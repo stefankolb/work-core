@@ -8,7 +8,7 @@
  */
 core.Class("core.mvc.Model", 
 {
-  include: [core.property.MGeneric],
+  include: [core.property.MGeneric, core.event.MEvent],
 
   construct: function(values) 
   {
@@ -25,61 +25,6 @@ core.Class("core.mvc.Model",
     {
       var properties = Object.keys(core.Class.getProperties(this.constructor));
       return JSON.stringify(this.get(properties));
-    },
-
-    // used by property system
-    fireEvent : function(type, value, old) {
-
-
-
-
-    },
-
-
-    bindFunction : function(callback, context) {
-
-      if (!context) {
-        context = this;
-      }
-
-
-
-    },
-
-    addListener : function(type, callback, context) {
-
-      var events = this.__events || {};
-
-      if (!this.__events) {
-        this.__events = events;
-      }
-
-      if (context) {
-        callback = callback.bind(context);
-      }
-
-      var callbackId = core.util.Id.get(callback);
-      var entryId = type + "-" + callbackId;
-
-      var list = events[type] || [];
-      if (!events[type]) {
-        events[type] = [];
-      } else if (events[type].indexOf(callback) != -1) {
-        return false;
-      }
-
-      events[type].push(callback);
-      return true;
-
-    },
-
-    removeListener : function(type, callback, context) {
-
-      
-    },
-
-    hasListener : function(type, callback, context) {
-
     }
 
   }

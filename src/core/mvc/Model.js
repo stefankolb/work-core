@@ -6,7 +6,7 @@
  * with your domain-specific methods, and Model provides a basic 
  * set of functionality for managing changes.
  */
-core.Class("fcc.mvc.Model", 
+core.Class("core.mvc.Model", 
 {
   include: [core.property.MGeneric],
 

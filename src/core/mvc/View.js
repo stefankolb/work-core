@@ -1,7 +1,7 @@
 /**
  *
  */
-core.Class("fcc.mvc.View", 
+core.Class("core.mvc.View", 
 {
   construct: function() {
   

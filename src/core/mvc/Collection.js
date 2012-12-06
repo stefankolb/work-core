@@ -1,7 +1,7 @@
 /**
  *
  */
-core.Class("fcc.mvc.Collection", 
+core.Class("core.mvc.Collection", 
 {
   construct: function() {
   

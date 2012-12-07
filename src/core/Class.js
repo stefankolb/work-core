@@ -206,6 +206,34 @@
 		// Prototype (stuff attached to all instances)
 		var proto = construct.prototype;
 	
+
+		// ------------------------------------
+		//   POOLING
+		// ------------------------------------
+
+		if (config.pooling) 
+		{
+			(function() 
+			{
+				var pool = [];
+				var max = 25;
+
+				construct.release = function(obj) 
+				{
+					if (pool.length <= max) {
+						pool.push(obj);	
+					}
+		    };
+
+		    construct.obtain = function() 
+		    {
+		      var obj = pool.pop() || new this;
+		      construct.apply(obj, arguments);
+		      return obj;
+		    };
+
+			})();
+		}
 	
 	
 		// ------------------------------------
@@ -483,14 +511,14 @@
 		 */
 		includesClass : function(cls, inc) 
 		{
-			if (jasy.Env.isSet("debug")) {
+			if (jasy.Env.isSet("debug")) 
+			{
 				core.Class.assertIsClass(cls, "Class to check for including class is itself not a class!");
 				core.Class.assertIsClass(inc, "Class to check for being included is not a class!");
 			}
 
 			return cls.__includes.indexOf(inc) != -1;
 		}
-		
 	});
 
 })();

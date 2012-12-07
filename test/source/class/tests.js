@@ -2127,5 +2127,142 @@ $(function() {
 		equals("Parent", child2.getProp());
 	});
 	
+
+	/*
+	---------------------------------------------------------------------------
+		OBJECT EVENTS
+	---------------------------------------------------------------------------
+	*/
+	
+	module("Core :: Classes :: Events", {
+		teardown : function() {
+			core.Main.clearNamespace("events.Simple1");
+		}
+	});
+
+	test("Simple", function() 
+	{
+		core.Class("events.Simple1", 
+		{
+			include : [core.event.MEvent],
+			members : 
+			{
+				testBasic : function() 
+				{
+					var eventExecuted = 0;
+					this.addListener("simple1", function() {
+						eventExecuted++;
+					});
+
+					this.fireEvent("simple1");
+					equals(eventExecuted, 1);
+
+					this.fireEvent("simple1");
+					this.fireEvent("simple1");
+					equals(eventExecuted, 3);
+				},
+
+				testContext : function() 
+				{
+					var contextObject = {valid : 1};
+
+					this.addListener("simple2", function() {
+						equals(this.valid, 1);
+					}, contextObject);
+
+					this.fireEvent("simple2");
+				},
+
+				testParams : function() 
+				{
+					this.addListener("simple3", function(first, second, third) {
+						equals(first, 1);
+						equals(second, 2);
+						equals(third, 3);
+					});
+
+					this.fireEvent("simple3", 1, 2, 3);
+				},
+
+				testDeconnect : function() {
+
+					var eventExecuted = 0;
+					var myListener = function() {
+						eventExecuted++;
+					};
+
+					this.addListener("simple4", myListener);
+
+					this.fireEvent("simple4");
+					equals(eventExecuted, 1);
+
+					this.removeListener("simple4", myListener);
+
+					equals(eventExecuted, 1);
+					this.fireEvent("simple4");
+					equals(eventExecuted, 1);
+
+					equals(this.addListener("simple4", myListener), true);
+					equals(this.addListener("simple4", myListener), false);
+					equals(this.addListener("simple4", myListener), false);
+
+					this.fireEvent("simple4");
+					equals(eventExecuted, 2);
+
+					equals(this.removeListener("simple4", myListener), true);
+					equals(this.removeListener("simple4", myListener), false);
+				},
+
+				testHasListener : function() {
+
+					var myListener = function() {};
+					var myHelperObject = {};
+
+					equals(this.hasListener("simple5"), false);
+					this.addListener("simple5", myListener);
+					equals(this.hasListener("simple5"), true);
+					equals(this.hasListener("simple5", myListener), true);
+					equals(this.hasListener("simple5", myListener, myHelperObject), false);
+					this.removeListener("simple5", myListener);
+
+					equals(this.hasListener("simple5"), false);
+					this.addListener("simple5", myListener, myHelperObject);
+					equals(this.hasListener("simple5"), true);
+					equals(this.hasListener("simple5", myListener), false);
+					equals(this.hasListener("simple5", myListener, myHelperObject), true);
+					this.removeListener("simple5", myListener, myHelperObject);
+
+				},
+
+				testConnectWhileFire : function() {
+
+
+				},
+
+				testDeconnectWhileFire : function() {
+
+				},
+
+				testListenOnce : function() {
+
+				}
+
+			}
+
+		});
+
+		var simple1 = new events.Simple1();
+		simple1.testBasic();
+		simple1.testContext();
+		simple1.testParams();
+		simple1.testDeconnect();
+		simple1.testHasListener();
+		simple1.testConnectWhileFire();
+		simple1.testDeconnectWhileFire();
+		simple1.testListenOnce();
+
+	});
+
+
 	
 });

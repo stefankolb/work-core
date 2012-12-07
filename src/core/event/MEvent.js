@@ -23,6 +23,17 @@
        */
       addListener : function(type, callback, context) 
       {
+        if (jasy.Env.isSet("debug")) 
+        {
+          core.Assert.isType(type, "String", "Invalid event type!");
+          core.Assert.isNotEmpty(type, "Invalid event type!");
+          core.Assert.isType(callback, "Function", "Invalid event callback!");
+
+          if (context != null) {
+            core.Assert.isType(context, "Object", "Invalid execution context!");
+          }
+        }
+
         // Simplify internal storage using Function.bind()
         if (context) {
           callback = core.util.Function.bind(callback, context);
@@ -47,6 +58,17 @@
        */
       addListenerOnce : function(type, callback, context) 
       {
+        if (jasy.Env.isSet("debug")) 
+        {
+          core.Assert.isType(type, "String", "Invalid event type!");
+          core.Assert.isNotEmpty(type, "Invalid event type!");
+          core.Assert.isType(callback, "Function", "Invalid event callback!");
+
+          if (context != null) {
+            core.Assert.isType(context, "Object", "Invalid execution context!");
+          }
+        }
+
         var self = this;
 
         if (self.hasListener(type, callback, context)) {
@@ -70,6 +92,17 @@
        */
       removeListener : function(type, callback, context) 
       {
+        if (jasy.Env.isSet("debug")) 
+        {
+          core.Assert.isType(type, "String", "Invalid event type!");
+          core.Assert.isNotEmpty(type, "Invalid event type!");
+          core.Assert.isType(callback, "Function", "Invalid event callback!");
+
+          if (context != null) {
+            core.Assert.isType(context, "Object", "Invalid execution context!");
+          }
+        }
+
         // Simplify internal storage using Function.bind()
         if (context) {
           callback = core.util.Function.bind(callback, context);
@@ -85,7 +118,7 @@
         handlers.splice(position, 1);
         return true;
       },
-      
+
 
       /**
        * Removes all listeners from this object with optional
@@ -93,6 +126,15 @@
        */
       removeAllListeners : function(type) 
       {
+        if (jasy.Env.isSet("debug")) 
+        {
+          if (type != null) 
+          {
+            core.Assert.isType(type, "String", "Invalid event type!");
+            core.Assert.isNotEmpty(type, "Invalid event type!");
+          }
+        }
+
         if (type != null) {
           getHandlers(this, type).length = 0;
         } else {
@@ -109,6 +151,17 @@
        */
       hasListener : function(type, callback, context) 
       {
+        if (jasy.Env.isSet("debug")) 
+        {
+          core.Assert.isType(type, "String", "Invalid event type!");
+          core.Assert.isNotEmpty(type, "Invalid event type!");
+          core.Assert.isType(callback, "Function", "Invalid event callback!");
+
+          if (context != null) {
+            core.Assert.isType(context, "Object", "Invalid execution context!");
+          }
+        }
+
         var handlers = getHandlers(this, type);
 
         // Short path for callback-less usage.
@@ -133,6 +186,12 @@
        */
       fireEvent : function(type, varargs) 
       {
+        if (jasy.Env.isSet("debug")) 
+        {
+          core.Assert.isType(type, "String", "Invalid event type to fire!");
+          core.Assert.isNotEmpty(type, "Invalid event type to fire!");
+        }
+
         var self = this;
         var handlers = slice.call(getHandlers(self, type));
         var length = handlers.length;

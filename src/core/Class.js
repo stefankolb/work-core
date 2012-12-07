@@ -152,7 +152,7 @@
 			core.Assert.isType(config, "Map", "Invalid class configuration in " + name);
 			
 			/** #require(ext.sugar.Object) */
-			var invalidKeys = Object.validateKeys(config, "construct,events,members,properties,include,implement".split(","));
+			var invalidKeys = Object.validateKeys(config, "construct,pooling,events,members,properties,include,implement".split(","));
 			if (invalidKeys.length > 0) {
 				throw new Error("Class declaration of " + name + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
 			}
@@ -231,6 +231,13 @@
 		      construct.apply(obj, arguments);
 		      return obj;
 		    };
+
+		    proto.release = function() 
+		    {
+					if (pool.length <= max) {
+						pool.push(this);	
+					}
+		    }
 
 			})();
 		}

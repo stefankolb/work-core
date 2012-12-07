@@ -6,8 +6,8 @@
   core.Module("core.util.Function", 
   {
     /**
-     * Binds the given function to the given object and returns 
-     * the result function. 
+     * {Function} Binds the given function @func {Function} to the given @object {Object} and returns 
+     * the resulting function. 
      * 
      * - Only one connection is made to allow proper disconnecting without access to the bound function. 
      * - Uses ES5 bind() to connect functions to objects internally.

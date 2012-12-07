@@ -4,7 +4,7 @@
 core.Class("core.property.Event", 
 {
   pooling: true,
-  
+
   /**
    * Creates a new event object with the given @type {String}. It stores the current @value {var}, 
    * the @old {var?} value and the @name {String?} of the property which was modified.
@@ -13,7 +13,7 @@ core.Class("core.property.Event",
   {
     var self = this;
 
-    self.type = name;
+    self.type = type;
     self.value = value;
     self.old = old;
     self.name = name;

@@ -2140,7 +2140,7 @@ $(function() {
 		}
 	});
 
-	test("Simple", function() 
+	test("Basic", function() 
 	{
 		core.Class("events.Simple1", 
 		{
@@ -2160,8 +2160,20 @@ $(function() {
 					this.fireEvent("simple1");
 					this.fireEvent("simple1");
 					equals(eventExecuted, 3);
-				},
+				}
+			}
+		});
 
+		new events.Simple1().testBasic();
+	});
+
+	test("Context", function() 
+	{
+		core.Class("events.Simple2", 
+		{
+			include : [core.event.MEvent],
+			members : 
+			{
 				testContext : function() 
 				{
 					var contextObject = {valid : 1};
@@ -2171,8 +2183,20 @@ $(function() {
 					}, contextObject);
 
 					this.fireEvent("simple2");
-				},
+				}
+			}
+		});
 
+		new events.Simple2().testContext();
+	});
+
+	test("Params", function() 
+	{
+		core.Class("events.Simple3", 
+		{
+			include : [core.event.MEvent],
+			members : 
+			{
 				testParams : function() 
 				{
 					this.addListener("simple3", function(first, second, third) {
@@ -2182,8 +2206,20 @@ $(function() {
 					});
 
 					this.fireEvent("simple3", 1, 2, 3);
-				},
+				}
+			}
+		});
 
+		new events.Simple3().testParams();
+	});
+
+	test("Deconnect", function() 
+	{
+		core.Class("events.Simple4", 
+		{
+			include : [core.event.MEvent],
+			members : 
+			{
 				testDeconnect : function() {
 
 					var eventExecuted = 0;
@@ -2211,8 +2247,20 @@ $(function() {
 
 					equals(this.removeListener("simple4", myListener), true);
 					equals(this.removeListener("simple4", myListener), false);
-				},
+				}
+			}
+		});
 
+		new events.Simple4().testDeconnect();
+	});
+
+	test("Has", function() 
+	{
+		core.Class("events.Simple5", 
+		{
+			include : [core.event.MEvent],
+			members : 
+			{
 				testHasListener : function() {
 
 					var myListener = function() {};
@@ -2232,37 +2280,159 @@ $(function() {
 					equals(this.hasListener("simple5", myListener, myHelperObject), true);
 					this.removeListener("simple5", myListener, myHelperObject);
 
-				},
-
-				testConnectWhileFire : function() {
-
-
-				},
-
-				testDeconnectWhileFire : function() {
-
-				},
-
-				testListenOnce : function() {
-
 				}
-
 			}
-
 		});
 
-		var simple1 = new events.Simple1();
-		simple1.testBasic();
-		simple1.testContext();
-		simple1.testParams();
-		simple1.testDeconnect();
-		simple1.testHasListener();
-		simple1.testConnectWhileFire();
-		simple1.testDeconnectWhileFire();
-		simple1.testListenOnce();
-
+		new events.Simple5().testHasListener();
 	});
 
+	test("Connect While Fire", function() 
+	{
+		core.Class("events.Simple6", 
+		{
+			include : [core.event.MEvent],
+			members : 
+			{
+				testConnectWhileFire : function() {
+
+					var count1 = 0;
+					var count2 = 0;
+
+					var myListener1 = function() {
+						count1++;
+					};
+
+					var myListener2 = function() {
+						count2++;
+						this.addListener("simple6", myListener1);
+					};
+
+					this.addListener("simple6", myListener2);
+					equals(count1, 0);
+					equals(count2, 0);
+
+					this.fireEvent("simple6");
+
+					equals(count1, 0);
+					equals(count2, 1);
+
+					this.fireEvent("simple6");
+
+					equals(count1, 1);
+					equals(count2, 2);
+
+				}
+			}
+		});
+
+		new events.Simple6().testConnectWhileFire();
+	});
+
+	test("Deconnect While Fire", function() 
+	{
+		core.Class("events.Simple7", 
+		{
+			include : [core.event.MEvent],
+			members : 
+			{
+				testDeconnectWhileFire : function() {
+
+					var count1 = 0;
+					var count2 = 0;
+
+					var myListener1 = function() {
+						count1++;
+					};
+
+					var myListener2 = function() {
+						count2++;
+						this.removeListener("simple7", myListener1);
+					};
+
+					this.addListener("simple7", myListener1);
+					this.addListener("simple7", myListener2);
+
+					equals(count1, 0);
+					equals(count2, 0);
+
+					this.fireEvent("simple7");
+
+					equals(count1, 1);
+					equals(count2, 1);
+
+					this.fireEvent("simple7");
+
+					equals(count1, 1);
+					equals(count2, 2);
+
+				}
+			}
+		});
+
+		new events.Simple7().testDeconnectWhileFire();
+	});
+
+	test("Deconnect Self", function() 
+	{
+		core.Class("events.Simple8", 
+		{
+			include : [core.event.MEvent],
+			members : 
+			{
+				testDeconnectSelf : function() {
+
+					var count = 0;
+					var myListener = function() {
+						count++;
+						this.removeListener("simple8", myListener);
+					}
+
+					this.addListener("simple8", myListener);
+					equals(count, 0);
+
+					this.fireEvent("simple8");
+					equals(count, 1);
+
+					this.fireEvent("simple8");
+					equals(count, 1);
+
+				}
+			}
+		});
+
+		new events.Simple8().testDeconnectSelf();
+	});
+
+	test("Listen Once", function() 
+	{
+		core.Class("events.Simple9", 
+		{
+			include : [core.event.MEvent],
+			members : 
+			{
+				testListenOnce : function() {
+
+					var count = 0;
+					var myListener = function() {
+						count++;
+					}
+
+					this.addListenerOnce("simple9", myListener);
+					equals(count, 0);
+
+					this.fireEvent("simple9");
+					equals(count, 1);
+
+					this.fireEvent("simple9");
+					equals(count, 1);
+
+				}
+			}
+		});
+
+		new events.Simple9().testListenOnce();
+	});
 
 	
 });

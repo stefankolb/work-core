@@ -31,6 +31,7 @@
 	 * available.
 	 *
 	 * #break(core.property.Debug)
+	 * #break(core.property.Event)
 	 */
 	core.Module("core.property.Simple",
 	{
@@ -159,8 +160,11 @@
 						}
 
 						// Fire event
-						if (propertyFire) {
-							context.fireEvent(propertyFire, propertyInit, undef, propertyName);
+						if (propertyFire) 
+						{
+							var eventObject = core.property.Event.obtain(propertyFire, propertyInit, undef, propertyName);
+							context.dispatchEvent(eventObject);
+							eventObject.release();
 						}
 					}
 				};
@@ -201,8 +205,11 @@
 						propertyApply.call(context, value, old);
 					}
 
-					if (propertyFire) {
-						context.fireEvent(propertyFire, value, old, propertyName);
+					if (propertyFire) 
+					{
+						var eventObject = core.property.Event.obtain(propertyFire, value, old, propertyName);
+						context.dispatchEvent(eventObject);
+						eventObject.release();
 					}
 				}
 
@@ -253,8 +260,11 @@
 						propertyApply.call(context, value, old);
 					}
 
-					if (propertyFire) {
-						context.fireEvent(propertyFire, value, old, propertyName);
+					if (propertyFire) 
+					{
+						var eventObject = core.property.Event.obtain(propertyFire, value, old, propertyName);
+						context.dispatchEvent(eventObject);
+						eventObject.release();
 					}
 				}
 			};

@@ -85,6 +85,7 @@
         handlers.splice(position, 1);
         return true;
       },
+      
 
       /**
        * Removes all listeners from this object with optional

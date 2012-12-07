@@ -160,7 +160,7 @@
 
 						// Fire event
 						if (propertyFire) {
-							context.fireEvent(propertyFire, propertyInit, undef);
+							context.fireEvent(propertyFire, propertyInit, undef, propertyName);
 						}
 					}
 				};
@@ -202,7 +202,7 @@
 					}
 
 					if (propertyFire) {
-						context.fireEvent(propertyFire, value, old);
+						context.fireEvent(propertyFire, value, old, propertyName);
 					}
 				}
 
@@ -254,7 +254,7 @@
 					}
 
 					if (propertyFire) {
-						context.fireEvent(propertyFire, value, old);
+						context.fireEvent(propertyFire, value, old, propertyName);
 					}
 				}
 			};

@@ -3,9 +3,8 @@
   /**
    * Utilities for functions
    */
-  core.Class("core.util.Function", 
+  core.Module("core.util.Function", 
   {
-    
     /**
      * Binds the given function to the given object and returns 
      * the result function. 

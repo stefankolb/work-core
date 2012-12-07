@@ -25,8 +25,8 @@
       {
         if (jasy.Env.isSet("debug")) 
         {
-          core.Assert.isType(type, "String", "Invalid event type!");
-          core.Assert.isNotEmpty(type, "Invalid event type!");
+          core.Assert.isType(type, "String", "Invalid event type - non string!");
+          core.Assert.isNotEmpty(type, "Invalid event type - empty string!");
           core.Assert.isType(callback, "Function", "Invalid event callback!");
 
           if (context != null) {
@@ -155,10 +155,14 @@
         {
           core.Assert.isType(type, "String", "Invalid event type!");
           core.Assert.isNotEmpty(type, "Invalid event type!");
-          core.Assert.isType(callback, "Function", "Invalid event callback!");
 
-          if (context != null) {
-            core.Assert.isType(context, "Object", "Invalid execution context!");
+          if (callback != null) 
+          {
+            core.Assert.isType(callback, "Function", "Invalid event callback!");
+
+            if (context != null) {
+              core.Assert.isType(context, "Object", "Invalid execution context!");
+            }
           }
         }
 

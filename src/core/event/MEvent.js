@@ -183,38 +183,53 @@
 
 
       /**
-       * {Boolean} Fires the given event @type {String} with 
-       * optional @varargs {var ... ?} which are passed to every 
-       * listener function as arguments. Returns whether any
-       * listeners were processed successfully.
+       * {Boolean} Dispatches the given @eventObject {Object} on this object. 
+       * The object can be an arbitrary Object with a valid `type` information.
+       * The method returns whether any listers were processed.
        */
-      fireEvent : function(type, varargs) 
+      dispatchEvent : function(eventObject)
       {
         if (jasy.Env.isSet("debug")) 
         {
-          core.Assert.isType(type, "String", "Invalid event type to fire!");
-          core.Assert.isNotEmpty(type, "Invalid event type to fire!");
+          core.Assert.isType(eventObject, "Object", "Invalid event type to dispatch!");
+          core.Assert.isType(eventObject.type, "String", "Invalid event type to dispatch!");
+          core.Assert.isNotEmpty(eventObject.type, "Invalid event type to dispatch!");
+        }
+
+        var self = this;
+        var handlers = slice.call(getHandlers(self, eventObject.type));
+        var length = handlers.length;
+
+        for (var i=0; i<length; ++i) {
+          handlers[i].call(self, eventObject);
+        }
+
+        return !!length;
+      },
+
+
+      /**
+       * Fires a simple notification like event without creating any object
+       * or additional data at all. For most cases prefer using {#dispatchEvent}
+       * instead. The method returns whether any listers were processed.
+       */
+      fireEvent : function(type) 
+      {
+        if (jasy.Env.isSet("debug")) 
+        {
+          core.Assert.isType(type, "String", "Invalid event type to dispatch!");
+          core.Assert.isNotEmpty(type, "Invalid event type to dispatch!");
         }
 
         var self = this;
         var handlers = slice.call(getHandlers(self, type));
         var length = handlers.length;
 
-        if (length)
-        {
-          var hasArgs = arguments.length > 1;
-          if (hasArgs) {
-            var args = slice.call(arguments, 1);
-          }
-
-          for (var i = 0; i < length; ++i) {
-            hasArgs ? handlers[i].apply(self, args) : handlers[i].call(this);
-          }
-
-          return true;
+        for (var i=0; i<length; ++i) {
+          handlers[i].call(self);
         }
 
-        return false;
+        return !!length;
       }
     }
 

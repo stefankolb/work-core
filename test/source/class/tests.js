@@ -1770,6 +1770,8 @@ $(function() {
 	{
 		core.Class("properties.Simple", 
 		{
+			include : [core.event.MEvent],
+
 			properties : 
 			{
 				color : 
@@ -1787,14 +1789,6 @@ $(function() {
 						// pass
 					},
 					fire : "changeBackgroundColor"
-				}
-			},
-			
-			members : 
-			{
-				// Interface implementation
-				fireEvent : function(type, value, old) {
-					// pass
 				}
 			}
 		});
@@ -1847,20 +1841,13 @@ $(function() {
 		core.Class("properties.ColorImplementer", 
 		{
 			implement : [properties.IColor],
+			include : [core.event.MEvent],			
 			properties : 
 			{
 				color : 
 				{
 					type : "String",
 					fire : "changeColor"
-				}
-			},
-			
-			members : 
-			{
-				// Interface implementation
-				fireEvent : function(type, value, old) {
-					// pass
 				}
 			}
 		});

@@ -22,8 +22,8 @@
 	 * - `type`: Check the incoming value for the given type or function.
 	 * - `apply`: Link to function to call after a new value has been stored. The signature of the method is
 	 * `function(newValue, oldValue)`
-	 * - `event`: Event to fire after a new value has been stored (and apply has been called). The event
-	 * type is a {core.property.Event} which contains both, the old and new value.
+	 * - `fire`: Event to fire after a new value has been stored (and apply has been called). The listeners
+	 * are called with 3 parameters: value, old value and property name.
 	 * - `init`: Init value for the property. If no value is set or the property gets reset, the getter
 	 * will return the `init` value.
 	 * - `nullable`: Whether the property is able to store null values. This also allows the system to

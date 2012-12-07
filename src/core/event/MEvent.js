@@ -209,9 +209,9 @@
 
 
       /**
-       * Fires a simple notification like event without creating any object
-       * or additional data at all. For most cases prefer using {#dispatchEvent}
-       * instead. The method returns whether any listers were processed.
+       * Fires a simple notification like event with the given @type {String} without 
+       * creating any event object (so no additional data at all). The method returns 
+       * whether any listers were processed.
        */
       fireEvent : function(type) 
       {

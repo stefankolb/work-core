@@ -13,11 +13,6 @@ core.Interface("core.property.IEvent",
 	members : 
 	{
 		/**
-		 * Fires the given notification event @type {String}.
-		 */
-		fireEvent : function(type) {},
-
-		/**
 		 * Dispatches an previously created @eventObject {Object} to all listeners.
 		 */
 		dispatchEvent : function(eventObject) {}		

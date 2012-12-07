@@ -72,8 +72,8 @@
         var self = this;
 
         if (self.hasListener(type, callback, context)) {
-          throw new Error("Could not add listener once. Listener already exists!")
-        }
+          return false;
+        }          
 
         var wrapper = function() 
         {

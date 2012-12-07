@@ -2190,29 +2190,6 @@ $(function() {
 		new events.Simple2().testContext();
 	});
 
-	test("Params", function() 
-	{
-		core.Class("events.Simple3", 
-		{
-			include : [core.event.MEvent],
-			members : 
-			{
-				testParams : function() 
-				{
-					this.addListener("simple3", function(first, second, third) {
-						equals(first, 1);
-						equals(second, 2);
-						equals(third, 3);
-					});
-
-					this.fireEvent("simple3", 1, 2, 3);
-				}
-			}
-		});
-
-		new events.Simple3().testParams();
-	});
-
 	test("Deconnect", function() 
 	{
 		core.Class("events.Simple4", 

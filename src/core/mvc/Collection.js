@@ -30,6 +30,15 @@ core.Class("core.mvc.Collection",
     {
       check: core.mvc.Model,
       nullable : true
+    },
+
+    /**
+     * Base URL to construct URLs with to load/save data from/to the server.
+     */
+    url : 
+    {
+      check: "String",
+      nullable : true
     }
   },
 
@@ -41,7 +50,6 @@ core.Class("core.mvc.Collection",
     append : function(models) 
     {
       var db = this.__models;
-
       var addEvent = core.mvc.event.AddModel.obtain(null);
       
       for (var i=0, l=models.length, model; i<l; i++) 
@@ -57,16 +65,22 @@ core.Class("core.mvc.Collection",
       core.mvc.event.AddModel.release(addEvent);
     },
 
+
     /**
      * Clears the collection so that all models are removed from it.
      */
     clear : function() 
     {
       var db = this.__models;
+      var length = db.length;
+
+      if (db.length == 0) {
+        return;
+      }
 
       var removeEvent = core.mvc.event.RemoveModel.obtain(null);
 
-      for (var i=db.length, model; i>=0; i--) 
+      for (var i=length, model; i>=0; i--) 
       {
         model = models[i];
 
@@ -84,10 +98,23 @@ core.Class("core.mvc.Collection",
     },
 
 
+    /**
+     * Combined call to replace all existing data with new list of @models {core.mvc.Model}.
+     */
+    reset : function(models) 
+    {
+      this.clear();
+      this.append(models);
+    },
+
+
+    /** {core.mvc.Model} Returns the model at the given @index {Integer}. */
     at : function(index) {
       return this.__models[index] || null;
     },
 
+
+    /** {core.mvc.Model} Removes and returns the last model of the collection. */
     pop : function() 
     {
       var removedModel = this.__models.pop();
@@ -100,10 +127,20 @@ core.Class("core.mvc.Collection",
       core.mvc.event.RemoveModel.release(removeEvent);
     },
 
-    push : function() {
 
+    /**
+     * Pushes a new @model {core.mvc.Model} to the end of the collection.
+     */
+    push : function(model) 
+    {
+      this.__models.push(model);
+      var addEvent = core.mvc.event.AddModel.obtain(model);
+      this.dispatchEvent(addEvent);
+      core.mvc.event.RemoveModel.release(addEvent);
     },
 
+
+    /** {core.mvc.Model} Removes and returns the first model of the collection. */
     shift : function() 
     {
       var removedModel = this.__models.shift();
@@ -118,16 +155,53 @@ core.Class("core.mvc.Collection",
       return removedModel;
     },
 
-    unshift: function() {
 
+    /**
+     * Pushes a new @model {core.mvc.Model} to the beginning of the collection.
+     */
+    unshift: function() 
+    {
+      this.__models.unshift(model);
+      var addEvent = core.mvc.event.AddModel.obtain(model);
+      this.dispatchEvent(addEvent);
+      core.mvc.event.RemoveModel.release(addEvent);
     },
 
-    filter : function() {
 
+    /** {core.mvc.Model} Removes and returns the first model of the collection. */
+    remove : function(model) 
+    {
+      /** #require(ext.sugar.Array) */
+      var removedModel = this.__models.remove(model);
+      if (!removedModel) {
+        return;
+      }
+
+      var removeEvent = core.mvc.event.RemoveModel.obtain(removedModel);
+      this.dispatchEvent(removeEvent);
+      core.mvc.event.RemoveModel.release(removeEvent);
+
+      return removedModel;
     },
 
-    map : function(func) {
-      return this.__models.map(func);
+
+    /** 
+     * {core.mvc.Collection} Returns a new collection filtered by the given filter @method {Function}.
+     */
+    filter : function(method) {
+      return this.__models.filter(method);
+    },
+
+
+    /** 
+     * {Array} Creates a new array with the results of calling a provided 
+     * @callback {Function} on every model in this collection. It's possible 
+     * to define the execution @context {Object?} of every @callback call.
+     * The context defaults to the global object. The parameters with which the
+     * callback is executed are: `value`, `key`, `array`.
+     */
+    map : function(callback, context) {
+      return this.__models.map(callback, context);
     },
 
 
@@ -167,6 +241,37 @@ core.Class("core.mvc.Collection",
       return "[" + this.__models.map(function(model) {
         return model.toJSON();
       }).join(",") + "]";
-    }
+    },
+
+
+    /**
+     * The method is called by whenever a collection's models are returned 
+     * by the server, in `fetch`. The function is passed the raw response object, 
+     * and should return the array of model attributes to be added to the collection.
+     *
+     * The default implementation is a no-op, simply passing through the JSON response. 
+     * Override this if you need to work with a preexisting API, or better namespace 
+     * your responses. Note that afterwards, if your model class already has a parse 
+     * function, it will be run against each fetched model.
+     */
+    parse : function(response) {
+      return response;
+    },
+
+    /**
+     * Fetch the default set of models for this collection from the server, resetting the 
+     * collection when they arrive. The options hash takes success and error callbacks which 
+     * will be passed (collection, response, options) and (collection, xhr, options) 
+     * as arguments, respectively. When the model data returns from the server, 
+     * the collection will reset. Delegates to Backbone.sync under the covers for 
+     * custom persistence strategies and returns a jqXHR. The server handler 
+     * for fetch requests should return a JSON array of models.
+     *
+     */
+    fetch : function() {
+      // TODO
+    },
+
+
   }
 });

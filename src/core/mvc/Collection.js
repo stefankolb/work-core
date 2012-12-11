@@ -168,7 +168,7 @@ core.Class("core.mvc.Collection",
     },
 
 
-    /** {core.mvc.Model} Removes and returns the first model of the collection. */
+    /** {core.mvc.Model} Removes and returns the given @model {core.mvc.Model} of the collection. */
     remove : function(model) 
     {
       /** #require(ext.sugar.Array) */
@@ -206,8 +206,8 @@ core.Class("core.mvc.Collection",
 
 
     /**
-     * Pluck an attribute from each model in the collection. 
-     * Equivalent to calling `map`, and returning a single attribute from the iterator.
+     * Pluck a @property {String} from each model in the collection. 
+     * Equivalent to calling {#map}, and returning a single property from the iterator.
      */
     pluck : function(property) 
     {
@@ -218,10 +218,11 @@ core.Class("core.mvc.Collection",
 
 
     /**
-     * {core.mvc.Model} Returns the model with the given ID.
+     * {core.mvc.Model} Returns the model with the given @id {String}.
      */ 
     get : function(id) 
     {
+      var models = this.__models;
       for (var i=0, l=models.length; i<l; i++) 
       {
         if (models[i].getId() == id) {
@@ -245,8 +246,8 @@ core.Class("core.mvc.Collection",
 
 
     /**
-     * The method is called by whenever a collection's models are returned 
-     * by the server, in `fetch`. The function is passed the raw response object, 
+     * {Map[]} The method is called by whenever a collection's models are returned 
+     * by the server, in `fetch`. The function is passed the raw @response {Object} object, 
      * and should return the array of model attributes to be added to the collection.
      *
      * The default implementation is a no-op, simply passing through the JSON response. 
@@ -258,19 +259,41 @@ core.Class("core.mvc.Collection",
       return response;
     },
 
+
     /**
      * Fetch the default set of models for this collection from the server, resetting the 
      * collection when they arrive. The options hash takes success and error callbacks which 
      * will be passed (collection, response, options) and (collection, xhr, options) 
      * as arguments, respectively. When the model data returns from the server, 
-     * the collection will reset. Delegates to Backbone.sync under the covers for 
-     * custom persistence strategies and returns a jqXHR. The server handler 
+     * the collection will reset. Delegates to `sync` under the covers for 
+     * custom persistence strategies and returns a XHR. The server handler 
      * for fetch requests should return a JSON array of models.
-     *
      */
     fetch : function() {
       // TODO
     },
+
+
+    /**
+     * {core.mvc.Model} Creates a new model with the given 
+     * @properties {Map?} and appends it to the collection.
+     */
+    create : function(properties) 
+    {
+      var modelClass = this.getModel();
+
+      if (!modelClass) {
+        throw new Error("create() requires a model being assigned to work!");
+      }
+
+      // Prefer pooling when available
+      var model = modelClass.obtain ? modelClass.obtain(properties) : new modelClass(properties);
+      
+      // Auto-append
+      this.push(model);
+
+      return model;
+    }
 
 
   }

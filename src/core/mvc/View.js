@@ -1,10 +1,11 @@
 /**
  * Views are almost more convention than they are code — they don't 
- * determine anything about your HTML or CSS for you, and can be used 
- * with any JavaScript templating library. The general idea is to 
+ * determine anything about the visual part of your application. The general idea is to 
  * organize your interface into logical views, backed by models, each of 
  * which can be updated independently when the model changes, without 
- * having to redraw the page. Instead of digging into a JSON object, 
+ * having to redraw the entire page. 
+ * 
+ * Instead of digging into a JSON object, 
  * looking up an element in the DOM, and updating the HTML by hand, 
  * you can bind your view's render function to the model's "change" event — 
  * and now everywhere that model data is displayed in the UI, it is 
@@ -12,17 +13,17 @@
  */
 core.Class("core.mvc.View", 
 {
-  include : [core.event.MEvent, core.property.MGeneric],
-  
+  include : [core.property.MGeneric, core.event.MEvent],
+
+  /**
+   * @properties {Map} Properties to set initially
+   */ 
   construct: function(properties) 
   {
-  
     if (properties) {
       this.set(properties);
     }
-
   },
-
 
   properties : 
   {
@@ -30,40 +31,54 @@ core.Class("core.mvc.View",
     template : 
     {
       check: core.template.Template,
-      nullable : true
+      nullable : true,
+      apply : function() {
+        this.render();
+      }
     },
 
-    /** The model to render - use either `model` or `collection`*/
+    /** The model/collection to render */
     model :
     {
-      check : core.mvc.Model,
-      nullable : true
-    },
+      check : core.mvc.IModel,
+      nullable : true,
+      apply : function(value, old)
+      {
+        if (old) 
+        {
+          old.removeListener("change", this.render, this);
 
-    /** The collection to render - use either `model` or `collection`*/
-    collection : 
-    {
-      check : core.mvc.Collection,
-      nullable : true
-    },
+          if (old instanceof core.mvc.Collection)
+          {
+            old.removeListener("add", this.render, this);
+            old.removeListener("remove", this.render, this);
+          }
+        }
 
+        if (value) 
+        {
+          value.addListener("change", this.render, this);
 
-
-
-
-
-
+          if (value instanceof core.mvc.Collection)
+          {
+            value.addListener("add", this.render, this);
+            value.addListener("remove", this.render, this);
+          }
+        }
+      }
+    }
   },
 
   members :
   {
     /**
-     *
+     * Renders the view using data from the attached model.
      */
-    render : function() {
-
+    render : function() 
+    {
+      if (jasy.Env.isSet("debug")) {
+        throw new Error("render() is abstract in core.mvc.View!");
+      }
     }
-
-
   }
 });

@@ -13,6 +13,7 @@
   core.Class("core.mvc.Model", 
   {
     include: [core.property.MGeneric, core.event.MEvent],
+    implement : [core.mvc.IModel],
 
     /**
      * Initial data structure is imported from @values {Map}.
@@ -35,21 +36,14 @@
 
     members: 
     {
-      /**
-       * {String} Returns the unique ID of the model. 
-       */
+      // Interface implementation
       getId : function() {
         return this.id;
       },
-      
 
-      /**
-       * {String} Exports all property data into a JSON structure.
-       */
-      toJSON : function() 
-      {
-        var properties = Object.keys(core.Class.getProperties(this.constructor));
-        return JSON.stringify(this.get(properties));
+      // Interface implementation
+      toJSON : function() {
+        return this.get(Object.keys(core.Class.getProperties(this.constructor)));
       }
     }
   });

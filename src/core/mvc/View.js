@@ -47,23 +47,15 @@ core.Class("core.mvc.View",
         if (old) 
         {
           old.removeListener("change", this.render, this);
-
-          if (old instanceof core.mvc.Collection)
-          {
-            old.removeListener("add", this.render, this);
-            old.removeListener("remove", this.render, this);
-          }
+          old.removeListener("add", this.render, this);
+          old.removeListener("remove", this.render, this);
         }
 
         if (value) 
         {
           value.addListener("change", this.render, this);
-
-          if (value instanceof core.mvc.Collection)
-          {
-            value.addListener("add", this.render, this);
-            value.addListener("remove", this.render, this);
-          }
+          value.addListener("add", this.render, this);
+          value.addListener("remove", this.render, this);
         }
       }
     }

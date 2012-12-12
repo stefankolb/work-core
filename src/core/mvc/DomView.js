@@ -21,7 +21,7 @@ core.Class("core.mvc.DomView",
       check: "Element",
       nullable : true,
       apply : function(value, old) {
-
+        this.render();
       }
     }
 
@@ -30,23 +30,31 @@ core.Class("core.mvc.DomView",
 
   members : 
   {
+    // Definition of abstract method
     render : function() 
     {
-      var data = this.getModel();
-
       var elem = this.getRoot();
       if (!elem)
       {
         var id = this.getId();
-        elem = document.getElementById(id);
-        this.setRoot(elem);
+        if (jasy.Env.isSet("debug")) 
+        {
+          if (!id) {
+            throw new Error("Please define either an element or an ID for having a valid render target.");
+          }
+        }
+
+        this.setRoot(document.getElementById(id));
+
+        // Setting the root leads to another render() call
+        return;
       }
 
+      var data = this.getModel();
       elem.innerHTML = this.getTemplate().render(data ? data.toJSON() : {});
 
       return this;
     }    
   }
-
 
 });

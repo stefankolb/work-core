@@ -45,7 +45,6 @@
 		 */
 		construct: function(array) 
 		{
-			
 			// Field to store data in each object
 			// Keeps an array with [prev, next]
 			var id = this.__id = "$ll" + unique++;
@@ -58,7 +57,8 @@
 				}
 				
 				var length = array.length;
-				if (length > 0) {
+				if (length > 0) 
+				{
 					
 					var current = array[0];
 					var prev, next;
@@ -78,7 +78,6 @@
 						
 						prev = current;
 						current = next;
-
 					}
 				}
 			}

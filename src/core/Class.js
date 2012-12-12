@@ -213,33 +213,61 @@
 
 		if (config.pooling) 
 		{
-			(function() 
+			(function(poolConfig) 
 			{
-				var pool = [];
-				var max = 25;
+				var max = poolConfig.max || 25;
+				var pool = new Array(max);
+				var length = 0;
+
+				// Emulate class constructor with empty function for
+				// unified argument handling between real and reused objects.
+				var fakeConstruct = new Function
+				fakeConstruct.prototype = proto;
+				fakeConstruct.className = fakeConstruct.displayName = name;
+				//fakeConstruct.prototype.constructor = fakeConstruct;
+				fakeConstruct.__isClass = true;
+				fakeConstruct.__events = events;
+				fakeConstruct.__properties = properties;
+
+
 
 				construct.release = function(obj) 
 				{
-					if (pool.length <= max) {
-						pool.push(obj);	
+					if (length < max) {
+						pool[length++] = obj;
 					}
 		    };
 
 		    construct.obtain = function() 
 		    {
-		      var obj = pool.pop() || new this;
-		      construct.apply(obj, arguments);
+		    	if (length > 0)
+		    	{
+		    		var obj = pool[--length];
+		    		pool[length] = null;
+		    	}
+		    	else
+		    	{
+		    		var obj = new fakeConstruct;
+		    	}
+
+					// Execute original constructor as inexpensive as possible
+			    arguments.length ? construct.apply(obj, arguments) : construct.call(obj);
+
 		      return obj;
+		    };
+
+		    construct.getPoolSize = function() {
+		    	return length;
 		    };
 
 		    proto.release = function() 
 		    {
-					if (pool.length <= max) {
-						pool.push(this);	
+					if (length < max) {
+						pool[length++] = this;
 					}
 		    }
 
-			})();
+			})(config.pooling);
 		}
 	
 	

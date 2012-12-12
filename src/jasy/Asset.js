@@ -101,7 +101,7 @@
 
 		/**
 		 * {String} Returns the sprite ID for the given data @spriteNumber {Integer} and image 
-		 * @id {String}.
+		 * @assetId {String}.
 		 */
 		resolveSprite : function(spriteNumber, assetId)
 		{

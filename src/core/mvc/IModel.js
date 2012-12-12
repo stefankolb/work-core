@@ -11,6 +11,11 @@ core.Interface("core.mvc.IModel",
 
   members : 
   {
+    /** 
+     * {String} Returns a unique identifier for this model 
+     */
+    getId : function() {},
+
     /**
      * {String} Exports all model data into a JSON structure.
      */    

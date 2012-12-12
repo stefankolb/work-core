@@ -180,7 +180,7 @@
       /**
        * Pushes a new @model {core.mvc.Model} to the beginning of the collection.
        */
-      unshift: function() 
+      unshift: function(model) 
       {
         this.__models.unshift(model);
         var addEvent = core.mvc.event.AddModel.obtain(model);

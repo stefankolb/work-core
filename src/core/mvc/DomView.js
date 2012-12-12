@@ -50,8 +50,13 @@ core.Class("core.mvc.DomView",
         return;
       }
 
+      var template = this.getTemplate();
+      if (!template) {
+        return;
+      }
+
       var data = this.getModel();
-      elem.innerHTML = this.getTemplate().render(data ? data.toJSON() : {});
+      elem.innerHTML = template.render(data ? data.toJSON() : {});
 
       return this;
     }    

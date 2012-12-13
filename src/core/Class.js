@@ -221,16 +221,17 @@
 
 				// Emulate class constructor with empty function for
 				// unified argument handling between real and reused objects.
-				var fakeConstruct = new Function
+				var fakeConstruct = new Function;
 				fakeConstruct.prototype = proto;
 				fakeConstruct.className = fakeConstruct.displayName = name;
-				//fakeConstruct.prototype.constructor = fakeConstruct;
 				fakeConstruct.__isClass = true;
 				fakeConstruct.__events = events;
 				fakeConstruct.__properties = properties;
 
 
-
+				/**
+				 * Releases the given @obj {Object}.
+				 */
 				construct.release = function(obj) 
 				{
 					if (length < max) {
@@ -238,7 +239,11 @@
 					}
 		    };
 
-		    construct.obtain = function() 
+		    /**
+		     * {Object} Obtains a new object from the pool or create one
+		     * dynamically based on the given constructor arguments.
+		     */
+		    construct.obtain = function(varargs) 
 		    {
 		    	if (length > 0)
 		    	{
@@ -256,16 +261,22 @@
 		      return obj;
 		    };
 
+		    /**
+		     * {Integer} Returns the current size of the pool
+		     */
 		    construct.getPoolSize = function() {
 		    	return length;
 		    };
 
+		    /**
+		     * Releases the object to the pool.
+		     */
 		    proto.release = function() 
 		    {
 					if (length < max) {
 						pool[length++] = this;
 					}
-		    }
+		    };
 
 			})(config.pooling);
 		}

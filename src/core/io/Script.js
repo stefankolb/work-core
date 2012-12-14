@@ -67,6 +67,17 @@
 				nocache = true;
 			}
 
+			// Browser-less (e.g. NodeJS) support
+			if (!doc) 
+			{
+			  eval(require("fs").readFileSync(uri));
+			  if (callback) {
+			  	callback.call(context||global, uri, false);
+			  }
+
+			  return;
+			}
+
 			var head = doc.head;
 			var elem = doc.createElement("script");
 

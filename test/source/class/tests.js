@@ -1,8 +1,7 @@
 /** 
- * #require(jquery) #require(qunit) #asset(qunit.css)
+ * #require(qunit) #asset(qunit.css)
  */
 var global = this;
-$(function() {
 	
 	/*
 	---------------------------------------------------------------------------
@@ -2585,5 +2584,3 @@ $(function() {
 	});
 
 
-	
-});

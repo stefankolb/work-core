@@ -1,5 +1,6 @@
 /** 
  * #require(QUnit) 
+ * #require(test.*)
  * #asset(qunit.css)
  */
 var global = this;

@@ -16,7 +16,7 @@ def source():
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName("tests").getSortedClasses()
+        classes = Resolver(session).addClassName("test.tests").getSortedClasses()
         
         # Writing source loader
         outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js", "QUnit.load();")
@@ -30,7 +30,7 @@ def build():
     fileManager = FileManager(session)
 
     # Deploy assets
-    outputManager.deployAssets(["tests"])
+    outputManager.deployAssets(["test.tests"])
 
     # Write kernel script
     outputManager.storeKernel("$prefix/script/kernel.js", debug=True, classes=["core.io.Asset", "core.io.StyleSheet"])
@@ -42,7 +42,7 @@ def build():
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName("tests").getSortedClasses()
+        classes = Resolver(session).addClassName("test.tests").getSortedClasses()
 
         # Compressing classes
         outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js", "QUnit.load();")

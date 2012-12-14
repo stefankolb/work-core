@@ -1,6 +1,7 @@
 /** 
  * #require(QUnit) 
  * #require(test.*)
+ * #require(core.io.StyleSheet)
  * #asset(qunit.css)
  */
 (function() {

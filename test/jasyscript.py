@@ -10,13 +10,13 @@ def source():
     fileManager = FileManager(session)
     
     # Store kernel script
-    outputManager.storeKernel("$prefix/script/kernel.js", debug=True, classes=["core.io.Asset", "core.io.StyleSheet"])
+    outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
     
     # Process every possible permutation
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName("test.tests").getSortedClasses()
+        classes = Resolver(session).addClassName("test.Main").getSortedClasses()
         
         # Writing source loader
         outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js")
@@ -30,10 +30,10 @@ def build():
     fileManager = FileManager(session)
 
     # Deploy assets
-    outputManager.deployAssets(["test.tests"])
+    outputManager.deployAssets(["test.Main"])
 
     # Write kernel script
-    outputManager.storeKernel("$prefix/script/kernel.js", debug=True, classes=["core.io.Asset", "core.io.StyleSheet"])
+    outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
 
     # Copy files from source
     fileManager.updateFile("source/index.html", "$prefix/index.html")
@@ -42,7 +42,7 @@ def build():
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName("test.tests").getSortedClasses()
+        classes = Resolver(session).addClassName("test.Main").getSortedClasses()
 
         # Compressing classes
         outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")

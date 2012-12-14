@@ -1,5 +1,6 @@
 /** 
- * #require(qunit) #asset(qunit.css)
+ * #require(QUnit) 
+ * #asset(qunit.css)
  */
 var global = this;
 	
@@ -16,7 +17,7 @@ var global = this;
 		/** #require(ext.TimeoutArgs) */
 		setTimeout(function(arg)
 		{
-			equals(arg, "hello");
+			equal(arg, "hello");
 			start();
 		}, 10, "hello");
 	});
@@ -43,11 +44,11 @@ var global = this;
 	{
 		// Basic first
 		var keys = Object.keys({hello:null, foo:1}).sort().join(",");
-		equals(keys, "foo,hello");
+		equal(keys, "foo,hello");
 
 		// toString etc. are special in IE because these are built-in keys
 		var keys = Object.keys({toString:null, hello:null, foo:1}).sort().join(",");
-		equals(keys, "foo,hello,toString");
+		equal(keys, "foo,hello,toString");
 	});
 
 
@@ -76,16 +77,16 @@ var global = this;
 	test("Object.values", function() 
 	{
 		var values = Object.values({x:1, y:2, z:3}).sort().join(",");
-		equals(values, "1,2,3");
+		equal(values, "1,2,3");
 	});
 	
 	test("Object.fromArray", function() 
 	{
-		equals(Object.keys(Object.fromArray(["foo","bar","baz"])).join(","), "foo,bar,baz");
-		equals(Object.values(Object.fromArray(["foo","bar","baz"])).join(","), "true,true,true");
+		equal(Object.keys(Object.fromArray(["foo","bar","baz"])).join(","), "foo,bar,baz");
+		equal(Object.values(Object.fromArray(["foo","bar","baz"])).join(","), "true,true,true");
 
-		equals(Object.keys(Object.fromArray(["foo","bar","baz"], "hello")).join(","), "foo,bar,baz");
-		equals(Object.values(Object.fromArray(["foo","bar","baz"], "hello")).join(","), "hello,hello,hello");
+		equal(Object.keys(Object.fromArray(["foo","bar","baz"], "hello")).join(","), "foo,bar,baz");
+		equal(Object.values(Object.fromArray(["foo","bar","baz"], "hello")).join(","), "hello,hello,hello");
 	});
 	
 
@@ -93,42 +94,42 @@ var global = this;
 
 	test("Array.prototype.max", function() 
 	{
-		equals([1,4,23,3].max(), 23);
-		equals([10,10,10].max(), 10);
-		equals([].max(), -Infinity);
+		equal([1,4,23,3].max(), 23);
+		equal([10,10,10].max(), 10);
+		equal([].max(), -Infinity);
 	});
 
 	test("Array.prototype.min", function() 
 	{
-		equals([1,4,23,3].min(), 1);
-		equals([10,10,10].min(), 10);
-		equals([].min(), Infinity);
+		equal([1,4,23,3].min(), 1);
+		equal([10,10,10].min(), 10);
+		equal([].min(), Infinity);
 	});
 	
 	test("Array.prototype.sum", function() 
 	{
-		equals([1,4,23,3].sum(), 31);
-		equals([1,4,23,,,3].sum(), 31);
-		equals([].sum(), 0);
+		equal([1,4,23,3].sum(), 31);
+		equal([1,4,23,,,3].sum(), 31);
+		equal([].sum(), 0);
 	});
 		
 	test("Array.prototype.insertAt", function() 
 	{
 		var arr1 = [1,2,3,4,5,6,7];
-		equals(arr1.insertAt("end"), "end");
-		equals(arr1.join(","), "1,2,3,4,5,6,7,end");
+		equal(arr1.insertAt("end"), "end");
+		equal(arr1.join(","), "1,2,3,4,5,6,7,end");
 
 		var arr1 = [1,2,3,4,5,6,7];
-		equals(arr1.insertAt("begin", 0), "begin");
-		equals(arr1.join(","), "begin,1,2,3,4,5,6,7");
+		equal(arr1.insertAt("begin", 0), "begin");
+		equal(arr1.join(","), "begin,1,2,3,4,5,6,7");
 
 		var arr1 = [1,2,3,4,5,6,7];
-		equals(arr1.insertAt("fromBegin", 3), "fromBegin");
-		equals(arr1.join(","), "1,2,3,fromBegin,4,5,6,7");
+		equal(arr1.insertAt("fromBegin", 3), "fromBegin");
+		equal(arr1.join(","), "1,2,3,fromBegin,4,5,6,7");
 
 		var arr1 = [1,2,3,4,5,6,7];
-		equals(arr1.insertAt("fromEnd", -3), "fromEnd");
-		equals(arr1.join(","), "1,2,3,4,fromEnd,5,6,7");
+		equal(arr1.insertAt("fromEnd", -3), "fromEnd");
+		equal(arr1.join(","), "1,2,3,4,fromEnd,5,6,7");
 	});
 		
 	test("Array.prototype.contains", function() 
@@ -154,79 +155,79 @@ var global = this;
 	{
 		var orig = [1,2,3];
 		var clone = orig.clone();
-		equals(orig.length, clone.length);
-		equals(orig.join(","), clone.join(","));
+		equal(orig.length, clone.length);
+		equal(orig.join(","), clone.join(","));
 
 		var orig = [1,2,,,5];
 		var clone = orig.clone();
-		equals(orig.length, clone.length);
-		equals(orig.join(","), clone.join(","));
+		equal(orig.length, clone.length);
+		equal(orig.join(","), clone.join(","));
 	});
 	
 	test("Array.prototype.remove", function() 
 	{
 		var arr = [1,2,3,4,5,6];
-		equals(arr.remove(4), 4);
-		equals(arr.length, 5);
-		equals(arr.remove(4));
-		equals(arr.length, 5);
+		equal(arr.remove(4), 4);
+		equal(arr.length, 5);
+		equal(arr.remove(4));
+		equal(arr.length, 5);
 
 		var arr = [1,2,3,1,2,3];
-		equals(arr.remove(3), 3);
-		equals(arr.join(","), "1,2,1,2,3");
+		equal(arr.remove(3), 3);
+		equal(arr.join(","), "1,2,1,2,3");
 	});
 	
 	test("Array.prototype.removeAt", function() 
 	{
 		var arr = [1,2,3,4,5,6];
-		equals(arr.removeAt(2), 3);
-		equals(arr.removeAt(12));
-		equals(arr.join(","), "1,2,4,5,6");
+		equal(arr.removeAt(2), 3);
+		equal(arr.removeAt(12));
+		equal(arr.join(","), "1,2,4,5,6");
 	});
 	
 	test("Array.prototype.removeRange", function() 
 	{
 		var arr = [1,2,3,4,5,6,7,8,9];
 		arr.removeRange(1, 1);
-		equals(arr.join(","), "1,3,4,5,6,7,8,9");
+		equal(arr.join(","), "1,3,4,5,6,7,8,9");
 
 		var arr = [1,2,3,4,5,6,7,8,9];
 		arr.removeRange(1, 3);
-		equals(arr.join(","), "1,5,6,7,8,9");
+		equal(arr.join(","), "1,5,6,7,8,9");
 
 		var arr = [1,2,3,4,5,6,7,8,9];
 		arr.removeRange(1, -3);
-		equals(arr.join(","), "1,8,9");
+		equal(arr.join(","), "1,8,9");
 
 		var arr = [1,2,3,4,5,6,7,8,9];
 		arr.removeRange(-3, -1);
-		equals(arr.join(","), "1,2,3,4,5,6");
+		equal(arr.join(","), "1,2,3,4,5,6");
 	});
 	
 	test("Array.prototype.unique", function() 
 	{
 		var arr = [1,2,3,1,2,3];
-		equals(arr.unique().join(","), "1,2,3");
+		equal(arr.unique().join(","), "1,2,3");
 
 		// sparse arrays supported
 		var arr = [1,2,,,2,3];
-		equals(arr.unique().join(","), "1,2,3");
+		equal(arr.unique().join(","), "1,2,3");
 
 		// null values are treated special
 		var arr = [1,2,null,null,2,3];
-		equals(arr.unique().join(","), "1,2,,3");
+		equal(arr.unique().join(","), "1,2,,3");
 
 		// selection test
 		var arr = [1,"2",3,"1",2,"3"];
 		var unique = arr.unique();
-		equals(unique.join(","), "1,2,3");
-		equals(typeof unique[0], "number");
-		equals(typeof unique[1], "string");
-		equals(typeof unique[2], "number");
+		equal(unique.join(","), "1,2,3");
+		equal(typeof unique[0], "number");
+		equal(typeof unique[1], "string");
+		equal(typeof unique[2], "number");
 		
 		// does not support objects
 		var arr = [{},{},{}];
-		equals(arr.unique().join(","), "[object Object]");
+		equal(arr.unique().join(","), "[object Object]");
 		
 		// but can work with special objects
 		var hashCode = 0;
@@ -237,33 +238,33 @@ var global = this;
 			return "[object Special#" + this.hashCode + "]";
 		}
 		arr = [new Special, new Special, new Special];
-		equals(arr.unique().join(","), "[object Special#0],[object Special#1],[object Special#2]");
+		equal(arr.unique().join(","), "[object Special#0],[object Special#1],[object Special#2]");
 	});
 	
 	test("Array.prototype.at", function() 
 	{
 		var arr = [1,2,3,4,5];
-		equals(arr.at(0), 1);
-		equals(arr.at(-1), 5);
-		equals(arr.at(20));
-		equals(arr.at(-20));
+		equal(arr.at(0), 1);
+		equal(arr.at(-1), 5);
+		equal(arr.at(20));
+		equal(arr.at(-20));
 	});
 	
 	test("Array.prototype.compact", function() 
 	{
 		var sparse = [1,2,3,,5,,,8];
-		equals(sparse.compact().length, 5);
+		equal(sparse.compact().length, 5);
 
 		var undef;
 		var sparse = [1,2,3,null,5,,undef,8];
-		equals(sparse.compact().length, 7);
-		equals(sparse.compact(true).length, 5);
+		equal(sparse.compact().length, 7);
+		equal(sparse.compact(true).length, 5);
 	});
 	
 	test("Array.prototype.flatten", function() 
 	{
-		equals([[1], 2, [3]].flatten().toString(), [1,2,3].toString());
-		equals([["a"],[],"b","c"].flatten().toString(), ["a","b","c"].toString());
+		equal([[1], 2, [3]].flatten().toString(), [1,2,3].toString());
+		equal([["a"],[],"b","c"].flatten().toString(), ["a","b","c"].toString());
 	});
 	
 	/** #require(ext.sugar.Function) */
@@ -283,7 +284,7 @@ var global = this;
 		debounced();
 		
 		window.setTimeout(function() {
-			equals(counter, 1);
+			equal(counter, 1);
 			start();
 		}, 200)
 	});
@@ -302,17 +303,17 @@ var global = this;
 		debounced();
 		debounced();
 		
-		equals(counter, 1);
+		equal(counter, 1);
 	});
 	
 	/** #require(ext.sugar.Number) */
 
 	test("Number.prototype.pad", function() 
 	{
-		equals((23).pad(2), "23");
-		equals((23).pad(4), "0023");
-		equals((23).pad(6), "000023");
-		equals((0).pad(6), "000000");
+		equal((23).pad(2), "23");
+		equal((23).pad(4), "0023");
+		equal((23).pad(6), "000023");
+		equal((0).pad(6), "000000");
 	});
 	
 	/** #require(ext.sugar.String) */
@@ -328,16 +329,16 @@ var global = this;
 
 	test("String.prototype.hyphenate", function() 
 	{
-		equals("backgroundColor".hyphenate(), "background-color");
-		equals("WebkitTransform".hyphenate(), "-webkit-transform");
-		equals("ISOString".hyphenate(), "-i-s-o-string");
+		equal("backgroundColor".hyphenate(), "background-color");
+		equal("WebkitTransform".hyphenate(), "-webkit-transform");
+		equal("ISOString".hyphenate(), "-i-s-o-string");
 	});
 
 	test("String.prototype.repeat", function() 
 	{
-		equals("x".repeat(3), "xxx");
-		equals("xyz".repeat(3), "xyzxyzxyz");
-		equals("xyz".repeat(0), "");
+		equal("x".repeat(3), "xxx");
+		equal("xyz".repeat(3), "xyzxyzxyz");
+		equal("xyz".repeat(0), "");
 	});
 	
 	
@@ -366,7 +367,7 @@ var global = this;
 			}, 
 			"profiles" : [{name:"source"}]
 		});
-		equals(jasy.Asset.toUri("my.png"), "asset/my.png");
+		equal(jasy.Asset.toUri("my.png"), "asset/my.png");
 
 		
 		jasy.Asset.resetData();
@@ -377,7 +378,7 @@ var global = this;
 			}, 
 			"profiles" : [{name:"source", "root":"xxx/yyy/"}]
 		});
-		equals(jasy.Asset.toUri("my.png"), "xxx/yyy/asset/my.png");
+		equal(jasy.Asset.toUri("my.png"), "xxx/yyy/asset/my.png");
 
 
 		jasy.Asset.resetData();
@@ -388,7 +389,7 @@ var global = this;
 			}, 
 			"profiles" : [{name:"source", "root":"http://mycdn.com/xxx/yyy/"}]
 		});
-		equals(jasy.Asset.toUri("my.png"), "http://mycdn.com/xxx/yyy/asset/my.png");
+		equal(jasy.Asset.toUri("my.png"), "http://mycdn.com/xxx/yyy/asset/my.png");
 		
 		
 		jasy.Asset.resetData();
@@ -401,7 +402,7 @@ var global = this;
 			}, 
 			"profiles" : [{name:"source", "root":"http://mycdn.com/app/source/"}]
 		});
-		equals(jasy.Asset.toUri("lib2/my.png"), "http://mycdn.com/app/source/../../lib2/asset/my.png");
+		equal(jasy.Asset.toUri("lib2/my.png"), "http://mycdn.com/app/source/../../lib2/asset/my.png");
 
 	});
 	
@@ -421,7 +422,7 @@ var global = this;
 			}, 
 			"profiles" : [{name:"build", "root":"asset/"}]
 		});
-		equals(jasy.Asset.toUri("my.png"), "asset/my.png");
+		equal(jasy.Asset.toUri("my.png"), "asset/my.png");
 
 		
 		jasy.Asset.resetData();
@@ -432,7 +433,7 @@ var global = this;
 			}, 
 			"profiles" : [{name:"build", "root":"xxx/yyy/asset/"}]
 		});
-		equals(jasy.Asset.toUri("my.png"), "xxx/yyy/asset/my.png");
+		equal(jasy.Asset.toUri("my.png"), "xxx/yyy/asset/my.png");
 
 
 		jasy.Asset.resetData();
@@ -443,7 +444,7 @@ var global = this;
 			}, 
 			"profiles" : [{name:"build", "root":"http://mycdn.com/xxx/yyy/asset/"}]
 		});
-		equals(jasy.Asset.toUri("my.png"), "http://mycdn.com/xxx/yyy/asset/my.png");
+		equal(jasy.Asset.toUri("my.png"), "http://mycdn.com/xxx/yyy/asset/my.png");
 		
 	});
 		
@@ -462,9 +463,9 @@ var global = this;
 			}, 
 			"profiles" : [{name:"build", "root":"asset/"}]
 		});
-		equals(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
-		equals(core.io.Asset.getImageSize("myapp/icons/app.png")+"", [48, 48]+"");
-		equals(core.io.Asset.getFrameNumber("myapp/icons/app.png"), 1);
+		equal(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
+		equal(core.io.Asset.getImageSize("myapp/icons/app.png")+"", [48, 48]+"");
+		equal(core.io.Asset.getFrameNumber("myapp/icons/app.png"), 1);
 		
 	});
 
@@ -483,7 +484,7 @@ var global = this;
 			}, 
 			"profiles" : [{name:"build", "root":"asset/"}]
 		});
-		equals(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
+		equal(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
 
 		var imgData = core.io.Asset.getImage("myapp/icons/app.png");
 		strictEqual(imgData.left, 0);
@@ -510,7 +511,7 @@ var global = this;
 			"profiles" : [{name:"build", "root":"asset/"}],
 			"sprites" : ["icons.png"]
 		});
-		equals(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
+		equal(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
 
 		var imgData = core.io.Asset.getImage("myapp/icons/app.png");
 		strictEqual(imgData.width, 48);
@@ -538,7 +539,7 @@ var global = this;
 			"profiles" : [{name:"build", "root":"asset/"}],
 			"sprites" : ["myapp/icons.png"]
 		});
-		equals(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
+		equal(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
 
 		var imgData = core.io.Asset.getImage("myapp/icons/app.png");
 		strictEqual(imgData.width, 48);
@@ -565,7 +566,7 @@ var global = this;
 			"profiles" : [{name:"build", "root":"asset/"}],
 			"sprites" : ["/icons.png"]
 		});
-		equals(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
+		equal(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
 
 		var imgData = core.io.Asset.getImage("myapp/icons/app.png");
 		strictEqual(imgData.width, 48);
@@ -1049,10 +1050,10 @@ var global = this;
 		var text = "{{^check}}No{{/check}}{{#check}}Yes{{/check}}";
 		var tree = core.template.Parser.parse(text);
 
-		equals(tree[0].tag, "^");
-		equals(tree[0].name, "check");
-		equals(tree[1].tag, "#");
-		equals(tree[1].name, "check");
+		equal(tree[0].tag, "^");
+		equal(tree[0].name, "check");
+		equal(tree[1].tag, "#");
+		equal(tree[1].name, "check");
 		
 	});
 	
@@ -1079,7 +1080,7 @@ var global = this;
 			}]
 		});
 		
-		equals(output, "Sascha[0]Christoph[1]Ivo[2]");
+		equal(output, "Sascha[0]Christoph[1]Ivo[2]");
 		
 	}); 
 	
@@ -1303,12 +1304,12 @@ var global = this;
 	
 	test("Creating global", function() {
 		core.Main.declareNamespace("foo", 3);
-		equals(global.foo, 3);
+		equal(global.foo, 3);
 	});
 
 	test("Creating namespace", function() {
 		core.Main.declareNamespace("abc.def", 5);
-		equals(global.abc.def, 5);
+		equal(global.abc.def, 5);
 	});
 
 
@@ -1328,16 +1329,16 @@ var global = this;
 	
 	test("Creating empty module", function() {
 		core.Module("abc.Module1", {});
-		equals(core.Module.isModule(abc.Module1), true);
-		equals(abc.Module1.moduleName, "abc.Module1");
-		equals(abc.Module1.toString(), "[module abc.Module1]");
+		equal(core.Module.isModule(abc.Module1), true);
+		equal(abc.Module1.moduleName, "abc.Module1");
+		equal(abc.Module1.toString(), "[module abc.Module1]");
 	});
 	
 	test("Creating module with short namespace", function() {
 		core.Module("x.Module1", {});
-		equals(core.Module.isModule(x.Module1), true);
-		equals(x.Module1.moduleName, "x.Module1");
-		equals(x.Module1.toString(), "[module x.Module1]");
+		equal(core.Module.isModule(x.Module1), true);
+		equal(x.Module1.moduleName, "x.Module1");
+		equal(x.Module1.toString(), "[module x.Module1]");
 	});
 
 	test("Module false validation", function() {
@@ -1352,13 +1353,13 @@ var global = this;
 			method2 : function() {},
 			method3 : function() {}
 		});
-		equals(core.Module.isModule(abc.Module2), true);
+		equal(core.Module.isModule(abc.Module2), true);
 		ok(abc.Module2.method1 instanceof Function);
 		ok(abc.Module2.method2 instanceof Function);
 		ok(abc.Module2.method3 instanceof Function);
-		equals(abc.Module2.method1.displayName, "abc.Module2.method1");
-		equals(abc.Module2.method2.displayName, "abc.Module2.method2");
-		equals(abc.Module2.method3.displayName, "abc.Module2.method3");
+		equal(abc.Module2.method1.displayName, "abc.Module2.method1");
+		equal(abc.Module2.method2.displayName, "abc.Module2.method2");
+		equal(abc.Module2.method3.displayName, "abc.Module2.method3");
 	});
 	
 	test("Checking module name", function() {
@@ -1414,9 +1415,9 @@ var global = this;
 
 	test("Creating empty class", function() {
 		core.Class("abc.Class1", {});
-		equals(core.Class.isClass(abc.Class1), true);
-		equals(abc.Class1.className, "abc.Class1");
-		equals(abc.Class1.toString(), "[class abc.Class1]");
+		equal(core.Class.isClass(abc.Class1), true);
+		equal(abc.Class1.className, "abc.Class1");
+		equal(abc.Class1.toString(), "[class abc.Class1]");
 	});
 	
 	test("Class false validation", function() {
@@ -1636,7 +1637,7 @@ var global = this;
 			core.Assert.isType(eventMap, "Map");
 			return true;
 		})(), "Events should be a returned as a map");
-		equals(eventMap.click, MouseEvent, "No click event found");
+		equal(eventMap.click, MouseEvent, "No click event found");
 		
 		core.Class("events.Keyboard", {
 			events : {
@@ -1650,7 +1651,7 @@ var global = this;
 		});
 		
 		var full = Object.keys(core.Class.getEvents(events.Widget)).join(",");
-		equals(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
+		equal(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
 
 		core.Class("events.Widget2", {
 			include : [events.Mouse, events.Keyboard],
@@ -1660,7 +1661,7 @@ var global = this;
 		});
 
 		var full = Object.keys(core.Class.getEvents(events.Widget2)).join(",");
-		equals(full, "custom,click,mousedown,mouseup,keydown,keyup", "Merge of events with own events failed");
+		equal(full, "custom,click,mousedown,mouseup,keydown,keyup", "Merge of events with own events failed");
 	});
 	
 	
@@ -1698,7 +1699,7 @@ var global = this;
 		});		
 		
 		var full = Object.keys(core.Class.getEvents(events.Widget)).join(",");
-		equals(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
+		equal(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
 		
 		raises(function() {
 			core.Class("events.Widget2", {
@@ -1797,31 +1798,31 @@ var global = this;
 			core.Class.assertIsClass(properties.Simple);
 			return true;
 		})());
-		equals(Object.keys(core.Class.getProperties(properties.Simple)).join(","), "color,backgroundColor");
+		equal(Object.keys(core.Class.getProperties(properties.Simple)).join(","), "color,backgroundColor");
 
-		equals(core.Class.getProperties(properties.Simple).color.type, "String");
-		equals(typeof core.Class.getProperties(properties.Simple).color.apply, "function");
+		equal(core.Class.getProperties(properties.Simple).color.type, "String");
+		equal(typeof core.Class.getProperties(properties.Simple).color.apply, "function");
 
 		ok(properties.Simple.prototype.getColor instanceof Function);
 		ok(properties.Simple.prototype.getBackgroundColor instanceof Function);
 		ok(properties.Simple.prototype.setColor instanceof Function);
 		ok(properties.Simple.prototype.setBackgroundColor instanceof Function);
 
-		equals(properties.Simple.prototype.getColor.displayName, "properties.Simple.getColor");
-		equals(properties.Simple.prototype.getBackgroundColor.displayName, "properties.Simple.getBackgroundColor");
-		equals(properties.Simple.prototype.setColor.displayName, "properties.Simple.setColor");
-		equals(properties.Simple.prototype.setBackgroundColor.displayName, "properties.Simple.setBackgroundColor");
+		equal(properties.Simple.prototype.getColor.displayName, "properties.Simple.getColor");
+		equal(properties.Simple.prototype.getBackgroundColor.displayName, "properties.Simple.getBackgroundColor");
+		equal(properties.Simple.prototype.setColor.displayName, "properties.Simple.setColor");
+		equal(properties.Simple.prototype.setBackgroundColor.displayName, "properties.Simple.setBackgroundColor");
 		
-		equals(properties.Simple.prototype.getColor.length, 0);
-		equals(properties.Simple.prototype.getBackgroundColor.length, 0);
-		equals(properties.Simple.prototype.setColor.length, 1);
-		equals(properties.Simple.prototype.setBackgroundColor.length, 1);
+		equal(properties.Simple.prototype.getColor.length, 0);
+		equal(properties.Simple.prototype.getBackgroundColor.length, 0);
+		equal(properties.Simple.prototype.setColor.length, 1);
+		equal(properties.Simple.prototype.setBackgroundColor.length, 1);
 		
 		var obj1 = new properties.Simple;
-		equals(obj1.setColor("red"), "red");
-		equals(obj1.setBackgroundColor("black"), "black");
-		equals(obj1.getColor(), "red");
-		equals(obj1.getBackgroundColor(), "black");
+		equal(obj1.setColor("red"), "red");
+		equal(obj1.setBackgroundColor("black"), "black");
+		equal(obj1.getColor(), "red");
+		equal(obj1.getBackgroundColor(), "black");
 	});
 	
 	
@@ -2026,7 +2027,7 @@ var global = this;
 		});
 		
 		ok(core.Class.isClass(properties.Text));
-		equals(Object.keys(core.Class.getProperties(properties.Text)).join(","), "wrap,color,fontFamily,lineHeight");
+		equal(Object.keys(core.Class.getProperties(properties.Text)).join(","), "wrap,color,fontFamily,lineHeight");
 
 
 
@@ -2045,7 +2046,7 @@ var global = this;
 		});
 
 		ok(core.Class.isClass(properties.Dimension));
-		equals(Object.keys(core.Class.getProperties(properties.Dimension)).join(","), "width,height");
+		equal(Object.keys(core.Class.getProperties(properties.Dimension)).join(","), "width,height");
 		
 		
 
@@ -2074,12 +2075,12 @@ var global = this;
 		});
 		
 		ok(core.Class.isClass(properties.Label));
-		equals(Object.keys(core.Class.getProperties(properties.Label)).join(","), "wrap,color,fontFamily,lineHeight,width,height");
+		equal(Object.keys(core.Class.getProperties(properties.Label)).join(","), "wrap,color,fontFamily,lineHeight,width,height");
 		
 		
 		
 		var ll = new properties.Label;
-		equals(ll.getLineHeight(), 2);
+		equal(ll.getLineHeight(), 2);
 	});
 	
 	
@@ -2110,8 +2111,8 @@ var global = this;
 		var child1 = new properties.Child1();
 		var child2 = new properties.Child2();
 		
-		equals("Child1", child1.getProp());
-		equals("Parent", child2.getProp());
+		equal("Child1", child1.getProp());
+		equal("Parent", child2.getProp());
 	});
 	
 
@@ -2150,11 +2151,11 @@ var global = this;
 					});
 
 					this.fireEvent("simple1");
-					equals(eventExecuted, 1);
+					equal(eventExecuted, 1);
 
 					this.fireEvent("simple1");
 					this.fireEvent("simple1");
-					equals(eventExecuted, 3);
+					equal(eventExecuted, 3);
 				}
 			}
 		});
@@ -2174,7 +2175,7 @@ var global = this;
 					var contextObject = {valid : 1};
 
 					this.addListener("simple2", function() {
-						equals(this.valid, 1);
+						equal(this.valid, 1);
 					}, contextObject);
 
 					this.fireEvent("simple2");
@@ -2202,23 +2203,23 @@ var global = this;
 					this.addListener("simple4", myListener);
 
 					this.fireEvent("simple4");
-					equals(eventExecuted, 1);
+					equal(eventExecuted, 1);
 
 					this.removeListener("simple4", myListener);
 
-					equals(eventExecuted, 1);
+					equal(eventExecuted, 1);
 					this.fireEvent("simple4");
-					equals(eventExecuted, 1);
+					equal(eventExecuted, 1);
 
-					equals(this.addListener("simple4", myListener), true);
-					equals(this.addListener("simple4", myListener), false);
-					equals(this.addListener("simple4", myListener), false);
+					equal(this.addListener("simple4", myListener), true);
+					equal(this.addListener("simple4", myListener), false);
+					equal(this.addListener("simple4", myListener), false);
 
 					this.fireEvent("simple4");
-					equals(eventExecuted, 2);
+					equal(eventExecuted, 2);
 
-					equals(this.removeListener("simple4", myListener), true);
-					equals(this.removeListener("simple4", myListener), false);
+					equal(this.removeListener("simple4", myListener), true);
+					equal(this.removeListener("simple4", myListener), false);
 				}
 			}
 		});
@@ -2238,18 +2239,18 @@ var global = this;
 					var myListener = function() {};
 					var myHelperObject = {};
 
-					equals(this.hasListener("simple5"), false);
+					equal(this.hasListener("simple5"), false);
 					this.addListener("simple5", myListener);
-					equals(this.hasListener("simple5"), true);
-					equals(this.hasListener("simple5", myListener), true);
-					equals(this.hasListener("simple5", myListener, myHelperObject), false);
+					equal(this.hasListener("simple5"), true);
+					equal(this.hasListener("simple5", myListener), true);
+					equal(this.hasListener("simple5", myListener, myHelperObject), false);
 					this.removeListener("simple5", myListener);
 
-					equals(this.hasListener("simple5"), false);
+					equal(this.hasListener("simple5"), false);
 					this.addListener("simple5", myListener, myHelperObject);
-					equals(this.hasListener("simple5"), true);
-					equals(this.hasListener("simple5", myListener), false);
-					equals(this.hasListener("simple5", myListener, myHelperObject), true);
+					equal(this.hasListener("simple5"), true);
+					equal(this.hasListener("simple5", myListener), false);
+					equal(this.hasListener("simple5", myListener, myHelperObject), true);
 					this.removeListener("simple5", myListener, myHelperObject);
 
 				}
@@ -2281,18 +2282,18 @@ var global = this;
 					};
 
 					this.addListener("simple6", myListener2);
-					equals(count1, 0);
-					equals(count2, 0);
+					equal(count1, 0);
+					equal(count2, 0);
 
 					this.fireEvent("simple6");
 
-					equals(count1, 0);
-					equals(count2, 1);
+					equal(count1, 0);
+					equal(count2, 1);
 
 					this.fireEvent("simple6");
 
-					equals(count1, 1);
-					equals(count2, 2);
+					equal(count1, 1);
+					equal(count2, 2);
 
 				}
 			}
@@ -2325,18 +2326,18 @@ var global = this;
 					this.addListener("simple7", myListener1);
 					this.addListener("simple7", myListener2);
 
-					equals(count1, 0);
-					equals(count2, 0);
+					equal(count1, 0);
+					equal(count2, 0);
 
 					this.fireEvent("simple7");
 
-					equals(count1, 1);
-					equals(count2, 1);
+					equal(count1, 1);
+					equal(count2, 1);
 
 					this.fireEvent("simple7");
 
-					equals(count1, 1);
-					equals(count2, 2);
+					equal(count1, 1);
+					equal(count2, 2);
 
 				}
 			}
@@ -2361,13 +2362,13 @@ var global = this;
 					}
 
 					this.addListener("simple8", myListener);
-					equals(count, 0);
+					equal(count, 0);
 
 					this.fireEvent("simple8");
-					equals(count, 1);
+					equal(count, 1);
 
 					this.fireEvent("simple8");
-					equals(count, 1);
+					equal(count, 1);
 
 				}
 			}
@@ -2391,13 +2392,13 @@ var global = this;
 					}
 
 					this.addListenerOnce("simple9", myListener);
-					equals(count, 0);
+					equal(count, 0);
 
 					this.fireEvent("simple9");
-					equals(count, 1);
+					equal(count, 1);
 
 					this.fireEvent("simple9");
-					equals(count, 1);
+					equal(count, 1);
 
 				}
 			}
@@ -2437,10 +2438,10 @@ var global = this;
 		});
 
 		var obj = pooled.Simple1.obtain(1);
-		equals(typeof obj, "object");
-		equals(obj.a, 1);
-		equals(obj.constructor.className, "pooled.Simple1");
-		equals(obj instanceof pooled.Simple1, true);
+		equal(typeof obj, "object");
+		equal(obj.a, 1);
+		equal(obj.constructor.className, "pooled.Simple1");
+		equal(obj instanceof pooled.Simple1, true);
 
 	});
 
@@ -2456,14 +2457,14 @@ var global = this;
 		});
 
 		var obj1 = pooled.Simple2.obtain(1);
-		equals(typeof obj1, "object");
-		equals(obj1.a, 1);
+		equal(typeof obj1, "object");
+		equal(obj1.a, 1);
 
 		obj1.release();
 
 		var obj2 = pooled.Simple2.obtain(2);
-		equals(typeof obj2, "object");
-		equals(obj2.a, 2);
+		equal(typeof obj2, "object");
+		equal(obj2.a, 2);
 
 	});
 
@@ -2478,34 +2479,34 @@ var global = this;
 			}
 		});
 
-		equals(pooled.Simple3.getPoolSize(), 0);
+		equal(pooled.Simple3.getPoolSize(), 0);
 
 		var obj1 = pooled.Simple3.obtain(1);
-		equals(typeof obj1, "object");
-		equals(obj1.a, 1);
+		equal(typeof obj1, "object");
+		equal(obj1.a, 1);
 
-		equals(pooled.Simple3.getPoolSize(), 0);
+		equal(pooled.Simple3.getPoolSize(), 0);
 
 		obj1.release();
 
-		equals(pooled.Simple3.getPoolSize(), 1);
+		equal(pooled.Simple3.getPoolSize(), 1);
 
 		var obj2 = pooled.Simple3.obtain(2);
-		equals(typeof obj2, "object");
-		equals(obj2.a, 2);
+		equal(typeof obj2, "object");
+		equal(obj2.a, 2);
 
-		equals(pooled.Simple3.getPoolSize(), 0);
+		equal(pooled.Simple3.getPoolSize(), 0);
 
 		var obj3 = pooled.Simple3.obtain(3);
-		equals(typeof obj3, "object");
-		equals(obj3.a, 3);
+		equal(typeof obj3, "object");
+		equal(obj3.a, 3);
 
-		equals(pooled.Simple3.getPoolSize(), 0);
+		equal(pooled.Simple3.getPoolSize(), 0);
 
 		obj2.release();
 		obj3.release();
 
-		equals(pooled.Simple3.getPoolSize(), 2);
+		equal(pooled.Simple3.getPoolSize(), 2);
 
 	});	
 
@@ -2524,25 +2525,25 @@ var global = this;
 		});
 
 		var obj1 = pooled.Simple4.obtain();
-		equals(typeof obj1, "object");
+		equal(typeof obj1, "object");
 
 		var obj2 = pooled.Simple4.obtain();
-		equals(typeof obj2, "object");
+		equal(typeof obj2, "object");
 
 		var obj3 = pooled.Simple4.obtain();
-		equals(typeof obj3, "object");
+		equal(typeof obj3, "object");
 
 		var obj4 = pooled.Simple4.obtain();
-		equals(typeof obj4, "object");
+		equal(typeof obj4, "object");
 
-		equals(pooled.Simple4.getPoolSize(), 0);
+		equal(pooled.Simple4.getPoolSize(), 0);
 
 		obj1.release();
 		obj2.release();
 		obj3.release();
 		obj4.release();
 
-		equals(pooled.Simple4.getPoolSize(), 2);
+		equal(pooled.Simple4.getPoolSize(), 2);
 
 	});
 
@@ -2565,18 +2566,18 @@ var global = this;
 		});
 
 		var obj1 = pooled.Simple5.obtain(1);
-		equals(typeof obj1, "object");
-		equals(obj1.isreused, false);
+		equal(typeof obj1, "object");
+		equal(obj1.isreused, false);
 
 		obj1.release();
 
 		var obj2 = pooled.Simple5.obtain(2);
-		equals(typeof obj2, "object");
-		equals(obj2.isreused, true);
+		equal(typeof obj2, "object");
+		equal(obj2.isreused, true);
 
 		var obj3 = pooled.Simple5.obtain(3);
-		equals(typeof obj3, "object");
-		equals(obj3.isreused, false);
+		equal(typeof obj3, "object");
+		equal(obj3.isreused, false);
 
 		obj2.release();
 		obj3.release();

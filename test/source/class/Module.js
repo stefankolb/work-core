@@ -1,6 +1,6 @@
 (function(global) 
 {
-  module("Core :: Modules", {
+  module("Modules", {
     teardown : function() {
       delete global.abc;
       delete global.x;

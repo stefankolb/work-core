@@ -1,6 +1,6 @@
 (function(global) 
 {
-  module("Core :: Namespaces", {
+  module("Namespaces", {
     teardown : function() {
       delete global.foo;
       delete global.abc;

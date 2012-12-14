@@ -1,4 +1,4 @@
-module("Core :: Crypt");
+module("Crypt");
 
 test("Adler32", function() {
   

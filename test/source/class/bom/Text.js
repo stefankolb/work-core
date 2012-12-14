@@ -1,6 +1,6 @@
-module("Core :: BOM");
+module("BOM :: Text");
 
-test("Text", function() {
+test("Basics", function() {
   
   strictEqual(typeof core.bom.Text.measure("hello world"), "object");
   strictEqual(typeof core.bom.Text.measure("hello world").width, "number");

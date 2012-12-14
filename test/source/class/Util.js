@@ -1,4 +1,4 @@
-module("Core :: Util");
+module("Util");
 
 test("Id", function() {
   

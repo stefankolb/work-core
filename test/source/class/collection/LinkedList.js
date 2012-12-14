@@ -1,4 +1,4 @@
-module("Core :: Collection :: LinkedList");
+module("Collection :: LinkedList");
 
 test("Create", function() 
 {

@@ -1,4 +1,4 @@
-module("Core :: Template");
+module("Template");
 
 test("Basic", function() {
   

@@ -19,7 +19,7 @@ def source():
         classes = Resolver(session).addClassName("test.tests").getSortedClasses()
         
         # Writing source loader
-        outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js", "QUnit.load();")
+        outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js")
 
 
 @task("Build")
@@ -45,7 +45,7 @@ def build():
         classes = Resolver(session).addClassName("test.tests").getSortedClasses()
 
         # Compressing classes
-        outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js", "QUnit.load();")
+        outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")
     
     
 @task("Clear cache")

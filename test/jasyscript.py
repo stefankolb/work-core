@@ -1,5 +1,4 @@
 # Configure
-session.permutateField("es5")
 session.setField("debug", True)
 
 

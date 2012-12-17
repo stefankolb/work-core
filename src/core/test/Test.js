@@ -35,6 +35,17 @@
         this.__passed.push([msg]);
       },
 
+      identical : function(a, b, msg) 
+      {
+        try{
+          core.Assert.identical(a, b, msg);  
+        } catch(ex) {
+          this.__failed.push([msg, ex]);
+        }
+
+        this.__passed.push([msg]);
+      },      
+
       ok : function(a, msg) 
       {
         try{
@@ -45,6 +56,18 @@
 
         this.__passed.push([msg]);
       },
+
+      raises : function(func, msg) 
+      {
+        try
+        {
+          func();
+          this.__failed.push([msg, "Did not raise exception!"]);  
+        }
+        catch(ex) {
+          this.__passed.push([msg]);        
+        }
+      },      
 
       done : function() {
         this.__suite.done(this);
@@ -60,8 +83,11 @@
       {
         try{
           this.__func();    
-        } catch(ex) {
+        } 
+        catch(ex) 
+        {
           this.fail("Exception: " + ex);
+          return;
         }
 
         if (this.__timeout == null) {

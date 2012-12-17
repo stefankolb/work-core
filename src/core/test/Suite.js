@@ -3,7 +3,7 @@
  */
 core.Class("core.test.Suite",
 {
-  construct : function(caption) 
+  construct : function(caption, setup, teardown) 
   {
     this.__caption = caption;
 
@@ -12,12 +12,12 @@ core.Class("core.test.Suite",
     this.__passed = [];
     this.__failed = [];
 
+    this.__setup = setup;
+    this.__teardown = teardown;
+
     // Revamp run method to allow auto execution as soon 
     // as no further tests are being added
     this.__autoRun = this.run.debounce(100);
-
-    
-
   },
 
   members : 
@@ -37,9 +37,11 @@ core.Class("core.test.Suite",
 
     check : function() 
     {
+      // console.debug("CHECK: ", this.__running, this.__passed.length, this.__failed.length)
+
       if (this.__running == (this.__passed.length + this.__failed.length)) 
       {
-        console.info("Suite completed: " + this.__passed.length + " passed; " + this.__failed.length + " failed");
+        console.info("Completed " + this.__caption + ": " + this.__passed.length + " passed; " + this.__failed.length + " failed");
 
         // Stop from further checks
         window.clearInterval(this.__waitHandle);
@@ -60,6 +62,10 @@ core.Class("core.test.Suite",
       this.__failed.push(test);
     },
 
+    __timeoutHandler : function() {
+      this.fail("Timeout (" + this.timeout + ")");
+    },
+
     run : function() 
     {
       var queue = this.__tests;
@@ -74,9 +80,7 @@ core.Class("core.test.Suite",
       // Initialize waiting routine
       this.__waitHandle = window.setInterval(this.check.bind(this), 100);
 
-      console.debug("");
       console.debug("Running " + this.__caption + " (" + queue.length + " tests)...");
-      console.debug("========================================");
 
       // Useful to be sure that test do not depend on each other
       if (this.randomize) 
@@ -90,21 +94,20 @@ core.Class("core.test.Suite",
       {
         var test = queue.pop();
 
-        // Asynchronous test
-        if ("timeout" in test)
-        {
-          window.setTimeout(function() {
-            this.fail("Timeout (" + test.timeout + ")");
-          }.bind(test), test.timeout);
+        // Asynchronous test with timeout
+        if ("timeout" in test) {
+          window.setTimeout(this.__timeoutHandler.bind(test), test.timeout);
         }
 
+        // Run test in protected mode (try-catch :))
         try {
           test.run();
         }
         catch(ex) 
         {
           console.error("Failed: " + test.title());
-          console.error(""+ex)
+          console.error("" + ex);
+
           this.__failed.push(test);
         }
 

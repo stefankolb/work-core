@@ -30,12 +30,7 @@ suite.test("Line Breaks", function() {
   
   this.equal(output, "Break\nHere xxx.");
 
-  // Fake async
-  window.setTimeout(function() {
-    this.done();
-  }.bind(this), 100);
-  
-}, 300);
+});
 
 suite.test("Lists", function() {
 

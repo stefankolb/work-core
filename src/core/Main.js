@@ -1,7 +1,7 @@
 /*
 ==================================================================================================
-  Core - JavaScript Foundation
-  Copyright 2010-2012 Zynga Inc.
+	Core - JavaScript Foundation
+	Copyright 2010-2012 Zynga Inc.
 ==================================================================================================
 */
 
@@ -96,19 +96,27 @@
 		TYPES: (classes + " Null Native Map Integer Primitive").split(" "),
 		
 
-	  /**
-	   * {Boolean} Host objects can return type values that are different from their actual
-	   * data type. The objects we are concerned with usually return non-primitive
-	   * types of object, function, or unknown.
-	   *
-	   * - @object {var} The owner of the property.
-	   * - @property {String} The property to check.
-	   */		
+		/**
+		 * {Boolean} Host objects can return type values that are different from their actual
+		 * data type. The objects we are concerned with usually return non-primitive
+		 * types of object, function, or unknown.
+		 *
+		 * - @object {var} The owner of the property.
+		 * - @property {String} The property to check.
+		 */		
 		isHostType : function(object, property) 
 		{
-	    var type = object != null ? typeof object[property] : 'number';
+			var type = object != null ? typeof object[property] : 'number';
 
-	    return !/^(?:boolean|number|string|undefined)$/.test(type) && (type == 'object' ? !!object[property] : true);
+			return !/^(?:boolean|number|string|undefined)$/.test(type) && (type == 'object' ? !!object[property] : true);
+		},
+
+
+		/**
+		 * {String} Gets the internal [[Class]] of a @value {var}.
+		 */
+		getClassOf : function(value) {
+			return value == null ? "Null" : toString.call(value).slice(8, -1);
 		},
 
 

@@ -11,14 +11,17 @@
         throw new Error("Please use 'new' for creating Suite instances!");
       }
 
-      if (navigator.userAgent.indexOf("PhantomJS/") != -1) {
-        console.debug("Headless browser!")
-      } else {
-        console.debug("Real browser!")
+      if (jasy.Env.isSet("runtime", "browser")) 
+      {
+        if (navigator.userAgent.indexOf("PhantomJS/") != -1) {
+          console.debug("Environment: Headless browser")
+        } else {
+          console.debug("Environment: Browser")
+        }
       }
-
-      if (global.phantom) {
-        console.log("Phantom: ", Object.prototype.toString.call(global.phantom));
+      else 
+      {
+        console.info("Environment: Native");
       }
 
       this.__caption = caption;

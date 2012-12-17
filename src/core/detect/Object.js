@@ -48,5 +48,5 @@ core.Module("core.detect.Object",
 
 			return !!result;
 		};
-	})(this)
+	})(core.Main.getGlobal())
 });

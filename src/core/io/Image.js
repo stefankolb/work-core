@@ -65,4 +65,4 @@
 			img.src = uri + (nocache ? dynamicExtension : "");
 		}
 	});
-})(this);
+})(core.Main.getGlobal());

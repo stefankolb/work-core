@@ -94,4 +94,4 @@
 			request.send();
 		}
 	});
-})(this);
+})(core.Main.getGlobal());

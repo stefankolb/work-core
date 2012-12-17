@@ -1,10 +1,8 @@
 /**
  * #require(ext.sugar.Function)
  */
-(function() 
+(function(global) 
 {
-  var global = (function(){ return this || (1,eval)('this') })();
-
   core.Class("core.test.Suite",
   {
     construct : function(caption, setup, teardown) 
@@ -143,4 +141,4 @@
       }
     }
   });
-})(this);
+})(core.Main.getGlobal());

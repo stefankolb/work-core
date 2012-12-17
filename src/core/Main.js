@@ -95,6 +95,31 @@
 		/** {=Array} Set of types which are supported */
 		TYPES: (classes + " Null Native Map Integer Primitive").split(" "),
 		
+
+	  /**
+	   * {Boolean} Host objects can return type values that are different from their actual
+	   * data type. The objects we are concerned with usually return non-primitive
+	   * types of object, function, or unknown.
+	   *
+	   * - @object {var} The owner of the property.
+	   * - @property {String} The property to check.
+	   */		
+		isHostType : function(object, property) 
+		{
+	    var type = object != null ? typeof object[property] : 'number';
+
+	    return !/^(?:boolean|number|string|undefined)$/.test(type) && (type == 'object' ? !!object[property] : true);
+		},
+
+
+		/**
+		 * {Object} Returns the global object
+		 */
+		getGlobal : function() {
+			return global;
+		},
+
+
 		/**
 		 * {Boolean} Whether the given @value {var} is of the given @type {String}.
 		 *
@@ -111,7 +136,7 @@
 		 * - `Boolean`
 		 * - `Map`
 		 * - `Integer`
-		 * - `Primitive`
+		 * - `Primitive`,
 		 */
 		isTypeOf : function(value, type) 
 		{

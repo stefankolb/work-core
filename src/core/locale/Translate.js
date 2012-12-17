@@ -145,4 +145,4 @@
 			return args.length <= 2 ? result : template(result, args, 2);     
 		}
 	});
-})(this);
+})(core.Main.getGlobal());

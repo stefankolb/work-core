@@ -36,4 +36,4 @@
 		}
 	});
 
-})(this);
+})(core.Main.getGlobal());

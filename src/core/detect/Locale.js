@@ -20,5 +20,5 @@ core.Module("core.detect.Locale",
 		var split = input.indexOf("-");
 
 		return split > 0 ? input.substring(0, split) : input;
-	})(this)
+	})(core.Main.getGlobal())
 });

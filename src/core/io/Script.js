@@ -117,5 +117,5 @@
 			return elem;
 		}
 	});
-})(this);
+})(core.Main.getGlobal());
 

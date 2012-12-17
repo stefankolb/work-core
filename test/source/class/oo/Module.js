@@ -60,4 +60,4 @@
       core.Module("two..Dots", {});
     });
   });
-})(this);
+})(core.Main.getGlobal());

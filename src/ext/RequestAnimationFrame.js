@@ -102,4 +102,4 @@
 		}
 	});
 
-})(this);
+})(core.Main.getGlobal());

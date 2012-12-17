@@ -243,4 +243,4 @@
 		}
 	});
 
-})(this);
+})(core.Main.getGlobal());

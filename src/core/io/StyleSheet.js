@@ -7,8 +7,10 @@
 ==================================================================================================
 */
 
-(function(global, doc) 
+(function(global) 
 {
+	var doc = global.document;
+
 	// Dynamic URI can be shared because we do not support reloading files
 	var dynamicExtension = "?r=" + Date.now();
 
@@ -129,4 +131,4 @@
 			}
 		}
 	});
-})(this, document);
+})(core.Main.getGlobal());

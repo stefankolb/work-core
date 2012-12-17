@@ -5,6 +5,10 @@ core.Class("core.test.Suite",
 {
   construct : function(caption, setup, teardown) 
   {
+    if (!(this instanceof core.test.Suite)) {
+      throw new Error("Please use 'new' for creating Suite instances!");
+    }
+
     this.__caption = caption;
 
     this.__tests = [];

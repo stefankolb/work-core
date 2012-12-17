@@ -1,12 +1,11 @@
-module("BOM :: Text");
+var suite = new core.test.Suite("BOM :: Text");
 
-test("Basics", function() {
-  
-  strictEqual(typeof core.bom.Text.measure("hello world"), "object");
-  strictEqual(typeof core.bom.Text.measure("hello world").width, "number");
-  strictEqual(typeof core.bom.Text.measure("hello world").height, "number");
+suite.test("Basics", function() 
+{
+  this.identical(typeof core.bom.Text.measure("hello world"), "object");
+  this.identical(typeof core.bom.Text.measure("hello world").width, "number");
+  this.identical(typeof core.bom.Text.measure("hello world").height, "number");
 
-  strictEqual(typeof core.bom.Text.measure("hello world foo bar baz", null, 40), "object");
-  strictEqual(core.bom.Text.measure("hello world foo bar baz", null, 40).width, 40);
-  
+  this.identical(typeof core.bom.Text.measure("hello world foo bar baz", null, 40), "object");
+  this.identical(core.bom.Text.measure("hello world foo bar baz", null, 40).width, 40);
 });

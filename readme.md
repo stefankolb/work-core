@@ -3,26 +3,25 @@ Core - A Fine Foundation for JavaScript Projects
 
 Core prepares the ground for JavaScript projects. It fills what is missing, fixes what is wrong, adds what is useful. While doing this it is still a pretty lightweight framework which is a good start for all kind of JavaScript projects.
 
-Core was designed to work together with the JavaScript tooling project [Jasy](https://github.com/zynga/jasy).
+Core was designed to work together with the JavaScript tooling project [Jasy](https://github.com/sebastian-software/jasy).
 
 ## Authors
 
-Core was initially developed by [Sebastian Werner](mailto:info@sebastian-werner.net)
-and is now continued as an official Zynga OpenSource project.
+Core is developed by [Sebastian Werner](mailto:info@sebastian-werner.net) with support from Zynga. 
 
 ## Creating Projects
 
 Core offers a skeleton project for being used via `jasy create`. This allows for an easy usage of Jasy and Core and offers a good set of typical tasks pre-configured for your use. To create a new project execute the following after Jasy has been installed:
 
 ```bash
-jasy create --name myproject --origin https://github.com/zynga/core.git 
+jasy create --name myproject --origin https://github.com/sebastian-software/core.git 
 ```
 
 Note: Replace `myproject` with the name of the project (lowecase characters, no spaces) you want to create.
 
 ## Jasy Compatibility
 
-This project is kept compatible with newest development of the [Jasy](http://github.com/zynga/jasy) tooling framework. This means that the newest GitHub versions typically require a recent Jasy version  as well. Take a look at this list to understand what version to choose from:
+This project is kept compatible with newest development of the [Jasy](http://github.com/sebastian-software/jasy) tooling framework. This means that the newest GitHub versions typically require a recent Jasy version  as well. Take a look at this list to understand what version to choose from:
 
 * **0.8**: Jasy = 0.8.x
 * **0.7**: Jasy = 0.7.x
@@ -32,7 +31,8 @@ This project is kept compatible with newest development of the [Jasy](http://git
 
 ## License
 
-Copyright (c) 2011-2012 Zynga Inc. http://zynga.com/
+Copyright (c) 2011-2012 Zynga Inc. http://zynga.com/  
+Copyright (c) 2012-2013 Sebastian Werner http://sebastian-werner.com
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

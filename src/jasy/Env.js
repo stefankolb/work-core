@@ -42,7 +42,7 @@
 
 
 		/**
-		 * Used by Jasy to inject field data
+		 * Used by Jasy to inject @fields {Array} data
 		 */
 		setFields : function(fields)
 		{

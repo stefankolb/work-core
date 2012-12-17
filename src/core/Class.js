@@ -152,7 +152,7 @@
 			core.Assert.isType(config, "Map", "Invalid class configuration in " + name);
 			
 			/** #require(ext.sugar.Object) */
-			var invalidKeys = Object.validateKeys(config, "construct,events,members,properties,include,implement".split(","));
+			var invalidKeys = Object.validateKeys(config, "construct,pooling,events,members,properties,include,implement".split(","));
 			if (invalidKeys.length > 0) {
 				throw new Error("Class declaration of " + name + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
 			}
@@ -206,6 +206,80 @@
 		// Prototype (stuff attached to all instances)
 		var proto = construct.prototype;
 	
+
+		// ------------------------------------
+		//   POOLING
+		// ------------------------------------
+
+		if (config.pooling) 
+		{
+			(function(poolConfig) 
+			{
+				var max = poolConfig.max || 25;
+				var pool = new Array(max);
+				var length = 0;
+
+				// Emulate class constructor with empty function for
+				// unified argument handling between real and reused objects.
+				var fakeConstruct = new Function;
+				fakeConstruct.prototype = proto;
+				fakeConstruct.className = fakeConstruct.displayName = name;
+				fakeConstruct.__isClass = true;
+				fakeConstruct.__events = events;
+				fakeConstruct.__properties = properties;
+
+
+				/**
+				 * Releases the given @obj {Object}.
+				 */
+				construct.release = function(obj) 
+				{
+					if (length < max) {
+						pool[length++] = obj;
+					}
+		    };
+
+		    /**
+		     * {Object} Obtains a new object from the pool or create one
+		     * dynamically based on the given constructor arguments.
+		     */
+		    construct.obtain = function(varargs) 
+		    {
+		    	if (length > 0)
+		    	{
+		    		var obj = pool[--length];
+		    		pool[length] = null;
+		    	}
+		    	else
+		    	{
+		    		var obj = new fakeConstruct;
+		    	}
+
+					// Execute original constructor as inexpensive as possible
+			    arguments.length ? construct.apply(obj, arguments) : construct.call(obj);
+
+		      return obj;
+		    };
+
+		    /**
+		     * {Integer} Returns the current size of the pool
+		     */
+		    construct.getPoolSize = function() {
+		    	return length;
+		    };
+
+		    /**
+		     * Releases the object to the pool.
+		     */
+		    proto.release = function() 
+		    {
+					if (length < max) {
+						pool[length++] = this;
+					}
+		    };
+
+			})(config.pooling);
+		}
 	
 	
 		// ------------------------------------
@@ -483,14 +557,14 @@
 		 */
 		includesClass : function(cls, inc) 
 		{
-			if (jasy.Env.isSet("debug")) {
+			if (jasy.Env.isSet("debug")) 
+			{
 				core.Class.assertIsClass(cls, "Class to check for including class is itself not a class!");
 				core.Class.assertIsClass(inc, "Class to check for being included is not a class!");
 			}
 
 			return cls.__includes.indexOf(inc) != -1;
 		}
-		
 	});
 
 })();

@@ -87,7 +87,7 @@
 
 		var inheritedPriority = fieldToPriority.inherited;
 
-		var propertyName=config.name, propertyApply=config.apply, propertyEvent=config.event;
+		var propertyName=config.name, propertyApply=config.apply, propertyFire=config.fire;
 		var propertyId = propertyNameToId[propertyName];
 		var propertyInitKey = initKeyPrefix + propertyName;
 
@@ -167,8 +167,11 @@
 				}
 
 				// Fire event
-				if (propertyEvent) {
-					child.fireDataEvent(propertyEvent, childNewValue, childOldValue);
+				if (propertyFire) 
+				{
+					var eventObject = core.property.Event.obtain(propertyFire, childNewValue, childOldValue, propertyName);
+					context.dispatchEvent(eventObject);
+					eventObject.release();					
 				}
 
 				// Go into recursion
@@ -247,7 +250,7 @@
 			// Shorthands: Better compression/obfuscation/performance
 			var propertyNullable = config.nullable;
 			var propertyInit = config.init;
-			var propertyEvent = config.event;
+			var propertyFire = config.fire;
 			var propertyApply = config.apply;
 			var propertyInheritable = config.inheritable;
 
@@ -318,8 +321,11 @@
 							}
 
 							// Fire event
-							if (propertyEvent) {
-								context.fireDataEvent(propertyEvent, newValue, oldValue);
+							if (propertyFire) 
+							{
+								var eventObject = core.property.Event.obtain(propertyFire, newValue, oldValue, propertyName);
+								context.dispatchEvent(eventObject);
+								eventObject.release();					
 							}
 
 							// Inheritance support
@@ -414,8 +420,11 @@
 						}
 
 						// Fire event
-						if (propertyEvent) {
-							context.fireDataEvent(propertyEvent, newValue, oldValue);
+						if (propertyFire) 
+						{
+							var eventObject = core.property.Event.obtain(propertyFire, newValue, oldValue, propertyName);
+							context.dispatchEvent(eventObject);
+							eventObject.release();
 						}
 
 						// Inheritance support
@@ -528,8 +537,11 @@
 					}
 
 					// Fire event
-					if (propertyEvent) {
-						context.fireDataEvent(propertyEvent, propertyInit, Undefined);
+					if (propertyFire) 
+					{
+						var eventObject = core.property.Event.obtain(propertyFire, propertyInit, Undefined, config.name);
+						context.dispatchEvent(eventObject);
+						eventObject.release();					
 					}
 
 					// Inheritance support
@@ -701,8 +713,11 @@
 					}
 
 					// Fire event
-					if (config.event) {
-						obj.fireDataEvent(config.event, newValue, oldValue);
+					if (config.fire) 
+					{
+						var eventObject = core.property.Event.obtain(config.fire, newValue, oldValue, config.name);
+						obj.dispatchEvent(eventObject);
+						eventObject.release();	
 					}
 
 					// Inheritance support
@@ -893,8 +908,11 @@
 					}
 
 					// Fire event
-					if (propertyConfig.event) {
-						obj.fireDataEvent(propertyConfig.event, newValue, oldValue);
+					if (propertyConfig.fire) 
+					{
+						var eventObject = core.property.Event.obtain(propertyConfig.fire, newValue, oldValue, propertyName);
+						context.dispatchEvent(eventObject);
+						eventObject.release();	
 					}
 
 					// Update children

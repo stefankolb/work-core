@@ -13,9 +13,8 @@ core.Interface("core.property.IEvent",
 	members : 
 	{
 		/**
-		 * Fires the given event @type {String} with the data of the properties
-		 * current @value {var} and @old {var} value to the object's event system.
+		 * Dispatches an previously created @eventObject {Object} to all listeners.
 		 */
-		fireEvent : function(type, value, old) {}
+		dispatchEvent : function(eventObject) {}		
 	}
 });

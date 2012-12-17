@@ -170,6 +170,29 @@
 			if (core.Main.isTypeOf(a, type)) {
 				raise(message || "Value " + a + " must not match type: " + type);
 			}
+		},
+
+		/**
+		 * Raises an exception when the given value @a {var} is not empty.
+		 * Customizable with a custom @message {String?} for the exception text.
+		 */
+		isNotEmpty: function(a, message) 
+		{
+			// Strings, Arrays
+			if (Object.prototype.hasOwnProperty(a, "length")) 
+			{
+				if (a.length === 0) {
+					raise(message || "Value " + a + " must not be empty: " + type);
+				}
+			}
+			else if (core.Main.isTypeOf(a, "Map")) 
+			{
+				for (var key in a) {
+					return;
+				}
+
+				raise(message || "Value " + a + " must not be empty: " + type);
+			}
 		}
 		
 	});

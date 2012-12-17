@@ -102,7 +102,7 @@
 
 				// Execute callback
 				if (callback) {
-					callback.call(context||global, uri, errornous);
+					callback.call(context||global, uri, errornous, elem);
 				}
 			});
 
@@ -113,7 +113,9 @@
 			}
 
 			head.insertBefore(elem, head.firstChild);
+
+			return elem;
 		}
 	});
-})(this);
+})(core.Main.getGlobal());
 

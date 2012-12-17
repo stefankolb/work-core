@@ -485,5 +485,5 @@
 		}
 	});
 	
-})(this, Object);
+})(core.Main.getGlobal(), Object);
 

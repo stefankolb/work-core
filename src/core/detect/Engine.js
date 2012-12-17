@@ -21,18 +21,22 @@ core.Module("core.detect.Engine",
 		
 		// isOldIE = '\v' == 'v'
 
-		// Priority based detection
-		// Omit possibility to fake user agent string by using object based detection first
-		// Fall back to other ways for special cases like NodeJS and special environments like PhoneGap or AppMobi
-		if (global.opera && toString.call(global.opera) == "[object Opera]") {
-			engine = "presto"; // Opera
-		} else if (global.WebKitPoint && toString.call(global.WebKitPoint) == "[object WebKitPoint]") {
-			engine = "webkit"; // Chrome, Safari, ...
-		} else if (global.controllers && toString.call(global.controllers) == "[object XULControllers]") {
-			engine = "gecko"; // Firefox, Camino, ...
-		} else if (nav && typeof nav.cpuClass === "string") {
-			engine = "trident"; // Internet Explorer
-		} else if (typeof window != "undefined") {
+		if (jasy.Env.isSet("runtime", "browser"))
+		{
+			// Priority based detection
+			// Omit possibility to fake user agent string by using object based detection first
+			// Fall back to other ways for special cases like NodeJS and special environments like PhoneGap or AppMobi
+			if (global.opera && toString.call(global.opera) == "[object Opera]") {
+				engine = "presto"; // Opera
+			} else if (global.WebKitPoint && toString.call(global.WebKitPoint) == "[object WebKitPoint]") {
+				engine = "webkit"; // Chrome, Safari, ...
+			} else if (global.controllers && toString.call(global.controllers) == "[object XULControllers]") {
+				engine = "gecko"; // Firefox, Camino, ...
+			} else if (nav && typeof nav.cpuClass === "string") {
+				engine = "trident"; // Internet Explorer
+			}			
+		}
+ 		else if (typeof window != "undefined") {
 			engine = "webkit"; // NodeJS
 		} else if (nav && /(webkit)[ \/]([\w.]+)/.exec(nav.userAgent)) {
 			engine = "webkit"; // PhoneGap, AppMobi, etc.
@@ -41,5 +45,5 @@ core.Module("core.detect.Engine",
 		}
 		
 		return engine;
-	})(this, Object.prototype.toString)
+	})(core.Main.getGlobal(), Object.prototype.toString)
 });

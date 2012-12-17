@@ -83,4 +83,4 @@
 			}
 		}, true);
 	}
-})(this);
+})(core.Main.getGlobal());

@@ -53,4 +53,4 @@
 			script.src = uri + "=" + src + (nocache ? dynamicExtension : "");
 		}
 	});
-})(this, document);
+})(core.Main.getGlobal(), document);

@@ -27,18 +27,18 @@
 		
 		/** {Boolean} Whether the viewport is in landscape orientation */
 		isLandscape: function() {
-			return global.outerWidth > global.outerHeight;
+			return window.outerWidth > window.outerHeight;
 		},
 
 		/** {Boolean} Whether the viewport is in portrait orientation */
 		isPortrait: function() {
-			return global.outerWidth < global.outerHeight;
+			return window.outerWidth < window.outerHeight;
 		},
 		
 		/** {String} Returns the viewport orientation. */
 		getOrientation: function() 
 		{
-			var orient = global.orientation;
+			var orient = window.orientation;
 			
 			// TODO
 			
@@ -54,4 +54,4 @@
 		
 	});
 	
-})(this);
+})(core.Main.getGlobal());

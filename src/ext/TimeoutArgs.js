@@ -56,5 +56,5 @@ if (jasy.Env.isSet("engine", "trident"))
 
 		});
 
-	})(this);
+	})(core.Main.getGlobal());
 }

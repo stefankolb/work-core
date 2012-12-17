@@ -46,4 +46,4 @@
 		}
 	});
 	
-})(this);
+})(core.Main.getGlobal());

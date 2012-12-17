@@ -15,4 +15,4 @@
     core.Main.declareNamespace("abc.def", 5);
     this.equal(global.abc.def, 5);
   });
-})(this);
+})(core.Main.getGlobal());

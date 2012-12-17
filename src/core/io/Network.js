@@ -113,4 +113,4 @@
 			}
 		}
 	});
-})(this);
+})(core.Main.getGlobal());

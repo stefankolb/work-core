@@ -1,4 +1,5 @@
 /**
+ * #require(test.io.*)
  * #require(test.oo.*)
  *
  * #require(test.Asset)

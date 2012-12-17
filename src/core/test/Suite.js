@@ -36,6 +36,9 @@
       // Revamp run method to allow auto execution as soon 
       // as no further tests are being added
       this.__autoRun = this.run.debounce(100);
+
+      // Self register to controller
+      core.test.Controller.registerSuite(this);
     },
 
     members : 
@@ -59,7 +62,8 @@
 
         if (this.__running == (this.__passed.length + this.__failed.length)) 
         {
-          if (this.__failed.length) {
+          var errornous = this.__failed.length > 0;
+          if (errornous) {
             console.error("Completed " + this.__caption + ": " + this.__passed.length + " passed; " + this.__failed.length + " failed");
           } else {
             console.info("Completed " + this.__caption + ": " + this.__passed.length + " passed; " + this.__failed.length + " failed");
@@ -67,6 +71,8 @@
 
           // Stop from further checks
           window.clearInterval(this.__waitHandle);
+
+          core.test.Controller.finishedSuite(this, errornous);
         }
 
         // Waiting for next iteration...

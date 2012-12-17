@@ -1,19 +1,19 @@
-module("Events", {
-  teardown : function() {
-    core.Main.clearNamespace("events.Simple1");
-    core.Main.clearNamespace("events.Simple2");
-    core.Main.clearNamespace("events.Simple3");
-    core.Main.clearNamespace("events.Simple4");
-    core.Main.clearNamespace("events.Simple5");
-    core.Main.clearNamespace("events.Simple6");
-    core.Main.clearNamespace("events.Simple7");
-    core.Main.clearNamespace("events.Simple8");
-    core.Main.clearNamespace("events.Simple9");
-  }
+var suite = new core.test.Suite("Events", null, function() {
+  core.Main.clearNamespace("events.Simple1");
+  core.Main.clearNamespace("events.Simple2");
+  core.Main.clearNamespace("events.Simple3");
+  core.Main.clearNamespace("events.Simple4");
+  core.Main.clearNamespace("events.Simple5");
+  core.Main.clearNamespace("events.Simple6");
+  core.Main.clearNamespace("events.Simple7");
+  core.Main.clearNamespace("events.Simple8");
+  core.Main.clearNamespace("events.Simple9");
 });
 
-test("Basic", function() 
+suite.test("Basic", function() 
 {
+  var test = this;
+
   core.Class("events.Simple1", 
   {
     include : [core.event.MEvent],
@@ -27,11 +27,11 @@ test("Basic", function()
         });
 
         this.fireEvent("simple1");
-        equal(eventExecuted, 1);
+        test.equal(eventExecuted, 1);
 
         this.fireEvent("simple1");
         this.fireEvent("simple1");
-        equal(eventExecuted, 3);
+        test.equal(eventExecuted, 3);
       }
     }
   });
@@ -39,8 +39,10 @@ test("Basic", function()
   new events.Simple1().testBasic();
 });
 
-test("Context", function() 
+suite.test("Context", function() 
 {
+  var test = this;
+  
   core.Class("events.Simple2", 
   {
     include : [core.event.MEvent],
@@ -51,7 +53,7 @@ test("Context", function()
         var contextObject = {valid : 1};
 
         this.addListener("simple2", function() {
-          equal(this.valid, 1);
+          test.equal(this.valid, 1);
         }, contextObject);
 
         this.fireEvent("simple2");
@@ -62,8 +64,10 @@ test("Context", function()
   new events.Simple2().testContext();
 });
 
-test("Deconnect", function() 
+suite.test("Deconnect", function() 
 {
+  var test = this;
+
   core.Class("events.Simple4", 
   {
     include : [core.event.MEvent],
@@ -79,23 +83,23 @@ test("Deconnect", function()
         this.addListener("simple4", myListener);
 
         this.fireEvent("simple4");
-        equal(eventExecuted, 1);
+        test.equal(eventExecuted, 1);
 
         this.removeListener("simple4", myListener);
 
-        equal(eventExecuted, 1);
+        test.equal(eventExecuted, 1);
         this.fireEvent("simple4");
-        equal(eventExecuted, 1);
+        test.equal(eventExecuted, 1);
 
-        equal(this.addListener("simple4", myListener), true);
-        equal(this.addListener("simple4", myListener), false);
-        equal(this.addListener("simple4", myListener), false);
+        test.equal(this.addListener("simple4", myListener), true);
+        test.equal(this.addListener("simple4", myListener), false);
+        test.equal(this.addListener("simple4", myListener), false);
 
         this.fireEvent("simple4");
-        equal(eventExecuted, 2);
+        test.equal(eventExecuted, 2);
 
-        equal(this.removeListener("simple4", myListener), true);
-        equal(this.removeListener("simple4", myListener), false);
+        test.equal(this.removeListener("simple4", myListener), true);
+        test.equal(this.removeListener("simple4", myListener), false);
       }
     }
   });
@@ -103,8 +107,10 @@ test("Deconnect", function()
   new events.Simple4().testDeconnect();
 });
 
-test("Has", function() 
+suite.test("Has", function() 
 {
+  var test = this;
+
   core.Class("events.Simple5", 
   {
     include : [core.event.MEvent],
@@ -115,18 +121,18 @@ test("Has", function()
         var myListener = function() {};
         var myHelperObject = {};
 
-        equal(this.hasListener("simple5"), false);
+        test.equal(this.hasListener("simple5"), false);
         this.addListener("simple5", myListener);
-        equal(this.hasListener("simple5"), true);
-        equal(this.hasListener("simple5", myListener), true);
-        equal(this.hasListener("simple5", myListener, myHelperObject), false);
+        test.equal(this.hasListener("simple5"), true);
+        test.equal(this.hasListener("simple5", myListener), true);
+        test.equal(this.hasListener("simple5", myListener, myHelperObject), false);
         this.removeListener("simple5", myListener);
 
-        equal(this.hasListener("simple5"), false);
+        test.equal(this.hasListener("simple5"), false);
         this.addListener("simple5", myListener, myHelperObject);
-        equal(this.hasListener("simple5"), true);
-        equal(this.hasListener("simple5", myListener), false);
-        equal(this.hasListener("simple5", myListener, myHelperObject), true);
+        test.equal(this.hasListener("simple5"), true);
+        test.equal(this.hasListener("simple5", myListener), false);
+        test.equal(this.hasListener("simple5", myListener, myHelperObject), true);
         this.removeListener("simple5", myListener, myHelperObject);
 
       }
@@ -136,8 +142,10 @@ test("Has", function()
   new events.Simple5().testHasListener();
 });
 
-test("Connect While Fire", function() 
+suite.test("Connect While Fire", function() 
 {
+  var test = this;
+
   core.Class("events.Simple6", 
   {
     include : [core.event.MEvent],
@@ -158,18 +166,18 @@ test("Connect While Fire", function()
         };
 
         this.addListener("simple6", myListener2);
-        equal(count1, 0);
-        equal(count2, 0);
+        test.equal(count1, 0);
+        test.equal(count2, 0);
 
         this.fireEvent("simple6");
 
-        equal(count1, 0);
-        equal(count2, 1);
+        test.equal(count1, 0);
+        test.equal(count2, 1);
 
         this.fireEvent("simple6");
 
-        equal(count1, 1);
-        equal(count2, 2);
+        test.equal(count1, 1);
+        test.equal(count2, 2);
 
       }
     }
@@ -178,8 +186,10 @@ test("Connect While Fire", function()
   new events.Simple6().testConnectWhileFire();
 });
 
-test("Deconnect While Fire", function() 
+suite.test("Deconnect While Fire", function() 
 {
+  var test = this;
+
   core.Class("events.Simple7", 
   {
     include : [core.event.MEvent],
@@ -202,18 +212,18 @@ test("Deconnect While Fire", function()
         this.addListener("simple7", myListener1);
         this.addListener("simple7", myListener2);
 
-        equal(count1, 0);
-        equal(count2, 0);
+        test.equal(count1, 0);
+        test.equal(count2, 0);
 
         this.fireEvent("simple7");
 
-        equal(count1, 1);
-        equal(count2, 1);
+        test.equal(count1, 1);
+        test.equal(count2, 1);
 
         this.fireEvent("simple7");
 
-        equal(count1, 1);
-        equal(count2, 2);
+        test.equal(count1, 1);
+        test.equal(count2, 2);
 
       }
     }
@@ -222,8 +232,10 @@ test("Deconnect While Fire", function()
   new events.Simple7().testDeconnectWhileFire();
 });
 
-test("Deconnect Self", function() 
+suite.test("Deconnect Self", function() 
 {
+  var test = this;
+
   core.Class("events.Simple8", 
   {
     include : [core.event.MEvent],
@@ -238,13 +250,13 @@ test("Deconnect Self", function()
         }
 
         this.addListener("simple8", myListener);
-        equal(count, 0);
+        test.equal(count, 0);
 
         this.fireEvent("simple8");
-        equal(count, 1);
+        test.equal(count, 1);
 
         this.fireEvent("simple8");
-        equal(count, 1);
+        test.equal(count, 1);
 
       }
     }
@@ -253,8 +265,10 @@ test("Deconnect Self", function()
   new events.Simple8().testDeconnectSelf();
 });
 
-test("Listen Once", function() 
+suite.test("Listen Once", function() 
 {
+  var test = this;
+
   core.Class("events.Simple9", 
   {
     include : [core.event.MEvent],
@@ -268,13 +282,13 @@ test("Listen Once", function()
         }
 
         this.addListenerOnce("simple9", myListener);
-        equal(count, 0);
+        test.equal(count, 0);
 
         this.fireEvent("simple9");
-        equal(count, 1);
+        test.equal(count, 1);
 
         this.fireEvent("simple9");
-        equal(count, 1);
+        test.equal(count, 1);
 
       }
     }

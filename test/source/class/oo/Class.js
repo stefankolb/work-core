@@ -4,39 +4,37 @@
 ---------------------------------------------------------------------------
 */
 
-module("Classes :: Basics", {
-  teardown : function() {
-    core.Main.clearNamespace("abc.Class1");
-    core.Main.clearNamespace("abc.Class2");
-    core.Main.clearNamespace("abc.Class3");
-  }
+var suite = new core.test.Suite("Classes :: Basics", null, function() {
+  core.Main.clearNamespace("abc.Class1");
+  core.Main.clearNamespace("abc.Class2");
+  core.Main.clearNamespace("abc.Class3");
 });
 
-test("Invalid config", function() {
-  raises(function() {
+suite.test("Invalid config", function() {
+  this.raises(function() {
     core.Class("abc.Class1");
   });
-  raises(function() {
+  this.raises(function() {
     core.Class("abc.Class2", 42);
   })
-  raises(function() {
+  this.raises(function() {
     core.Class("abc.Class3", {
       unallowedKey : "foo"
     });
   });
 });
 
-test("Creating empty class", function() {
+suite.test("Creating empty class", function() {
   core.Class("abc.Class1", {});
-  equal(core.Class.isClass(abc.Class1), true);
-  equal(abc.Class1.className, "abc.Class1");
-  equal(abc.Class1.toString(), "[class abc.Class1]");
+  this.equal(core.Class.isClass(abc.Class1), true);
+  this.equal(abc.Class1.className, "abc.Class1");
+  this.equal(abc.Class1.toString(), "[class abc.Class1]");
 });
 
-test("Class false validation", function() {
-  ok(!core.Class.isClass({}));
-  ok(!core.Class.isClass(3));
-  ok(!core.Class.isClass(null));
+suite.test("Class false validation", function() {
+  this.ok(!core.Class.isClass({}));
+  this.ok(!core.Class.isClass(3));
+  this.ok(!core.Class.isClass(null));
 });
 
   
@@ -48,12 +46,10 @@ test("Class false validation", function() {
 ---------------------------------------------------------------------------
 */  
 
-module("Classes :: Members", {
-  teardown : function() {
-    core.Main.clearNamespace("members.Class1");
-    core.Main.clearNamespace("members.Include1");
-    core.Main.clearNamespace("members.Include2");
-  }
+var suite = new core.test.Suite("Classes :: Members", null, function() {
+  core.Main.clearNamespace("members.Class1");
+  core.Main.clearNamespace("members.Include1");
+  core.Main.clearNamespace("members.Include2");
 });
 
 
@@ -61,7 +57,7 @@ module("Classes :: Members", {
  * Two classes which should be mixed into another one define the same member. 
  * A conflict arises, as both could not be merged into the target class.
  */
-test("Conflicting member functions", function() {
+suite.test("Conflicting member functions", function() {
   core.Class("members.Include1", {
     members : {
       foo : function() {}
@@ -73,7 +69,7 @@ test("Conflicting member functions", function() {
     }
   });
 
-  raises(function() {
+  this.raises(function() {
     core.Class("members.Join", {
       include : [members.Include1, members.Include2]
     });
@@ -85,7 +81,7 @@ test("Conflicting member functions", function() {
  * Two classes which should be mixed into another one define the same member.
  * A conflict arises, as both could not be merged into the target class.
  */
-test("Conflicting member data", function() {
+suite.test("Conflicting member data", function() {
   core.Class("members.Include1", {
     members : {
       foo : 1
@@ -97,7 +93,7 @@ test("Conflicting member data", function() {
     }
   });
 
-  raises(function() {
+  this.raises(function() {
     core.Class("members.Join", {
       include : [members.Include1, members.Include2]
     });
@@ -111,7 +107,7 @@ test("Conflicting member data", function() {
  * the author of the including class is aware of the conflict and could call the
  * original methods if that makes sense.
  */
-test("Conflicting member functions, correctly merged", function() {
+suite.test("Conflicting member functions, correctly merged", function() {
   core.Class("members.Include1", {
     members : {
       foo : function() {}
@@ -137,7 +133,7 @@ test("Conflicting member functions, correctly merged", function() {
     }
   });
   
-  ok(true);
+  this.ok(true);
 });
 
 
@@ -147,7 +143,7 @@ test("Conflicting member functions, correctly merged", function() {
  * it is not a function this is not regarded as solved. The individual included classes might
  * require that this member is a function!
  */
-test("Conflicting member functions, not merged correctly", function() {
+suite.test("Conflicting member functions, not merged correctly", function() {
   core.Class("members.Include1", {
     members : {
       foo : function() {}
@@ -159,7 +155,7 @@ test("Conflicting member functions, not merged correctly", function() {
     }
   });
 
-  raises(function() {
+  this.raises(function() {
     core.Class("members.Join", {
       include : [members.Include1, members.Include2],
     
@@ -177,7 +173,7 @@ test("Conflicting member functions, not merged correctly", function() {
  * The conflict is tried to being prevented as the affected member is also defined locally. 
  * But this is not allowed for private members.
  */
-test("Conflicting member functions with failed private merge", function() {
+suite.test("Conflicting member functions with failed private merge", function() {
   core.Class("members.Include1", {
     members : {
       __foo : function() {}
@@ -189,7 +185,7 @@ test("Conflicting member functions with failed private merge", function() {
     }
   });
 
-  raises(function() {
+  this.raises(function() {
     core.Class("members.Join", {
       include : [members.Include1, members.Include2],
     
@@ -214,13 +210,11 @@ test("Conflicting member functions with failed private merge", function() {
 ---------------------------------------------------------------------------
 */
 
-module("Classes :: Events", {
-  teardown : function() {
-    core.Main.clearNamespace("events.Keyboard");
-    core.Main.clearNamespace("events.Mouse");
-    core.Main.clearNamespace("events.Widget");
-    core.Main.clearNamespace("events.Widget2");
-  }
+var suite = new core.test.Suite("Classes :: Events", null, function() {
+  core.Main.clearNamespace("events.Keyboard");
+  core.Main.clearNamespace("events.Mouse");
+  core.Main.clearNamespace("events.Widget");
+  core.Main.clearNamespace("events.Widget2");
 });
 
   
@@ -236,7 +230,7 @@ core.Class("DataEvent", {});
 core.Class("FocusEvent", {});
 
 
-test("Events", function() {
+suite.test("Events", function() {
   core.Class("events.Mouse", {
     events : {
       click : MouseEvent,
@@ -246,11 +240,11 @@ test("Events", function() {
   });
   
   var eventMap = core.Class.getEvents(events.Mouse);
-  ok((function() {
+  this.ok((function() {
     core.Assert.isType(eventMap, "Map");
     return true;
   })(), "Events should be a returned as a map");
-  equal(eventMap.click, MouseEvent, "No click event found");
+  this.equal(eventMap.click, MouseEvent, "No click event found");
   
   core.Class("events.Keyboard", {
     events : {
@@ -264,7 +258,7 @@ test("Events", function() {
   });
   
   var full = Object.keys(core.Class.getEvents(events.Widget)).join(",");
-  equal(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
+  this.equal(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
 
   core.Class("events.Widget2", {
     include : [events.Mouse, events.Keyboard],
@@ -274,12 +268,12 @@ test("Events", function() {
   });
 
   var full = Object.keys(core.Class.getEvents(events.Widget2)).join(",");
-  equal(full, "custom,click,mousedown,mouseup,keydown,keyup", "Merge of events with own events failed");
+  this.equal(full, "custom,click,mousedown,mouseup,keydown,keyup", "Merge of events with own events failed");
 });
 
 
 
-test("Event Conflicts", function() {
+suite.test("Event Conflicts", function() {
   core.Class("events.Mouse", {
     events : {
       click : MouseEvent,
@@ -312,9 +306,9 @@ test("Event Conflicts", function() {
   });    
   
   var full = Object.keys(core.Class.getEvents(events.Widget)).join(",");
-  equal(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
+  this.equal(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
   
-  raises(function() {
+  this.raises(function() {
     core.Class("events.Widget2", {
       // This should fail, two click events in include list
       include : [events.Mouse, events.Keyboard, events.Touch]
@@ -322,7 +316,7 @@ test("Event Conflicts", function() {
   })
 });
 
-test("Event Interfaces", function() 
+suite.test("Event Interfaces", function() 
 {
   core.Interface("events.UserActions", 
   {
@@ -338,7 +332,7 @@ test("Event Interfaces", function()
     }
   });
   
-  raises(function() 
+  this.raises(function() 
   {
     var MouseEvent = true;
     core.Class("events.Mouse", 
@@ -361,26 +355,24 @@ test("Event Interfaces", function()
 ---------------------------------------------------------------------------
 */
 
-module("Classes :: Properties", {
-  teardown : function() {
-    core.Main.clearNamespace("properties.Text");
-    core.Main.clearNamespace("properties.Dimension");
-    core.Main.clearNamespace("properties.Label");
-    core.Main.clearNamespace("properties.Simple");
-    core.Main.clearNamespace("properties.IColor");
-    core.Main.clearNamespace("properties.IFontSize");
-    core.Main.clearNamespace("properties.ColorImplementer");
-    core.Main.clearNamespace("properties.ColorWrongImplementer");
-    core.Main.clearNamespace("properties.FontSizeImplementer");
-    core.Main.clearNamespace("properties.FontSizeMissing");
-    core.Main.clearNamespace("properties.FontSizeWrongImplementer");
-    core.Main.clearNamespace("properties.Parent");
-    core.Main.clearNamespace("properties.Child1");
-    core.Main.clearNamespace("properties.Child2");
-  }
+var suite = new core.test.Suite("Classes :: Properties", null, function() {
+  core.Main.clearNamespace("properties.Text");
+  core.Main.clearNamespace("properties.Dimension");
+  core.Main.clearNamespace("properties.Label");
+  core.Main.clearNamespace("properties.Simple");
+  core.Main.clearNamespace("properties.IColor");
+  core.Main.clearNamespace("properties.IFontSize");
+  core.Main.clearNamespace("properties.ColorImplementer");
+  core.Main.clearNamespace("properties.ColorWrongImplementer");
+  core.Main.clearNamespace("properties.FontSizeImplementer");
+  core.Main.clearNamespace("properties.FontSizeMissing");
+  core.Main.clearNamespace("properties.FontSizeWrongImplementer");
+  core.Main.clearNamespace("properties.Parent");
+  core.Main.clearNamespace("properties.Child1");
+  core.Main.clearNamespace("properties.Child2");
 }); 
 
-test("Creating Properties", function() 
+suite.test("Creating Properties", function() 
 {
   core.Class("properties.Simple", 
   {
@@ -407,39 +399,39 @@ test("Creating Properties", function()
     }
   });
   
-  ok((function() {
+  this.ok((function() {
     core.Class.assertIsClass(properties.Simple);
     return true;
   })());
-  equal(Object.keys(core.Class.getProperties(properties.Simple)).join(","), "color,backgroundColor");
+  this.equal(Object.keys(core.Class.getProperties(properties.Simple)).join(","), "color,backgroundColor");
 
-  equal(core.Class.getProperties(properties.Simple).color.type, "String");
-  equal(typeof core.Class.getProperties(properties.Simple).color.apply, "function");
+  this.equal(core.Class.getProperties(properties.Simple).color.type, "String");
+  this.equal(typeof core.Class.getProperties(properties.Simple).color.apply, "function");
 
-  ok(properties.Simple.prototype.getColor instanceof Function);
-  ok(properties.Simple.prototype.getBackgroundColor instanceof Function);
-  ok(properties.Simple.prototype.setColor instanceof Function);
-  ok(properties.Simple.prototype.setBackgroundColor instanceof Function);
+  this.ok(properties.Simple.prototype.getColor instanceof Function);
+  this.ok(properties.Simple.prototype.getBackgroundColor instanceof Function);
+  this.ok(properties.Simple.prototype.setColor instanceof Function);
+  this.ok(properties.Simple.prototype.setBackgroundColor instanceof Function);
 
-  equal(properties.Simple.prototype.getColor.displayName, "properties.Simple.getColor");
-  equal(properties.Simple.prototype.getBackgroundColor.displayName, "properties.Simple.getBackgroundColor");
-  equal(properties.Simple.prototype.setColor.displayName, "properties.Simple.setColor");
-  equal(properties.Simple.prototype.setBackgroundColor.displayName, "properties.Simple.setBackgroundColor");
+  this.equal(properties.Simple.prototype.getColor.displayName, "properties.Simple.getColor");
+  this.equal(properties.Simple.prototype.getBackgroundColor.displayName, "properties.Simple.getBackgroundColor");
+  this.equal(properties.Simple.prototype.setColor.displayName, "properties.Simple.setColor");
+  this.equal(properties.Simple.prototype.setBackgroundColor.displayName, "properties.Simple.setBackgroundColor");
   
-  equal(properties.Simple.prototype.getColor.length, 0);
-  equal(properties.Simple.prototype.getBackgroundColor.length, 0);
-  equal(properties.Simple.prototype.setColor.length, 1);
-  equal(properties.Simple.prototype.setBackgroundColor.length, 1);
+  this.equal(properties.Simple.prototype.getColor.length, 0);
+  this.equal(properties.Simple.prototype.getBackgroundColor.length, 0);
+  this.equal(properties.Simple.prototype.setColor.length, 1);
+  this.equal(properties.Simple.prototype.setBackgroundColor.length, 1);
   
   var obj1 = new properties.Simple;
-  equal(obj1.setColor("red"), "red");
-  equal(obj1.setBackgroundColor("black"), "black");
-  equal(obj1.getColor(), "red");
-  equal(obj1.getBackgroundColor(), "black");
+  this.equal(obj1.setColor("red"), "red");
+  this.equal(obj1.setBackgroundColor("black"), "black");
+  this.equal(obj1.getColor(), "red");
+  this.equal(obj1.getBackgroundColor(), "black");
 });
 
 
-test("Property Interfaces", function()
+suite.test("Property Interfaces", function()
 {
   core.Interface("properties.IColor", 
   {
@@ -466,7 +458,7 @@ test("Property Interfaces", function()
     }
   });
   
-  raises(function() {
+  this.raises(function() {
     core.Class("properties.ColorImplementer",
     {
       implement : [properties.IColor],
@@ -513,14 +505,14 @@ test("Property Interfaces", function()
     }
   });
   
-  raises(function() 
+  this.raises(function() 
   {
     core.Class("properties.FontSizeMissing", {
       implement : [properties.IFontSize]
     });
   })
   
-  raises(function() 
+  this.raises(function() 
   {
     core.Class("properties.FontSizeWrongImplementer", 
     {
@@ -545,9 +537,9 @@ test("Property Interfaces", function()
   });
 });
 
-test("Creating specific properties in classes without matching interfaces", function()
+suite.test("Creating specific properties in classes without matching interfaces", function()
 {
-  raises(function() 
+  this.raises(function() 
   {
     core.Class("properties.NoFireEvent", 
     {
@@ -560,7 +552,7 @@ test("Creating specific properties in classes without matching interfaces", func
     });
   });
   
-  raises(function() 
+  this.raises(function() 
   {
     core.Class("properties.NoGetThemed", 
     {
@@ -573,7 +565,7 @@ test("Creating specific properties in classes without matching interfaces", func
     });
   });
   
-  raises(function() 
+  this.raises(function() 
   {
     core.Class("properties.NoGetInherited", 
     {
@@ -588,7 +580,7 @@ test("Creating specific properties in classes without matching interfaces", func
 });
 
 
-test("Inheriting Properties", function() 
+suite.test("Inheriting Properties", function() 
 {
   core.Class("properties.Text", 
   {
@@ -639,8 +631,8 @@ test("Inheriting Properties", function()
     }
   });
   
-  ok(core.Class.isClass(properties.Text));
-  equal(Object.keys(core.Class.getProperties(properties.Text)).join(","), "wrap,color,fontFamily,lineHeight");
+  this.ok(core.Class.isClass(properties.Text));
+  this.equal(Object.keys(core.Class.getProperties(properties.Text)).join(","), "wrap,color,fontFamily,lineHeight");
 
 
 
@@ -658,8 +650,8 @@ test("Inheriting Properties", function()
     }
   });
 
-  ok(core.Class.isClass(properties.Dimension));
-  equal(Object.keys(core.Class.getProperties(properties.Dimension)).join(","), "width,height");
+  this.ok(core.Class.isClass(properties.Dimension));
+  this.equal(Object.keys(core.Class.getProperties(properties.Dimension)).join(","), "width,height");
   
   
 
@@ -687,17 +679,17 @@ test("Inheriting Properties", function()
     }
   });
   
-  ok(core.Class.isClass(properties.Label));
-  equal(Object.keys(core.Class.getProperties(properties.Label)).join(","), "wrap,color,fontFamily,lineHeight,width,height");
+  this.ok(core.Class.isClass(properties.Label));
+  this.equal(Object.keys(core.Class.getProperties(properties.Label)).join(","), "wrap,color,fontFamily,lineHeight,width,height");
   
   
   
   var ll = new properties.Label;
-  equal(ll.getLineHeight(), 2);
+  this.equal(ll.getLineHeight(), 2);
 });
 
 
-test("Overwrite properties", function() 
+suite.test("Overwrite properties", function() 
 {
   core.Class("properties.Parent",
   {
@@ -724,7 +716,7 @@ test("Overwrite properties", function()
   var child1 = new properties.Child1();
   var child2 = new properties.Child2();
   
-  equal("Child1", child1.getProp());
-  equal("Parent", child2.getProp());
+  this.equal("Child1", child1.getProp());
+  this.equal("Parent", child2.getProp());
 });
 

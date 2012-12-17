@@ -1,9 +1,8 @@
-/** 
- * #require(QUnit) 
- * #require(test.*)
- * #require(core.io.StyleSheet)
- * #asset(qunit.css)
+/**
+ * #require(test.Asset)
+ * #require(test.Crypt)
+ * #require(test.Pooling)
+ * #require(test.Template)
+ * #require(test.Util)
  */
-(function() {
-	core.io.Asset.load(["qunit.css"]);
-})();
+;

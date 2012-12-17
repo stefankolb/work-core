@@ -1,8 +1,8 @@
-module("Jasy :: Asset");
+var suite = new core.test.Suite("Jasy/Asset");
 
-test("Adding Source Data", function() 
+suite.test("Adding Source Data", function() 
 {
-  raises(function() 
+  this.raises(function() 
   {
     jasy.Asset.resetData();
     jasy.Asset.toUri("my.png")
@@ -16,7 +16,7 @@ test("Adding Source Data", function()
     }, 
     "profiles" : [{name:"source"}]
   });
-  equal(jasy.Asset.toUri("my.png"), "asset/my.png");
+  this.equal(jasy.Asset.toUri("my.png"), "asset/my.png");
 
   
   jasy.Asset.resetData();
@@ -27,7 +27,7 @@ test("Adding Source Data", function()
     }, 
     "profiles" : [{name:"source", "root":"xxx/yyy/"}]
   });
-  equal(jasy.Asset.toUri("my.png"), "xxx/yyy/asset/my.png");
+  this.equal(jasy.Asset.toUri("my.png"), "xxx/yyy/asset/my.png");
 
 
   jasy.Asset.resetData();
@@ -38,7 +38,7 @@ test("Adding Source Data", function()
     }, 
     "profiles" : [{name:"source", "root":"http://mycdn.com/xxx/yyy/"}]
   });
-  equal(jasy.Asset.toUri("my.png"), "http://mycdn.com/xxx/yyy/asset/my.png");
+  this.equal(jasy.Asset.toUri("my.png"), "http://mycdn.com/xxx/yyy/asset/my.png");
   
   
   jasy.Asset.resetData();
@@ -51,14 +51,14 @@ test("Adding Source Data", function()
     }, 
     "profiles" : [{name:"source", "root":"http://mycdn.com/app/source/"}]
   });
-  equal(jasy.Asset.toUri("lib2/my.png"), "http://mycdn.com/app/source/../../lib2/asset/my.png");
+  this.equal(jasy.Asset.toUri("lib2/my.png"), "http://mycdn.com/app/source/../../lib2/asset/my.png");
 
 });
 
 
-test("Adding Build Data", function() 
+suite.test("Adding Build Data", function() 
 {
-  raises(function() {
+  this.raises(function() {
     jasy.Asset.resetData();
     jasy.Asset.toUri("my.png")
   });
@@ -71,7 +71,7 @@ test("Adding Build Data", function()
     }, 
     "profiles" : [{name:"build", "root":"asset/"}]
   });
-  equal(jasy.Asset.toUri("my.png"), "asset/my.png");
+  this.equal(jasy.Asset.toUri("my.png"), "asset/my.png");
 
   
   jasy.Asset.resetData();
@@ -82,7 +82,7 @@ test("Adding Build Data", function()
     }, 
     "profiles" : [{name:"build", "root":"xxx/yyy/asset/"}]
   });
-  equal(jasy.Asset.toUri("my.png"), "xxx/yyy/asset/my.png");
+  this.equal(jasy.Asset.toUri("my.png"), "xxx/yyy/asset/my.png");
 
 
   jasy.Asset.resetData();
@@ -93,7 +93,7 @@ test("Adding Build Data", function()
     }, 
     "profiles" : [{name:"build", "root":"http://mycdn.com/xxx/yyy/asset/"}]
   });
-  equal(jasy.Asset.toUri("my.png"), "http://mycdn.com/xxx/yyy/asset/my.png");
+  this.equal(jasy.Asset.toUri("my.png"), "http://mycdn.com/xxx/yyy/asset/my.png");
   
 });
   

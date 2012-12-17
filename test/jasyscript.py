@@ -12,14 +12,11 @@ def source():
     # Store kernel script
     outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
     
-    # Process every possible permutation
-    for permutation in session.permutate():
-
-        # Resolving dependencies
-        classes = Resolver(session).addClassName("test.Main").getSortedClasses()
-        
-        # Writing source loader
-        outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js")
+    # Resolving dependencies
+    classes = Resolver(session).addClassName("test.Main").getSortedClasses()
+    
+    # Writing source loader
+    outputManager.storeLoader(classes, "$prefix/script/test.js")
 
 
 @task
@@ -38,14 +35,11 @@ def build():
     # Copy files from source
     fileManager.updateFile("source/index.html", "$prefix/index.html")
 
-    # Process every possible permutation
-    for permutation in session.permutate():
+    # Resolving dependencies
+    classes = Resolver(session).addClassName("test.Main").getSortedClasses()
 
-        # Resolving dependencies
-        classes = Resolver(session).addClassName("test.Main").getSortedClasses()
-
-        # Compressing classes
-        outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")
+    # Compressing classes
+    outputManager.storeCompressed(classes, "$prefix/script/test.js")
     
     
 @task

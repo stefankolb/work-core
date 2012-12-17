@@ -1,40 +1,46 @@
-module("Ext :: Fixes");
+var suite = new core.test.Suite("Ext :: Fixes");
 
-asyncTest("setTimeout with arguments", 1, function() 
+suite.test("setTimeout with arguments", function() 
 {
+  var test = this;
+
   /** #require(ext.TimeoutArgs) */
   setTimeout(function(arg)
   {
-    equal(arg, "hello");
-    start();
+    test.equal(arg, "hello");
+    test.done();
   }, 10, "hello");
-});
+}, 1000);
 
-asyncTest("setImmediate", 1, function() 
+suite.test("setImmediate", function() 
 {
+  var test = this;
+
   /** #require(ext.Immediate) */
   setImmediate(function() {
-    ok(true, "always fine");
-    start();
+    test.ok(true, "always fine");
+    test.done();
   });
-});
+}, 1000);
 
-asyncTest("requestAnimationFrame", 1, function() 
+suite.test("requestAnimationFrame", function() 
 {
+  var test = this;
+
   /** #require(ext.RequestAnimationFrame) */
   requestAnimationFrame(function() {
-    ok(true, "always fine");
-    start();
+    test.ok(true, "always fine");
+    test.done();
   });
-});
+}, 1000);
 
-test("Object.keys", function() 
+suite.test("Object.keys", function() 
 {
   // Basic first
   var keys = Object.keys({hello:null, foo:1}).sort().join(",");
-  equal(keys, "foo,hello");
+  this.equal(keys, "foo,hello");
 
   // toString etc. are special in IE because these are built-in keys
   var keys = Object.keys({toString:null, hello:null, foo:1}).sort().join(",");
-  equal(keys, "foo,hello,toString");
+  this.equal(keys, "foo,hello,toString");
 });

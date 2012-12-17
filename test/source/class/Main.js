@@ -1,4 +1,5 @@
 /**
+ * #require(test.ext.*)
  * #require(test.io.*)
  * #require(test.oo.*)
  *

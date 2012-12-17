@@ -41,7 +41,11 @@ core.Class("core.test.Suite",
 
       if (this.__running == (this.__passed.length + this.__failed.length)) 
       {
-        console.info("Completed " + this.__caption + ": " + this.__passed.length + " passed; " + this.__failed.length + " failed");
+        if (this.__failed.length) {
+          console.error("Completed " + this.__caption + ": " + this.__passed.length + " passed; " + this.__failed.length + " failed");
+        } else {
+          console.info("Completed " + this.__caption + ": " + this.__passed.length + " passed; " + this.__failed.length + " failed");
+        }
 
         // Stop from further checks
         window.clearInterval(this.__waitHandle);

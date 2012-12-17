@@ -1,6 +1,5 @@
 /**
- * #require(test.oo.Class)
- * #require(test.oo.Events)
+ * #require(test.oo.*)
  *
  * #require(test.Asset)
  * #require(test.Crypt)

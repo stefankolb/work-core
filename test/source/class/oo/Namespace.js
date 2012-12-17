@@ -1,20 +1,18 @@
 (function(global) 
 {
-  module("Namespaces", {
-    teardown : function() {
-      delete global.foo;
-      delete global.abc;
-      delete global.a;
-    }
+  var suite = new core.test.Suite("Namespaces", null, function() {
+    delete global.foo;
+    delete global.abc;
+    delete global.a;
   });
 
-  test("Creating global", function() {
+  suite.test("Creating global", function() {
     core.Main.declareNamespace("foo", 3);
-    equal(global.foo, 3);
+    this.equal(global.foo, 3);
   });
 
-  test("Creating namespace", function() {
+  suite.test("Creating namespace", function() {
     core.Main.declareNamespace("abc.def", 5);
-    equal(global.abc.def, 5);
+    this.equal(global.abc.def, 5);
   });
 })(this);

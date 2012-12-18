@@ -47,8 +47,8 @@ core.Module("core.test.Controller",
 
     for (var id in suits) 
     {
-      var suit = suits[id];
-      if (!suit.isSuccessful()) {
+      suite = suits[id];
+      if (!suite.isSuccessful()) {
         return false;
       }
     }
@@ -62,6 +62,20 @@ core.Module("core.test.Controller",
 
   isFinished : function() {
     return this.__length == 0;
+  },
+
+  run : function() 
+  {
+    var suits = this.__suits;
+    var suite;
+
+
+
+    for (var id in suits) 
+    {
+      var suite = suits[id];
+      suite.run();
+    }
   }
 
 });

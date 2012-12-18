@@ -90,7 +90,7 @@ core.Main.addMembers("Array",
 	 * {Boolean} Whether the array contains the given @value {var}.
 	 */
 	contains : function(value) {
-		return ~this.indexOf(value);
+		return this.indexOf(value) > -1;
 	},
 	
 	

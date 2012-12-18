@@ -103,7 +103,7 @@ core.Class("core.test.Suite",
           var msg = failed[i][0];
           var ex = failed[i][1];
 
-          console.error("  - Assertion " + i + ": " + (msg||ex));
+          console.error("  - Assertion " + i + ": " + (msg||ex) + ", " + ex.line);
         }
       } 
 

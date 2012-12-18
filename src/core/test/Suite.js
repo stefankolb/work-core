@@ -167,7 +167,7 @@ core.Class("core.test.Suite",
       }
 
       // Waiting for all async tests to finish
-      this.__waitHandle = setInterval(this.__isFinishedInterval.bind(this, callback, context), 100);
+      this.__waitHandle = setInterval(this.__isFinishedInterval.bind(this, callback, context), 16);
 
       // With the first run the suite is locked
       this.__locked = true;

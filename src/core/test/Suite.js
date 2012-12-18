@@ -93,6 +93,7 @@ core.Class("core.test.Suite",
       this.__passed.push(test);      
     },
 
+
     /**
      * Marks the given @test {core.test.Test} as having failed for various reasons.
      */

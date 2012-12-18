@@ -22,10 +22,38 @@ core.Module("core.test.Controller",
       this.__length--;
     }
 
-    if (this.__length == 0) {
-      console.info("All tests finished!");
+    if (this.__length > 0) {
+      return;
     }
 
+    console.info("All tests finished!");
+
+    if (jasy.Env.isSet("runtime", "browser")) 
+    {
+      if (typeof callPhantom == "function") 
+      {
+        callPhantom({
+          action : "finished",
+          status : this.isSuccessful()
+        });
+      }
+    }
+  },
+
+  isSuccessful : function() 
+  {
+    var suits = this.__suits;
+    var suite;
+
+    for (var id in suits) 
+    {
+      var suit = suits[id];
+      if (!suit.isSuccessful()) {
+        return false;
+      }
+    }
+
+    return true;
   },
 
   isRunning : function() {

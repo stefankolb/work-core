@@ -11,19 +11,6 @@
         throw new Error("Please use 'new' for creating Suite instances!");
       }
 
-      if (jasy.Env.isSet("runtime", "browser")) 
-      {
-        if (navigator.userAgent.indexOf("PhantomJS/") != -1) {
-          console.debug("Environment: Headless browser")
-        } else {
-          console.debug("Environment: Browser")
-        }
-      }
-      else 
-      {
-        console.info("Environment: Native");
-      }
-
       this.__caption = caption;
 
       this.__tests = [];
@@ -77,6 +64,10 @@
         }
 
         // Waiting for next iteration...
+      },
+
+      isSuccessful : function() {
+        return this.__failed.length == 0;
       },
 
       done : function(test) 

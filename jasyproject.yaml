@@ -20,3 +20,7 @@ fields:
     check: String
     default: en
     detect: core.detect.Locale
+  runtime:
+    check: String
+    default: browser
+    detect: core.detect.Runtime

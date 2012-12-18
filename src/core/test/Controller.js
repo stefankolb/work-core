@@ -1,32 +1,60 @@
 core.Module("core.test.Controller",
 {
-  __suits : {},
-  __length : 0,
+  __suites : [],
+  __randomize : true,
 
-  registerSuite : function(suite) 
-  {
-    var id = core.util.Id.get(suite);
-    if (!this.__suits[id])
-    {
-      this.__suits[id] = suite;
-      this.__length++;
-    }
+  registerSuite : function(suite) {
+    this.__suites.push(suite);
   },
 
-  finishedSuite : function(suite, errornous)
+  isSuccessful : function() 
   {
-    var id = core.util.Id.get(suite);
-    if (this.__suits[id])
+    var suites = this.__suites;
+    for (var i=0, l=suites.length; i<l; i++) 
     {
-      delete this.__suits[id];
-      this.__length--;
+      if (!suites[i].isSuccessful()) {
+        return false;
+      }
     }
 
-    if (this.__length > 0) {
+    return true;
+  },
+
+  isRunning : function() {
+    return this.__isRunning;
+  },
+
+  isFinished : function() {
+    return this.__isFinished;
+  },
+
+  __isRunning : false,
+  __isFinished : false,
+
+  run : function() 
+  {
+    var suites = this.__suites;
+
+    if (!this.__isRunning) 
+    {
+      suites.sort(function(a, b) {
+        return a.getCaption() > b.getCaption() ? 1 : -1;
+      });
+    }
+
+    this.__isRunning = true;
+
+    var first = suites.shift();
+    if (first)
+    {
+      first.run(this.run, this, this.__randomize);
       return;
     }
 
-    console.info("All tests finished!");
+    console.info("Test suites completed!")
+
+    this.__isRunning = false;
+    this.__isFinished = true;
 
     if (jasy.Env.isSet("runtime", "browser")) 
     {
@@ -38,44 +66,5 @@ core.Module("core.test.Controller",
         });
       }
     }
-  },
-
-  isSuccessful : function() 
-  {
-    var suits = this.__suits;
-    var suite;
-
-    for (var id in suits) 
-    {
-      suite = suits[id];
-      if (!suite.isSuccessful()) {
-        return false;
-      }
-    }
-
-    return true;
-  },
-
-  isRunning : function() {
-    return this.__length > 0;
-  },
-
-  isFinished : function() {
-    return this.__length == 0;
-  },
-
-  run : function() 
-  {
-    var suits = this.__suits;
-    var suite;
-
-
-
-    for (var id in suits) 
-    {
-      var suite = suits[id];
-      suite.run();
-    }
   }
-
 });

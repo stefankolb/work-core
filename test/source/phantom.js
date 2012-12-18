@@ -15,7 +15,7 @@ phantom.onError = function(msg, trace)
 
 var page = require("webpage").create();
 
-page.onConsoleMessage = function(msg) {
+page.onConsoleMessage = function(msg, lineNum, sourceId) {
   console.log(msg);
 };
 

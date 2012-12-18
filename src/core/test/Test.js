@@ -164,7 +164,7 @@ core.Class("core.test.Test",
      * {Integer} Returns the number of passed assertions
      */
     getPassedAssertions : function() {
-      return this.__passed.length;
+      return this.__passed;
     },
 
 
@@ -172,7 +172,7 @@ core.Class("core.test.Test",
      * {Integer} Returns the number of failed assertions
      */
     getFailedAssertions : function() {
-      return this.__failed.length;
+      return this.__failed;
     },    
 
 
@@ -202,7 +202,7 @@ core.Class("core.test.Test",
       if (failedAssertions) 
       {
         this.__failureReason = "assertions";
-        this.__suite.testFailed(this, failedAssertions + " number of failed assertions.");
+        this.__suite.testFailed(this, "Did not successfully pass " + failedAssertions + " assertions.");
       }
       else if (this.__assertions != null && this.__assertions != this.__passed.length) 
       {

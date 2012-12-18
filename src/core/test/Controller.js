@@ -51,7 +51,8 @@ core.Module("core.test.Controller",
       return;
     }
 
-    console.info("Test suites completed!")
+    console.log("");
+    console.info("All done!")
 
     this.__isRunning = false;
     this.__isFinished = true;

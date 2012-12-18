@@ -1,4 +1,4 @@
-var suite = new core.test.Suite("Collection :: LinkedList");
+var suite = new core.test.Suite("Collection/LinkedList");
 
 suite.test("Create", function() 
 {

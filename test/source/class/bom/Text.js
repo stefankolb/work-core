@@ -1,4 +1,4 @@
-var suite = new core.test.Suite("BOM :: Text");
+var suite = new core.test.Suite("BOM/Text");
 
 suite.test("Basics", function() 
 {

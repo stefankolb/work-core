@@ -47,9 +47,9 @@ core.Class("core.test.Suite",
       {
         var errornous = this.__failed.length > 0;
         if (errornous) {
-          console.error("- Done: " + this.__passed.length + " passed; " + this.__failed.length + " failed");
+          console.error("- " + this.__passed.length + " tests passed; " + this.__failed.length + " tests failed");
         } else {
-          console.info("- Done: " + this.__passed.length + " passed");
+          console.info("- " + this.__passed.length + " tests passed");
         }
 
         if (this.__waitHandle) {
@@ -154,7 +154,7 @@ core.Class("core.test.Suite",
         return false;
       }
 
-      console.log("Running " + this.__caption + " (" + queue.length + " tests)...");
+      console.log("Testing " + this.__caption + "...");
 
       // Useful to be sure that test do not depend on each other
       // Works on a copy to be able to reproduce the list in the

@@ -127,6 +127,31 @@ core.Class("core.test.Test",
     },
 
 
+    /**
+     * {Integer} Returns the number of assertions which are expected for being executed.
+     */
+    getExpectedAssertions : function() {
+      return this.__assertions == null ? this.__passed.length + this.__failed.length : this.__assertions;
+    },
+
+
+    /**
+     * {String} Returns a useful one liner of the status of the test
+     *
+     * #require(ext.sugar.Number)
+     */
+    getSummary : function() 
+    {
+      var reason = this.__failureReason;
+
+      var prefix = reason == null ? "Success" : "Failure"
+      var base = ": " + this.__title + " [" + this.__passed.length.pad(2) + "/" + this.getExpectedAssertions().pad(2) + "]";
+      var postfix = reason == null ? "" : ": " + reason;
+
+      return prefix + base + postfix;
+    },
+
+
     /** 
      * {String} Returns the reason of the failure 
      */
@@ -172,7 +197,7 @@ core.Class("core.test.Test",
       if (this.__timeoutHandle) {
         clearTimeout(this.__timeoutHandle);
       }
-            
+
       var failedAssertions = this.__failed.length;
       if (failedAssertions) 
       {

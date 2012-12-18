@@ -76,19 +76,39 @@ core.Class("core.test.Suite",
       return this.__failed.length == 0;
     },
 
+
+
+    /*
+    ----------------------------------------------
+       API FOR TEST TO SEND FEEDBACK
+    ----------------------------------------------
+    */
+
+    /**
+     * Marks the given @test {core.test.Test} as being successfully completed.
+     */
     testPassed : function(test) 
     {
-      console.log("- Success: " + test.getTitle());
+      console.log("- " + test.getSummary());
       this.__passed.push(test);      
     },
 
+    /**
+     * Marks the given @test {core.test.Test} as having failed for various reasons.
+     */
     testFailed : function(test) 
     {
-      console.log("- Failed: " + test.getTitle() + ": " + test.getFailureReason());
+      console.log("- " + test.getSummary());
       this.__failed.push(test);
     },
   
 
+
+    /*
+    ----------------------------------------------
+       API FOR USER OR CONTROLLER
+    ----------------------------------------------
+    */
 
     /**
      * {Boolean} Runs the test suite. Executes the given @callback {Function?} in the

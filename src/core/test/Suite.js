@@ -1,12 +1,18 @@
-/**
- * #require(ext.sugar.Function)
- */
 (function(global) 
 {
+  /**
+   * #require(ext.sugar.Function)
+   */
   core.Class("core.test.Suite",
   {
+    /**
+     * Creates a new test suite with the given @caption {String}.
+     * The optionally defined @setup {Function?} and @teardown {Function?} can
+     * be used to run methods either before or after each individual test.
+     */
     construct : function(caption, setup, teardown) 
     {
+      // Verify that an instance was created
       if (!(this instanceof core.test.Suite)) {
         throw new Error("Please use 'new' for creating Suite instances!");
       }
@@ -21,7 +27,7 @@
       this.__setup = setup;
       this.__teardown = teardown;
 
-      // Revamp run method to allow auto execution as soon 
+      // Wrapped run method to allow auto execution as soon 
       // as no further tests are being added
       this.__autoRun = this.run.debounce(100);
 
@@ -37,6 +43,12 @@
       /** Whether to automatically randomize test execution order */
       randomize : true,
 
+      /**
+       * Registers a new test @func {Function} with the given @title {String} to
+       * the suite. The optional @timeout {Integer?} can be used to setup the test
+       * as being asynchronous. In these tests the method {#done} needs to be called
+       * after all tests have been processed.
+       */
       test : function(title, func, timeout) 
       {
         // Initialize test instance and trigger auto run
@@ -130,7 +142,6 @@
 
             this.__failed.push(test);
           }
-
         }
       }
     }

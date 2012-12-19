@@ -59,7 +59,7 @@ def phantom():
     source()
     build()
 
-    Console.header("Running PhantomJS")
+    Console.header("Task: Phantom - Continued")
 
     Console.info("Testing source...")
     output = executeCommand("phantomjs phantom.js", "Test Suite Failed", "source")

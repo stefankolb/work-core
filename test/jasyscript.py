@@ -43,13 +43,15 @@ def build():
     # Copy files from source
     fileManager.updateFile("source/index.html", "$prefix/index.html")
     fileManager.updateFile("source/phantom.js", "$prefix/phantom.js")
+    fileManager.updateFile("source/node.js", "$prefix/node.js")
 
     # Resolving dependencies
     classes = Resolver(session).addClassName("test.Main").getSortedClasses()
 
     # Compressing classes
-    outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")
-    
+    for permutation in session.permutate():
+        outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")
+
     
 @task
 def phantom():
@@ -69,6 +71,28 @@ def phantom():
 
     Console.info("Testing build...")
     output = executeCommand("phantomjs phantom.js", "Test Suite Failed", "build")
+    Console.info("Finished successfully")
+
+
+    
+@task
+def node():
+    """Automatically tests using NodeJS"""
+
+    from jasy.core.Util import executeCommand
+
+    Console.info("Updating generated files...")
+    source()
+    build()
+
+    Console.header("Task: Node - Continued")
+
+    Console.info("Testing source...")
+    output = executeCommand("node node.js", "Test Suite Failed", "source")
+    Console.info("Finished successfully")
+
+    Console.info("Testing build...")
+    output = executeCommand("node node.js", "Test Suite Failed", "build")
     Console.info("Finished successfully")
 
 

@@ -2,6 +2,9 @@
 @task
 def source():
     session.setField("debug", True)
+    session.permutateField("es5")
+    session.permutateField("engine")
+    session.permutateField("runtime")
 
     # Initialize shared objects
     assetManager = AssetManager(session).addSourceProfile()
@@ -14,13 +17,17 @@ def source():
     # Resolving dependencies
     classes = Resolver(session).addClassName("test.Main").getSortedClasses()
     
-    # Writing source loader
-    outputManager.storeLoader(classes, "$prefix/script/test.js")
+    for permutation in session.permutate():
+        # Writing source loader
+        outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js")
 
 
 @task
 def build():
     session.setField("debug", True)
+    session.permutateField("es5")
+    session.permutateField("engine")
+    session.permutateField("runtime")
 
     # Initialize shared objects
     assetManager = AssetManager(session).addBuildProfile()
@@ -41,7 +48,7 @@ def build():
     classes = Resolver(session).addClassName("test.Main").getSortedClasses()
 
     # Compressing classes
-    outputManager.storeCompressed(classes, "$prefix/script/test.js")
+    outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")
     
     
 @task

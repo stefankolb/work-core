@@ -3,20 +3,6 @@
 	
 	"requires" : 
   [
-    {
-      "source" : "https://github.com/jquery/qunit.git",
-      "version" : "v1.10.0",
-      "config" :
-      {
-        "package" : "",
-        "content" : 
-        {
-          "qunit.css" : ["qunit/qunit.css"],
-          "QUnit" : ["qunit/qunit.js"]
-        }
-      }
-    },
-    
 		"../"
 	]
 }

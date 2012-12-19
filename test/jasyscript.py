@@ -1,9 +1,14 @@
-# Configure
-session.setField("debug", True)
-
-
 @task
 def source():
+    return _source()
+
+@task
+def build():
+    return _build()
+
+def _source():
+    session.setField("debug", True)
+
     # Initialize shared objects
     assetManager = AssetManager(session).addSourceProfile()
     outputManager = OutputManager(session, assetManager, compressionLevel=0, formattingLevel=1)
@@ -19,8 +24,9 @@ def source():
     outputManager.storeLoader(classes, "$prefix/script/test.js")
 
 
-@task
-def build():
+def _build():
+    session.setField("debug", True)
+
     # Initialize shared objects
     assetManager = AssetManager(session).addBuildProfile()
     outputManager = OutputManager(session, assetManager, compressionLevel=2)
@@ -34,6 +40,7 @@ def build():
 
     # Copy files from source
     fileManager.updateFile("source/index.html", "$prefix/index.html")
+    fileManager.updateFile("source/phantom.js", "$prefix/phantom.js")
 
     # Resolving dependencies
     classes = Resolver(session).addClassName("test.Main").getSortedClasses()
@@ -43,40 +50,32 @@ def build():
     
     
 @task
-def phantom():
-    # Initialize shared objects
-    assetManager = AssetManager(session).addSourceProfile()
-    outputManager = OutputManager(session, assetManager, compressionLevel=0, formattingLevel=1)
-    fileManager = FileManager(session)
-    
-    # Store kernel script
-    outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
-    
-    # Copy files from source
-    fileManager.updateFile("source/phantom.js", "$prefix/phantom.js")
-    fileManager.updateFile("source/phantom.html", "$prefix/phantom.html")
+def test():
+    """Automatically tests using PhantomJS"""
 
-    # Process every possible permutation
-    for permutation in session.permutate():
+    from jasy.core.Util import executeCommand
 
-        # Resolving dependencies
-        classes = Resolver(session).addClassName("test.Main").getSortedClasses()
-        
-        # Writing source loader
-        outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js", "phantomQunit();", urlPrefix="../source")
+    Console.info("Testing source...")
+    Console.indent()
+    Console.info("Updating source task...")
+    Console.indent()
+    _source()
+    Console.outdent()
+    Console.info("Executing PhantomJS...")
+    output = executeCommand("phantomjs phantom.js", "Test Suite Failed")
+    Console.info("Tests finished successfully")
+    Console.outdent()
 
-    # Execute test
-    Console.info("Running QUnit...")
-    import jasy.core.Util
-    result = None
-    try:
-        result = jasy.core.Util.executeCommand("phantomjs phantom.js", "Tests did not ececute successfully", "phantom")
-    except Exception:
-        pass
-
-    Console.info("QUnit Finished")
-    print(result)
-
+    Console.info("Testing build...")
+    Console.indent()
+    Console.info("Updating build task...")
+    Console.indent()
+    _build()
+    Console.outdent()
+    Console.info("Executing PhantomJS...")
+    output = executeCommand("phantomjs phantom.js", "Test Suite Failed")
+    Console.info("Tests finished successfully")
+    Console.outdent()
 
 
 @task

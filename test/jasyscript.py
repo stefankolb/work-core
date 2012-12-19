@@ -50,32 +50,24 @@ def _build():
     
     
 @task
-def test():
+def phantom():
     """Automatically tests using PhantomJS"""
 
     from jasy.core.Util import executeCommand
 
+    Console.info("Updating generated files...")
+    source()
+    build()
+
+    Console.header("Running PhantomJS")
+
     Console.info("Testing source...")
-    Console.indent()
-    Console.info("Updating source task...")
-    Console.indent()
-    _source()
-    Console.outdent()
-    Console.info("Executing PhantomJS...")
-    output = executeCommand("phantomjs phantom.js", "Test Suite Failed")
-    Console.info("Tests finished successfully")
-    Console.outdent()
+    output = executeCommand("phantomjs phantom.js", "Test Suite Failed", "source")
+    Console.info("Finished successfully")
 
     Console.info("Testing build...")
-    Console.indent()
-    Console.info("Updating build task...")
-    Console.indent()
-    _build()
-    Console.outdent()
-    Console.info("Executing PhantomJS...")
-    output = executeCommand("phantomjs phantom.js", "Test Suite Failed")
-    Console.info("Tests finished successfully")
-    Console.outdent()
+    output = executeCommand("phantomjs phantom.js", "Test Suite Failed", "build")
+    Console.info("Finished successfully")
 
 
 @task

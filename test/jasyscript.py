@@ -1,12 +1,6 @@
+
 @task
 def source():
-    return _source()
-
-@task
-def build():
-    return _build()
-
-def _source():
     session.setField("debug", True)
 
     # Initialize shared objects
@@ -24,7 +18,8 @@ def _source():
     outputManager.storeLoader(classes, "$prefix/script/test.js")
 
 
-def _build():
+@task
+def build():
     session.setField("debug", True)
 
     # Initialize shared objects

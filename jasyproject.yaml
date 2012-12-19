@@ -21,6 +21,8 @@ fields:
     default: en
     detect: core.detect.Locale
   runtime:
-    check: String
+    check:
+    - browser
+    - native
     default: browser
     detect: core.detect.Runtime

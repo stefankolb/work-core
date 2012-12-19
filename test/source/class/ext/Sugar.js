@@ -220,7 +220,7 @@ suite.test("Function.prototype.debounce - END", function()
   debounced();
   debounced();
   
-  window.setTimeout(function() {
+  setTimeout(function() {
     test.equal(counter, 1);
     test.done();
   }, 200)

@@ -9,6 +9,9 @@ suite.test("Id", function()
   this.identical(core.util.Id.get(myFunc), startId+1);
   this.identical(core.util.Id.get(myFunc), startId+1);
 
-  this.identical(core.util.Id.get(document.body), startId+2);
-  this.identical(core.util.Id.get(document.body), startId+2); 
+  if (typeof document != "undefined")
+  {
+    this.identical(core.util.Id.get(document.body), startId+2);
+    this.identical(core.util.Id.get(document.body), startId+2); 
+  }
 });

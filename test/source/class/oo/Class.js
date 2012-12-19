@@ -662,7 +662,7 @@ suite.test("Inheriting Properties", function()
     
     construct : function() 
     {
-      this.__labelElement = document.createElement("label");
+      this.__labelElement = typeof document != "undefined" ? document.createElement("label") : {style:{}};
       
       properties.Text.call(this, this.__labelElement);
       

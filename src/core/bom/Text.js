@@ -5,7 +5,12 @@
 ==================================================================================================
 */
 
-(function() {
+(function() 
+{
+	// Requires DOM interface
+	if (jasy.Env.isSet("runtime", "native")) {
+		return;
+	}
 
 	var measureNode = document.createElement("div");
 	var measureStyle = measureNode.style;

@@ -11,7 +11,7 @@
 
 	// the following is a feature sniff for the ability to set async=false on dynamically created script elements, as proposed to the W3C
 	// RE: http://wiki.whatwg.org/wiki/Dynamic_Script_Execution_Order
-	var supportsScriptAsync = doc.createElement("script").async === true;
+	var supportsScriptAsync = doc && doc.createElement("script").async === true;
 
 	// Dynamic URI can be shared because we do not support reloading files
 	var dynamicExtension = "?r=" + Date.now();
@@ -70,7 +70,7 @@
 			// Browser-less (e.g. NodeJS) support
 			if (!doc) 
 			{
-			  eval(require("fs").readFileSync(uri));
+			  eval(require("fs").readFileSync(uri, "utf-8"));
 			  if (callback) {
 			  	callback.call(context||global, uri, false);
 			  }

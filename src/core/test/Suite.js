@@ -38,9 +38,6 @@ core.Class("core.test.Suite",
     ----------------------------------------------
     */
 
-    /** Internal marker used to indicate test suites which are currently/were running before. */
-    __locked : false,
-
     /**
      * Method which is being executed on a regular basis to check
      * whether all tests of this suite are finished. When this
@@ -119,9 +116,6 @@ core.Class("core.test.Suite",
       this.__testDoneCallback(test);
     },
 
-
-
-  
 
 
     /*
@@ -204,9 +198,6 @@ core.Class("core.test.Suite",
 
       // Callback which should be executed after each test is completed
       this.__testDoneCallback = testDoneCallback;
-
-      // With the first run the suite is locked
-      this.__locked = true;
 
       // Disabling log output for successful items by default
       this.__verbose = false;

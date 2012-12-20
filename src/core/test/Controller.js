@@ -29,7 +29,7 @@ core.Module("core.test.Controller",
 
 
   /** 
-   * {Boolean} Whether the suites have been executed successfully */
+   * {Boolean} Whether the suites have been executed successfully
    */
   isSuccessful : function() 
   {

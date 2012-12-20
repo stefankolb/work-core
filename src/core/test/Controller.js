@@ -37,6 +37,20 @@ core.Module("core.test.Controller",
 
     if (!this.__isRunning) 
     {
+      if (location.hash == "#testem" && !this.__testemLoaded) 
+      {
+        this.__testemLoaded = true;
+
+        console.info("Welcome Testem!!!");
+
+        core.io.Script.load("/testem.js", function() {
+          console.info("Testem is ready!");
+          this.run();
+        }, this);
+
+        return;        
+      }
+
       suites.sort(function(a, b) {
         return a.getCaption() > b.getCaption() ? 1 : -1;
       });

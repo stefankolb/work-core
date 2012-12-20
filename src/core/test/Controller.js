@@ -1,3 +1,10 @@
+/**
+ * Main controller of test environment in Core. Is automatically used
+ * by {core.test.Suite} instances for self registration. The controller
+ * joins together the flow and results of the individual suites. It also
+ * supports the Testem (https://github.com/airportyh/testem/) test runner
+ * for automating multi browser tests.
+ */
 core.Module("core.test.Controller",
 {
   /** {=core.test.Suite[]} List of suite instances */

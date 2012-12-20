@@ -23,7 +23,7 @@ suite.test("Adding Source Data", function()
   jasy.Asset.addData(
   {
     "assets" : {
-      "my.png" : {"u":"asset/my.png","p":0}
+      "my.pngm" : {"u":"asset/my.png","p":0}
     }, 
     "profiles" : [{name:"source", "root":"xxx/yyy/"}]
   });
@@ -67,7 +67,7 @@ suite.test("Adding Build Data", function()
   jasy.Asset.addData(
   {
     "assets" : {
-      "my.png" : {"p":0}
+      "my.png" : {"xp":0}
     }, 
     "profiles" : [{name:"build", "root":"asset/"}]
   });

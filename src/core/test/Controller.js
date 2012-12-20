@@ -1,14 +1,29 @@
 core.Module("core.test.Controller",
 {
+  /** {=core.test.Suite[]} List of suite instances */
   __suites : [],
+
+  /** Whether the test suites are being executed right now */
   __isRunning : false,
+
+  /** Whether the test suites are finished with execution */
   __isFinished : false,
+
+  /** Current suite (by index) to execute */
   __currentIndex : 0,  
 
+
+  /**
+   * Registers the given @suite {core.test.Suite} to the controller.
+   */
   registerSuite : function(suite) {
     this.__suites.push(suite);
   },
 
+
+  /** 
+   * {Boolean} Whether the suites have been executed successfully */
+   */
   isSuccessful : function() 
   {
     var suites = this.__suites;
@@ -22,14 +37,25 @@ core.Module("core.test.Controller",
     return true;
   },
 
+
+  /**
+   * {Boolean} Whether the test suites are being executed right now
+   */
   isRunning : function() {
     return this.__isRunning;
   },
 
+  /** 
+   * {Boolean} Whether the test suites are finished with execution 
+   */
   isFinished : function() {
     return this.__isFinished;
   },
 
+
+  /**
+   * {Array} Exports the internal suite data into a list of test results.
+   */
   export : function() 
   {
     var suites = this.__suites;
@@ -39,6 +65,9 @@ core.Module("core.test.Controller",
   },
 
 
+  /**
+   * Executes all tests of all registered test suites.
+   */
   run : function() 
   {
     if (this.__isRunning) {
@@ -82,6 +111,9 @@ core.Module("core.test.Controller",
   },
 
 
+  /**
+   * Internal helper to execute the next suite in the list.
+   */
   __runNextSuite : function() 
   {
     var currentIndex = this.__currentIndex++;
@@ -121,6 +153,10 @@ core.Module("core.test.Controller",
     }
   },
 
+
+  /** 
+   * Callback which is being executed every time a @test {core.test.Test} is completed.
+   */
   __testComplete : function(test) 
   {
     var socket = this.__testemSocket;

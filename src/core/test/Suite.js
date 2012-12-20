@@ -93,7 +93,7 @@ core.Class("core.test.Suite",
     {
       console.error("- " + test.getSummary());
       if (message) {
-        console.error("- " + message)
+        console.error("  - " + message)
       }
 
       if (test.getFailureReason() == "assertions") 

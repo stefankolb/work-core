@@ -24,6 +24,7 @@ core.Class("core.test.Test",
     this.__items = [];
   },
 
+
   members : 
   {
     /*
@@ -32,25 +33,40 @@ core.Class("core.test.Test",
     ----------------------------------------------
     */
 
+    /** {=String} Reason of failure, value is `null` when successful */
+    __failureReason : null,    
+
+    /** Number of passed assertions */
     __passedCount : 0,
+
+    /** Number of failed assertions */
     __failedCount : 0,
 
-    __passed : function(msg) 
+    
+    /** 
+     * Helper method to track new passed assertions with @message {String?""}. 
+     */
+    __passed : function(message) 
     {
       this.__items.push({
         passed : true,
-        message : msg,
+        message : message,
         stacktrace: null
       });
 
       this.__passedCount++;
     },
 
-    __failed : function(msg, ex) 
+
+    /** 
+     * Helper method to track new failed assertions with @message {String?""} and
+     * an optional exception @ex {Exception?null}.
+     */
+    __failed : function(message, ex) 
     {
       this.__items.push({
         passed : false,
-        message : msg + (ex ? ": " + ex.message : ""),
+        message : message + (ex ? ": " + ex.message : ""),
         stacktrace : ex.stack || null
       });
 
@@ -65,48 +81,70 @@ core.Class("core.test.Test",
     ----------------------------------------------
     */
 
-    equal : function(a, b, msg) 
+    /**
+     * Test whether @a {var} and @b {var} are equal and register
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    equal : function(a, b, message) 
     {
       try{
-        core.Assert.equal(a, b, msg);  
+        core.Assert.equal(a, b, message);  
       } catch(ex) {
-        return this.__failed(msg, ex);
+        return this.__failed(message, ex);
       }
 
-      this.__passed(msg);
+      this.__passed(message);
     },
 
-    identical : function(a, b, msg) 
+
+    /**
+     * Test whether @a {var} and @b {var} are identical and register
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    identical : function(a, b, message) 
     {
       try{
-        core.Assert.identical(a, b, msg);  
+        core.Assert.identical(a, b, message);  
       } catch(ex) {
-        return this.__failed(msg, ex);
+        return this.__failed(message, ex);
       }
 
-      this.__passed(msg);
+      this.__passed(message);
     },      
 
-    ok : function(a, msg) 
+
+    /**
+     * Test whether @a {var} is truish and register
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    ok : function(a, message) 
     {
       try{
-        core.Assert.isTrue(a, msg);  
+        core.Assert.isTrue(a, message);  
       } catch(ex) {
-        return this.__failed(msg, ex);
+        return this.__failed(message, ex);
       }
 
-      this.__passed(msg);
+      this.__passed(message);
     },
 
-    raises : function(func, msg) 
+    /**
+     * Test whether @func {Function} raises an exception (which is should) 
+     * and register the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    raises : function(func, message) 
     {
       try {
         func();
       } catch(ex) {
-        return this.__passed(msg);  
+        return this.__passed(message);  
       }
 
-      this.__failed(msg + ": Did not throwed an exception!");
+      this.__failed(message + ": Did not throwed an exception!");
     },
 
 
@@ -127,16 +165,17 @@ core.Class("core.test.Test",
 
     /**
      * Indicate that the test was not executed successfully
-     * e.g. exceptions or timeouts occured.
+     * e.g. exceptions or timeouts occured. Define the @reason {String}
+     * to give more hints about the issue.
      */
     failure : function(reason) 
     {
-      this.__failureReason = "other";
-      this.__suite.failure(this, reason);
-
       if (this.__timeoutHandle) {
         clearTimeout(this.__timeoutHandle);
       }
+
+      this.__failureReason = "other";
+      this.__suite.failure(this, reason);
     },
 
 
@@ -197,10 +236,6 @@ core.Class("core.test.Test",
     },
 
 
-    /** {=String} Reason of failure, value is `null` when successful */
-    __failureReason : null,
-
-
     /** 
      * {String} Returns the reason of the failure 
      */
@@ -255,10 +290,12 @@ core.Class("core.test.Test",
       var timeout = this.__timeout;
       if (timeout != null) 
       {
-        this.__timeoutHandle = setTimeout((function() {
-          this.__failureReason = "timeout";
-          this.__suite.testFailed(this, "Timeout (" + timeout + "ms)");
-        }).bind(this), timeout);
+        var self = this;
+        this.__timeoutHandle = setTimeout((function() 
+        {
+          self.__failureReason = "timeout";
+          self.__suite.testFailed(self, "Timeout (" + timeout + "ms)");
+        }), timeout);
       }
 
       try
@@ -269,6 +306,7 @@ core.Class("core.test.Test",
       {
         this.__failureReason = "exception";
         this.__suite.testFailed(this, "Exception: " + ex);
+
         return;
       }
 

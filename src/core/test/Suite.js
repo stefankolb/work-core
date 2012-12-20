@@ -41,7 +41,7 @@ core.Class("core.test.Suite",
     /** Internal marker used to indicate test suites which are currently/were running before. */
     __locked : false,
 
-    __isFinishedInterval : function(callback, context) 
+    __isFinishedInterval : function(callback) 
     {
       if ((this.__passed.length + this.__failed.length) == this.__tests.length) 
       {
@@ -57,7 +57,7 @@ core.Class("core.test.Suite",
         }
 
         if (callback) {
-          context ? callback.call(context, errornous) : callback(errornous);
+          callback(errornous);
         }
       }
 
@@ -81,7 +81,8 @@ core.Class("core.test.Suite",
         console.log("- " + test.getSummary());
       }
       
-      this.__passed.push(test);      
+      this.__passed.push(test);
+      this.__testDoneCallback(test);
     },
 
 
@@ -108,7 +109,11 @@ core.Class("core.test.Suite",
       } 
 
       this.__failed.push(test);
+      this.__testDoneCallback(test);
     },
+
+
+
   
 
 
@@ -148,14 +153,15 @@ core.Class("core.test.Suite",
     },
 
     /**
-     * {Boolean} Runs the test suite. Executes the given @callback {Function?} in the
-     * given @context {Object?} when all tests have been completed. Returns `false` when
-     * there are no tests registered to the suite. 
+     * {Boolean} Runs the test suite. Executes the given @allDoneCallback callback {Function?} when 
+     * all tests have been completed. Executes the @testDoneCallback {Function?} callback
+     * every time a single test is completed. Returns `false` when
+     * there are no tests registered. 
      * 
      * Optional @randomize {Boolean?true} allows
      * for disabling auto randomization of test order (don't use this).
      */
-    run : function(callback, context, randomize, verbose) 
+    run : function(allDoneCallback, testDoneCallback, randomize) 
     {
       var queue = this.__tests;
       var length = queue.length;
@@ -178,13 +184,16 @@ core.Class("core.test.Suite",
       }
 
       // Waiting for all async tests to finish
-      this.__waitHandle = setInterval(this.__isFinishedInterval.bind(this, callback, context), 16);
+      this.__waitHandle = setInterval(this.__isFinishedInterval.bind(this, allDoneCallback), 16);
+
+      // Callback which should be executed after each test is completed
+      this.__testDoneCallback = testDoneCallback;
 
       // With the first run the suite is locked
       this.__locked = true;
 
       // Disabling log output for successful items by default
-      this.__verbose = verbose || false;
+      this.__verbose = false;
 
       // Process tests in queue
       for (var i=0; i<length; i++) {

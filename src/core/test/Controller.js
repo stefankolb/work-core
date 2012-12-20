@@ -1,7 +1,9 @@
 core.Module("core.test.Controller",
 {
   __suites : [],
-  __randomizeTests : true,
+  __isRunning : false,
+  __isFinished : false,
+  __currentIndex : 0,  
 
   registerSuite : function(suite) {
     this.__suites.push(suite);
@@ -28,10 +30,13 @@ core.Module("core.test.Controller",
     return this.__isFinished;
   },
 
-  __isRunning : false,
-  __isFinished : false,
-  __currentIndex : 0,
-
+  export : function() 
+  {
+    var suites = this.__suites;
+    return Array.prototype.concat.apply([], this.__suites.map(function(suite) {
+      return suite.export();
+    }));          
+  },
 
 
   run : function() 
@@ -65,73 +70,62 @@ core.Module("core.test.Controller",
           socket.emit("tests-start");
 
           console.info("Executing Tests...");
-          self.runNext();          
+          self.__runNextSuite();          
         });
       });
     }
     else
     {
       console.info("Executing Tests...");
-      this.runNext();
+      this.__runNextSuite();
     }
   },
 
 
-  runNext : function() 
+  __runNextSuite : function() 
   {
     var currentIndex = this.__currentIndex++;
     var currentSuite = this.__suites[currentIndex];
 
-    if (currentSuite) {
-      currentSuite.run(this.runNext, this, this.__randomizeTests);
-    } else {
-      this.finalize();
+    if (currentSuite) 
+    {
+      var allComplete = core.util.Function.bind(this.__runNextSuite, this);
+      var testComplete = core.util.Function.bind(this.__testComplete, this);
+
+      currentSuite.run(allComplete, testComplete, true);
+    }
+    else if (this.__isRunning)
+    {
+      console.info("Finished!")
+
+      this.__isRunning = false;
+      this.__isFinished = true;
+
+      if (jasy.Env.isSet("runtime", "browser")) 
+      {
+        if (typeof callPhantom == "function") 
+        {
+          callPhantom({
+            action : "finished",
+            status : this.isSuccessful()
+          });
+        }
+
+        if (this.__testemSocket != null)
+        {
+          // Report back all test results and the fact that
+          // we are done running them.
+          this.__testemSocket.emit("all-test-results", this.export());
+        }
+      }      
     }
   },
 
-
-  finalize : function() 
+  __testComplete : function(test) 
   {
-    if (!this.__isRunning) {
-      return;
-    }
-
-    this.__isRunning = false;
-    this.__isFinished = true;
-
-    console.info("Finished!")
-
-    this.__isRunning = false;
-    this.__isFinished = true;
-
-    if (jasy.Env.isSet("runtime", "browser")) 
-    {
-      if (typeof callPhantom == "function") 
-      {
-        callPhantom({
-          action : "finished",
-          status : this.isSuccessful()
-        });
-      }
-
-      if (this.__testemSocket != null)
-      {
-        var suites = this.__suites;
-        var results = [];
-        for (var i=0, l=suites.length; i<l; i++) {
-          results.push.apply(results, suites[i].export());
-        }
-
-        console.log("Tests in Testem finished!", results, results.length, suites.length);
-
-        for (var i=0, l=results.length; i<l; i++) {
-          this.__testemSocket.emit("test-result", results[i]);
-        }
-
-        // Report back all test results and the fact that
-        // we are done running them.
-        this.__testemSocket.emit("all-test-results", results);
-      }
+    var socket = this.__testemSocket;
+    if (socket != null) {    
+      socket.emit("test-result", test.export());
     }
   }  
 });

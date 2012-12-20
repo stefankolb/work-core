@@ -1,6 +1,6 @@
 /**
- * Thematic wrapper around a set of tests. The test in a suite are 
- * processed at once but in arbitrary order.
+ * Wrapper around a group of {core.test.Test}s. All tests in a suite are 
+ * processed in arbitrary order.
  */
 core.Class("core.test.Suite",
 {

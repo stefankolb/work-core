@@ -1,4 +1,4 @@
-# Unit Testing Framework
+## Unit Testing Framework
 
 This is the integrated unit testing framework for Core-based applications and frameworks.
 
@@ -17,4 +17,13 @@ function you like to test. Inside that function you are able to chose from an ar
 - {core.test.Suite#ok}
 - {core.test.Suite#raises}
 
-Have fun!
+Example:
+
+    var suite = new core.test.Suite("Crypt");
+
+    suite.test("CRC32", function() {
+      
+      this.identical(core.crypt.CRC32.checksum("hello world"), 222957957);
+      this.identical(core.crypt.CRC32.checksum("hello world!"), 62177901);
+
+    });

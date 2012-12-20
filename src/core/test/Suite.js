@@ -94,6 +94,7 @@ core.Class("core.test.Suite",
 
     /**
      * Marks the given @test {core.test.Test} as having failed for various reasons.
+     * Add a custom @message {String} for clarification of the issue.
      */
     testFailed : function(test, message) 
     {
@@ -143,8 +144,8 @@ core.Class("core.test.Suite",
     /**
      * Registers a new test @func {Function} with the given @title {String} to
      * the suite. The optional @timeout {Integer?} can be used to setup the test
-     * as being asynchronous. In these tests the method {#done} needs to be called
-     * after all tests have been processed.
+     * as being asynchronous. In these tests the method {core.test.Test#done} needs to be called
+     * after all assertions have been processed.
      */
     test : function(title, func, timeout) {
       this.__tests.push(new core.test.Test(title, func, this, timeout));
@@ -165,7 +166,7 @@ core.Class("core.test.Suite",
     getCaption : function() {
       return this.__caption;
     },
-    
+
 
     /**
      * {Boolean} Runs the test suite. Executes the given @allDoneCallback callback {Function?} when 

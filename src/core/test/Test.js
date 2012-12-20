@@ -120,6 +120,23 @@ core.Class("core.test.Test",
     */
 
     /**
+     * {Map} Returns internal data to a Testem compatible JSON object.
+     */
+    export : function() 
+    {
+      // the result object to report for this test
+      return {
+        passed: this.__passed.length, 
+        failed: this.__failed.length, 
+        total: this.getExpectedAssertions(), 
+        id: this.__id, 
+        name: this.__title, 
+        items: this.__failed
+      };
+    },
+
+
+    /**
      * {Boolean} Whether the test was successfully executed.
      */
     wasSuccessful : function() {

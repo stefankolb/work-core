@@ -119,6 +119,20 @@ core.Class("core.test.Suite",
     */
 
     /**
+     * {Array} Exports all test data 
+     */
+    export : function() 
+    {
+      var xx= this.__tests.map(function(test) {
+        return test.export();
+      });
+
+      console.debug("Export Suite: " + this.__caption, xx);
+      return xx;
+    },
+
+
+    /**
      * Registers a new test @func {Function} with the given @title {String} to
      * the suite. The optional @timeout {Integer?} can be used to setup the test
      * as being asynchronous. In these tests the method {#done} needs to be called
@@ -161,7 +175,7 @@ core.Class("core.test.Suite",
       // order the developer has added the tests.
       if (randomize !== false) 
       {
-        queue.slice().sort(function() {
+        queue = queue.slice().sort(function() {
           return Math.random() < 0.5 ? -1 : 1;
         });
       }

@@ -31,24 +31,48 @@ core.Module("core.test.Controller",
   __isRunning : false,
   __isFinished : false,
 
+
+  testem : function(socket)
+  {
+    this.__testemSocket = socket;
+
+
+
+    socket.emit("tests-start");
+
+
+
+
+
+
+  },
+
+
   run : function() 
   {
     var suites = this.__suites;
 
     if (!this.__isRunning) 
     {
-      if (location.hash == "#testem" && !this.__testemLoaded) 
+      if (location.hash == "#testem") 
       {
-        this.__testemLoaded = true;
+        if (this.__testemLoaded)
+        {
+          Testem.useCustomAdapter(this.testem.bind(this));
+        }
+        else
+        {
+          this.__testemLoaded = true;
 
-        console.info("Welcome Testem!!!");
+          console.info("Welcome Testem!!!");
 
-        core.io.Script.load("/testem.js", function() {
-          console.info("Testem is ready!");
-          this.run();
-        }, this);
+          core.io.Script.load("/testem.js", function() {
+            console.info("Testem is ready!");
+            this.run();
+          }, this);
 
-        return;        
+          return;        
+        }
       }
 
       suites.sort(function(a, b) {
@@ -58,10 +82,10 @@ core.Module("core.test.Controller",
 
     this.__isRunning = true;
 
-    var first = suites.shift();
-    if (first)
+    var firstSuite = suites.shift();
+    if (firstSuite)
     {
-      first.run(this.run, this, this.__randomize);
+      firstSuite.run(this.run, this, this.__randomize);
       return;
     }
 
@@ -73,12 +97,33 @@ core.Module("core.test.Controller",
 
     if (jasy.Env.isSet("runtime", "browser")) 
     {
+      console.log("IN BROWSER: ", this.__testemSocket);
+
       if (typeof callPhantom == "function") 
       {
         callPhantom({
           action : "finished",
           status : this.isSuccessful()
         });
+      }
+
+      if (this.__testemSocket != null)
+      {
+        var suites = this.__suites;
+        var results = [];
+        for (var i=0, l=suites.length; i<l; i++) {
+          results.push.apply(results, suites[i].export());
+        }
+
+        console.log("Tests in Testem finished!", results, suites.length);
+
+
+        // Report back all test results and the fact that
+        // we are done running them.
+        this.__testemSocket.emit("all-test-results", results);
+
+
+        
       }
     }
   }

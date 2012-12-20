@@ -1,3 +1,4 @@
 {
+  "framework": "custom",
   "test_page" : "test/source/index.html"
 }

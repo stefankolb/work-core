@@ -41,6 +41,12 @@ core.Class("core.test.Suite",
     /** Internal marker used to indicate test suites which are currently/were running before. */
     __locked : false,
 
+    /**
+     * Method which is being executed on a regular basis to check
+     * whether all tests of this suite are finished. When this
+     * happens it kills the interval and reports back to the given
+     * @callback {Function?} that the suite was finished.
+     */
     __isFinishedInterval : function(callback) 
     {
       if ((this.__passed.length + this.__failed.length) == this.__tests.length) 
@@ -144,13 +150,22 @@ core.Class("core.test.Suite",
       this.__tests.push(new core.test.Test(title, func, this, timeout));
     },
 
+
+    /**
+     * {Boolean} Whether there were no failed tests in this suite.
+     */
     isSuccessful : function() {
       return this.__failed.length == 0;
     },
 
+
+    /** 
+     * {String} Returns the caption of this test suite
+     */
     getCaption : function() {
       return this.__caption;
     },
+    
 
     /**
      * {Boolean} Runs the test suite. Executes the given @allDoneCallback callback {Function?} when 

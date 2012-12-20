@@ -10,7 +10,7 @@ core.Class("core.test.Test",
    * - @func {Function} Function to test
    * - @suite {core.test.Suite} Instance of suite to assign to (for back reporting)
    * - @timeout {Integer?null} Configure timeout to enable async execution of test
-   * - @totel {Integer?null} Configure the total number of assertions which are expected to run
+   * - @total {Integer?null} Configure the total number of assertions which are expected to run
    */
   construct : function(title, func, suite, timeout, total) 
   {

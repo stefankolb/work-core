@@ -123,12 +123,9 @@ core.Class("core.test.Suite",
      */
     export : function() 
     {
-      var xx= this.__tests.map(function(test) {
+      return this.__tests.map(function(test) {
         return test.export();
       });
-
-      console.debug("Export Suite: " + this.__caption, xx);
-      return xx;
     },
 
 

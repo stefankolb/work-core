@@ -10,29 +10,58 @@ core.Class("core.test.Test",
    * - @func {Function} Function to test
    * - @suite {core.test.Suite} Instance of suite to assign to (for back reporting)
    * - @timeout {Integer?null} Configure timeout to enable async execution of test
-   * - @assertions {Integer?null} Configure the number of assertions which are expected to run
+   * - @totel {Integer?null} Configure the total number of assertions which are expected to run
    */
-  construct : function(title, func, suite, timeout, assertions) 
+  construct : function(title, func, suite, timeout, total) 
   {
     this.__title = title;
     this.__func = func;
     this.__suite = suite;
     this.__timeout = timeout;
-    this.__assertions = assertions;
+    this.__totalCount = total;
 
-    /** List of passed assertions */
-    this.__passed = [];
-
-    /** List of failed assertions */
-    this.__failed = [];
-
+    /** List of passed/failed assertions */
+    this.__items = [];
   },
 
   members : 
   {
     /*
     ----------------------------------------------
-       ASSERTION API FOR TEST
+      HELPER
+    ----------------------------------------------
+    */
+
+    __passedCount : 0,
+    __failedCount : 0,
+
+    __passed : function(msg) 
+    {
+      this.__items.push({
+        passed : true,
+        message : msg,
+        stacktrace: null
+      });
+
+      this.__passedCount++;
+    },
+
+    __failed : function(msg, ex) 
+    {
+      this.__items.push({
+        passed : false,
+        message : msg + (ex ? ": " + ex.message : ""),
+        stacktrace : ex.stack || null
+      });
+
+      this.__failedCount++;
+    },
+
+
+
+    /*
+    ----------------------------------------------
+      ASSERTION API FOR TEST
     ----------------------------------------------
     */
 
@@ -41,10 +70,10 @@ core.Class("core.test.Test",
       try{
         core.Assert.equal(a, b, msg);  
       } catch(ex) {
-        this.__failed.push([msg, ex]);
+        return this.__failed(msg, ex);
       }
 
-      this.__passed.push([msg]);
+      this.__passed(msg);
     },
 
     identical : function(a, b, msg) 
@@ -52,10 +81,10 @@ core.Class("core.test.Test",
       try{
         core.Assert.identical(a, b, msg);  
       } catch(ex) {
-        this.__failed.push([msg, ex]);
+        return this.__failed(msg, ex);
       }
 
-      this.__passed.push([msg]);
+      this.__passed(msg);
     },      
 
     ok : function(a, msg) 
@@ -63,29 +92,28 @@ core.Class("core.test.Test",
       try{
         core.Assert.isTrue(a, msg);  
       } catch(ex) {
-        this.__failed.push([msg, ex]);
+        return this.__failed(msg, ex);
       }
 
-      this.__passed.push([msg]);
+      this.__passed(msg);
     },
 
     raises : function(func, msg) 
     {
-      try
-      {
+      try {
         func();
-        this.__failed.push([msg, "Did not raise exception!"]);  
+      } catch(ex) {
+        return this.__passed(msg);  
       }
-      catch(ex) {
-        this.__passed.push([msg]);        
-      }
+
+      this.__failed(msg + ": Did not throwed an exception!");
     },
 
 
 
     /*
     ----------------------------------------------
-       STATUS API FOR TEST
+      STATUS API FOR TEST
     ----------------------------------------------
     */
 
@@ -115,7 +143,7 @@ core.Class("core.test.Test",
 
     /*
     ----------------------------------------------
-       API FOR SUITE
+      API FOR SUITE
     ----------------------------------------------
     */
 
@@ -126,12 +154,12 @@ core.Class("core.test.Test",
     {
       // the result object to report for this test
       return {
-        passed: this.__passed.length, 
-        failed: this.__failed.length, 
-        total: this.getExpectedAssertions(), 
+        passed: this.__passedCount, 
+        failed: this.__failedCount, 
+        total: this.getTotalCount(), 
         id: this.__id, 
         name: this.__title, 
-        items: this.__failed
+        items: this.__items
       };
     },
 
@@ -147,8 +175,8 @@ core.Class("core.test.Test",
     /**
      * {Integer} Returns the number of assertions which are expected for being executed.
      */
-    getExpectedAssertions : function() {
-      return this.__assertions == null ? this.__passed.length + this.__failed.length : this.__assertions;
+    getTotalCount : function() {
+      return this.__totalCount == null ? this.__passedCount + this.__failedCount : this.__totalCount;
     },
 
 
@@ -162,11 +190,15 @@ core.Class("core.test.Test",
       var reason = this.__failureReason;
 
       var prefix = reason == null ? "Success" : "Failure"
-      var base = ": " + this.__title + " [" + this.__passed.length.pad(2) + "/" + this.getExpectedAssertions().pad(2) + "]";
+      var base = ": " + this.__title + " [" + this.__passedCount.pad(2) + "/" + this.getTotalCount().pad(2) + "]";
       var postfix = reason == null ? "" : ": " + reason;
 
       return prefix + base + postfix;
     },
+
+
+    /** {=String} Reason of failure, value is `null` when successful */
+    __failureReason : null,
 
 
     /** 
@@ -175,22 +207,6 @@ core.Class("core.test.Test",
     getFailureReason : function() {
       return this.__failureReason;
     },
-
-
-    /** 
-     * {Integer} Returns the number of passed assertions
-     */
-    getPassedAssertions : function() {
-      return this.__passed;
-    },
-
-
-    /** 
-     * {Integer} Returns the number of failed assertions
-     */
-    getFailedAssertions : function() {
-      return this.__failed;
-    },    
 
 
     /**
@@ -202,10 +218,6 @@ core.Class("core.test.Test",
     },
 
 
-    /** {=String} Reason of failure, value is `null` when successful */
-    __failureReason : null,
-
-
     /** 
      * This method is automatically triggered whenever the test was marked as done 
      */
@@ -215,16 +227,16 @@ core.Class("core.test.Test",
         clearTimeout(this.__timeoutHandle);
       }
 
-      var failedAssertions = this.__failed.length;
+      var failedAssertions = this.__failedCount;
       if (failedAssertions) 
       {
         this.__failureReason = "assertions";
         this.__suite.testFailed(this, "Did not successfully pass " + failedAssertions + " assertions.");
       }
-      else if (this.__assertions != null && this.__assertions != this.__passed.length) 
+      else if (this.__totalCount != null && this.__totalCount != this.__passedCount) 
       {
         this.__failureReason = "mismatch";
-        this.__suite.testFailed(this, "Did to match number of assertions expected (" + this.__assertions + " vs. " + this.__passed.length + ")");
+        this.__suite.testFailed(this, "Did to match number of assertions expected (" + this.__totalCount + " vs. " + this.__passedCount + ")");
       }
       else
       {
@@ -266,4 +278,5 @@ core.Class("core.test.Test",
       }
     }
   }
-});  
+});
+

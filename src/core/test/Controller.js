@@ -1,7 +1,7 @@
 core.Module("core.test.Controller",
 {
   __suites : [],
-  __randomize : true,
+  __randomizeTests : true,
 
   registerSuite : function(suite) {
     this.__suites.push(suite);
@@ -30,75 +30,82 @@ core.Module("core.test.Controller",
 
   __isRunning : false,
   __isFinished : false,
+  __currentIndex : 0,
 
-
-  testem : function(socket)
-  {
-    this.__testemSocket = socket;
-
-
-
-    socket.emit("tests-start");
-
-
-
-
-
-
-  },
 
 
   run : function() 
   {
-    var suites = this.__suites;
-
-    if (!this.__isRunning) 
-    {
-      if (location.hash == "#testem") 
-      {
-        if (this.__testemLoaded)
-        {
-          Testem.useCustomAdapter(this.testem.bind(this));
-        }
-        else
-        {
-          this.__testemLoaded = true;
-
-          console.info("Welcome Testem!!!");
-
-          core.io.Script.load("/testem.js", function() {
-            console.info("Testem is ready!");
-            this.run();
-          }, this);
-
-          return;        
-        }
-      }
-
-      suites.sort(function(a, b) {
-        return a.getCaption() > b.getCaption() ? 1 : -1;
-      });
+    if (this.__isRunning) {
+      return;
     }
 
     this.__isRunning = true;
 
-    var firstSuite = suites.shift();
-    if (firstSuite)
+    var suites = this.__suites;
+
+    // Sort suites by caption
+    suites.sort(function(a, b) {
+      return a.getCaption() > b.getCaption() ? 1 : -1;
+    });
+
+    // Integration with Testem Runner
+    if (location.hash == "#testem") 
     {
-      firstSuite.run(this.run, this, this.__randomize);
+      var self = this;
+
+      console.info("Loading Testem...");
+      core.io.Script.load("/testem.js", function() 
+      {
+        console.info("Initializing Testem...");
+        
+        Testem.useCustomAdapter(function(socket) 
+        {
+          self.__testemSocket = socket;
+          socket.emit("tests-start");
+
+          console.info("Executing Tests...");
+          self.runNext();          
+        });
+      });
+    }
+    else
+    {
+      console.info("Executing Tests...");
+      this.runNext();
+    }
+  },
+
+
+  runNext : function() 
+  {
+    var currentIndex = this.__currentIndex++;
+    var currentSuite = this.__suites[currentIndex];
+
+    if (currentSuite) {
+      currentSuite.run(this.runNext, this, this.__randomizeTests);
+    } else {
+      this.finalize();
+    }
+  },
+
+
+  finalize : function() 
+  {
+    if (!this.__isRunning) {
       return;
     }
 
-    console.log("");
-    console.info("All done!")
+    this.__isRunning = false;
+    this.__isFinished = true;
+
+    console.info("Finished!")
 
     this.__isRunning = false;
     this.__isFinished = true;
 
     if (jasy.Env.isSet("runtime", "browser")) 
     {
-      console.log("IN BROWSER: ", this.__testemSocket);
-
       if (typeof callPhantom == "function") 
       {
         callPhantom({
@@ -115,16 +122,16 @@ core.Module("core.test.Controller",
           results.push.apply(results, suites[i].export());
         }
 
-        console.log("Tests in Testem finished!", results, suites.length);
+        console.log("Tests in Testem finished!", results, results.length, suites.length);
 
+        for (var i=0, l=results.length; i<l; i++) {
+          this.__testemSocket.emit("test-result", results[i]);
+        }
 
         // Report back all test results and the fact that
         // we are done running them.
         this.__testemSocket.emit("all-test-results", results);
-
-
-        
       }
     }
-  }
+  }  
 });

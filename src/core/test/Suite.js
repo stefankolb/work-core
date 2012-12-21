@@ -48,19 +48,12 @@ core.Class("core.test.Suite",
     {
       if ((this.__passed.length + this.__failed.length) == this.__tests.length) 
       {
-        var errornous = this.__failed.length > 0;
-        if (errornous) {
-          console.error("- " + this.__passed.length + " tests passed; " + this.__failed.length + " tests failed");
-        } else {
-          console.info("- " + this.__passed.length + " tests passed");
-        }
-
         if (this.__waitHandle) {
           clearInterval(this.__waitHandle);
         }
 
         if (callback) {
-          callback(errornous);
+          callback(this.__failed.length > 0);
         }
       }
 
@@ -80,10 +73,6 @@ core.Class("core.test.Suite",
      */
     testPassed : function(test) 
     {
-      if (this.__verbose) {
-        console.log("- " + test.getSummary());
-      }
-      
       this.__passed.push(test);
       this.__testDoneCallback(test);
     },
@@ -95,23 +84,6 @@ core.Class("core.test.Suite",
      */
     testFailed : function(test, message) 
     {
-      console.error("- " + test.getSummary());
-      if (message) {
-        console.error("  - " + message)
-      }
-
-      if (test.getFailureReason() == "assertions") 
-      {
-        var failed = test.getFailedAssertions();
-        for (var i=0, l=failed.length; i<l; i++)
-        {
-          var msg = failed[i][0];
-          var ex = failed[i][1];
-
-          console.error("  - Assertion " + i + ": " + (msg||ex) + ", " + ex.line);
-        }
-      } 
-
       this.__failed.push(test);
       this.__testDoneCallback(test);
     },
@@ -180,8 +152,6 @@ core.Class("core.test.Suite",
       if (!length) {
         return false;
       }
-
-      console.log("Testing " + this.__caption + "...");
 
       // Useful to be sure that test do not depend on each other
       // Works on a copy to be able to reproduce the list in the

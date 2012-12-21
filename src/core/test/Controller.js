@@ -52,6 +52,7 @@ core.Module("core.test.Controller",
     return this.__isRunning;
   },
 
+
   /** 
    * {Boolean} Whether the test suites are finished with execution 
    */

@@ -1,5 +1,5 @@
-(function(id) {
-  
+(function(id) 
+{
   /**
    * Wraps a function to test so that it can report back
    * to a whole suite of tests and is protected regarding

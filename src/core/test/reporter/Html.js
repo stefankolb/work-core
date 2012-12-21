@@ -92,6 +92,16 @@ core.Class("core.test.reporter.Html",
     {
       var li = document.getElementById("suite-" + suite.getId());      
       core.bom.ClassName.remove(li, "running");
+
+      if (suite.wasSuccessful()) 
+      {
+        core.bom.ClassName.add(li, "successful");
+      } 
+      else
+      {
+        core.bom.ClassName.add(li, "failed");
+
+      }
     },
 
     // interface implementation
@@ -110,6 +120,15 @@ core.Class("core.test.reporter.Html",
 
       var li = document.getElementById("test-" + test.getId());      
       core.bom.ClassName.remove(li, "running");
+
+      if (suite.wasSuccessful()) 
+      {
+        core.bom.ClassName.add(li, "successful");
+      } 
+      else
+      {
+        core.bom.ClassName.add(li, "failed");
+      }
     }
   }
 });

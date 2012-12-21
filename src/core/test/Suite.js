@@ -129,7 +129,7 @@ core.Class("core.test.Suite",
     /**
      * {Boolean} Whether there were no failed tests in this suite.
      */
-    isSuccessful : function() {
+    wasSuccessful : function() {
       return this.__failed.length == 0;
     },
 

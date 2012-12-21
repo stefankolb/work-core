@@ -26,11 +26,35 @@
       padding: 30px;
     }
 
+    #reporter{
+      max-width: 600px;
+    }
+
     h3{
       font-size: 18px;
-      margin-top: 18px;
       background: #EEE;
       padding: 6px 10px;
+    }
+
+    ul.suites > li{
+      border-top-left-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+
+      -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    ul.suites > li > h3{
+      border-left: 30px solid #333;
+      border-bottom: 2px solid #333;
+
+      -webkit-transition: border-color 300ms;
+      -moz-transition: border-color 300ms;
+      -ms-transition: border-color 300ms;
+      transition: border-color 300ms;
     }
 
     ul.suites > li > h3 > span.result{
@@ -55,29 +79,34 @@
       opacity: 1;
     }    
 
+    ul.suites > li.successful > h3{
+      border-color: green;
+    }
+
+    ul.suites > li.failed > h3{
+      border-color: red;
+    }
+
     ul.tests{
       padding: 10px;
     }
 
-    ul.tests h4{
+    ul.tests > li > h4{
       font-weight: normal;
       font-size: 14px;
     }
 
-    ul.tests > li.running > h3:after{
-      content: "running";
-      font-size: 10px;
-      padding: 3px;
-      font-weight: normal;
-      border-radius: 4px;
-      background: #AAA;
-      color: white;
-      margin-left: 8px;
-      vertical-align: middle;
-    }    
+    ul.tests > li span.running{
+      display: none;
+    }
 
+    ul.tests > li.running span.running{
+      display: block;
+    }
 
-
+    ul.tests > li span.result{
+      float: right;
+    }
 
     </style>
     <div id="reporter"></div>

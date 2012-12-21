@@ -31,12 +31,12 @@ core.Module("core.test.Controller",
   /** 
    * {Boolean} Whether the suites have been executed successfully
    */
-  isSuccessful : function() 
+  wasSuccessful : function() 
   {
     var suites = this.__suites;
     for (var i=0, l=suites.length; i<l; i++) 
     {
-      if (!suites[i].isSuccessful()) {
+      if (!suites[i].wasSuccessful()) {
         return false;
       }
     }

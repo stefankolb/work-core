@@ -212,6 +212,14 @@
 
 
       /**
+       * {Array} Returns all assertion results.
+       */
+      getAssertions : function() {
+        return this.__items;
+      },
+
+
+      /**
        * {Integer} Returns the number of assertions which are expected for being executed.
        */
       getTotalCount : function() {

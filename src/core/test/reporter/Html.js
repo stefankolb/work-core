@@ -93,22 +93,27 @@ core.Class("core.test.reporter.Html",
       var li = document.getElementById("suite-" + suite.getId());      
       core.bom.ClassName.remove(li, "running");
 
-      if (suite.wasSuccessful()) 
-      {
+      if (suite.wasSuccessful()) {
         core.bom.ClassName.add(li, "successful");
-      } 
-      else
-      {
+      } else {
         core.bom.ClassName.add(li, "failed");
-
       }
+
+      var tests = suite.getTests();
+      var failed = 0;
+      var passed = 0;
+
+      for (var i=0, l=tests.length; i<l; i++) {
+        tests[i].wasSuccessful() ? passed++ : failed++;
+      }
+
+      li.querySelector(".result .passed").innerHTML = passed;
+      li.querySelector(".result .failed").innerHTML = failed;
     },
 
     // interface implementation
     testStarted : function(test) 
     {
-      console.info("- Start: " + test.getTitle());
-
       var li = document.getElementById("test-" + test.getId());
       core.bom.ClassName.add(li, "running");
     },
@@ -116,19 +121,28 @@ core.Class("core.test.reporter.Html",
     // interface implementation
     testFinished : function(test) 
     {
-      console.info("- " + test.getSummary());
-
       var li = document.getElementById("test-" + test.getId());      
       core.bom.ClassName.remove(li, "running");
 
-      if (suite.wasSuccessful()) 
-      {
+      if (test.wasSuccessful()) {
         core.bom.ClassName.add(li, "successful");
-      } 
-      else
-      {
+      } else {
         core.bom.ClassName.add(li, "failed");
       }
+
+      var assertions = test.getAssertions();
+      var failed = 0;
+      var passed = 0;
+
+      for (var i=0, l=assertions.length; i<l; i++) {
+        assertions[i].passed ? passed++ : failed++;
+      }
+
+      li.querySelector(".result .passed").innerHTML = passed;
+      li.querySelector(".result .failed").innerHTML = failed;
+
+      // Be sure that total number is correct
+      li.querySelector(".result .total").innerHTML = test.getTotalCount();      
     }
   }
 });

@@ -32,24 +32,23 @@
 
     h3{
       font-size: 18px;
-      background: #EEE;
       padding: 6px 10px;
+      background: #444;
+      color: #ddd;
     }
 
     ul.suites > li{
-      border-top-left-radius: 10px;
+      background: #fafafa;
       margin-bottom: 18px;
-      overflow: hidden;
 
-      -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-      -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-      -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+      -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+      -ms-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+      box-shadow: 0 1px 5px rgba(0,0,0,0.3);
     }
 
     ul.suites > li > h3{
       border-left: 30px solid #333;
-      border-bottom: 2px solid #333;
 
       -webkit-transition: border-color 300ms;
       -moz-transition: border-color 300ms;
@@ -72,27 +71,50 @@
       margin-left: 8px;
       vertical-align: middle;
 
-      -webkit-transition: opacity 500ms ease-out;
+      -webkit-transition: opacity 300ms ease-out;
+      -moz-transition: opacity 300ms ease-out;
+      -ms-transition: opacity 300ms ease-out;
+      transition: opacity 300ms ease-out;
     }
 
     ul.suites > li.running > h3 > span.running{
       opacity: 1;
-    }    
+    }
 
     ul.suites > li.successful > h3{
-      border-color: green;
+      border-left-color: green;
     }
 
     ul.suites > li.failed > h3{
-      border-color: red;
+      border-left-color: red;
     }
 
     ul.tests{
       padding: 10px;
     }
 
+    ul.tests > li{
+      line-height: 2;
+      padding-left: 30px;
+      padding-right: 10px;
+    }
+
+    ul.tests > li.successful{
+
+    }
+
+    ul.tests > li.failed{
+      background: red !important;
+      color: white;
+      font-weight: bold;
+    }
+
+    ul.tests > li:nth-child(odd){
+      background-color: rgba(0,0,0,0.03);
+    }
+
     ul.tests > li > h4{
-      font-weight: normal;
+      font-weight: inherit;
       font-size: 14px;
     }
 

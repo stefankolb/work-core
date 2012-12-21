@@ -5,6 +5,82 @@
 		<title>Core - Test Suite</title>
 	</head>
 	<body>
+    <style>
+    *{
+      margin: 0;
+      padding: 0;
+
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    ul{
+      list-style: none;
+    }
+
+    body{
+      font-size: 14px;
+      line-height: 1.2;
+      font-family: "Helvetica Neue", sans-serif;
+      padding: 30px;
+    }
+
+    h3{
+      font-size: 18px;
+      margin-top: 18px;
+      background: #EEE;
+      padding: 6px 10px;
+    }
+
+    ul.suites > li > h3 > span.result{
+      float: right;
+    }
+
+    ul.suites > li > h3 > span.running{
+      opacity: 0;
+      font-size: 12px;
+      padding: 3px;
+      font-weight: normal;
+      border-radius: 4px;
+      background: #AAA;
+      color: white;
+      margin-left: 8px;
+      vertical-align: middle;
+
+      -webkit-transition: opacity 500ms ease-out;
+    }
+
+    ul.suites > li.running > h3 > span.running{
+      opacity: 1;
+    }    
+
+    ul.tests{
+      padding: 10px;
+    }
+
+    ul.tests h4{
+      font-weight: normal;
+      font-size: 14px;
+    }
+
+    ul.tests > li.running > h3:after{
+      content: "running";
+      font-size: 10px;
+      padding: 3px;
+      font-weight: normal;
+      border-radius: 4px;
+      background: #AAA;
+      color: white;
+      margin-left: 8px;
+      vertical-align: middle;
+    }    
+
+
+
+
+    </style>
+    <div id="reporter"></div>
 		<script src="script/kernel.js"></script>
 		<script>core.io.Script.load("script/test-" + jasy.Env.CHECKSUM + ".js");</script>
 	</body>

@@ -74,7 +74,7 @@ core.Class("core.test.Suite",
     testPassed : function(test) 
     {
       this.__passed.push(test);
-      this.__testDoneCallback(test);
+      this.__testFinishedCallback(test);
     },
 
 
@@ -85,7 +85,7 @@ core.Class("core.test.Suite",
     testFailed : function(test, message) 
     {
       this.__failed.push(test);
-      this.__testDoneCallback(test);
+      this.__testFinishedCallback(test);
     },
 
 
@@ -104,6 +104,14 @@ core.Class("core.test.Suite",
       return this.__tests.map(function(test) {
         return test.export();
       });
+    },
+
+
+    /**
+     * {core.test.Test[]} Returns the list of tests
+     */
+    getTests : function() {
+      return this.__tests;
     },
 
 
@@ -135,15 +143,23 @@ core.Class("core.test.Suite",
 
 
     /**
+     * Returns a unique ID for this suite.
+     */
+    getId : function() {
+      return core.util.Id.get(this);
+    },
+
+
+    /**
      * {Boolean} Runs the test suite. Executes the given @allDoneCallback callback {Function?} when 
-     * all tests have been completed. Executes the @testDoneCallback {Function?} callback
+     * all tests have been completed. Executes the @testFinishedCallback {Function?} callback
      * every time a single test is completed. Returns `false` when
      * there are no tests registered. 
      * 
      * Optional @randomize {Boolean?true} allows
      * for disabling auto randomization of test order (don't use this).
      */
-    run : function(allDoneCallback, testDoneCallback, randomize) 
+    run : function(allDoneCallback, testStartedCallback, testFinishedCallback, randomize) 
     {
       var queue = this.__tests;
       var length = queue.length;
@@ -167,13 +183,15 @@ core.Class("core.test.Suite",
       this.__waitHandle = setInterval(this.__isFinishedInterval.bind(this, allDoneCallback), 16);
 
       // Callback which should be executed after each test is completed
-      this.__testDoneCallback = testDoneCallback;
+      this.__testFinishedCallback = testFinishedCallback;
 
       // Disabling log output for successful items by default
       this.__verbose = false;
 
       // Process tests in queue
-      for (var i=0; i<length; i++) {
+      for (var i=0; i<length; i++) 
+      {
+        testStartedCallback(queue[i]);
         queue[i].run();
       }
 

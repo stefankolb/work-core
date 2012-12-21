@@ -73,6 +73,24 @@ core.Module("core.test.Controller",
   },
 
 
+  __initReporter : function()
+  {
+    if (this.__reporter) {
+      return;
+    }
+
+    var suites = this.__suites;
+
+    if (jasy.Env.isSet("runtime", "browser") && typeof callPhantom != "function") {
+      this.__reporter = new core.test.reporter.Html(suites);
+    } else if (typeof console !== "undefined") {
+      this.__reporter = new core.test.reporter.Console(suites);
+    } else {
+      this.__reporter = null;
+    }
+  },
+
+
   /**
    * Executes all tests of all registered test suites.
    */
@@ -91,29 +109,29 @@ core.Module("core.test.Controller",
       return a.getCaption() > b.getCaption() ? 1 : -1;
     });
 
+    // Initialize view
+    this.__initReporter(suites);
+
     // Integration with Testem Runner
     if (location.hash == "#testem") 
     {
       var self = this;
 
-      console.info("Loading Testem...");
       core.io.Script.load("/testem.js", function() 
       {
-        console.info("Initializing Testem...");
-        
         Testem.useCustomAdapter(function(socket) 
         {
           self.__testemSocket = socket;
           socket.emit("tests-start");
 
-          console.info("Executing Tests...");
+          self.__reporter.start(suites);
           self.__runNextSuite();          
         });
       });
     }
     else
     {
-      console.info("Executing Tests...");
+      this.__reporter.start(suites);
       this.__runNextSuite();
     }
   },
@@ -124,19 +142,26 @@ core.Module("core.test.Controller",
    */
   __runNextSuite : function() 
   {
-    var currentIndex = this.__currentIndex++;
-    var currentSuite = this.__suites[currentIndex];
+    var previousSuite = this.__suites[this.__currentIndex];
+    var currentSuite = this.__suites[++this.__currentIndex];
 
+    if (previousSuite) {
+      this.__reporter.suiteFinished(previousSuite);  
+    }
+    
     if (currentSuite) 
     {
-      var allComplete = core.util.Function.bind(this.__runNextSuite, this);
-      var testComplete = core.util.Function.bind(this.__testComplete, this);
+      this.__reporter.suiteStarted(currentSuite);
 
-      currentSuite.run(allComplete, testComplete, true);
+      var allComplete = core.util.Function.bind(this.__runNextSuite, this);
+      var testStarted = core.util.Function.bind(this.__testStarted, this);
+      var testFinished = core.util.Function.bind(this.__testFinished, this);
+
+      currentSuite.run(allComplete, testStarted, testFinished, true);
     }
     else if (this.__isRunning)
     {
-      console.info("Finished!")
+      this.__reporter.finished();
 
       this.__isRunning = false;
       this.__isFinished = true;
@@ -163,10 +188,20 @@ core.Module("core.test.Controller",
 
 
   /** 
-   * Callback which is being executed every time a @test {core.test.Test} is completed.
+   * Callback which is being executed every time a @test {core.test.Test} was started.
    */
-  __testComplete : function(test) 
+  __testStarted : function(test) {
+    this.__reporter.testStarted(test);
+  },
+
+
+  /** 
+   * Callback which is being executed every time a @test {core.test.Test} was finished.
+   */
+  __testFinished : function(test) 
   {
+    this.__reporter.testFinished(test);
+
     var socket = this.__testemSocket;
     if (socket != null) {    
       socket.emit("test-result", test.export());

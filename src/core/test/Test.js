@@ -1,5 +1,3 @@
-(function(id) 
-{
   /**
    * Wraps a function to test so that it can report back
    * to a whole suite of tests and is protected regarding
@@ -21,9 +19,6 @@
       this.__suite = suite;
       this.__timeout = timeout;
       this.__totalCount = total;
-
-      // Auto incremented ID
-      this.__id = id++;
 
       /** List of passed/failed assertions */
       this.__items = [];
@@ -201,7 +196,7 @@
           passed: this.__passedCount, 
           failed: this.__failedCount, 
           total: this.getTotalCount(), 
-          id: this.__id, 
+          id: this.getId(), 
           name: this.__title, 
           items: this.__items
         };
@@ -255,6 +250,14 @@
        */
       getTitle : function() {
         return this.__title;
+      },
+
+
+      /**
+       * Returns a unique ID for this test.
+       */
+      getId : function() {
+        return core.util.Id.get(this);
       },
 
 
@@ -322,5 +325,3 @@
       }
     }
   });
-
-})(0);

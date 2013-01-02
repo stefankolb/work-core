@@ -1,0 +1,12 @@
+<div class="line">
+	<strong>Line: </strong>
+	{{?sourceLink}}
+		<a href="#{{sourceLink}}">{{line}}</a>
+	{{/sourceLink}}
+	{{^sourceLink}}
+		{{line}}
+	{{/sourceLink}}
+	{{?from}}
+		<strong> in </strong><a class="from" href="#{{fromLink}}">{{from}}</a>
+	{{/from}}
+</div>

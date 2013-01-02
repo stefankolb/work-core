@@ -1,0 +1,12 @@
+{{?tags}}
+	<ul class="tags">
+		{{#tags}}
+			<li>
+				{{name}}
+				{{#value}}
+					={{.}}
+				{{/value}}
+			</li>
+		{{/tags}}
+	</ul>
+{{/tags}}

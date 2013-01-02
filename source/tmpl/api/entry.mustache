@@ -1,0 +1,47 @@
+<h3>
+	{{name}}
+	{{?isFunction}}
+		{{>params}}
+	{{/isFunction}}
+	{{>tags}}
+	{{?isFunction}}
+		{{?returns}}
+			<span class="returns"> &#8594; {{!}}
+				{{#returns}}
+					{{?linkable}}
+						<a href="#{{name}}">
+							{{name}}
+							{{?array}}<span>[]</span>{{/array}}
+						</a>
+					{{/linkable}}
+					{{^linkable}}
+						<span>
+							{{name}}
+							{{?array}}<span>[]</span>{{/array}}
+						</span>
+					{{/linkable}}
+				{{/returns}}
+			</span>
+		{{/returns}}
+	{{/isFunction}}
+	{{^isFunction}}
+		{{!}} <span class="returns"> 
+			[
+			{{type}}
+			{{?value}}
+				: <code>{{value}}</code>
+			{{/value}}
+			]
+		</span>
+	{{/isFunction}}
+	{{?summary}}
+		<div class="summary">{{&summary}}</div>
+	{{/summary}}
+</h3>
+<div class="details">
+	<div class="doc">
+		{{&doc}}
+	</div>
+	{{>info}}
+	{{>origin}}
+</div> 

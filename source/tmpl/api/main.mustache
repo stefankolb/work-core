@@ -1,0 +1,310 @@
+
+<div class="heading">
+	<h1 type="{{main.type}}"{{?errornous}} class="errornous"{{/errornous}}>
+		{{basename}}
+		{{?package}}<span class="namespace">{{package}}</span>{{/package}}
+		
+		{{?main.extension}}
+			<span class="extension">extends <a href="#{{main.name}}">{{main.name}}</a></span>
+		{{/main.extension}}
+	</h1>
+
+	{{?main.doc}}
+		<div class="description doc">
+			{{&main.doc}}
+		</div>
+	{{/main.doc}}
+</div>
+
+{{?construct}}
+	<div class="constructor{{?errornous}} errornous{{/errornous}}">
+		{{#construct}}
+			<h2>
+				Constructor
+			</h2>
+			{{init}}
+			{{>params}}
+		{{/construct}}
+	</div>
+{{/construct}}
+
+{{?statics}}
+	<div class="statics">
+		<h2>Statics</h2>
+		<ul>
+			{{#statics}}
+			<li id="static-{{name}}"{{?errornous}} class="errornous"{{/errornous}}>
+				{{>entry}}
+			</li>
+			{{/statics}}
+		</ul>
+	</div>
+{{/statics}}
+
+{{?properties}}
+	<div class="properties">
+		<h2>Properties</h2>
+		<ul>
+			{{#properties}}
+			<li id="property-{{name}}"{{?errornous}} class="errornous"{{/errornous}}>
+				<h3>
+					{{name}}
+					{{?type}}
+						{{!enforce space}} <span class="returns">[{{type}}
+							
+							{{?init}}
+								: <code>{{init}}</code>
+							{{/init}}
+							
+						]</span>
+					{{/type}}
+					{{>tags}}
+				</h3>
+				{{?summary}}
+					<div class="summary">{{&summary}}</div>
+				{{/summary}}
+				<div class="details">
+					<div class="doc">{{&doc}}</div>
+					<ul class="config">
+						{{?group}}
+							<li>
+								{{?shorthand}}
+									<strong>Group (Shorthand): </strong>
+								{{/shorthand}}
+								{{^shorthand}}
+									<strong>Group: </strong>
+								{{/shorthand}}
+								{{#group}}
+									<a href="#">{{.}}</a>
+								{{/group}}
+							</li>
+							{{?themeable}}
+								<li><strong>Themeable:</strong> <code>true</code></li>
+							{{/themeable}}
+						{{/group}}
+						{{^group}}
+							<li>
+								{{?type}}
+									<strong>Type: </strong>
+									<a href="#{{type}}">{{type}}</a>
+									{{?nullable}}?{{/nullable}}
+								{{/type}}
+								{{^type}}
+									<strong>Type: var</strong>
+									{{?nullable}}?{{/nullable}}
+								{{/type}}
+								{{?init}} = <code>{{init}}</code>{{/init}}
+							</li>
+							{{?fire}}
+								<li>
+									<strong>Event: </strong>
+									<code>{{fire}}</code>
+								</li>
+							{{/fire}}
+							{{?themeable}}
+								<li><strong>Themeable:</strong> <code>true</code></li>
+							{{/themeable}}
+							{{?inheritable}}
+								<li><strong>Inheritable:</strong> <code>true</code></li>
+							{{/inheritable}}
+						{{/group}}
+					</ul>
+					{{>origin}}
+					{{>info}}
+				</div>
+			</li>
+		{{/properties}}
+		</ul>
+	</div>
+{{/properties}}
+
+{{?events}}
+	<div class="events">
+		<h2>Events</h2>
+		<ul>
+			{{#events}}
+				<li id="event-{{name}}"{{?errornous}} class="errornous"{{/errornous}}>
+					<h3>
+						{{name}} {{>tags}}
+					</h3>
+					<div class="details">
+						<div>
+							<strong>Type: </strong>{{type}}
+						</div>
+						{{>info}}
+					</div>
+				</li>
+			{{/events}}
+		</ul>
+	</div>
+{{/events}}
+
+{{?members}}
+	<div class="members">
+		<h2>Members</h2>
+		<ul>
+			{{#members}}
+			<li id="member-{{name}}" {{?errornous}}class="errornous"{{/errornous}}>
+				{{>entry}}
+			</li>
+			{{/members}}
+		</ul>
+	</div>
+{{/members}}
+
+{{?content}}
+	<div class="toc">
+		{{?statics}}
+			<h2>Package Content</h2>
+		{{/statics}}
+		{{^statics}}
+			{{?construct}}
+				<h2>Package Content</h2>
+			{{/construct}}
+		{{/statics}}
+		<ul>
+			{{#content}}
+				<li>
+					<h3><a href="#{{link}}">{{name}}</a> <span class="type">{{type}}</span></h3>
+					{{?summary}}
+						<p>{{&summary}}</p>
+					{{/summary}}
+				</li>
+			{{/content}}
+		</ul>
+	</div>
+{{/content}}
+
+{{?errors}}
+	<div class="errors">
+		<h2>Errors</h2>
+		<ul>
+			{{#errors}}
+				<li>
+					<h3>
+					{{?name}}
+						{{kind}} <a href="#{{kind}}:~{{name}}">{{name}}</a>
+						{{!}} at line {{!}}
+						{{?lineLink}}
+							<a href="{{lineLink}}">{{line}}</a>
+						{{/lineLink}}
+						{{^lineLink}}
+							{{line}}
+						{{/lineLink}}
+					{{/name}}
+					{{^name}}
+						{{kind}}
+					{{/name}}
+					</h3>
+				</li>
+			{{/errors}}
+		</ul>
+	</div>
+{{/errors}}
+
+<div class="meta">
+	{{#main}}
+		<div class="section">
+			<strong>Type:</strong> <a href="#{{type}}">{{type}}</a>
+		</div>
+
+		{{?tags}}
+			<div class="section">
+				<strong>Tags: </strong> 
+				{{>tags}}
+			</div>
+		{{/tags}}
+	{{/main}}
+
+	{{?size}}
+		<div class="section">
+			<strong>Size: </strong> 
+			<em>Compressed:</em> {{size.compressed}}, <em>Optimized:</em> {{size.optimized}}, <em>Zipped:</em> {{size.zipped}}
+		</div>
+	{{/size}}
+	
+	{{?permutations}}
+		<div class="section">
+			<strong>Permutations: </strong>
+			<ul>
+				{{#permutations}}
+					<li><code>{{.}}</code></li>
+				{{/permutations}}
+			</ul>
+		</div>
+	{{/permutations}}
+	
+	{{?assets}}
+		<div class="section">
+			<strong>Assets: </strong>
+			<ul>
+				{{#assets}}
+					<li><code>{{.}}</code></li>
+				{{/assets}}
+			</ul>
+		</div>
+	{{/assets}}	
+	
+	{{?uses}}
+		<div class="section">
+			<strong>Uses: </strong>
+			<ul>
+				{{#uses}}
+					<li><a href="#{{.}}">{{.}}</a></li>
+				{{/uses}}
+			</ul>
+		</div>
+	{{/uses}}
+	{{?usedBy}}
+		<div class="section">
+			<strong>Used by: </strong>
+			<ul>
+				{{#usedBy}}
+					<li><a href="#{{.}}">{{.}}</a></li>
+				{{/usedBy}}
+			</ul>
+		</div>
+	{{/usedBy}}
+	
+	{{?implements}}
+		<div class="section">
+			<strong>Implements: </strong>
+			<ul>
+				{{#implements}}
+					<li><a href="#{{.}}">{{.}}</a></li>
+				{{/implements}}
+			</ul>
+		</div>
+	{{/implements}}
+	{{?implementedBy}}
+		<div class="section">
+			<strong>Implemented by: </strong>
+			<ul>
+				{{#implementedBy}}
+					<li><a href="#{{.}}">{{.}}</a></li>
+				{{/implementedBy}}
+			</ul>
+		</div>
+	{{/implementedBy}}
+		
+	{{?includes}}
+		<div class="section">
+			<strong>Includes: </strong>
+			<ul>
+				{{#includes}}
+					<li><a href="#{{.}}">{{.}}</a></li>
+				{{/includes}}
+			</ul>
+		</div>
+	{{/includes}}
+	{{?includedBy}}
+		<div class="section">
+			<strong>Included by: </strong>
+			<ul>
+				{{#includedBy}}
+					<li><a href="#{{.}}">{{.}}</a></li>
+				{{/includedBy}}
+			</ul>
+		</div>
+	{{/includedBy}}
+</div>

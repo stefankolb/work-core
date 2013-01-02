@@ -1,0 +1,18 @@
+{{?type}}
+	<span class="types">
+		{{#type}}
+			{{?linkable}}
+				<a href="#{{name}}">
+					{{name}}
+					{{?array}}<span>[]</span>{{/array}}
+				</a>
+			{{/linkable}}
+			{{^linkable}}
+				<span>
+					{{name}}
+					{{?array}}<span>[]</span>{{/array}}
+				</span>
+			{{/linkable}}
+		{{/type}}
+	</span>
+{{/type}}

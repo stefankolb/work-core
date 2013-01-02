@@ -1,5 +1,4 @@
 # Core - JavaScript Foundation
-# Copyright 2010-2012 Zynga Inc.
 
 session.permutateField("es5")
 session.permutateField("debug")
@@ -17,40 +16,45 @@ def distclean():
 
     session.clean()
 
-    removeDir("api")
-    removeDir("dist")
 
+@task
+def api(theme="original"):
+    """Build the API viewer application"""
 
-@task(prefix="dist")
-def module():
-    """Build module.js"""
+    import json
 
-    for permutation in session.permutate():
-        resolver = Resolver().addClassName("core.Module")
-        storeCompressed(resolver.getSortedClasses(), "module-%s.js" % permutation.getChecksum())
+    # Configure fields
+    session.setField("debug", False)
+    session.setField("apibrowser.theme", theme)
+    session.permutateField("es5")
 
+    # Initialize shared objects
+    assetManager = AssetManager(session).addBuildProfile()
+    outputManager = OutputManager(session, assetManager, compressionLevel=2)
+    fileManager = FileManager(session)
 
-@task(prefix="dist")
-def oo():
-    """Build oo.js"""
+    # Deploy assets
+    outputManager.deployAssets(["core.api.Browser"])
 
-    for permutation in session.permutate():
-        resolver = Resolver().addClassName("core.Module").addClassName("core.Class")
-        storeCompressed(resolver.getSortedClasses(), "oo-%s.js" % permutation.getChecksum())
+    # Write kernel script
+    outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
+
+    # Copy files from source
+    fileManager.updateFile("source/api.html", "$prefix/index.html")
+    
+    # Rewrite template as jsonp
+    for tmpl in ["main", "error", "entry", "type", "params", "info", "origin", "tags"]:
+        jsonTemplate = json.dumps({ "template" : open("source/tmpl/%s.mustache" % tmpl).read() })
+        fileManager.writeFile("$prefix/tmpl/%s.js" % tmpl, "apiload(%s, '%s.mustache')" % (jsonTemplate, tmpl))
         
-        
-@task(prefix="dist")
-def sugar():
-    """Build sugar.js"""
-
+    # Process every possible permutation
     for permutation in session.permutate():
-        resolver = Resolver()
-        resolver.addClassName("ext.sugar.Array")
-        resolver.addClassName("ext.sugar.Function")
-        resolver.addClassName("ext.sugar.Number")
-        resolver.addClassName("ext.sugar.Object")
-        resolver.addClassName("ext.sugar.String")
+        
+        # Resolving dependencies
+        resolver = Resolver(session).addClassName("core.api.Browser")
 
-        storeCompressed(resolver.getSortedClasses(), "sugar-%s.js" % permutation.getChecksum())
+        # Compressing classes
+        outputManager.storeCompressed(resolver.getSortedClasses(), "$prefix/script/apibrowser-$permutation.js", "new core.api.Browser;")
 
-                
+
+

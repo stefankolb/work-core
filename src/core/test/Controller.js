@@ -164,7 +164,9 @@ core.Module("core.test.Controller",
     }
     else if (this.__isRunning)
     {
-      this.__reporter.finished();
+      var successfully = this.wasSuccessful();
+
+      this.__reporter.finished(successfully);
 
       this.__isRunning = false;
       this.__isFinished = true;
@@ -175,7 +177,7 @@ core.Module("core.test.Controller",
         {
           callPhantom({
             action : "finished",
-            status : this.wasSuccessful()
+            status : successfully
           });
         }
 
@@ -186,10 +188,10 @@ core.Module("core.test.Controller",
           this.__testemSocket.emit("all-test-results", this.export());
         }
       }
-      else if (jasy.Env.isSet("runtime", "browser")) 
+      else if (jasy.Env.isSet("runtime", "native") && typeof process != "undefined") 
       {
-        var process = require("process");
-        process.exit(this.wasSuccessful() ? 0 : 1)
+        // NodeJS integration
+        process.exit(successfully ? 0 : 1);
       }
     }
   },

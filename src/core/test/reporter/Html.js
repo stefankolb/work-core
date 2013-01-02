@@ -74,7 +74,7 @@ core.Class("core.test.reporter.Html",
 
 
     // interface implementation
-    finished : function() {
+    finished : function(successfully) {
 
     },
 

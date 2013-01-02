@@ -18,8 +18,13 @@ core.Class("core.test.reporter.Console",
     },
 
     // interface implementation
-    finished : function() {
-      console.info("Testing finished!");
+    finished : function(successfully) 
+    {
+      if (successfully) {
+        console.info("Testing finished successfully.");
+      } else {
+        console.info("Testing finished with errors!");
+      }
     },
 
     // interface implementation

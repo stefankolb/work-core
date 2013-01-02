@@ -15,7 +15,7 @@ core.Interface("core.test.reporter.IReporter",
     /** 
      * Reports that the test run is completely finished.
      */
-    finished : function() {},
+    finished : function(successfully) {},
 
 
     /** 

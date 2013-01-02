@@ -12,7 +12,12 @@ core.Module("core.detect.Param",
 {
 	get : (function()
 	{
-		var items = location.search.substring(1).split("&");
+		if (core.detect.Runtime.VALUE == "browser") {
+			var items = location.search.substring(1).split("&");
+		} else {
+			var items = ""; // TODO: NodeJS support
+		}
+		
 		var map = {};
 
 		var translate =

@@ -34,27 +34,27 @@ def api(theme="original"):
     fileManager = FileManager(session)
 
     # Deploy assets
-    outputManager.deployAssets(["core.api.Browser"])
+    outputManager.deployAssets(["core.apibrowser.Browser"])
 
     # Write kernel script
     outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
 
     # Copy files from source
-    fileManager.updateFile("source/api.html", "$prefix/index.html")
+    fileManager.updateFile("source/apibrowser.html", "$prefix/index.html")
     
     # Rewrite template as jsonp
     for tmpl in ["main", "error", "entry", "type", "params", "info", "origin", "tags"]:
-        jsonTemplate = json.dumps({ "template" : open("source/tmpl/%s.mustache" % tmpl).read() })
+        jsonTemplate = json.dumps({ "template" : open("source/tmpl/apibrowser/%s.mustache" % tmpl).read() })
         fileManager.writeFile("$prefix/tmpl/%s.js" % tmpl, "apiload(%s, '%s.mustache')" % (jsonTemplate, tmpl))
         
     # Process every possible permutation
     for permutation in session.permutate():
         
         # Resolving dependencies
-        resolver = Resolver(session).addClassName("core.api.Browser")
+        resolver = Resolver(session).addClassName("core.apibrowser.Browser")
 
         # Compressing classes
-        outputManager.storeCompressed(resolver.getSortedClasses(), "$prefix/script/apibrowser-$permutation.js", "new core.api.Browser;")
+        outputManager.storeCompressed(resolver.getSortedClasses(), "$prefix/script/apibrowser-$permutation.js", "new core.apibrowser.Browser;")
 
-
-
+    # Write data
+    ApiWriter(session).write("$prefix/data")

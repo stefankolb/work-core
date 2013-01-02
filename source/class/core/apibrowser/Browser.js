@@ -2,19 +2,20 @@
 ==================================================================================================
   API Browser
   Copyright 2012 Zynga Inc.
+  Copyright 2012-2013 Sebastian Werner
 ==================================================================================================
 */
 
 /**
  * The main class of the API Browser.
  *
- * #asset(apibrowser/*)
+ * #asset(core/apibrowser/*)
  * #require(core.io.StyleSheet)
  */
-core.Class('apibrowser.Browser', {
-
-	construct: function() {
-
+core.Class('core.apibrowser.Browser', 
+{
+	construct: function() 
+	{
 		this.__headElem = document.createElement("div");
 		this.__headElem.id = "head";
 		this.__headElem.innerHTML = "API Documentation";
@@ -29,15 +30,15 @@ core.Class('apibrowser.Browser', {
 		document.body.appendChild(this.__treeElem);
 		document.body.appendChild(this.__contentElem);
 
-		var theme = jasy.Env.getValue("theme");
+		var theme = jasy.Env.getValue("apibrowser.theme");
 
 		// Load initial data
 		core.io.Queue.load([
-			jasy.Asset.toUri("apibrowser/icon/stylesheet.css"),
-			jasy.Asset.toUri("apibrowser/reset.css"),
-			jasy.Asset.toUri("apibrowser/style.css"),
-			jasy.Asset.toUri("apibrowser/theme/" + theme + ".css"),
-			jasy.Asset.toUri("apibrowser/syntax.css"),
+			jasy.Asset.toUri("core/apibrowser/icon/stylesheet.css"),
+			jasy.Asset.toUri("core/apibrowser/reset.css"),
+			jasy.Asset.toUri("core/apibrowser/style.css"),
+			jasy.Asset.toUri("core/apibrowser/theme/" + theme + ".css"),
+			jasy.Asset.toUri("core/apibrowser/syntax.css"),
 
 			"tmpl/main.js",
 			"tmpl/entry.js",

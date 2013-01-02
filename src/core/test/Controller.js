@@ -175,7 +175,7 @@ core.Module("core.test.Controller",
         {
           callPhantom({
             action : "finished",
-            status : this.isSuccessful()
+            status : this.wasSuccessful()
           });
         }
 

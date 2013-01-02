@@ -17,7 +17,7 @@ core.Module("core.test.Controller",
   __isFinished : false,
 
   /** Current suite (by index) to execute */
-  __currentIndex : 0,  
+  __currentIndex : -1,  
 
   /** {=Object} Socket object used to transfer status to testem test runner */
   __testemSocket : null,  

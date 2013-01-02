@@ -71,14 +71,13 @@ def phantom():
 
     Console.info("Testing source...")
     output = executeCommand("phantomjs phantom.js", "Test Suite Failed", "source")
-    Console.info("Finished successfully")
+    print(output)
 
     Console.info("Testing build...")
     output = executeCommand("phantomjs phantom.js", "Test Suite Failed", "build")
-    Console.info("Finished successfully")
+    print(output)
 
 
-    
 @task
 def node():
     """Automatically executes source and build tests using NodeJS"""
@@ -93,12 +92,40 @@ def node():
 
     Console.info("Testing source...")
     output = executeCommand("node node.js", "Test Suite Failed", "source")
-    Console.info("Finished successfully")
+    print(output)
 
     Console.info("Testing build...")
     output = executeCommand("node node.js", "Test Suite Failed", "build")
-    Console.info("Finished successfully")
+    print(output)
 
+
+@task
+def testem():
+    """Automatically executes source and build tests using Testem test runner"""
+
+    from jasy.core.Util import executeCommand
+    import tempfile
+
+    Console.info("Updating generated files...")
+    source()
+    build()
+
+    Console.header("Task: Testem - Continued")
+
+    sourceConfig = tempfile.NamedTemporaryFile("w")
+    sourceConfig.write('{"framework": "custom", "test_page" : "test/source/index.html"}')
+
+    buildConfig = tempfile.NamedTemporaryFile("w")
+    buildConfig.write('{"framework": "custom", "test_page" : "test/build/index.html"}')
+
+    Console.info("Testing source...")
+    output = executeCommand("testem ci -f " + sourceConfig.name, "Test Suite Failed", "..")
+    print(output)
+
+    Console.info("Testing source...")
+    output = executeCommand("testem ci -f " + buildConfig.name, "Test Suite Failed", "..")
+    print(output)
+    
 
 @task
 def clean():

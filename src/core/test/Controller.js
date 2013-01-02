@@ -185,7 +185,12 @@ core.Module("core.test.Controller",
           // we are done running them.
           this.__testemSocket.emit("all-test-results", this.export());
         }
-      }      
+      }
+      else if (jasy.Env.isSet("runtime", "browser")) 
+      {
+        var process = require("process");
+        process.exit(this.wasSuccessful() ? 0 : 1)
+      }
     }
   },
 

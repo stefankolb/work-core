@@ -1,6 +1,8 @@
 
 @task
 def source():
+    """Generates source (development) version of test runner"""
+
     session.setField("debug", True)
     session.permutateField("es5")
     session.permutateField("engine")
@@ -24,6 +26,8 @@ def source():
 
 @task
 def build():
+    """Generates build (deployment) version of test runner"""
+
     session.setField("debug", True)
     session.permutateField("es5")
     session.permutateField("engine")
@@ -55,7 +59,7 @@ def build():
     
 @task
 def phantom():
-    """Automatically tests using PhantomJS"""
+    """Automatically executes source and build tests using PhantomJS"""
 
     from jasy.core.Util import executeCommand
 
@@ -77,7 +81,7 @@ def phantom():
     
 @task
 def node():
-    """Automatically tests using NodeJS"""
+    """Automatically executes source and build tests using NodeJS"""
 
     from jasy.core.Util import executeCommand
 
@@ -98,11 +102,15 @@ def node():
 
 @task
 def clean():
+    """Cleans up project environment"""
+
     session.clean()
     Repository.clean()
 
 
 @task
 def distclean():
+    """Cleans up project environment with removing all non-repository files"""
+    
     session.clean()
     Repository.distclean()

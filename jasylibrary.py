@@ -10,6 +10,9 @@ import json
 def api(theme="original"):
   """Generates the API viewer for the current project"""
 
+  sourceFolder = session.getProjectByName("core").getPath() + "/source/"
+  print("SOURCE FOLDER: " + sourceFolder)
+
   # Configure fields
   session.setField("debug", False)
   session.setField("apibrowser.theme", theme)
@@ -27,11 +30,11 @@ def api(theme="original"):
   outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
 
   # Copy files from source
-  fileManager.updateFile("source/apibrowser.html", "$prefix/index.html")
+  fileManager.updateFile(sourceFolder + "/apibrowser.html", "$prefix/index.html")
   
   # Rewrite template as jsonp
   for tmpl in ["main", "error", "entry", "type", "params", "info", "origin", "tags"]:
-      jsonTemplate = json.dumps({ "template" : open("source/tmpl/apibrowser/%s.mustache" % tmpl).read() })
+      jsonTemplate = json.dumps({ "template" : open(sourceFolder + "/tmpl/apibrowser/%s.mustache" % tmpl).read() })
       fileManager.writeFile("$prefix/tmpl/%s.js" % tmpl, "apiload(%s, '%s.mustache')" % (jsonTemplate, tmpl))
       
   # Process every possible permutation

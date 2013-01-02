@@ -212,6 +212,14 @@
 
 
       /**
+       * {Boolean} Whether the test is running asynchronously
+       */      
+      isAsynchronous : function() {
+        return this.__timeout != null;
+      },
+
+
+      /**
        * {Array} Returns all assertion results.
        */
       getAssertions : function() {

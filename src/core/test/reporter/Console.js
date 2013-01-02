@@ -38,8 +38,11 @@ core.Class("core.test.reporter.Console",
     },
 
     // interface implementation
-    testStarted : function(test) {
-      console.info("- Start: " + test.getTitle());
+    testStarted : function(test) 
+    {
+      if (test.isAsynchronous()) {
+        console.info("- Start: " + test.getTitle());  
+      }  
     },
 
     // interface implementation

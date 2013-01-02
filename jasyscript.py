@@ -21,5 +21,4 @@ def distclean():
 def api():
     """Build the API viewer application"""
 
-    core.api(theme="original")
-    
+    core.api()

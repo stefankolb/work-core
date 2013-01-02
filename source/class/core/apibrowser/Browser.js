@@ -30,14 +30,12 @@ core.Class('core.apibrowser.Browser',
 		document.body.appendChild(this.__treeElem);
 		document.body.appendChild(this.__contentElem);
 
-		var theme = jasy.Env.getValue("apibrowser.theme");
-
 		// Load initial data
 		core.io.Queue.load([
 			jasy.Asset.toUri("core/apibrowser/icon/stylesheet.css"),
 			jasy.Asset.toUri("core/apibrowser/reset.css"),
 			jasy.Asset.toUri("core/apibrowser/style.css"),
-			jasy.Asset.toUri("core/apibrowser/theme/" + theme + ".css"),
+			jasy.Asset.toUri("core/apibrowser/theme/original.css"),
 			jasy.Asset.toUri("core/apibrowser/syntax.css"),
 
 			"tmpl/main.js",

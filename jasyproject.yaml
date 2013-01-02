@@ -26,7 +26,3 @@ fields:
     - native
     default: browser
     detect: core.detect.Runtime
-  apibrowser.theme:
-    check: String
-    default: original
-

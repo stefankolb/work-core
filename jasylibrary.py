@@ -7,15 +7,13 @@ from jasy.js.api.Writer import ApiWriter
 import json
 
 @share
-def api(theme="original"):
+def api():
   """Generates the API viewer for the current project"""
 
   sourceFolder = session.getProjectByName("core").getPath() + "/source/"
-  print("SOURCE FOLDER: " + sourceFolder)
 
   # Configure fields
   session.setField("debug", False)
-  session.setField("apibrowser.theme", theme)
   session.permutateField("es5")
 
   # Initialize shared objects
@@ -46,6 +44,6 @@ def api(theme="original"):
       # Compressing classes
       outputManager.storeCompressed(resolver.getSortedClasses(), "$prefix/script/apibrowser-$permutation.js", "new core.apibrowser.Browser;")
 
-  # Write data
+  # Write API data
   ApiWriter(session).write("$prefix/data")
 

@@ -4,11 +4,11 @@ from jasy.asset.Manager import AssetManager
 from jasy.js.Resolver import Resolver
 from jasy.js.api.Writer import ApiWriter
 
+import json
+
 @share
 def api(theme="original"):
   """Generates the API viewer for the current project"""
-
-  import json
 
   # Configure fields
   session.setField("debug", False)

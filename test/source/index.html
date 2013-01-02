@@ -23,37 +23,35 @@
       font-size: 14px;
       line-height: 1.2;
       font-family: "Helvetica Neue", sans-serif;
-      padding: 30px;
+      padding: 20px;
     }
 
     #reporter{
       max-width: 600px;
     }
 
-    h3{
-      font-size: 18px;
-      padding: 6px 10px;
-      background: #444;
-      color: #ddd;
-    }
-
     ul.suites > li{
       background: #fafafa;
       margin-bottom: 18px;
 
+      border: 1px solid #444;
       -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
       -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
       -ms-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
       box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+
+      -webkit-transition: background 300ms;
+      -moz-transition: background 300ms;
+      -ms-transition: background 300ms;
+      transition: background 300ms;      
     }
 
     ul.suites > li > h3{
-      border-left: 30px solid #333;
-
-      -webkit-transition: border-color 300ms;
-      -moz-transition: border-color 300ms;
-      -ms-transition: border-color 300ms;
-      transition: border-color 300ms;
+      font-size: 18px;
+      padding: 6px 10px;
+      background: #ccc;
+      color: #555;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.4);
     }
 
     ul.suites > li > h3 > span.result{
@@ -81,36 +79,28 @@
       opacity: 1;
     }
 
-    ul.suites > li.successful > h3{
-      border-left-color: green;
+    ul.suites > li.successful{
+      background: rgba(20,240,20,0.1);
     }
 
-    ul.suites > li.failed > h3{
-      border-left-color: red;
-    }
-
-    ul.tests{
-      padding: 10px;
+    ul.suites > li.failed{
+      background: rgba(240,20,20,0.1);
     }
 
     ul.tests > li{
       line-height: 2;
-      padding-left: 30px;
+      padding-left: 10px;
       padding-right: 10px;
     }
 
-    ul.tests > li.successful{
-
-    }
-
     ul.tests > li.failed{
-      background: red !important;
+      background: rgba(240,20,20,0.6) !important;
       color: white;
       font-weight: bold;
     }
 
     ul.tests > li:nth-child(odd){
-      background-color: rgba(0,0,0,0.03);
+      background-color: rgba(0,0,0,0.06);
     }
 
     ul.tests > li > h4{

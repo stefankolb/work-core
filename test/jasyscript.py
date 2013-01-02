@@ -16,10 +16,10 @@ def source():
     # Store kernel script
     outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
     
-    # Resolving dependencies
-    classes = Resolver(session).addClassName("test.Main").getSortedClasses()
-    
     for permutation in session.permutate():
+        # Resolving dependencies
+        classes = Resolver(session).addClassName("test.Main").getSortedClasses()
+
         # Writing source loader
         outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js")
 
@@ -49,11 +49,11 @@ def build():
     fileManager.updateFile("source/phantom.js", "$prefix/phantom.js")
     fileManager.updateFile("source/node.js", "$prefix/node.js")
 
-    # Resolving dependencies
-    classes = Resolver(session).addClassName("test.Main").getSortedClasses()
-
-    # Compressing classes
     for permutation in session.permutate():
+        # Resolving dependencies
+        classes = Resolver(session).addClassName("test.Main").getSortedClasses()
+
+        # Compressing classes
         outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")
 
     
@@ -111,6 +111,6 @@ def clean():
 @task
 def distclean():
     """Cleans up project environment with removing all non-repository files"""
-    
+
     session.clean()
     Repository.distclean()

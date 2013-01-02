@@ -19,6 +19,9 @@ core.Module("core.test.Controller",
   /** Current suite (by index) to execute */
   __currentIndex : 0,  
 
+  /** {=Object} Socket object used to transfer status to testem test runner */
+  __testemSocket : null,  
+
 
   /**
    * Registers the given @suite {core.test.Suite} to the controller.

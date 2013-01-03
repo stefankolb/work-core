@@ -208,7 +208,7 @@ def test_testem():
     prefix = session.getCurrentPrefix()
 
     testemConfig = tempfile.NamedTemporaryFile("w")
-    testemConfig.write('{"framework": "custom", "test_page" : "test/%1/index.html"}' % prefix)
+    testemConfig.write('{"framework": "custom", "test_page" : "test/' + prefix + '/index.html"}')
 
     Console.info("")
     Console.info("Running Testem based test suite...")

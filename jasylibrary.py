@@ -139,6 +139,7 @@ def distclean():
     fm.removeDir("external")    
 
 
+@share
 def test_source(mainClass="test.Main"):
     """Generates source (development) version of test runner"""
 
@@ -164,6 +165,7 @@ def test_source(mainClass="test.Main"):
         outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js")
 
 
+@share
 def test_build(mainClass="test.Main"):
     """Generates build (deployment) version of test runner"""
 

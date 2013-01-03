@@ -1,4 +1,5 @@
 import jasy.core.Console as Console
+import jasy.vcs.Repository as Repository
 
 from jasy.core.OutputManager import OutputManager
 from jasy.core.FileManager import FileManager

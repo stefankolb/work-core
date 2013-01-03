@@ -63,6 +63,10 @@ core.Class("core.test.reporter.Html",
     };
 
     root.innerHTML = suitesTemplate.render(suitesData);
+
+    if (typeof console == "object") {
+      this.__consoleReporter = new core.test.reporter.Console(suites);  
+    }
   },
 
   members : 
@@ -142,7 +146,12 @@ core.Class("core.test.reporter.Html",
       li.querySelector(".result .failed").innerHTML = failed;
 
       // Be sure that total number is correct
-      li.querySelector(".result .total").innerHTML = test.getTotalCount();      
+      li.querySelector(".result .total").innerHTML = test.getTotalCount();
+
+      // Forward to console reporter for details
+      if (!test.wasSuccessful() && this.__consoleReporter) {
+        this.__consoleReporter.testFinished(test);
+      }
     }
   }
 });

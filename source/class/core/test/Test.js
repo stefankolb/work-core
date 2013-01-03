@@ -64,9 +64,19 @@
        */
       __failed : function(message, ex) 
       {
+        var combined = message || "";
+        if (ex) 
+        {
+          if (combined) {
+            combined += ": ";
+          }
+
+          combined += ex.message;
+        }
+
         this.__items.push({
           passed : false,
-          message : message + (ex ? ": " + ex.message : ""),
+          message : combined,
           stacktrace : ex.stack || null
         });
 

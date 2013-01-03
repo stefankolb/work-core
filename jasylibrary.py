@@ -216,7 +216,7 @@ def test_testem(browsers=None):
 
     # Add parameter for browsers - otherwise auto-detected
     if browsers:
-        browsers = "-l " % browsers
+        browsers = "-l %s" % browsers
     else:
         browsers = ""
 

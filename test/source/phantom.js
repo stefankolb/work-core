@@ -1,3 +1,5 @@
+#!/usr/bin/env phantomjs
+
 phantom.onError = function(msg, trace) 
 {
   var msgStack = ["Phantom Error: " + msg];

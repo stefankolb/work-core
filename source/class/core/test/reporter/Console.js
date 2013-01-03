@@ -46,8 +46,35 @@ core.Class("core.test.reporter.Console",
     },
 
     // interface implementation
-    testFinished : function(test) {
+    testFinished : function(test) 
+    {
       console.info("- " + test.getSummary());
+      if (!test.wasSuccessful()) 
+      {
+        if (test.getFailureReason() == "assertions") 
+        {
+          var items = test.export().items;
+          for (var i=0, l=items.length; i<l; i++)
+          {
+            var current = items[i];
+
+            if (current.passed) 
+            {
+              console.info("  #" + i + ": succeeded");
+              continue;
+            }
+
+            console.error("  #" + i + ": failed: " + current.message);
+            if (current.stacktrace)
+            {
+              var lines = current.stacktrace.split("\n");
+              for (var j=0, jl=lines.length; j<jl; j++) {
+                console.info("  " + lines[j])
+              }
+            }
+          }
+        }
+      }
     }
   }
 });

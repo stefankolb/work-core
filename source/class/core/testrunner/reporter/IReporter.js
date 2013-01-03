@@ -6,7 +6,7 @@ core.Interface("core.testrunner.reporter.IReporter",
   /**
    * @suites {core.testrunner.Suite[]} Collection of suites to report for
    */
-  construct : function(suites) {},
+  // construct : function(suites) {},
 
   members :
   {

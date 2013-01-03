@@ -52,7 +52,18 @@
       background: #ccc;
       color: #555;
       text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+      clear: both;
     }
+
+    ul.suites > li > h3:before,
+    ul.suites > li > h3:after {
+      content: " "; /* 1 */
+      display: table; /* 2 */
+    }
+
+    ul.suites > li > h3:after {
+      clear: both;
+    }      
 
     ul.suites > li > h3 > span.result{
       float: right;
@@ -93,13 +104,23 @@
       padding-right: 10px;
     }
 
+    ul.tests > li:before,
+    ul.tests > li:after {
+      content: " "; /* 1 */
+      display: table; /* 2 */
+    }
+
+    ul.tests > li:after {
+      clear: both;
+    }    
+
     ul.tests > li.failed{
       background: rgba(240,20,20,0.6) !important;
       color: white;
       font-weight: bold;
     }
 
-    ul.tests > li:nth-child(odd){
+    ul.tests > li:nth-child(even){
       background-color: rgba(0,0,0,0.06);
     }
 
@@ -109,11 +130,11 @@
     }
 
     ul.tests > li span.running{
-      display: none;
+      visibility: hidden;
     }
 
     ul.tests > li.running span.running{
-      display: block;
+      visibility: visible;
     }
 
     ul.tests > li span.result{

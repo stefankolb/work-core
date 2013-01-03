@@ -113,6 +113,8 @@ def api():
 
 @share
 def clean():
+    """Deletes generated JavaScript files, the build folder and clears all caches."""
+
     session.clean()
 
     fm = FileManager(session)
@@ -122,6 +124,7 @@ def clean():
 
 @share
 def distclean():
+    """Deletes all generated folders like api, build, external and all caches."""
 
     session.clean()
     Repository.distclean()
@@ -135,7 +138,7 @@ def distclean():
     fm.removeDir("api")
     fm.removeDir("external")    
 
-@share
+
 def test_source(mainClass="test.Main"):
     """Generates source (development) version of test runner"""
 
@@ -161,7 +164,6 @@ def test_source(mainClass="test.Main"):
         outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js")
 
 
-@share
 def test_build(mainClass="test.Main"):
     """Generates build (deployment) version of test runner"""
 
@@ -182,9 +184,8 @@ def test_build(mainClass="test.Main"):
     outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
 
     # Copy files from source
-    fileManager.updateFile("source/index.html", "$prefix/index.html")
-    fileManager.updateFile("source/phantom.js", "$prefix/phantom.js")
-    fileManager.updateFile("source/node.js", "$prefix/node.js")
+    for name in ["index.html", "phantom.js", "node.js"]:
+        fileManager.updateFile("source/%s" % fileName, "$prefix/%s" % fileName)
 
     for permutation in session.permutate():
 
@@ -195,7 +196,6 @@ def test_build(mainClass="test.Main"):
         outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")
 
     
-@share
 def test_phantom():
     """Automatically executes tests using PhantomJS"""
 
@@ -209,7 +209,6 @@ def test_phantom():
     return retval
 
 
-@share
 def test_node():
     """Automatically executes tests using NodeJS"""
 
@@ -223,9 +222,19 @@ def test_node():
     return retval
 
 
-@share
-def test_testem(browsers=None):
-    """Automatically executes tests using Testem"""
+def test_testem(browsers=None, root=".."):
+    """
+    Automatically executes tests using Testem.
+
+    Using a comma separated list of `browsers` one can define which browsers to use. By default
+    Testem will use all browsers it finds on the system. The list could be printed out on screen
+    using `testem launchers`.
+
+    The `root` needs to be the folder where the testem files should be executed in which
+    needs to be the folder which contains all the other relevant files for the project. Typically
+    when you use the convention of a `test` folder inside your real project just use the default `..`
+    which points to the "real" project's root folder.
+    """
 
     prefix = session.getCurrentPrefix()
 
@@ -246,7 +255,33 @@ def test_testem(browsers=None):
 
     Console.info("")
     Console.info("Running Testem based test suite...")
-    retval = executeCommand("testem ci " + browsers + " -f " + testemConfig.name, path="..", wrapOutput=False)
+
+    # We execute the testem command in the root of the project
+    retval = executeCommand("testem ci " + browsers + " -f " + testemConfig.name, path=root, wrapOutput=False)
     Console.info("")
 
     return retval
+
+
+@share
+def test(target="source", tool="phantom", browsers=None):
+    """Automatically executes tests in either PhantomJS, NodeJS or Testem CI"""
+    
+    session.setCurrentPrefix(target)
+
+    if target == "source":
+        test_source()
+    elif target == "build":
+        test_build()
+    else:
+        Console.error("Unsupported target: %s" % target)    
+
+    if tool == "phantom":
+        test_phantom()
+    elif tool == "node":
+        test_node()
+    elif tool == "testem":
+        test_testem(browsers)
+    else:
+        Console.error("Unsupported tool: %s" % tool)
+

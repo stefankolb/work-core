@@ -24,23 +24,7 @@ def distclean():
     Repository.distclean()
 
 @task 
-def test(target="source", tool="phantom"):
+def test(target="source", tool="phantom", browsers=None):
     """Automatically executes tests in either PhantomJS, NodeJS or Testem CI"""
     
-    session.setCurrentPrefix(target)
-
-    if target == "source":
-        core.test_source()
-    elif target == "build":
-        core.test_build()
-    else:
-        Console.error("Unsupported target: %s" % target)        
-
-    if tool == "phantom":
-        core.test_phantom()
-    elif tool == "node":
-        core.test_node()
-    elif tool == "testem":
-        core.test_testem()
-    else:
-        Console.error("Unsupported tool: %s" % tool)
+    core.test(target, tool, browsers)

@@ -65,7 +65,7 @@
       __failed : function(message, ex) 
       {
         var combined = message || "";
-        if (ex) 
+        if (ex && combined != ex.message) 
         {
           if (combined) {
             combined += ": ";

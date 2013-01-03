@@ -23,7 +23,7 @@ core.Class("core.test.reporter.Console",
       if (successfully) {
         console.info("Testing finished successfully.");
       } else {
-        console.info("Testing finished with errors!");
+        console.error("Testing finished with errors!");
       }
     },
 
@@ -49,6 +49,7 @@ core.Class("core.test.reporter.Console",
     testFinished : function(test) 
     {
       console.info("- " + test.getSummary());
+
       if (!test.wasSuccessful()) 
       {
         if (test.getFailureReason() == "assertions") 

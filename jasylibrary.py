@@ -110,6 +110,29 @@ def api():
     # Write API data
     ApiWriter(session).write("$prefix/data")
 
+@share
+def clean():
+    session.clean()
+
+    fm = FileManager(session)
+
+    fm.removeDir("build")
+    fm.removeDir("source/script")
+
+@share
+def distclean():
+
+    session.clean()
+    Repository.distclean()
+
+    fm = FileManager(session)
+    session.close()
+
+    fm.removeDir("build")
+    fm.removeDir("source/script")
+
+    fm.removeDir("api")
+    fm.removeDir("external")    
 
 @share
 def test_source(mainClass="test.Main"):

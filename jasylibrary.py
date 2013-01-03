@@ -13,28 +13,62 @@ import tempfile
 import shlex
 import subprocess
 
-def executeCommand(args, path=None):
-  """Modified executeCommand which outputs console messages"""
+def executeCommand(args, failMessage=None, path=None, wrapOutput=True):
+    """
+    Executes the given process and outputs failMessage when errors happen.
 
-  if type(args) == str:
-    args = shlex.split(args)
+    :param args: 
+    :type args: str or list
+    :param failMessage: Message for exception when command fails
+    :type failMessage: str
+    :param path: Directory path where the command should be executed
+    :type path: str
+    :raise Exception: Raises an exception whenever the shell command fails in execution
+    :type wrapOutput: bool
+    :param wrapOutput: Whether shell output should be wrapped and returned (and passed through to Console.debug())
+    """
 
-  prevpath = os.getcwd()
+    if type(args) == str:
+        args = shlex.split(args)
 
-  # Execute in custom directory
-  if path:
-    path = os.path.abspath(os.path.expanduser(path))
-    os.chdir(path)
+    prevpath = os.getcwd()
 
-  Console.info("Executing command: %s", " ".join(args))
-  
-  # Using shell on Windows to resolve binaries like "git"
-  returnValue = subprocess.call(args, shell=sys.platform == "win32")  
+    # Execute in custom directory
+    if path:
+        path = os.path.abspath(os.path.expanduser(path))
+        os.chdir(path)
 
-  # Change back to previous path
-  os.chdir(prevpath)
+    Console.debug("Executing command: %s", " ".join(args))
+    Console.indent()
+    
+    # Using shell on Windows to resolve binaries like "git"
+    if not wrapOutput:
+        returnValue = subprocess.call(args, shell=sys.platform == "win32")
 
-  return returnValue
+    else:
+        output = tempfile.TemporaryFile(mode="w+t")
+        returnValue = subprocess.call(args, stdout=output, stderr=output, shell=sys.platform == "win32")
+            
+        output.seek(0)
+        result = output.read().strip("\n\r")
+        output.close()
+
+    # Change back to previous path
+    os.chdir(prevpath)
+
+    if returnValue != 0:
+        raise Exception("Error during executing shell command: %s (%s)" % (failMessage, result))
+    
+    if wrapOutput:
+        for line in result.splitlines():
+            Console.debug(line)
+    
+    Console.outdent()
+    
+    if wrapOutput:
+        return result
+    else:
+        return returnValue
 
 
 @share
@@ -147,7 +181,7 @@ def test_phantom():
 
     Console.info("")
     Console.info("Running PhantomJS based test suite...")
-    retval = executeCommand("phantomjs phantom.js", prefix)
+    retval = executeCommand("phantomjs phantom.js", path=prefix, wrapOutput=False)
     Console.info("")
 
     return retval
@@ -161,7 +195,7 @@ def test_node():
 
     Console.info("")
     Console.info("Running NodeJS based test suite...")
-    retval = executeCommand("node node.js", prefix)
+    retval = executeCommand("node node.js", path=prefix, wrapOutput=False)
     Console.info("")
 
     return retval
@@ -178,7 +212,7 @@ def test_testem():
 
     Console.info("")
     Console.info("Running Testem based test suite...")
-    retval = executeCommand("testem ci -f " + testemConfig.name, "..")
+    retval = executeCommand("testem ci -f " + testemConfig.name, path="..", wrapOutput=False)
     Console.info("")
 
     return retval

@@ -44,6 +44,7 @@ def executeCommand(args, failMessage=None, path=None, wrapOutput=True):
     # Using shell on Windows to resolve binaries like "git"
     if not wrapOutput:
         returnValue = subprocess.call(args, shell=sys.platform == "win32")
+        result = returnValue
 
     else:
         output = tempfile.TemporaryFile(mode="w+t")
@@ -56,7 +57,7 @@ def executeCommand(args, failMessage=None, path=None, wrapOutput=True):
     # Change back to previous path
     os.chdir(prevpath)
 
-    if returnValue != 0:
+    if returnValue != 0 and failMessage:
         raise Exception("Error during executing shell command: %s (%s)" % (failMessage, result))
     
     if wrapOutput:
@@ -65,10 +66,7 @@ def executeCommand(args, failMessage=None, path=None, wrapOutput=True):
     
     Console.outdent()
     
-    if wrapOutput:
-        return result
-    else:
-        return returnValue
+    return result
 
 
 @share
@@ -202,17 +200,29 @@ def test_node():
 
 
 @share
-def test_testem():
+def test_testem(browsers=None):
     """Automatically executes tests using Testem"""
 
     prefix = session.getCurrentPrefix()
 
-    testemConfig = tempfile.NamedTemporaryFile("w")
-    testemConfig.write('{"framework": "custom", "test_page" : "test/' + prefix + '/index.html"}')
+    # We need to use a full temporary directory and even a named temporary file
+    # is not being guaranteed able to be accessed a second time.
+    configDir = tempfile.TemporaryDirectory()
+    pagePath = os.path.join("test", prefix, "index.html")
+    
+    testemConfig = open(os.path.join(configDir.name, "testem.json"), "w")
+    testemConfig.write('{"framework": "custom", "test_page" : "' + pagePath + '"}')
+    testemConfig.close()
+
+    # Add parameter for browsers - otherwise auto-detected
+    if browsers:
+        browsers = "-l " % browsers
+    else:
+        browsers = ""
 
     Console.info("")
     Console.info("Running Testem based test suite...")
-    retval = executeCommand("testem ci -f " + testemConfig.name, path="..", wrapOutput=False)
+    retval = executeCommand("testem ci " + browsers + " -f " + testemConfig.name, path="..", wrapOutput=False)
     Console.info("")
 
     return retval

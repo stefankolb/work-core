@@ -1,9 +1,13 @@
 /**
- * Interface which reporters for the testing infrastructure have to implement
- * to be usable by the {core.test.Controller}.
+ * Interface which any reporter has to implement to be compatible to the testing framework.
  */
 core.Interface("core.test.reporter.IReporter",
 {
+  /**
+   * @suites {core.test.Suite[]} Collection of suites to report for
+   */
+  construct : function(suites) {},
+
   members :
   {
     /** 
@@ -13,7 +17,8 @@ core.Interface("core.test.reporter.IReporter",
 
 
     /** 
-     * Reports that the test run is completely finished.
+     * Reports that the test run is completely finished and the parameter
+     * @successfully {Boolean} defines whether this run was successfully or not.
      */
     finished : function(successfully) {},
 

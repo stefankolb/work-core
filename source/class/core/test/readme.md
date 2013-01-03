@@ -43,8 +43,26 @@ It is also possible to execute the tools on your own (when using the skeleton ba
 
 - NodeJS: Go to the `source` or `build` directory execute `node node.js`.
 - PhantomJS: Go to the `source` or `build` directory execute `phantomjs phantomjs.js`.
-- Testem: Go to the project root folder execute `testem -f testem.json`. See next section for more info.
+- Testem: Go to the project root folder execute `testem -f test/testem.json`. See next section for more info.
 
 ### Testem:
 
-Testem is pretty useful for automatically testing range of browsers automatically and repeatedly.
+Testem is pretty useful for automatically testing range of browsers automatically and repeatedly. Testem is able to run either in full automated "ci" (continous integration) mode or in manual control. In both situations Testem is able to auto detect installed browsers and launching them. 
+
+- Interactive: `testem -f test/testem.json`: Run Testem at default port and waiting for browsers to connect.
+- Interactive with launcher: `testem -f test/testem.json -l chrome,firefox`: Run Testem at default port, opening Firefox and Chrome with the Testem-URL and waiting for incoming results.
+- Automated (CI): `testem ci -f test/testem.json -l chrome,firefox`: Run Testem in Chrome and Firefox and print results to the terminal.
+
+An example `testem.json` might look like:
+
+    {
+      "framework": "custom",
+      "test_page" : "test/source/index.html"
+    }
+
+The `custom` framework is required for giving full control the the Core test runner. You can also choose the build version BTW:
+
+    {
+      "framework": "custom",
+      "test_page" : "test/build/index.html"
+    }

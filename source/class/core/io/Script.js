@@ -70,7 +70,7 @@
 			// Browser-less (e.g. NodeJS) support
 			if (!doc) 
 			{
-			  eval(require("fs").readFileSync(uri, "utf-8"));
+			  eval("//@ sourceURL=" + uri + "\n" + require("fs").readFileSync(uri, "utf-8"));
 			  if (callback) {
 			  	callback.call(context||global, uri, false);
 			  }

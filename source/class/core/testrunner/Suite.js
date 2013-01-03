@@ -1,8 +1,8 @@
 /**
- * Wrapper around a group of {core.test.Test}s. All tests in a suite are 
+ * Wrapper around a group of {core.testrunner.Test}s. All tests in a suite are 
  * processed in arbitrary order.
  */
-core.Class("core.test.Suite",
+core.Class("core.testrunner.Suite",
 {
   /**
    * Creates a new test suite with the given @caption {String}.
@@ -12,7 +12,7 @@ core.Class("core.test.Suite",
   construct : function(caption, setup, teardown) 
   {
     // Verify that an instance was created
-    if (!(this instanceof core.test.Suite)) {
+    if (!(this instanceof core.testrunner.Suite)) {
       throw new Error("Please use 'new' for creating Suite instances!");
     }
 
@@ -27,7 +27,7 @@ core.Class("core.test.Suite",
     this.__teardown = teardown;
 
     // Self register to controller
-    core.test.Controller.registerSuite(this);
+    core.testrunner.Controller.registerSuite(this);
   },
 
   members : 
@@ -69,7 +69,7 @@ core.Class("core.test.Suite",
     */
 
     /**
-     * Marks the given @test {core.test.Test} as being successfully completed.
+     * Marks the given @test {core.testrunner.Test} as being successfully completed.
      */
     testPassed : function(test) 
     {
@@ -79,7 +79,7 @@ core.Class("core.test.Suite",
 
 
     /**
-     * Marks the given @test {core.test.Test} as having failed for various reasons.
+     * Marks the given @test {core.testrunner.Test} as having failed for various reasons.
      * Add a custom @message {String} for clarification of the issue.
      */
     testFailed : function(test, message) 
@@ -108,7 +108,7 @@ core.Class("core.test.Suite",
 
 
     /**
-     * {core.test.Test[]} Returns the list of tests
+     * {core.testrunner.Test[]} Returns the list of tests
      */
     getTests : function() {
       return this.__tests;
@@ -118,11 +118,11 @@ core.Class("core.test.Suite",
     /**
      * Registers a new test @func {Function} with the given @title {String} to
      * the suite. The optional @timeout {Integer?} can be used to setup the test
-     * as being asynchronous. In these tests the method {core.test.Test#done} needs to be called
+     * as being asynchronous. In these tests the method {core.testrunner.Test#done} needs to be called
      * after all assertions have been processed.
      */
     test : function(title, func, timeout) {
-      this.__tests.push(new core.test.Test(title, func, this, timeout));
+      this.__tests.push(new core.testrunner.Test(title, func, this, timeout));
     },
 
 

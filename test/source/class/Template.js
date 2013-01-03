@@ -1,4 +1,4 @@
-var suite = new core.test.Suite("Template");
+var suite = new core.testrunner.Suite("Template");
 
 suite.test("Basic", function() {
   

@@ -3,12 +3,12 @@
    * to a whole suite of tests and is protected regarding
    * exceptions so that these do not influence the outside.
    */
-  core.Class("core.test.Test",
+  core.Class("core.testrunner.Test",
   {
     /**
      * - @title {String} Human readable title of the test
      * - @func {Function} Function to test
-     * - @suite {core.test.Suite} Instance of suite to assign to (for back reporting)
+     * - @suite {core.testrunner.Suite} Instance of suite to assign to (for back reporting)
      * - @timeout {Integer?null} Configure timeout to enable async execution of test
      * - @total {Integer?null} Configure the total number of assertions which are expected to run
      */

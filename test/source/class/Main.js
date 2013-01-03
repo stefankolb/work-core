@@ -1,2 +1,2 @@
 /** #require(test.*) */
-core.test.Controller.run();
+core.testrunner.Controller.run();

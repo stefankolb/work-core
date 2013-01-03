@@ -1,5 +1,5 @@
 /** #require(ext.sugar.Object) */
-var suite = new core.test.Suite("Ext :: Sugar");
+var suite = new core.testrunner.Suite("Ext :: Sugar");
 
 suite.test("Object.isEmpty", function() 
 {

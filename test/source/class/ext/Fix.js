@@ -1,4 +1,4 @@
-var suite = new core.test.Suite("Ext :: Fixes");
+var suite = new core.testrunner.Suite("Ext :: Fixes");
 
 suite.test("setTimeout with arguments", function() 
 {

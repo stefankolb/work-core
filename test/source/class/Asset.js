@@ -1,4 +1,4 @@
-var suite = new core.test.Suite("Jasy/Asset");
+var suite = new core.testrunner.Suite("Jasy/Asset");
 
 suite.test("Adding Source Data", function() 
 {

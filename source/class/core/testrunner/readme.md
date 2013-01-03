@@ -7,17 +7,17 @@ It supports a wide-array of other infrastructure out of the box:
 - [PhantomJS](http://phantomjs.org/) (Headless Browser)
 - [Testem](https://github.com/airportyh/testem) (Test Runner)
 
-Writing tests is simple. Just initialize a {core.test.Suite} and call {core.test.Suite#test} for every
+Writing tests is simple. Just initialize a {core.testrunner.Suite} and call {core.testrunner.Suite#test} for every
 function you like to test. Inside that function you are able to chose from an array of assertion helpers as well:
 
-- {core.test.Suite#equal}
-- {core.test.Suite#identical}
-- {core.test.Suite#ok}
-- {core.test.Suite#raises}
+- {core.testrunner.Suite#equal}
+- {core.testrunner.Suite#identical}
+- {core.testrunner.Suite#ok}
+- {core.testrunner.Suite#raises}
 
 ### Example:
 
-    var suite = new core.test.Suite("Crypt");
+    var suite = new core.testrunner.Suite("Crypt");
 
     suite.test("CRC32", function() 
     {  

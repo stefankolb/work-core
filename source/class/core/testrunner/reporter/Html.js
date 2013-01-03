@@ -1,9 +1,9 @@
 /**
  * Reporter which produces visual HTML output into the document.
  */
-core.Class("core.test.reporter.Html", 
+core.Class("core.testrunner.reporter.Html", 
 {
-  implement: [core.test.reporter.IReporter],
+  implement: [core.testrunner.reporter.IReporter],
 
   construct : function(suites) 
   {
@@ -65,7 +65,7 @@ core.Class("core.test.reporter.Html",
     root.innerHTML = suitesTemplate.render(suitesData);
 
     if (typeof console == "object") {
-      this.__consoleReporter = new core.test.reporter.Console(suites);  
+      this.__consoleReporter = new core.testrunner.reporter.Console(suites);  
     }
   },
 

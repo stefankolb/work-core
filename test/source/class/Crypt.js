@@ -1,4 +1,4 @@
-var suite = new core.test.Suite("Crypt");
+var suite = new core.testrunner.Suite("Crypt");
 
 suite.test("Adler32", function() {
   

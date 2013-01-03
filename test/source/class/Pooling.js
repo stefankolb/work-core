@@ -1,4 +1,4 @@
-var suite = new core.test.Suite("Pooling", null, function() 
+var suite = new core.testrunner.Suite("Pooling", null, function() 
 {
   core.Main.clearNamespace("pooled.Simple1");
   core.Main.clearNamespace("pooled.Simple2");

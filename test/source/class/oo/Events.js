@@ -1,4 +1,4 @@
-var suite = new core.test.Suite("Events", null, function() {
+var suite = new core.testrunner.Suite("Events", null, function() {
   core.Main.clearNamespace("events.Simple1");
   core.Main.clearNamespace("events.Simple2");
   core.Main.clearNamespace("events.Simple3");

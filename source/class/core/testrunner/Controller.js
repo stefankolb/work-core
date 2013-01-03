@@ -1,13 +1,13 @@
 /**
  * Main controller of test environment in Core. Is automatically used
- * by {core.test.Suite} instances for self registration. The controller
+ * by {core.testrunner.Suite} instances for self registration. The controller
  * joins together the flow and results of the individual suites. It also
  * supports the Testem (https://github.com/airportyh/testem/) test runner
  * for automating multi browser tests.
  */
-core.Module("core.test.Controller",
+core.Module("core.testrunner.Controller",
 {
-  /** {=core.test.Suite[]} List of suite instances */
+  /** {=core.testrunner.Suite[]} List of suite instances */
   __suites : [],
 
   /** Whether the test suites are being executed right now */
@@ -24,7 +24,7 @@ core.Module("core.test.Controller",
 
 
   /**
-   * Registers the given @suite {core.test.Suite} to the controller.
+   * Registers the given @suite {core.testrunner.Suite} to the controller.
    */
   registerSuite : function(suite) {
     this.__suites.push(suite);
@@ -85,9 +85,9 @@ core.Module("core.test.Controller",
     var suites = this.__suites;
 
     if (jasy.Env.isSet("runtime", "browser") && typeof callPhantom != "function") {
-      this.__reporter = new core.test.reporter.Html(suites);
+      this.__reporter = new core.testrunner.reporter.Html(suites);
     } else if (typeof console !== "undefined") {
-      this.__reporter = new core.test.reporter.Console(suites);
+      this.__reporter = new core.testrunner.reporter.Console(suites);
     } else {
       this.__reporter = null;
     }
@@ -198,7 +198,7 @@ core.Module("core.test.Controller",
 
 
   /** 
-   * Callback which is being executed every time a @test {core.test.Test} was started.
+   * Callback which is being executed every time a @test {core.testrunner.Test} was started.
    */
   __testStarted : function(test) {
     this.__reporter.testStarted(test);
@@ -206,7 +206,7 @@ core.Module("core.test.Controller",
 
 
   /** 
-   * Callback which is being executed every time a @test {core.test.Test} was finished.
+   * Callback which is being executed every time a @test {core.testrunner.Test} was finished.
    */
   __testFinished : function(test) 
   {

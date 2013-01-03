@@ -1,6 +1,6 @@
 if (jasy.Env.isSet("runtime", "browser"))
 {
-  var suite = new core.test.Suite("BOM/Text");
+  var suite = new core.testrunner.Suite("BOM/Text");
 
   suite.test("Basics", function() 
   {

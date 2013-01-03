@@ -2,9 +2,9 @@
  * A reporter for the `console` interface which is available in 
  * web browsers, NodeJS, PhantomJS, etc.
  */
-core.Class("core.test.reporter.Console", 
+core.Class("core.testrunner.reporter.Console", 
 {
-  implement: [core.test.reporter.IReporter],
+  implement: [core.testrunner.reporter.IReporter],
 
   construct : function(suites) {
     console.info("Suites: " + suites.length);

@@ -1,10 +1,10 @@
 /**
  * Interface which any reporter has to implement to be compatible to the testing framework.
  */
-core.Interface("core.test.reporter.IReporter",
+core.Interface("core.testrunner.reporter.IReporter",
 {
   /**
-   * @suites {core.test.Suite[]} Collection of suites to report for
+   * @suites {core.testrunner.Suite[]} Collection of suites to report for
    */
   construct : function(suites) {},
 
@@ -24,25 +24,25 @@ core.Interface("core.test.reporter.IReporter",
 
 
     /** 
-     * Reports that the testing of the given @suite {core.test.Suite} was started.
+     * Reports that the testing of the given @suite {core.testrunner.Suite} was started.
      */
     suiteStarted : function(suite) {},
 
 
     /** 
-     * Reports that the testing of the given @suite {core.test.Suite} was finished.
+     * Reports that the testing of the given @suite {core.testrunner.Suite} was finished.
      */
     suiteFinished : function(suite) {},
 
 
     /** 
-     * Reports that the testing of the given @test {core.test.Test} was started.
+     * Reports that the testing of the given @test {core.testrunner.Test} was started.
      */
     testStarted : function(test) {},
 
 
     /** 
-     * Reports that the testing of the given @test {core.test.Test} was finished.
+     * Reports that the testing of the given @test {core.testrunner.Test} was finished.
      */
     testFinished : function(test) {}
   }

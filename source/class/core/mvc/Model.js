@@ -41,6 +41,12 @@
       this.id = "model:" + (globalId++);
     },
 
+    events :
+    {
+      /** Fired whenever the model is changed in a way that is interesting for listeners */
+      "change" : core.property.Event
+    },
+
     members: 
     {
       // Interface implementation

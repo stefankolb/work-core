@@ -43,6 +43,9 @@ core.Class("core.testrunner.Test",
     /** {=String} Reason of failure, value is `null` when successful */
     __failureReason : null,    
 
+    /** {=String} Message to describe the failure */
+    __failureMessage : null,    
+
     /** Number of passed assertions */
     __passedCount : 0,
 
@@ -147,6 +150,7 @@ core.Class("core.testrunner.Test",
 
       this.__passed(message);
     },
+    
 
     /**
      * Test whether @func {Function} raises an exception (which is should) 
@@ -182,17 +186,21 @@ core.Class("core.testrunner.Test",
 
     /**
      * Indicate that the test was not executed successfully
-     * e.g. exceptions or timeouts occured. Define the @reason {String}
+     * e.g. exceptions or timeouts occured. Define the @message {String}
      * to give more hints about the issue.
      */
-    failure : function(reason) 
+    failure : function(message) 
     {
       if (this.__timeoutHandle) {
         clearTimeout(this.__timeoutHandle);
       }
 
       this.__failureReason = "other";
-      this.__suite.failure(this, reason);
+      this.__failureMessage = message;
+
+      this.__updateOnFatalError();
+
+      this.__suite.failure(this);
     },
 
 
@@ -260,20 +268,35 @@ core.Class("core.testrunner.Test",
     getSummary : function() 
     {
       var reason = this.__failureReason;
+      var message = this.__failureMessage;
 
       var prefix = reason == null ? "Success" : "Failure"
       var base = ": " + this.__title + " [" + this.__passedCount.pad(2) + "/" + this.getTotalCount().pad(2) + "]";
-      var postfix = reason == null ? "" : ": " + reason;
+      var postfix = message == null ? reason == null ? "" : ": " + reason : ": " + message;
 
       return prefix + base + postfix;
     },
 
 
     /** 
-     * {String} Returns the reason of the failure 
+     * {String} Returns the reason of the failure. One of:
+     *
+     * - assertions: Failed assertions
+     * - mismatch: Mismatch in expexted vs. executed number of assertions
+     * - exception: Exception during execution
+     * - timeout: Timeout occoured
+     * - other: Custom error by test itself
      */
     getFailureReason : function() {
       return this.__failureReason;
+    },
+
+
+    /**
+     * {String} Returns the failure message (only when available).
+     */
+    getFailureMessage : function() {
+      return this.__failureMessage;
     },
 
 
@@ -294,6 +317,26 @@ core.Class("core.testrunner.Test",
     },
 
 
+    /**
+     * Used to update failed count to sensible value when error happens
+     */
+    __updateOnFatalError : function() 
+    {
+      if (this.__totalCount == null) 
+      {
+        // Assume that at least one assertion is failed
+        if (this.__failedCount == 0) {
+          this.__failedCount++;
+        }
+      }
+      else
+      {
+        // Mark all remaining assertions as failed
+        this.__failedCount = Math.max(this.__totalCount - this.__passedCount, 1);
+      }
+    },
+
+
     /** 
      * This method is automatically triggered whenever the test was marked as done 
      */
@@ -307,16 +350,24 @@ core.Class("core.testrunner.Test",
       if (failedAssertions) 
       {
         this.__failureReason = "assertions";
-        this.__suite.testFailed(this, "Did not successfully pass " + failedAssertions + " assertions.");
+        this.__failureMessage = "Did not successfully pass " + failedAssertions + " assertions.";
+
+        this.__suite.testFailed(this);
       }
       else if (this.__totalCount != null && this.__totalCount != this.__passedCount) 
       {
         this.__failureReason = "mismatch";
-        this.__suite.testFailed(this, "Did to match number of assertions expected (" + this.__totalCount + " vs. " + this.__passedCount + ")");
+        this.__failureMessage = "Did to match number of assertions expected (" + this.__totalCount + " vs. " + this.__passedCount + ")";
+
+        this.__updateOnFatalError();
+
+        this.__suite.testFailed(this);
       }
       else
       {
         this.__failureReason = null;
+        this.__failureMessage = null;
+
         this.__suite.testPassed(this);
       }
     },
@@ -335,7 +386,11 @@ core.Class("core.testrunner.Test",
         this.__timeoutHandle = setTimeout((function() 
         {
           self.__failureReason = "timeout";
-          self.__suite.testFailed(self, "Timeout (" + timeout + "ms)");
+          self.__failureMessage = "Timeout (" + timeout + "ms)";
+
+          this.__updateOnFatalError();
+
+          self.__suite.testFailed(self);
         }), timeout);
       }
 
@@ -346,7 +401,11 @@ core.Class("core.testrunner.Test",
       catch(ex) 
       {
         this.__failureReason = "exception";
-        this.__suite.testFailed(this, "Exception: " + ex);
+        this.__failureMessage = "Exception: " + ex;
+
+        this.__updateOnFatalError();
+
+        this.__suite.testFailed(this);
 
         return;
       }

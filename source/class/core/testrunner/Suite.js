@@ -87,9 +87,8 @@ core.Class("core.testrunner.Suite",
 
     /**
      * Marks the given @test {core.testrunner.Test} as having failed for various reasons.
-     * Add a custom @message {String} for clarification of the issue.
      */
-    testFailed : function(test, message) 
+    testFailed : function(test) 
     {
       this.__failed.push(test);
       this.__testFinishedCallback(test);

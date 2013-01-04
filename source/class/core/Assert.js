@@ -91,7 +91,7 @@
 		 */
 		isNull: function(a, message) 
 		{
-			if (a == null) {
+			if (a != null) {
 				raise(message || "Value " + a + " must be null!");
 			}
 		},

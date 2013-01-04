@@ -30,7 +30,7 @@ core.Class("core.testrunner.reporter.Console",
       if (successfully) {
         console.info("Testing finished successfully.");
       } else {
-        console.error("Testing finished with errors!");
+        console.warn("Testing finished with errors!");
       }
     },
 
@@ -72,12 +72,12 @@ core.Class("core.testrunner.reporter.Console",
               continue;
             }
 
-            console.error("  #" + i + ": failed: " + current.message);
+            console.warn("  #" + i + ": failed: " + current.message);
             if (current.stacktrace)
             {
               var lines = current.stacktrace.split("\n");
               for (var j=0, jl=lines.length; j<jl; j++) {
-                console.info("  " + lines[j])
+                console.log("  " + lines[j])
               }
             }
           }

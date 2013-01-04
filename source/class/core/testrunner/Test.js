@@ -136,7 +136,7 @@ core.Class("core.testrunner.Test",
 
 
     /**
-     * Test whether @a {var} is truish and register
+     * Test whether @a {var} is truish and registers
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
@@ -150,6 +150,23 @@ core.Class("core.testrunner.Test",
 
       this.__passed(message);
     },
+
+
+    /**
+     * Test whether @a {var} is null and registers
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    not : function(a, message) 
+    {
+      try{
+        core.Assert.isNull(a);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    },    
 
 
     /**

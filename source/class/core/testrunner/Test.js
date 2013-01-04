@@ -109,7 +109,7 @@ core.Class("core.testrunner.Test",
     equal : function(a, b, message) 
     {
       try{
-        core.Assert.equal(a, b, message);  
+        core.Assert.equal(a, b);  
       } catch(ex) {
         return this.__failed(message, ex);
       }
@@ -126,7 +126,7 @@ core.Class("core.testrunner.Test",
     identical : function(a, b, message) 
     {
       try{
-        core.Assert.identical(a, b, message);  
+        core.Assert.identical(a, b);  
       } catch(ex) {
         return this.__failed(message, ex);
       }
@@ -143,13 +143,30 @@ core.Class("core.testrunner.Test",
     ok : function(a, message) 
     {
       try{
-        core.Assert.isTrue(a, message);  
+        core.Assert.isTrue(a);  
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
     },
+
+
+    /**
+     * Test whether @a {var} is an instance of @b {var} and registers
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    instance : function(a, b, message) 
+    {
+      try{
+        core.Assert.isInstance(a, b);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    },    
     
 
     /**

@@ -159,7 +159,7 @@ core.Class("core.testrunner.Suite",
 
 
     /**
-     * {Boolean} Runs the test suite. Executes the given @allDoneCallback callback {Function?} when 
+     * {Boolean} Runs the test suite. Executes the given @allDoneCallback {Function?} when 
      * all tests have been completed. Executes the @testFinishedCallback {Function?} callback
      * every time a single test is completed. Returns `false` when
      * there are no tests registered. 

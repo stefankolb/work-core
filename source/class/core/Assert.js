@@ -150,6 +150,17 @@
 				raise(message || "Value " + a + " must not match " + regexp);
 			}
 		},
+
+		/**
+		 * Raises an exception when the value @a {var} is not an instance of @clazz {String}
+		 * Customizable with a custom @message {String?} for the exception text.
+		 */
+		isInstance: function(a, clazz, message) 
+		{
+			if (!(a instanceof clazz)) {
+				raise(message || "Value " + a + " must be instance of: " + clazz);
+			}
+		},		
 		
 		/**
 		 * Raises an exception when the value @a {var} is not of @type {String} (checked via {core.Main#isTypeOf})

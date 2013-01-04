@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>$${name} test suite</title>
+	</head>
+	<body>
+    <style>
+    *{
+      margin: 0;
+      padding: 0;
+
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    ul{
+      list-style: none;
+    }
+
+    body{
+      font-size: 14px;
+      line-height: 1.2;
+      font-family: "Helvetica Neue", sans-serif;
+      padding: 20px;
+    }
+
+    #reporter{
+      max-width: 600px;
+    }
+
+    ul.suites > li{
+      background: #fafafa;
+      margin-bottom: 18px;
+
+      border: 1px solid #444;
+      -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+      -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+      -ms-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+      box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+
+      -webkit-transition: background 300ms;
+      -moz-transition: background 300ms;
+      -ms-transition: background 300ms;
+      transition: background 300ms;      
+    }
+
+    ul.suites > li > h3{
+      font-size: 18px;
+      padding: 6px 10px;
+      background: #ccc;
+      color: #555;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+    }
+
+    ul.suites > li > h3:before,
+    ul.suites > li > h3:after {
+      content: " ";
+      display: table;
+    }
+
+    ul.suites > li > h3:after {
+      clear: both;
+    }      
+
+    ul.suites > li > h3 > span.result{
+      float: right;
+    }
+
+    ul.suites > li > h3 > span.running{
+      opacity: 0;
+      font-size: 12px;
+      padding: 3px;
+      font-weight: normal;
+      border-radius: 4px;
+      background: #AAA;
+      color: white;
+      margin-left: 8px;
+      vertical-align: middle;
+
+      -webkit-transition: opacity 300ms ease-out;
+      -moz-transition: opacity 300ms ease-out;
+      -ms-transition: opacity 300ms ease-out;
+      transition: opacity 300ms ease-out;
+    }
+
+    ul.suites > li.running > h3 > span.running{
+      opacity: 1;
+    }
+
+    ul.suites > li.successful{
+      background: rgba(20,240,20,0.1);
+    }
+
+    ul.suites > li.failed{
+      background: rgba(240,20,20,0.1);
+    }
+
+    ul.tests > li{
+      line-height: 2;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    ul.tests > li:before,
+    ul.tests > li:after {
+      content: " "; /* 1 */
+      display: table; /* 2 */
+    }
+
+    ul.tests > li:after {
+      clear: both;
+    }    
+
+    ul.tests > li.failed{
+      background: rgba(240,20,20,0.6) !important;
+      color: white;
+      font-weight: bold;
+    }
+
+    ul.tests > li:nth-child(even){
+      background-color: rgba(0,0,0,0.06);
+    }
+
+    ul.tests > li > h4{
+      font-weight: inherit;
+      font-size: 14px;
+    }
+
+    ul.tests > li span.running{
+      visibility: hidden;
+    }
+
+    ul.tests > li.running span.running{
+      visibility: visible;
+    }
+
+    ul.tests > li span.result{
+      float: right;
+    }
+
+    </style>
+    <div id="reporter"></div>
+		<script src="script/kernel.js"></script>
+		<script>core.io.Script.load("script/test-" + jasy.Env.CHECKSUM + ".js");</script>
+	</body>
+</html>

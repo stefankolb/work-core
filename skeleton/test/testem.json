@@ -1,0 +1,4 @@
+{
+  "framework": "custom",
+  "test_page" : "$${name}/source/index.html"
+}

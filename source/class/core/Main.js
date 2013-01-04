@@ -94,7 +94,7 @@
 		
 
 		/** {=Array} Set of types which are supported */
-		TYPES: (classes + " Null Native Map Integer Primitive").split(" "),
+		TYPES: (classes + " Null Native Map Integer Primitive Node").split(" "),
 		
 
 		/**

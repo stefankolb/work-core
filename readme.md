@@ -7,7 +7,7 @@ Core was designed to work together with the JavaScript tooling project [Jasy](ht
 
 ## Authors
 
-Core is developed by [Sebastian Werner](mailto:info@sebastian-werner.net) with support from Zynga. 
+Core is developed by [Sebastian Werner](mailto:info@sebastian-werner.net) (supported by Zynga during 2011 and 2012). 
 
 ## Creating Projects
 
@@ -23,6 +23,7 @@ Note: Replace `myproject` with the name of the project (lowecase characters, no 
 
 This project is kept compatible with newest development of the [Jasy](http://github.com/sebastian-software/jasy) tooling framework. This means that the newest GitHub versions typically require a recent Jasy version  as well. Take a look at this list to understand what version to choose from:
 
+* **0.9**: Jasy = 0.8.x
 * **0.8**: Jasy = 0.8.x
 * **0.7**: Jasy = 0.7.x
 * **0.6**: Jasy = 0.6.x

@@ -92,9 +92,10 @@
 			{
 				if (jasy.Env.isSet("debug")) 
 				{
-					console.debug("DD: ", data);
-					core.Assert.isType(data, "Map", "Invalid data to render");
-					
+					if (!(core.Main.isTypeOf(data, "Map") || core.Main.isTypeOf(data, "Array"))) {
+						throw new Error("Data needs to be type of Array or Map: " + data);
+					}
+										
 					if (arguments.length > 1) {
 						core.Assert.isType(partials, "Map", "Invalid partials");
 					}

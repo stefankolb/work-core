@@ -45,7 +45,7 @@
        */
       model : 
       {
-        check: core.mvc.Model,
+        type: core.mvc.Model,
         nullable : true
       },
 
@@ -54,7 +54,7 @@
        */
       url : 
       {
-        check: "String",
+        type: "String",
         nullable : true
       }
     },

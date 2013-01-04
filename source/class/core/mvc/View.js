@@ -37,7 +37,7 @@ core.Class("core.mvc.View",
     /** Instance of compiled template to produce final data / text for output e.g. HTML, JSON, ... */
     template : 
     {
-      check: core.template.Template,
+      type: core.template.Template,
       nullable : true,
       apply : function() {
         this.render();
@@ -47,7 +47,7 @@ core.Class("core.mvc.View",
     /** The model/collection to render */
     model :
     {
-      check : core.mvc.IModel,
+      type : core.mvc.IModel,
       nullable : true,
       apply : function(value, old)
       {

@@ -25,7 +25,7 @@ core.Class("core.mvc.DomView",
     /** The root element to render into */
     root : 
     {
-      check: "Element",
+      type: "Element",
       nullable : true,
       apply : function(value, old) {
         this.render();

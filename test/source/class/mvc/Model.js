@@ -4,6 +4,7 @@ suite.test("Empty", function()
 {
   var empty = new core.mvc.Model();
 
+  this.instance(empty, core.mvc.Model);
   this.identical(typeof empty.id, "string");
   this.identical(typeof empty.getId(), "string");
   this.identical(typeof empty.toJSON(), "object");
@@ -27,18 +28,12 @@ suite.test("Custom", function()
         fire : "changeTextColor",
         type : "String",
         nullable : true
-      },
-
-      backgroundColor : 
-      {
-        fire : "changeBackgroundColor",
-        type : "String",
-        nullable : true
       }
     }
   });
 
   var obj1 = new my.test.Model({textColor: "red"});
+
   this.identical(obj1.getTextColor(), "red");
   this.identical(obj1.get("textColor"), "red");
 
@@ -49,6 +44,5 @@ suite.test("Custom", function()
   }, this);
 
   this.identical(obj1.setTextColor("blue"), "blue");
-
 
 }, 5);

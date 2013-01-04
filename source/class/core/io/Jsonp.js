@@ -2,9 +2,10 @@
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
+  Copyright 2012-2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
   Based on the work of Andrea Giammarchi
-  (C) WebReflection Essential - Mit Style
+  Copright WebReflection Essential - Mit Style
 ==================================================================================================
 */
 

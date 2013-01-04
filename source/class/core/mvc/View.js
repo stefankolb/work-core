@@ -1,3 +1,10 @@
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2012-2013 Sebastian Werner
+==================================================================================================
+*/
+
 /**
  * Views are almost more convention than they are code — they don't 
  * determine anything about the visual part of your application. The general idea is to 

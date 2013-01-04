@@ -1,3 +1,10 @@
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2012-2013 Sebastian Werner
+==================================================================================================
+*/
+
 /**
  * Interface which any reporter has to implement to be compatible to the testing framework.
  */

@@ -2,6 +2,7 @@
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
+  Copyright 2012-2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
   Easing Equations (c) 2003 Robert Penner, all rights reserved.
   Open source under the BSD License.

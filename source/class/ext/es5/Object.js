@@ -2,6 +2,7 @@
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
+  Copyright 2012-2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
   Based on the work of ES5 Shim
   MIT License, Copyright (c) 2009, 280 North Inc. http://280north.com/

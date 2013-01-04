@@ -1,3 +1,10 @@
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2012-2013 Sebastian Werner
+==================================================================================================
+*/
+
 /**
  * Main controller of test environment in Core. Is automatically used
  * by {core.testrunner.Suite} instances for self registration. The controller

@@ -2,6 +2,7 @@
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
+  Copyright 2012-2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
   Based on code of Unify Project
   License: MIT + Apache (V2)

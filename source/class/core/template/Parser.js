@@ -1,3 +1,17 @@
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2010-2012 Zynga Inc.
+  Copyright 2012-2013 Sebastian Werner
+--------------------------------------------------------------------------------------------------
+  Based on the work of:
+  Hogan.JS by Twitter, Inc.
+  https://github.com/twitter/hogan.js
+  Licensed under the Apache License, Version 2.0
+  http://www.apache.org/licenses/LICENSE-2.0
+==================================================================================================
+*/
+
 (function() 
 {
 	var tagSplitter = /(\{\{[^\{\}}]*\}\})/;

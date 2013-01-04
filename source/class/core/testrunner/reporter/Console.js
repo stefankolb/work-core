@@ -1,3 +1,10 @@
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2012-2013 Sebastian Werner
+==================================================================================================
+*/
+
 /**
  * A reporter for the `console` interface which is available in 
  * web browsers, NodeJS, PhantomJS, etc.

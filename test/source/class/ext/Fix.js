@@ -10,7 +10,7 @@ suite.test("setTimeout with arguments", function()
     test.equal(arg, "hello");
     test.done();
   }, 10, "hello");
-}, 1000);
+}, 1, 1000);
 
 suite.test("setImmediate", function() 
 {
@@ -21,7 +21,7 @@ suite.test("setImmediate", function()
     test.ok(true, "always fine");
     test.done();
   });
-}, 1000);
+}, 1, 1000);
 
 suite.test("requestAnimationFrame", function() 
 {
@@ -32,7 +32,7 @@ suite.test("requestAnimationFrame", function()
     test.ok(true, "always fine");
     test.done();
   });
-}, 1000);
+}, 1, 1000);
 
 suite.test("Object.keys", function() 
 {

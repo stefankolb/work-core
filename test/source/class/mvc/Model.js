@@ -41,7 +41,14 @@ suite.test("Custom", function()
   var obj1 = new my.test.Model({textColor: "red"});
   this.identical(obj1.getTextColor(), "red");
   this.identical(obj1.get("textColor"), "red");
-  //this.identical(obj1.get("text-color"), "red");
+
+  obj1.addListener("changeTextColor", function(evt) 
+  {
+    this.identical(evt.getValue(), "blue");
+    this.identical(evt.getOldValue(), "red");
+  }, this);
+
+  this.identical(obj1.setTextColor("blue"), "blue");
 
 
-})
+}, 5);

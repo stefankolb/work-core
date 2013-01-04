@@ -16,16 +16,16 @@ core.Class("core.testrunner.Test",
    * - @title {String} Human readable title of the test
    * - @func {Function} Function to test
    * - @suite {core.testrunner.Suite} Instance of suite to assign to (for back reporting)
-   * - @timeout {Integer?null} Configure timeout to enable async execution of test
    * - @total {Integer?null} Configure the total number of assertions which are expected to run
+   * - @timeout {Integer?null} Configure timeout to enable async execution of test
    */
-  construct : function(title, func, suite, timeout, total) 
+  construct : function(title, func, suite, total, timeout) 
   {
     this.__title = title;
     this.__func = func;
     this.__suite = suite;
-    this.__timeout = timeout;
     this.__totalCount = total;
+    this.__timeout = timeout;
 
     /** List of passed/failed assertions */
     this.__items = [];
@@ -388,7 +388,7 @@ core.Class("core.testrunner.Test",
           self.__failureReason = "timeout";
           self.__failureMessage = "Timeout (" + timeout + "ms)";
 
-          this.__updateOnFatalError();
+          self.__updateOnFatalError();
 
           self.__suite.testFailed(self);
         }), timeout);

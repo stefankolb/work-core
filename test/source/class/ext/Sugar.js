@@ -224,7 +224,7 @@ suite.test("Function.prototype.debounce - END", function()
     test.equal(counter, 1);
     test.done();
   }, 200)
-}, 1000);
+}, 1, 1000);
 
 suite.test("Function.prototype.debounce - ASAP", function() 
 {

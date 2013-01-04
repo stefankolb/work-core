@@ -123,12 +123,14 @@ core.Class("core.testrunner.Suite",
 
     /**
      * Registers a new test @func {Function} with the given @title {String} to
-     * the suite. The optional @timeout {Integer?} can be used to setup the test
-     * as being asynchronous. In these tests the method {core.testrunner.Test#done} needs to be called
-     * after all assertions have been processed.
+     * the suite. It's possible to define the @total {Integer?} number of expected assertions. 
+     * This is especially useful in asynchronous or event based tests. Asynchronous mode
+     * can be triggered via the optional @timeout {Integer?} which is the time to wait for
+     * `done` in milliseconds. For asynchronous tests the method {core.testrunner.Test#done} 
+     * needs to be called after all assertions have been processed. 
      */
-    test : function(title, func, timeout) {
-      this.__tests.push(new core.testrunner.Test(title, func, this, timeout));
+    test : function(title, func, total, timeout) {
+      this.__tests.push(new core.testrunner.Test(title, func, this, total, timeout));
     },
 
 

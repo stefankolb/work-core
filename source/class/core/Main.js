@@ -172,6 +172,10 @@
 				var type = typeof value;
 				result = value == null || type == "boolean" || type == "number" || type == "string";
 			}
+			else if (type == "Node")
+			{
+				result = value && typeof value.nodeType == "number";
+			}
 
 			return result;
 		},

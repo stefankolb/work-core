@@ -11,7 +11,7 @@
 core.Class("core.mvc.event.AddModel", 
 {
   pooling: true,
-  include : ["core.event.MEvent"],
+  include : [core.event.MEvent],
 
   construct: function(model) {
     this.model = model;

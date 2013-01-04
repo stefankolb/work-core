@@ -11,7 +11,7 @@
 core.Class("core.mvc.event.RemoveModel", 
 {
   pooling: true,
-  include : ["core.event.MEvent"],
+  include : [core.event.MEvent],
 
   construct: function(model) {
     this.model = model;

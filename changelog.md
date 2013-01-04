@@ -1,8 +1,20 @@
-0.8.1
-=====
 
-- IE10 fixes in core.io.Script
-- Fixed some broken unit tests
+0.9-alpha1
+==========
+
+This is the first follow up release of the Core project by Sebastian Software. Updated Copyright headers for new owner (of this fork).
+
+- Integrated API Browser into Core.
+- First version of Test Runner integrated into Core.
+- Added ready-to-use skeleton "test" for creating a new test environment in any existing Core-based application.
+- Added `jasylibrary.py` to Core with support for generating API docs, building test runner and cleaning up projects - a set of common tasks made available to Core based projects.
+- Restructured Core to contain assets which basically means converting it into some kind of application structure with `source/class` and `source/asset` folder.
+- Converted existing QUnit based unit tests into tests for the new integrated Test Runner.
+- Added new `runtime` field to differ between pure native JavaScript environments like NodeJS and JavaScript inside the browser.
+- Cleanup of `jasyscript.py`
+- Support for generating API Browser for Core itself.
+- IE10 fixes in `core.io.Script`.
+- Added NodeJS support to `core.io.Script`.
 
 
 0.8

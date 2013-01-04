@@ -140,7 +140,7 @@ def distclean():
 
 
 @share
-def test_source(mainClass="test.Main"):
+def test_source(main="test.Main"):
     """Generates source (development) version of test runner"""
 
     session.setField("debug", True)
@@ -159,14 +159,14 @@ def test_source(mainClass="test.Main"):
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName(mainClass).getSortedClasses()
+        classes = Resolver(session).addClassName(main).getSortedClasses()
 
         # Writing source loader
         outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js")
 
 
 @share
-def test_build(mainClass="test.Main"):
+def test_build(main="test.Main"):
     """Generates build (deployment) version of test runner"""
 
     session.setField("debug", True)
@@ -180,7 +180,7 @@ def test_build(mainClass="test.Main"):
     fileManager = FileManager(session)
 
     # Deploy assets
-    outputManager.deployAssets([mainClass])
+    outputManager.deployAssets([main])
 
     # Store kernel script
     outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
@@ -192,7 +192,7 @@ def test_build(mainClass="test.Main"):
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName(mainClass).getSortedClasses()
+        classes = Resolver(session).addClassName(main).getSortedClasses()
 
         # Compressing classes
         outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")
@@ -266,15 +266,15 @@ def test_testem(browsers=None, root=".."):
 
 
 @share
-def test(target="source", tool="phantom", browsers=None):
+def test(target="source", tool="phantom", browsers=None, main="test.Main"):
     """Automatically executes tests in either PhantomJS, NodeJS or Testem CI"""
     
     session.setCurrentPrefix(target)
 
     if target == "source":
-        test_source()
+        test_source(main=main)
     elif target == "build":
-        test_build()
+        test_build(main=main)
     else:
         Console.error("Unsupported target: %s" % target)    
 

@@ -3,13 +3,13 @@
 def source():
     """Generates source (development) version of test runner"""
     
-    core.test_source()
+    core.test_source(main="$${name}.Main")
 
 @task
 def build():
     """Generates build (deployment) version of test runner"""
 
-    core.test_build()
+    core.test_build(main="$${name}.Main")
 
 @task
 def clean():
@@ -27,4 +27,4 @@ def distclean():
 def test(target="source", tool="phantom", browsers=None):
     """Automatically executes tests in either PhantomJS, NodeJS or Testem CI"""
     
-    core.test(target, tool, browsers)
+    core.test(target, tool, browsers, main="$${name}.Main")

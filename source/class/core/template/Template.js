@@ -92,6 +92,7 @@
 			{
 				if (jasy.Env.isSet("debug")) 
 				{
+					console.debug("DD: ", data);
 					core.Assert.isType(data, "Map", "Invalid data to render");
 					
 					if (arguments.length > 1) {

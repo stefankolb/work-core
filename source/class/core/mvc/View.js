@@ -57,6 +57,8 @@ core.Class("core.mvc.View",
           value.addListener("add", this.render, this);
           value.addListener("remove", this.render, this);
         }
+
+        this.render();
       }
     }
   },

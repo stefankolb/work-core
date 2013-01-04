@@ -38,6 +38,11 @@
       this.id = "collection:" + (globalId++);
     },
 
+    events :
+    {
+      "change" : core.event.Notification
+    },
+
     properties : 
     {
       /**

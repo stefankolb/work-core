@@ -44,7 +44,7 @@
     events :
     {
       /** Fired whenever the model is changed in a way that is interesting for listeners */
-      "change" : core.property.Event
+      "change" : core.event.Notification
     },
 
     members: 

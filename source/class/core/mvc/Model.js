@@ -49,6 +49,10 @@
 
     members: 
     {
+      error : function(message) {
+        console.error("Model Error: " + message);
+      },
+
       // Interface implementation
       getId : function() {
         return this.id;

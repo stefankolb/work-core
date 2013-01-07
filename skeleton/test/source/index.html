@@ -68,23 +68,25 @@
       float: right;
     }
 
+    ul.tests > li span.running,
     ul.suites > li > h3 > span.running{
       opacity: 0;
       font-size: 12px;
-      padding: 3px;
+      padding: 2px 4px;
       font-weight: normal;
       border-radius: 4px;
-      background: #AAA;
+      background: #aaa;
       color: white;
       margin-left: 8px;
       vertical-align: middle;
 
-      -webkit-transition: opacity 300ms ease-out;
-      -moz-transition: opacity 300ms ease-out;
-      -ms-transition: opacity 300ms ease-out;
-      transition: opacity 300ms ease-out;
+      -webkit-transition: opacity 150ms ease-out;
+      -moz-transition: opacity 150ms ease-out;
+      -ms-transition: opacity 150ms ease-out;
+      transition: opacity 150ms ease-out;
     }
 
+    ul.tests > li.running span.running,
     ul.suites > li.running > h3 > span.running{
       opacity: 1;
     }
@@ -126,14 +128,6 @@
     ul.tests > li > h4{
       font-weight: inherit;
       font-size: 14px;
-    }
-
-    ul.tests > li span.running{
-      visibility: hidden;
-    }
-
-    ul.tests > li.running span.running{
-      visibility: visible;
     }
 
     ul.tests > li span.result{

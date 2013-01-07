@@ -24,4 +24,4 @@ suite.test("Timeout", function() {
     self.done();
   }, 300);
   
-}, 1000);
+}, 1, 1000);

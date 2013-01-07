@@ -12,16 +12,19 @@ suite.test("setTimeout with arguments", function()
   }, 10, "hello");
 }, 1, 1000);
 
-suite.test("requestAnimationFrame", function() 
+if (jasy.Env.isSet("runtime", "browser"))
 {
-  var test = this;
+  suite.test("requestAnimationFrame", function() 
+  {
+    var test = this;
 
-  /** #require(ext.RequestAnimationFrame) */
-  requestAnimationFrame(function() {
-    test.ok(true, "always fine");
-    test.done();
-  });
-}, 1, 1000);
+    /** #require(ext.RequestAnimationFrame) */
+    requestAnimationFrame(function() {
+      test.ok(true, "always fine");
+      test.done();
+    });
+  }, 1, 1000);
+}
 
 suite.test("Object.keys", function() 
 {

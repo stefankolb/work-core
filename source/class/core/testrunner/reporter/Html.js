@@ -22,9 +22,6 @@ core.Class("core.testrunner.reporter.Html",
       document.body.appendChild(root);
     }
 
-    /** #asset(core/test/index.css) */
-    core.io.StyleSheet.load(jasy.Asset.toUri("core/test/index.css"));
-    
     var suitesTemplate = 
       core.template.Compiler.compile(
       '<ul class="suites">' +
@@ -165,3 +162,6 @@ core.Class("core.testrunner.reporter.Html",
     }
   }
 });
+
+/** #asset(core/testrunner/index.css) */
+core.io.StyleSheet.load(jasy.Asset.toUri("core/testrunner/index.css"));

@@ -30,6 +30,8 @@ ul.suites > li{
 
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
+  -webkit-background-clip: padding-box;
+  
   overflow: hidden;
 
   border: 1px solid #777;

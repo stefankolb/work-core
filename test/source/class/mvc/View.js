@@ -10,7 +10,7 @@ suite.test("Empty", function()
   this.not(empty.getTemplate());
 });
 
-suite.test("Constructor", function() 
+suite.test("Constructor Args", function() 
 {
   core.Class("TestView",
   {
@@ -62,6 +62,11 @@ suite.test("Constructor", function()
   
   // Two expected calls - one for model change, one for template change
   this.identical(renderCount, 2);
+
+  test.render();
+
+  // Another render
+  this.identical(renderCount, 3);
 
 });
 

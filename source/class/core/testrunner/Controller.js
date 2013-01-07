@@ -114,6 +114,15 @@ core.Module("core.testrunner.Controller",
 
     var suites = this.__suites;
 
+    var filter = core.detect.Param.get("filter");
+    if (filter) 
+    {
+      filter = filter.toLowerCase();
+      this.__suites = suites = suites.filter(function(value) {
+        return value.getCaption().toLowerCase().indexOf(filter) != -1; 
+      });
+    }
+  
     // Sort suites by caption
     suites.sort(function(a, b) {
       return a.getCaption() > b.getCaption() ? 1 : -1;

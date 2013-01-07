@@ -14,14 +14,17 @@
  *
  * #custom
  */
-(function(doc) 
+if (jasy.Env.isSet("runtime", "browser"))
 {
-	// Verify browser environment
-	if (doc) 
-	{
-		var tags = 'abbr article aside audio canvas details figcaption figure footer header hgroup mark meter nav output progress section summary time video';
-		tags.replace(/\w+/g, function(tagName) {
-			doc.createElement(tagName); 
-		});
-	}
-})(this.document);
+  (function(doc) 
+  {
+  	// Verify browser environment
+  	if (doc) 
+  	{
+  		var tags = 'abbr article aside audio canvas details figcaption figure footer header hgroup mark meter nav output progress section summary time video';
+  		tags.replace(/\w+/g, function(tagName) {
+  			doc.createElement(tagName); 
+  		});
+  	}
+  })(document);
+}

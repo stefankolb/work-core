@@ -22,99 +22,101 @@
  *
  * #custom(HTMLElement)
  */
-(function(document, proto, map, indexOf) 
+if (jasy.Env.isSet("runtime", "browser"))
 {
-	if(typeof document.documentElement.sourceIndex == "undefined") 
+	(function(document, proto, map, indexOf) 
 	{
-		proto.__defineGetter__("sourceIndex", function sourceIndex(){
-			return indexOf.call(this.ownerDocument.getElementsByTagName("*"), this);
-		});
-	}
-
-	var div = document.createElement("div");
-	
-	if(typeof div.innerText == "undefined")
-	{
-		proto.__defineGetter__("innerText", function() 
+		if(typeof document.documentElement.sourceIndex == "undefined") 
 		{
-			return map.call(this.childNodes, function(node){
-				return node.nodeType === 3 ? node.nodeValue : node.innerText
-			}).join("");
-		});
+			proto.__defineGetter__("sourceIndex", function sourceIndex(){
+				return indexOf.call(this.ownerDocument.getElementsByTagName("*"), this);
+			});
+		}
 
-		proto.__defineSetter__("innerText", function(value)
+		var div = document.createElement("div");
+		
+		if(typeof div.innerText == "undefined")
 		{
-			this.innerHTML = "";
-			if(value) {
-				this.appendChild(this.ownerDocument.createTextNode(value || ""));
-			}
-			return value;
-		});
-	};
-
-	if(typeof div.outerText == "undefined")
-	{
-		proto.__defineGetter__("outerText", function() {
-			return this.innerText;
-		});
-
-		proto.__defineSetter__("outerText", function(value) 
-		{
-			if(this.parentNode) {
-				this.parentNode.replaceChild(this.ownerDocument.createTextNode(value), this);
-			}
-
-			return value;
-		});
-	};
-
-	if (!div.insertAdjacentElement) 
-	{
-		proto.insertAdjacentElement = function(where, HTMLElement)
-		{
-			switch(where)
+			proto.__defineGetter__("innerText", function() 
 			{
-				case "beforeBegin":
-					this.parentNode.insertBefore(HTMLElement, this);
-					break;
-					
-				case "afterBegin":
-					this.insertBefore(HTMLElement, this.firstChild);
-					break;
-					
-				case "beforeEnd":
-					this.appendChild(HTMLElement);
-					break;
-					
-				case "afterEnd":
-					this.parentNode.insertBefore(HTMLElement, this.nextSibling);
-					break;
-			};
+				return map.call(this.childNodes, function(node){
+					return node.nodeType === 3 ? node.nodeValue : node.innerText
+				}).join("");
+			});
 
-			return HTMLElement;
+			proto.__defineSetter__("innerText", function(value)
+			{
+				this.innerHTML = "";
+				if(value) {
+					this.appendChild(this.ownerDocument.createTextNode(value || ""));
+				}
+				return value;
+			});
 		};
-	}
 
-	if (!div.insertAdjacentHTML) 
-	{
-		proto.insertAdjacentHTML = function(where, innerHTML)
+		if(typeof div.outerText == "undefined")
 		{
-			var fragment = this.ownerDocument.createDocumentFragment();
-			div.innerHTML = innerHTML;
+			proto.__defineGetter__("outerText", function() {
+				return this.innerText;
+			});
 
-			while(div.firstChild) {
-				fragment.appendChild(div.firstChild);
-			}
+			proto.__defineSetter__("outerText", function(value) 
+			{
+				if(this.parentNode) {
+					this.parentNode.replaceChild(this.ownerDocument.createTextNode(value), this);
+				}
 
-			this.insertAdjacentElement(where, fragment);
+				return value;
+			});
 		};
-	}
 
-	if (!div.insertAdjacentText) 
-	{
-		proto.insertAdjacentText = function(where, innerText) {
-			this.insertAdjacentElement(where, this.ownerDocument.createTextNode(innerText));
-		};
-	}
-})(document, HTMLElement.prototype, Array.prototype.map, Array.prototype.indexOf);
+		if (!div.insertAdjacentElement) 
+		{
+			proto.insertAdjacentElement = function(where, HTMLElement)
+			{
+				switch(where)
+				{
+					case "beforeBegin":
+						this.parentNode.insertBefore(HTMLElement, this);
+						break;
+						
+					case "afterBegin":
+						this.insertBefore(HTMLElement, this.firstChild);
+						break;
+						
+					case "beforeEnd":
+						this.appendChild(HTMLElement);
+						break;
+						
+					case "afterEnd":
+						this.parentNode.insertBefore(HTMLElement, this.nextSibling);
+						break;
+				};
 
+				return HTMLElement;
+			};
+		}
+
+		if (!div.insertAdjacentHTML) 
+		{
+			proto.insertAdjacentHTML = function(where, innerHTML)
+			{
+				var fragment = this.ownerDocument.createDocumentFragment();
+				div.innerHTML = innerHTML;
+
+				while(div.firstChild) {
+					fragment.appendChild(div.firstChild);
+				}
+
+				this.insertAdjacentElement(where, fragment);
+			};
+		}
+
+		if (!div.insertAdjacentText) 
+		{
+			proto.insertAdjacentText = function(where, innerText) {
+				this.insertAdjacentElement(where, this.ownerDocument.createTextNode(innerText));
+			};
+		}
+	})(document, HTMLElement.prototype, Array.prototype.map, Array.prototype.indexOf);
+}

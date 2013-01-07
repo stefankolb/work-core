@@ -8,12 +8,13 @@
 
 /**
  * Fixes missing `document.head` in older browser engines.
- *
- * #custom
  */
-(function(doc) 
+if (jasy.Env.isSet("runtime", "browser"))
 {
-	if (doc && !doc.head) {
-		doc.head = doc.getElementsByTagName('head')[0];
-	}
-})(this.document);
+  (function(doc) 
+  {
+    if (!doc.head) {
+      doc.head = doc.getElementsByTagName('head')[0];
+    }
+  })(document);  
+}

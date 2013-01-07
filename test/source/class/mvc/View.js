@@ -1,4 +1,4 @@
-var suite = new core.testrunner.Suite("View");
+var suite = new core.testrunner.Suite("MVC/View");
 
 suite.test("Empty", function() 
 {

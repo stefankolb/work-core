@@ -12,17 +12,6 @@ suite.test("setTimeout with arguments", function()
   }, 10, "hello");
 }, 1, 1000);
 
-suite.test("setImmediate", function() 
-{
-  var test = this;
-
-  /** #require(ext.Immediate) */
-  setImmediate(function() {
-    test.ok(true, "always fine");
-    test.done();
-  });
-}, 1, 1000);
-
 suite.test("requestAnimationFrame", function() 
 {
   var test = this;

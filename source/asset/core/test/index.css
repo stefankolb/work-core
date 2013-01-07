@@ -17,17 +17,22 @@ body{
   font-family: "Helvetica Neue", sans-serif;
   padding: 20px;
   text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+  color: #222;
 }
 
 #reporter{
-  max-width: 600px;
+  max-width: 500px;
 }
 
 ul.suites > li{
   background: #fafafa;
   margin-bottom: 18px;
 
-  border: 1px solid #444;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  overflow: hidden;
+
+  border: 1px solid #777;
   -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
   -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
   -ms-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
@@ -44,6 +49,7 @@ ul.suites > li > h3{
   padding: 6px 0px 6px 10px;
   background: #ccc;
   color: #555;
+  border-bottom: 1px solid #777;
 }
 
 ul.suites > li > h3:before,

@@ -32,8 +32,8 @@ core.Class("core.testrunner.reporter.Html",
           '<h3>{{caption}}' +
             '<span class="running">running</span>' +
             '<span class="result">' +
-              '<span class="passed">0</span> + ' +
-              '<span class="failed">0</span> = ' +
+              '<span class="passed">0</span>+' +
+              '<span class="failed">0</span>→' +
               '<span class="total">{{total}}</span>' +
             '</span>' +
           '</h3>' + 
@@ -42,8 +42,8 @@ core.Class("core.testrunner.reporter.Html",
               '<h4>{{title}}' +
                 '<span class="running">running</span>' +
                 '<span class="result">' +
-                  '<span class="passed">0</span> + ' +
-                  '<span class="failed">0</span> = ' +
+                  '<span class="passed">0</span>+' +
+                  '<span class="failed">0</span>→' +
                   '<span class="total">{{total}}</span>' +
                 '</span>' +
               '</h4>' +

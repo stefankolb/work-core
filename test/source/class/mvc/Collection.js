@@ -84,7 +84,6 @@ suite.test("Pop", function()
   this.identical(manipulated.toJSON().toString(), "1,2");
   this.identical(manipulated.getLength(), 2);
   this.identical(eventCounter, 1);
-
 });
 
 suite.test("Clear", function() 

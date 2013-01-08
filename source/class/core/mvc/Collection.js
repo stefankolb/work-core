@@ -79,6 +79,11 @@
         return this.__models.map(modelToJson);
       },
 
+      // Interface implementation
+      sync : function() {
+        return core.mvc.Sync.sync(this);
+      }
+
       /**
        * {Integer} Returns the length of the collection.
        */
@@ -351,8 +356,6 @@
 
         return model;
       }
-
-
     }
   });
 })();

@@ -26,6 +26,11 @@ core.Interface("core.mvc.IModel",
     /**
      * {String} Exports all model data into a JSON structure.
      */    
-    toJSON : function() {}
+    toJSON : function() {},
+
+    /**
+     * {var} Sychronizes the model with external storage/server.
+     */
+    sync : function() {}
   }
 });

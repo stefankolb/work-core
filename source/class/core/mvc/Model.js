@@ -61,6 +61,11 @@
       // Interface implementation
       toJSON : function() {
         return this.get(Object.keys(core.Class.getProperties(this.constructor)));
+      },
+
+      // Interface implementation
+      sync : function() {
+        return core.mvc.Sync.sync(this);
       }
     }
   });

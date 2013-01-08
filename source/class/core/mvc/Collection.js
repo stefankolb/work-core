@@ -9,7 +9,7 @@
 {
   var globalId = 0;
   var modelToJson = function(model) {
-    return model.toJSON();
+    return model.toJSON ? model.toJSON() : model;
   };
 
   /**
@@ -28,9 +28,12 @@
      */
     construct: function(models) 
     {
+      // Do not directly use given models to have a internal 
+      // "protected" copy of the original data and using
+      // the real append() method instead.
       this.__models = [];
-      this.__length = 0;
 
+      // Inject given models
       if (models != null) {
         this.append(models);
       }
@@ -78,6 +81,14 @@
 
 
       /**
+       * {Integer} Returns the length of the collection.
+       */
+      getLength : function() {
+        return this.__models.length;
+      },
+
+
+      /**
        * Imports an array of @models {core.mvc.Model[]} into the collection.
        */
       append : function(models) 
@@ -89,7 +100,6 @@
         {
           model = models[i];
           db.push(model);
-          this.length++;
 
           addEvent.model = model;
           this.dispatchEvent(addEvent);
@@ -113,18 +123,16 @@
 
         var removeEvent = core.mvc.event.RemoveModel.obtain(null);
 
-        for (var i=length, model; i>=0; i--) 
+        for (var i=length, model; i>0; i--) 
         {
-          model = models[i];
-
-          removeEvent.model = model;
-          this.dispatchEvent(removeEvent);
+          model = db[i];
 
           // Pop out last model
           db.length--;
 
-          // Update internal length, too
-          this.length--;
+          // Inform others
+          removeEvent.model = model;
+          this.dispatchEvent(removeEvent);
         }
 
         core.mvc.event.RemoveModel.release(removeEvent);
@@ -158,18 +166,24 @@
         var removeEvent = core.mvc.event.RemoveModel.obtain(removedModel);
         this.dispatchEvent(removeEvent);
         core.mvc.event.RemoveModel.release(removeEvent);
+
+        return removedModel;
       },
 
 
       /**
-       * Pushes a new @model {core.mvc.Model} to the end of the collection.
+       * Pushes a new (or multiple) @model {core.mvc.Model...} to the end of the collection.
        */
       push : function(model) 
       {
-        this.__models.push(model);
-        var addEvent = core.mvc.event.AddModel.obtain(model);
-        this.dispatchEvent(addEvent);
-        core.mvc.event.RemoveModel.release(addEvent);
+        for (var i=0, l=arguments.length; i<l; i++) 
+        {
+          model = arguments[i];
+          this.__models.push(model);
+          var addEvent = core.mvc.event.AddModel.obtain(model);
+          this.dispatchEvent(addEvent);
+          core.mvc.event.AddModel.release(addEvent);
+        }
       },
 
 

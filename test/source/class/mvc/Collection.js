@@ -51,6 +51,28 @@ suite.test("Push - Multi", function()
   this.identical(eventCounter, 3);
 });
 
+suite.test("Push - Circular", function() 
+{
+  // Somewhat testing nested event structures, too
+
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function(evt) 
+  { 
+    eventCounter++; 
+    var next = evt.getModel() + 1;
+    if (next < 10) {
+      this.push(next);  
+    }
+  });
+  manipulated.addListener("remove", function() { eventCounter++; });
+
+  this.identical(manipulated.push(4), 9);
+  this.identical(manipulated.toJSON().toString(), "1,2,3,4,5,6,7,8,9");
+  this.identical(manipulated.getLength(), 9);
+  this.identical(eventCounter, 6);
+});
+
 suite.test("Pop", function() 
 {
   var eventCounter = 0;

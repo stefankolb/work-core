@@ -5,6 +5,8 @@ suite.test("Empty", function()
   var empty = new core.mvc.Model();
 
   this.instance(empty, core.mvc.Model);
+  core.Interface.assert(empty, core.mvc.IModel);
+
   this.identical(typeof empty.id, "string");
   this.identical(typeof empty.getId(), "string");
   this.identical(typeof empty.toJSON(), "object");

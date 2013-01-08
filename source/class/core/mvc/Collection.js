@@ -84,6 +84,21 @@
         return core.mvc.Sync.sync(this);
       },
 
+      /** 
+       * Force sorting of models 
+       */
+      sort : function() 
+      {
+        // TODO
+        // sort with comparator and fire "sort" event
+      },
+
+      update : function(models)
+      {
+        // TODO
+        // add, remove and merge automatically
+      },
+
       /**
        * {Integer} Returns the length of the collection.
        */
@@ -331,8 +346,11 @@
        * custom persistence strategies and returns a XHR. The server handler 
        * for fetch requests should return a JSON array of models.
        */
-      fetch : function() {
+      fetch : function(reset) 
+      {
         // TODO
+        // support either update or reset
+        
       },
 
 

@@ -79,14 +79,12 @@
         return this.__models.map(modelToJson);
       },
 
-
       /**
        * {Integer} Returns the length of the collection.
        */
       getLength : function() {
         return this.__models.length;
       },
-
 
       /**
        * Imports an array of @models {core.mvc.Model[]} into the collection.
@@ -106,11 +104,14 @@
         }
 
         core.mvc.event.AddModel.release(addEvent);
+
+        return db.length;
       },
 
 
       /**
-       * Clears the collection so that all models are removed from it.
+       * {Integer} Clears the collection so that all models are removed from it. Returns
+       * the new length of the collection afterwards (always zero here).
        */
       clear : function() 
       {
@@ -136,16 +137,19 @@
         }
 
         core.mvc.event.RemoveModel.release(removeEvent);
+        return 0;
       },
 
 
       /**
-       * Combined call to replace all existing data with new list of @models {core.mvc.Model}.
+       * {Integer} Combined call to replace all existing data with new 
+       * list of @models {core.mvc.Model}. Returns the new length
+       * of the collection.
        */
       reset : function(models) 
       {
         this.clear();
-        this.append(models);
+        return this.append(models);
       },
 
 
@@ -187,6 +191,8 @@
         }
 
         core.mvc.event.AddModel.release(addEvent);
+
+        return this.__models.length;
       },
 
 
@@ -207,18 +213,26 @@
 
 
       /**
-       * Pushes one or multiple @model {core.mvc.Model...} to the beginning of the collection.
+       * {Integer} Pushes one or multiple @model {core.mvc.Model...} to the beginning of the collection.
+       * Returns the new length of the collection.
        */
       unshift: function(model) 
       {
-        for (var i=arguments.length-1; i>=0; i--) 
+        var addEvent = core.mvc.event.AddModel.obtain(null);
+
+        for (var i=0, l=arguments.length; i<l; i++)
         {
           model = arguments[i];
-          this.__models.unshift(model);
-          var addEvent = core.mvc.event.AddModel.obtain(model);
+
+          // Inserting in right order. Using unshift() would reverse the list.
+          this.__models.splice(i, 0, model);
+          addEvent.model = model;
           this.dispatchEvent(addEvent);
-          core.mvc.event.AddModel.release(addEvent);
         }
+
+        core.mvc.event.AddModel.release(addEvent);
+
+        return this.__models.length;
       },
 
 

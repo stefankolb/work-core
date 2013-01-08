@@ -25,101 +25,142 @@ suite.test("Constructor", function()
   this.identical(filled.getLength(), 3);
 });
 
-suite.test("Manipulate", function() 
+suite.test("Push", function() 
 {
-  var manipulated = new core.mvc.Collection([1,2,3]);
   var eventCounter = 0;
-  var oldLength;
-
+  var manipulated = new core.mvc.Collection([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
-  this.instance(manipulated, core.mvc.Collection);
-  core.Interface.assert(manipulated, core.mvc.IModel);
-
-  this.identical(manipulated.toJSON().toString(), "1,2,3");
-  this.identical(manipulated.getLength(), 3);
-  this.identical(eventCounter, 0);
-
-  // PUSH
-
-  eventCounter = 0;
-  manipulated.push(4);
+  this.identical(manipulated.push(4), 4);
   this.identical(manipulated.toJSON().toString(), "1,2,3,4");
   this.identical(manipulated.getLength(), 4);
   this.identical(eventCounter, 1);
+});
 
-  eventCounter = 0;
-  manipulated.push(5, 6, 7);
-  this.identical(manipulated.toJSON().toString(), "1,2,3,4,5,6,7");
-  this.identical(manipulated.getLength(), 7);
-  this.identical(eventCounter, 3);
+suite.test("Push - Multi", function() 
+{
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function() { eventCounter++; });
+  manipulated.addListener("remove", function() { eventCounter++; });
 
-  // POP
-
-  eventCounter = 0;
-  this.identical(manipulated.pop(), 7);
+  this.identical(manipulated.push(4, 5, 6), 6);
   this.identical(manipulated.toJSON().toString(), "1,2,3,4,5,6");
   this.identical(manipulated.getLength(), 6);
+  this.identical(eventCounter, 3);
+});
+
+suite.test("Pop", function() 
+{
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function() { eventCounter++; });
+  manipulated.addListener("remove", function() { eventCounter++; });
+
+  this.identical(manipulated.pop(), 3);
+  this.identical(manipulated.toJSON().toString(), "1,2");
+  this.identical(manipulated.getLength(), 2);
   this.identical(eventCounter, 1);
 
-  // CLEAR
+});
 
-  oldLength = manipulated.getLength();
-  eventCounter = 0;
-  manipulated.clear();
+suite.test("Clear", function() 
+{
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function() { eventCounter++; });
+  manipulated.addListener("remove", function() { eventCounter++; });
+
+  var oldLength = manipulated.getLength();
+  this.identical(manipulated.clear(), 0);
   this.identical(manipulated.toJSON().toString(), "");
   this.identical(manipulated.getLength(), 0);
   this.identical(eventCounter, oldLength);
 
-  // POP AFTER CLEAR
+  // Pop after clear
 
-  eventCounter = 0;
+  var eventCounter = 0;
   this.equal(manipulated.pop(), null);
   this.identical(manipulated.toJSON().toString(), "");
   this.identical(manipulated.getLength(), 0);
   this.identical(eventCounter, 0);  
+});
 
-  // APPEND
+suite.test("Append", function() 
+{
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function() { eventCounter++; });
+  manipulated.addListener("remove", function() { eventCounter++; });
 
-  eventCounter = 0;
-  manipulated.append([1,2,3]);
-  this.identical(manipulated.toJSON().toString(), "1,2,3");
-  this.identical(manipulated.getLength(), 3);
+  this.identical(manipulated.append([4,5,6]), 6);
+  this.identical(manipulated.toJSON().toString(), "1,2,3,4,5,6");
+  this.identical(manipulated.getLength(), 6);
   this.identical(eventCounter, 3);
+});
 
-  // RESET
+suite.test("Reset", function() 
+{
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function() { eventCounter++; });
+  manipulated.addListener("remove", function() { eventCounter++; });
 
-  oldLength = manipulated.getLength();
-  eventCounter = 0;
-  manipulated.reset([4,5,6,7,8]);
+  var oldLength = manipulated.getLength();
+  this.identical(manipulated.reset([4,5,6,7,8]), 5);
   this.identical(manipulated.toJSON().toString(), "4,5,6,7,8");
   this.identical(manipulated.getLength(), 5);
   this.identical(eventCounter, oldLength + 5);
-
-  // AT
-
-  eventCounter = 0;
-  this.identical(manipulated.at(3), 7);
-  this.identical(eventCounter, 0);
-
-  // SHIFT
-
-  eventCounter = 0;
-  this.identical(manipulated.shift(), 4);
-  this.identical(manipulated.toJSON().toString(), "5,6,7,8");
-  this.identical(manipulated.getLength(), 4);
-  this.identical(eventCounter, 1);
-
-  // UNSHIFT
-
-  eventCounter = 0;
-  manipulated.unshift(1);
-  this.identical(manipulated.toJSON().toString(), "1,5,6,7,8");
-  this.identical(manipulated.getLength(), 5);
-  this.identical(eventCounter, 1);
-
-
 });
 
+suite.test("At", function() 
+{
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function() { eventCounter++; });
+  manipulated.addListener("remove", function() { eventCounter++; });
+
+  this.identical(manipulated.at(1), 2);
+  this.identical(eventCounter, 0);
+});
+
+suite.test("Shift", function() 
+{
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function() { eventCounter++; });
+  manipulated.addListener("remove", function() { eventCounter++; });
+
+  this.identical(manipulated.shift(), 1);
+  this.identical(manipulated.toJSON().toString(), "2,3");
+  this.identical(manipulated.getLength(), 2);
+  this.identical(eventCounter, 1);
+});
+
+suite.test("Unshift", function() 
+{
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function() { eventCounter++; });
+  manipulated.addListener("remove", function() { eventCounter++; });
+
+  this.identical(manipulated.unshift(0), 4);
+  this.identical(manipulated.toJSON().toString(), "0,1,2,3");
+  this.identical(manipulated.getLength(), 4);
+  this.identical(eventCounter, 1);
+});
+
+suite.test("Unshift - Multi", function() 
+{
+  var eventCounter = 0;
+  var manipulated = new core.mvc.Collection([1,2,3]);
+  manipulated.addListener("add", function() { eventCounter++; });
+  manipulated.addListener("remove", function() { eventCounter++; });
+
+  this.identical(manipulated.unshift(4,5,6), 6);
+  this.identical(manipulated.toJSON().toString(), "4,5,6,1,2,3");
+  this.identical(manipulated.getLength(), 6);
+  this.identical(eventCounter, 3);
+});
 

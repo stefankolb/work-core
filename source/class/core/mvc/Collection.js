@@ -172,18 +172,21 @@
 
 
       /**
-       * Pushes a new (or multiple) @model {core.mvc.Model...} to the end of the collection.
+       * Pushes one or multiple @model {core.mvc.Model...} to the end of the collection.
        */
       push : function(model) 
       {
+        var addEvent = core.mvc.event.AddModel.obtain(null);
+
         for (var i=0, l=arguments.length; i<l; i++) 
         {
           model = arguments[i];
           this.__models.push(model);
-          var addEvent = core.mvc.event.AddModel.obtain(model);
+          addEvent.model = model;
           this.dispatchEvent(addEvent);
-          core.mvc.event.AddModel.release(addEvent);
         }
+
+        core.mvc.event.AddModel.release(addEvent);
       },
 
 
@@ -204,14 +207,18 @@
 
 
       /**
-       * Pushes a new @model {core.mvc.Model} to the beginning of the collection.
+       * Pushes one or multiple @model {core.mvc.Model...} to the beginning of the collection.
        */
       unshift: function(model) 
       {
-        this.__models.unshift(model);
-        var addEvent = core.mvc.event.AddModel.obtain(model);
-        this.dispatchEvent(addEvent);
-        core.mvc.event.RemoveModel.release(addEvent);
+        for (var i=arguments.length-1; i>=0; i--) 
+        {
+          model = arguments[i];
+          this.__models.unshift(model);
+          var addEvent = core.mvc.event.AddModel.obtain(model);
+          this.dispatchEvent(addEvent);
+          core.mvc.event.AddModel.release(addEvent);
+        }
       },
 
 

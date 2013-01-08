@@ -103,7 +103,22 @@ suite.test("Manipulate", function()
   this.identical(manipulated.at(3), 7);
   this.identical(eventCounter, 0);
 
-  // 
+  // SHIFT
+
+  eventCounter = 0;
+  this.identical(manipulated.shift(), 4);
+  this.identical(manipulated.toJSON().toString(), "5,6,7,8");
+  this.identical(manipulated.getLength(), 4);
+  this.identical(eventCounter, 1);
+
+  // UNSHIFT
+
+  eventCounter = 0;
+  manipulated.unshift(1);
+  this.identical(manipulated.toJSON().toString(), "1,5,6,7,8");
+  this.identical(manipulated.getLength(), 5);
+  this.identical(eventCounter, 1);
+
 
 });
 

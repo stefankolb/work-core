@@ -29,6 +29,7 @@ suite.test("Manipulate", function()
 {
   var manipulated = new core.mvc.Collection([1,2,3]);
   var eventCounter = 0;
+  var oldLength;
 
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
@@ -64,12 +65,20 @@ suite.test("Manipulate", function()
 
   // CLEAR
 
-  var oldLength = manipulated.getLength();
+  oldLength = manipulated.getLength();
   eventCounter = 0;
   manipulated.clear();
   this.identical(manipulated.toJSON().toString(), "");
   this.identical(manipulated.getLength(), 0);
   this.identical(eventCounter, oldLength);
+
+  // POP AFTER CLEAR
+
+  eventCounter = 0;
+  this.equal(manipulated.pop(), null);
+  this.identical(manipulated.toJSON().toString(), "");
+  this.identical(manipulated.getLength(), 0);
+  this.identical(eventCounter, 0);  
 
   // APPEND
 
@@ -81,12 +90,20 @@ suite.test("Manipulate", function()
 
   // RESET
 
-  var oldLength = manipulated.getLength();
+  oldLength = manipulated.getLength();
   eventCounter = 0;
   manipulated.reset([4,5,6,7,8]);
   this.identical(manipulated.toJSON().toString(), "4,5,6,7,8");
   this.identical(manipulated.getLength(), 5);
   this.identical(eventCounter, oldLength + 5);
+
+  // AT
+
+  eventCounter = 0;
+  this.identical(manipulated.at(3), 7);
+  this.identical(eventCounter, 0);
+
+  // 
 
 });
 

@@ -2,9 +2,9 @@ var suite = new core.testrunner.Suite("MVC/Collection");
 
 suite.test("Empty", function() 
 {
-  var empty = new core.mvc.Collection();
+  var empty = new core.mvc.collection.Array();
 
-  this.instance(empty, core.mvc.Collection);
+  this.instance(empty, core.mvc.collection.Array);
   core.Interface.assert(empty, core.mvc.IModel);
 
   this.identical(typeof empty.id, "string");
@@ -16,9 +16,9 @@ suite.test("Empty", function()
 
 suite.test("Constructor", function() 
 {
-  var filled = new core.mvc.Collection([1,2,3]);
+  var filled = new core.mvc.collection.Array([1,2,3]);
 
-  this.instance(filled, core.mvc.Collection);
+  this.instance(filled, core.mvc.collection.Array);
   core.Interface.assert(filled, core.mvc.IModel);
 
   this.identical(filled.toJSON().toString(), "1,2,3");
@@ -28,7 +28,7 @@ suite.test("Constructor", function()
 suite.test("Push", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
@@ -41,7 +41,7 @@ suite.test("Push", function()
 suite.test("Push - Multi", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
@@ -56,7 +56,7 @@ suite.test("Push - Circular", function()
   // Somewhat testing nested event structures, too
 
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function(evt) 
   { 
     eventCounter++; 
@@ -76,7 +76,7 @@ suite.test("Push - Circular", function()
 suite.test("Pop", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
@@ -89,7 +89,7 @@ suite.test("Pop", function()
 suite.test("Clear", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
@@ -111,7 +111,7 @@ suite.test("Clear", function()
 suite.test("Append", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
@@ -124,7 +124,7 @@ suite.test("Append", function()
 suite.test("Reset", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
@@ -138,7 +138,7 @@ suite.test("Reset", function()
 suite.test("At", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
@@ -149,7 +149,7 @@ suite.test("At", function()
 suite.test("Shift", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
@@ -162,7 +162,7 @@ suite.test("Shift", function()
 suite.test("Unshift", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 
@@ -175,7 +175,7 @@ suite.test("Unshift", function()
 suite.test("Unshift - Multi", function() 
 {
   var eventCounter = 0;
-  var manipulated = new core.mvc.Collection([1,2,3]);
+  var manipulated = new core.mvc.collection.Array([1,2,3]);
   manipulated.addListener("add", function() { eventCounter++; });
   manipulated.addListener("remove", function() { eventCounter++; });
 

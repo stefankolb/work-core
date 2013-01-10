@@ -7,8 +7,8 @@ suite.test("Empty", function()
   this.instance(empty, core.mvc.collection.Array);
   core.Interface.assert(empty, core.mvc.IModel);
 
-  this.identical(typeof empty.id, "string");
-  this.identical(typeof empty.getId(), "string");
+  this.identical(typeof empty.cid, "string");
+  this.identical(typeof empty.getClientId(), "string");
   this.identical(typeof empty.toJSON(), "object");
   this.identical(empty.getLength(), 0);
   this.identical(empty.toJSON().toString(), "");  

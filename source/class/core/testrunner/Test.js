@@ -106,7 +106,7 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    equal : function(a, b, message) 
+    isEqual : function(a, b, message) 
     {
       try{
         core.Assert.equal(a, b);  
@@ -123,7 +123,7 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    identical : function(a, b, message) 
+    isIdentical : function(a, b, message) 
     {
       try{
         core.Assert.identical(a, b);  
@@ -140,7 +140,7 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    ok : function(a, message) 
+    isTrue : function(a, message) 
     {
       try{
         core.Assert.isTrue(a);  
@@ -157,7 +157,7 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    not : function(a, message) 
+    isNull : function(a, message) 
     {
       try{
         core.Assert.isNull(a);  
@@ -174,7 +174,7 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    instance : function(a, b, message) 
+    isInstance : function(a, b, message) 
     {
       try{
         core.Assert.isInstance(a, b);  
@@ -187,11 +187,11 @@ core.Class("core.testrunner.Test",
     
 
     /**
-     * Test whether @func {Function} raises an exception (which is should) 
+     * Test whether @func {Function} raises an exception (which it should) 
      * and register the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    raises : function(func, message) 
+    raisesException : function(func, message) 
     {
       try {
         func();

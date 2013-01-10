@@ -7,22 +7,22 @@
 
   suite.test("Creating empty module", function() {
     core.Module("abc.Module1", {});
-    this.equal(core.Module.isModule(abc.Module1), true);
-    this.equal(abc.Module1.moduleName, "abc.Module1");
-    this.equal(abc.Module1.toString(), "[module abc.Module1]");
+    this.isEqual(core.Module.isModule(abc.Module1), true);
+    this.isEqual(abc.Module1.moduleName, "abc.Module1");
+    this.isEqual(abc.Module1.toString(), "[module abc.Module1]");
   });
 
   suite.test("Creating module with short namespace", function() {
     core.Module("x.Module1", {});
-    this.equal(core.Module.isModule(x.Module1), true);
-    this.equal(x.Module1.moduleName, "x.Module1");
-    this.equal(x.Module1.toString(), "[module x.Module1]");
+    this.isEqual(core.Module.isModule(x.Module1), true);
+    this.isEqual(x.Module1.moduleName, "x.Module1");
+    this.isEqual(x.Module1.toString(), "[module x.Module1]");
   });
 
   suite.test("Module false validation", function() {
-    this.ok(!core.Module.isModule({}));
-    this.ok(!core.Module.isModule(3));
-    this.ok(!core.Module.isModule(null));
+    this.isTrue(!core.Module.isModule({}));
+    this.isTrue(!core.Module.isModule(3));
+    this.isTrue(!core.Module.isModule(null));
   });
 
   suite.test("Creating method module", function() {
@@ -31,32 +31,32 @@
       method2 : function() {},
       method3 : function() {}
     });
-    this.equal(core.Module.isModule(abc.Module2), true);
-    this.ok(abc.Module2.method1 instanceof Function);
-    this.ok(abc.Module2.method2 instanceof Function);
-    this.ok(abc.Module2.method3 instanceof Function);
-    this.equal(abc.Module2.method1.displayName, "abc.Module2.method1");
-    this.equal(abc.Module2.method2.displayName, "abc.Module2.method2");
-    this.equal(abc.Module2.method3.displayName, "abc.Module2.method3");
+    this.isEqual(core.Module.isModule(abc.Module2), true);
+    this.isTrue(abc.Module2.method1 instanceof Function);
+    this.isTrue(abc.Module2.method2 instanceof Function);
+    this.isTrue(abc.Module2.method3 instanceof Function);
+    this.isEqual(abc.Module2.method1.displayName, "abc.Module2.method1");
+    this.isEqual(abc.Module2.method2.displayName, "abc.Module2.method2");
+    this.isEqual(abc.Module2.method3.displayName, "abc.Module2.method3");
   });
 
   suite.test("Checking module name", function() {
-    this.raises(function() {
+    this.raisesException(function() {
       core.Module("", {});
     });
-    this.raises(function() {
+    this.raisesException(function() {
       Module(true, {});
     });
-    this.raises(function() {
+    this.raisesException(function() {
       core.Module(" SpaceVoodoo ", {});
     });
-    this.raises(function() {
+    this.raisesException(function() {
       core.Module("has space", {});
     });
-    this.raises(function() {
+    this.raisesException(function() {
       core.Module("firstLow", {});
     });
-    this.raises(function() {
+    this.raisesException(function() {
       core.Module("two..Dots", {});
     });
   });

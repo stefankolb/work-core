@@ -4,10 +4,10 @@ suite.test("Empty", function()
 {
   var empty = new core.mvc.View();
 
-  this.instance(empty, core.mvc.View);
+  this.isInstance(empty, core.mvc.View);
 
-  this.not(empty.getModel());
-  this.not(empty.getTemplate());
+  this.isNull(empty.getModel());
+  this.isNull(empty.getTemplate());
 });
 
 suite.test("Constructor Args", function() 
@@ -56,17 +56,17 @@ suite.test("Constructor Args", function()
     renderCount++;
   });
 
-  this.instance(test, TestView);
-  this.identical(test.getModel(), model);
-  this.identical(test.getTemplate(), template);
+  this.isInstance(test, TestView);
+  this.isIdentical(test.getModel(), model);
+  this.isIdentical(test.getTemplate(), template);
   
   // Two expected calls - one for model change, one for template change
-  this.identical(renderCount, 2);
+  this.isIdentical(renderCount, 2);
 
   test.render();
 
   // Another render
-  this.identical(renderCount, 3);
+  this.isIdentical(renderCount, 3);
 
 });
 

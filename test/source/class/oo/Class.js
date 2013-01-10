@@ -11,13 +11,13 @@ var suite = new core.testrunner.Suite("Classes/Basics", null, function() {
 });
 
 suite.test("Invalid config", function() {
-  this.raises(function() {
+  this.raisesException(function() {
     core.Class("abc.Class1");
   });
-  this.raises(function() {
+  this.raisesException(function() {
     core.Class("abc.Class2", 42);
   })
-  this.raises(function() {
+  this.raisesException(function() {
     core.Class("abc.Class3", {
       unallowedKey : "foo"
     });
@@ -26,15 +26,15 @@ suite.test("Invalid config", function() {
 
 suite.test("Creating empty class", function() {
   core.Class("abc.Class1", {});
-  this.equal(core.Class.isClass(abc.Class1), true);
-  this.equal(abc.Class1.className, "abc.Class1");
-  this.equal(abc.Class1.toString(), "[class abc.Class1]");
+  this.isEqual(core.Class.isClass(abc.Class1), true);
+  this.isEqual(abc.Class1.className, "abc.Class1");
+  this.isEqual(abc.Class1.toString(), "[class abc.Class1]");
 });
 
 suite.test("Class false validation", function() {
-  this.ok(!core.Class.isClass({}));
-  this.ok(!core.Class.isClass(3));
-  this.ok(!core.Class.isClass(null));
+  this.isTrue(!core.Class.isClass({}));
+  this.isTrue(!core.Class.isClass(3));
+  this.isTrue(!core.Class.isClass(null));
 });
 
   
@@ -69,7 +69,7 @@ suite.test("Conflicting member functions", function() {
     }
   });
 
-  this.raises(function() {
+  this.raisesException(function() {
     core.Class("members.Join", {
       include : [members.Include1, members.Include2]
     });
@@ -93,7 +93,7 @@ suite.test("Conflicting member data", function() {
     }
   });
 
-  this.raises(function() {
+  this.raisesException(function() {
     core.Class("members.Join", {
       include : [members.Include1, members.Include2]
     });
@@ -133,7 +133,7 @@ suite.test("Conflicting member functions, correctly merged", function() {
     }
   });
   
-  this.ok(true);
+  this.isTrue(true);
 });
 
 
@@ -155,7 +155,7 @@ suite.test("Conflicting member functions, not merged correctly", function() {
     }
   });
 
-  this.raises(function() {
+  this.raisesException(function() {
     core.Class("members.Join", {
       include : [members.Include1, members.Include2],
     
@@ -185,7 +185,7 @@ suite.test("Conflicting member functions with failed private merge", function() 
     }
   });
 
-  this.raises(function() {
+  this.raisesException(function() {
     core.Class("members.Join", {
       include : [members.Include1, members.Include2],
     
@@ -240,11 +240,11 @@ suite.test("Events", function() {
   });
   
   var eventMap = core.Class.getEvents(events.Mouse);
-  this.ok((function() {
+  this.isTrue((function() {
     core.Assert.isType(eventMap, "Map");
     return true;
   })(), "Events should be a returned as a map");
-  this.equal(eventMap.click, MouseEvent, "No click event found");
+  this.isEqual(eventMap.click, MouseEvent, "No click event found");
   
   core.Class("events.Keyboard", {
     events : {
@@ -258,7 +258,7 @@ suite.test("Events", function() {
   });
   
   var full = Object.keys(core.Class.getEvents(events.Widget)).join(",");
-  this.equal(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
+  this.isEqual(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
 
   core.Class("events.Widget2", {
     include : [events.Mouse, events.Keyboard],
@@ -268,7 +268,7 @@ suite.test("Events", function() {
   });
 
   var full = Object.keys(core.Class.getEvents(events.Widget2)).join(",");
-  this.equal(full, "custom,click,mousedown,mouseup,keydown,keyup", "Merge of events with own events failed");
+  this.isEqual(full, "custom,click,mousedown,mouseup,keydown,keyup", "Merge of events with own events failed");
 });
 
 
@@ -306,9 +306,9 @@ suite.test("Event Conflicts", function() {
   });    
   
   var full = Object.keys(core.Class.getEvents(events.Widget)).join(",");
-  this.equal(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
+  this.isEqual(full, "click,mousedown,mouseup,keydown,keyup", "Merge of events failed");
   
-  this.raises(function() {
+  this.raisesException(function() {
     core.Class("events.Widget2", {
       // This should fail, two click events in include list
       include : [events.Mouse, events.Keyboard, events.Touch]
@@ -332,7 +332,7 @@ suite.test("Event Interfaces", function()
     }
   });
   
-  this.raises(function() 
+  this.raisesException(function() 
   {
     var MouseEvent = true;
     core.Class("events.Mouse", 
@@ -399,35 +399,35 @@ suite.test("Creating Properties", function()
     }
   });
   
-  this.ok((function() {
+  this.isTrue((function() {
     core.Class.assertIsClass(properties.Simple);
     return true;
   })());
-  this.equal(Object.keys(core.Class.getProperties(properties.Simple)).join(","), "color,backgroundColor");
+  this.isEqual(Object.keys(core.Class.getProperties(properties.Simple)).join(","), "color,backgroundColor");
 
-  this.equal(core.Class.getProperties(properties.Simple).color.type, "String");
-  this.equal(typeof core.Class.getProperties(properties.Simple).color.apply, "function");
+  this.isEqual(core.Class.getProperties(properties.Simple).color.type, "String");
+  this.isEqual(typeof core.Class.getProperties(properties.Simple).color.apply, "function");
 
-  this.ok(properties.Simple.prototype.getColor instanceof Function);
-  this.ok(properties.Simple.prototype.getBackgroundColor instanceof Function);
-  this.ok(properties.Simple.prototype.setColor instanceof Function);
-  this.ok(properties.Simple.prototype.setBackgroundColor instanceof Function);
+  this.isTrue(properties.Simple.prototype.getColor instanceof Function);
+  this.isTrue(properties.Simple.prototype.getBackgroundColor instanceof Function);
+  this.isTrue(properties.Simple.prototype.setColor instanceof Function);
+  this.isTrue(properties.Simple.prototype.setBackgroundColor instanceof Function);
 
-  this.equal(properties.Simple.prototype.getColor.displayName, "properties.Simple.getColor");
-  this.equal(properties.Simple.prototype.getBackgroundColor.displayName, "properties.Simple.getBackgroundColor");
-  this.equal(properties.Simple.prototype.setColor.displayName, "properties.Simple.setColor");
-  this.equal(properties.Simple.prototype.setBackgroundColor.displayName, "properties.Simple.setBackgroundColor");
+  this.isEqual(properties.Simple.prototype.getColor.displayName, "properties.Simple.getColor");
+  this.isEqual(properties.Simple.prototype.getBackgroundColor.displayName, "properties.Simple.getBackgroundColor");
+  this.isEqual(properties.Simple.prototype.setColor.displayName, "properties.Simple.setColor");
+  this.isEqual(properties.Simple.prototype.setBackgroundColor.displayName, "properties.Simple.setBackgroundColor");
   
-  this.equal(properties.Simple.prototype.getColor.length, 0);
-  this.equal(properties.Simple.prototype.getBackgroundColor.length, 0);
-  this.equal(properties.Simple.prototype.setColor.length, 1);
-  this.equal(properties.Simple.prototype.setBackgroundColor.length, 1);
+  this.isEqual(properties.Simple.prototype.getColor.length, 0);
+  this.isEqual(properties.Simple.prototype.getBackgroundColor.length, 0);
+  this.isEqual(properties.Simple.prototype.setColor.length, 1);
+  this.isEqual(properties.Simple.prototype.setBackgroundColor.length, 1);
   
   var obj1 = new properties.Simple;
-  this.equal(obj1.setColor("red"), "red");
-  this.equal(obj1.setBackgroundColor("black"), "black");
-  this.equal(obj1.getColor(), "red");
-  this.equal(obj1.getBackgroundColor(), "black");
+  this.isEqual(obj1.setColor("red"), "red");
+  this.isEqual(obj1.setBackgroundColor("black"), "black");
+  this.isEqual(obj1.getColor(), "red");
+  this.isEqual(obj1.getBackgroundColor(), "black");
 });
 
 
@@ -458,7 +458,7 @@ suite.test("Property Interfaces", function()
     }
   });
   
-  this.raises(function() {
+  this.raisesException(function() {
     core.Class("properties.ColorImplementer",
     {
       implement : [properties.IColor],
@@ -505,14 +505,14 @@ suite.test("Property Interfaces", function()
     }
   });
   
-  this.raises(function() 
+  this.raisesException(function() 
   {
     core.Class("properties.FontSizeMissing", {
       implement : [properties.IFontSize]
     });
   })
   
-  this.raises(function() 
+  this.raisesException(function() 
   {
     core.Class("properties.FontSizeWrongImplementer", 
     {
@@ -539,7 +539,7 @@ suite.test("Property Interfaces", function()
 
 suite.test("Creating specific properties in classes without matching interfaces", function()
 {
-  this.raises(function() 
+  this.raisesException(function() 
   {
     core.Class("properties.NoFireEvent", 
     {
@@ -552,7 +552,7 @@ suite.test("Creating specific properties in classes without matching interfaces"
     });
   });
   
-  this.raises(function() 
+  this.raisesException(function() 
   {
     core.Class("properties.NoGetThemed", 
     {
@@ -565,7 +565,7 @@ suite.test("Creating specific properties in classes without matching interfaces"
     });
   });
   
-  this.raises(function() 
+  this.raisesException(function() 
   {
     core.Class("properties.NoGetInherited", 
     {
@@ -631,8 +631,8 @@ suite.test("Inheriting Properties", function()
     }
   });
   
-  this.ok(core.Class.isClass(properties.Text));
-  this.equal(Object.keys(core.Class.getProperties(properties.Text)).join(","), "wrap,color,fontFamily,lineHeight");
+  this.isTrue(core.Class.isClass(properties.Text));
+  this.isEqual(Object.keys(core.Class.getProperties(properties.Text)).join(","), "wrap,color,fontFamily,lineHeight");
 
 
 
@@ -650,8 +650,8 @@ suite.test("Inheriting Properties", function()
     }
   });
 
-  this.ok(core.Class.isClass(properties.Dimension));
-  this.equal(Object.keys(core.Class.getProperties(properties.Dimension)).join(","), "width,height");
+  this.isTrue(core.Class.isClass(properties.Dimension));
+  this.isEqual(Object.keys(core.Class.getProperties(properties.Dimension)).join(","), "width,height");
   
   
 
@@ -680,13 +680,13 @@ suite.test("Inheriting Properties", function()
     }
   });
   
-  this.ok(core.Class.isClass(properties.Label));
-  this.equal(Object.keys(core.Class.getProperties(properties.Label)).join(","), "wrap,color,fontFamily,lineHeight,width,height");
+  this.isTrue(core.Class.isClass(properties.Label));
+  this.isEqual(Object.keys(core.Class.getProperties(properties.Label)).join(","), "wrap,color,fontFamily,lineHeight,width,height");
   
   
   
   var ll = new properties.Label;
-  this.equal(ll.getLineHeight(), 2);
+  this.isEqual(ll.getLineHeight(), 2);
 });
 
 
@@ -717,7 +717,7 @@ suite.test("Overwrite properties", function()
   var child1 = new properties.Child1();
   var child2 = new properties.Child2();
   
-  this.equal("Child1", child1.getProp());
-  this.equal("Parent", child2.getProp());
+  this.isEqual("Child1", child1.getProp());
+  this.isEqual("Parent", child2.getProp());
 });
 

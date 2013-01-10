@@ -6,12 +6,12 @@ suite.test("Id", function()
 
   var startId = core.util.Id.get(new Function());
   
-  this.identical(core.util.Id.get(myFunc), startId+1);
-  this.identical(core.util.Id.get(myFunc), startId+1);
+  this.isIdentical(core.util.Id.get(myFunc), startId+1);
+  this.isIdentical(core.util.Id.get(myFunc), startId+1);
 
   if (typeof document != "undefined")
   {
-    this.identical(core.util.Id.get(document.body), startId+2);
-    this.identical(core.util.Id.get(document.body), startId+2); 
+    this.isIdentical(core.util.Id.get(document.body), startId+2);
+    this.isIdentical(core.util.Id.get(document.body), startId+2); 
   }
 });

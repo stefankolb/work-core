@@ -4,13 +4,13 @@ suite.test("Empty", function()
 {
   var empty = new core.mvc.Model();
 
-  this.instance(empty, core.mvc.Model);
+  this.isInstance(empty, core.mvc.Model);
   core.Interface.assert(empty, core.mvc.IModel);
 
-  this.identical(typeof empty.cid, "string");
-  this.identical(typeof empty.getClientId(), "string");
-  this.identical(typeof empty.toJSON(), "object");
-  this.identical(empty.toJSON().toString(), "[object Object]");
+  this.isIdentical(typeof empty.cid, "string");
+  this.isIdentical(typeof empty.getClientId(), "string");
+  this.isIdentical(typeof empty.toJSON(), "object");
+  this.isIdentical(empty.toJSON().toString(), "[object Object]");
 });
 
 suite.test("Custom", function() 
@@ -36,15 +36,15 @@ suite.test("Custom", function()
 
   var obj1 = new my.test.Model({textColor: "red"});
 
-  this.identical(obj1.getTextColor(), "red");
-  this.identical(obj1.get("textColor"), "red");
+  this.isIdentical(obj1.getTextColor(), "red");
+  this.isIdentical(obj1.get("textColor"), "red");
 
   obj1.addListener("changeTextColor", function(evt) 
   {
-    this.identical(evt.getValue(), "blue");
-    this.identical(evt.getOldValue(), "red");
+    this.isIdentical(evt.getValue(), "blue");
+    this.isIdentical(evt.getOldValue(), "red");
   }, this);
 
-  this.identical(obj1.setTextColor("blue"), "blue");
+  this.isIdentical(obj1.setTextColor("blue"), "blue");
 
 }, 5);

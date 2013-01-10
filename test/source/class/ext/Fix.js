@@ -7,7 +7,7 @@ suite.test("setTimeout with arguments", function()
   /** #require(ext.TimeoutArgs) */
   setTimeout(function(arg)
   {
-    test.equal(arg, "hello");
+    test.isEqual(arg, "hello");
     test.done();
   }, 10, "hello");
 }, 1, 1000);
@@ -20,7 +20,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 
     /** #require(ext.RequestAnimationFrame) */
     requestAnimationFrame(function() {
-      test.ok(true, "always fine");
+      test.isTrue(true, "always fine");
       test.done();
     });
   }, 1, 1000);
@@ -30,9 +30,9 @@ suite.test("Object.keys", function()
 {
   // Basic first
   var keys = Object.keys({hello:null, foo:1}).sort().join(",");
-  this.equal(keys, "foo,hello");
+  this.isEqual(keys, "foo,hello");
 
   // toString etc. are special in IE because these are built-in keys
   var keys = Object.keys({toString:null, hello:null, foo:1}).sort().join(",");
-  this.equal(keys, "foo,hello,toString");
+  this.isEqual(keys, "foo,hello,toString");
 });

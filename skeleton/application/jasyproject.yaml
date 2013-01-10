@@ -1,6 +1,3 @@
 name: $${name}
 requires:
-- source: https://github.com/zynga/core.git
-  version: 0.8
-- source: https://github.com/zynga/apibrowser.git
-  version: 0.6
+- source: https://github.com/sebastian-software/core.git

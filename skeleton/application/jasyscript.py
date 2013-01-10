@@ -7,24 +7,21 @@
 def clean():
     """Clear build cache"""
     
-    session.clean()
-    Repository.clean()
+    core.clean()
 
 
 @task
 def distclean():
     """Clear caches and build results"""
     
-    session.clean()
-    Repository.distclean()
+    core.distclean()
 
 
 @task
 def api():
     """Build API viewer"""
     
-    Task.runTask("apibrowser", "build")
-    ApiWriter(session).write("$prefix/data")
+    core.api()
     
     
 @task

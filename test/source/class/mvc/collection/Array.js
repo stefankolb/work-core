@@ -1,4 +1,4 @@
-var suite = new core.testrunner.Suite("MVC/Collection");
+var suite = new core.testrunner.Suite("MVC/Collection/Array");
 
 suite.test("Empty", function() 
 {

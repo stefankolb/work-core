@@ -21,7 +21,7 @@
   core.Class("core.mvc.collection.Array", 
   {
     include: [core.property.MGeneric, core.event.MEvent],
-    implement : [core.mvc.IModel],
+    implement : [core.mvc.IModel, core.mvc.collection.ICollection],
 
     /**
      * Prefill the collection with @models {core.mvc.Model[]}.
@@ -44,7 +44,9 @@
 
     events :
     {
-      "change" : core.event.Notification
+      "change" : core.event.Notification,
+      "add" : core.event.Notification,
+      "remove" : core.event.Notification
     },
 
     properties : 
@@ -228,6 +230,10 @@
         return this.__models.length;
       },
 
+      // Interface implementation
+      add : function(model) {
+        this.push.apply(this, arguments);
+      },
 
       /** {core.mvc.Model} Removes and returns the first model of the collection. */
       shift : function() 

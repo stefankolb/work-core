@@ -26,11 +26,11 @@ core.Interface("core.mvc.collection.ICollection",
     /** 
      * Removes the given @model {core.mvc.IModel} from the collection.
      */
-    remove : function(model) {}
+    remove : function(model) {},
 
     /**
      * {core.mvc.IModel} Returns the model with the given @id {String|Number}.
      */
-    getById : function(id) {}
+    find : function(id) {}
   }
 });

@@ -34,7 +34,7 @@
       this.__models = [];
 
       // Automatically created client-side ID
-      this.cid = "collection:" + (globalId++);
+      this.__clientId = "collection:" + (globalId++);
 
       // Inject given models
       if (models != null) {
@@ -72,41 +72,46 @@
 
     members :
     {
-      id : null,
+      __id : null,
 
-      // Interface implementation
+      // Model Interface implementation
       getId : function() {
-        return this.id;
+        return this.__id;
       },
 
-      // Interface implementation
+      // Model Interface implementation
       setId : function(id) {
-        return this.id = id;
+        return this.__id = id;
       },
 
-      // Interface implementation
+      __clientId : null,
+
+      // Model Interface implementation
       getClientId : function() {
-        return this.cid;
+        return this.__clientId;
       },
 
-      // Interface implementation
+      // Model Interface implementation
       toJSON : function() {
         return this.__models.map(modelToJson);
       },
 
-      // Interface implementation
-      sync : function() {
-        return core.mvc.Sync.sync(this);
+      // Collection Interface implementation
+      find : function(id) 
+      {
+        var models = this.__models;
+        for (var i=0, l=models.length; i<l; i++) 
+        {
+          var model = models[i];
+          if (model.getId() == id || model.getClientId() == id) {
+            return model;
+          }
+        }
+
+        return null;
       },
 
-      /** 
-       * Force sorting of models 
-       */
-      sort : function() 
-      {
-        // TODO
-        // sort with comparator and fire "sort" event
-      },
+
 
       update : function(models)
       {

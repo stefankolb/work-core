@@ -28,6 +28,9 @@ core.Interface("core.mvc.collection.ICollection",
      */
     remove : function(model) {}
 
-    //get : function() {}
+    /**
+     * {core.mvc.IModel} Returns the model with the given @id {String|Number}.
+     */
+    getById : function(id) {}
   }
 });

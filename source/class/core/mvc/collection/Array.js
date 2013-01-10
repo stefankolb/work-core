@@ -33,12 +33,13 @@
       // the real append() method instead.
       this.__models = [];
 
+      // Automatically created client-side ID
+      this.cid = "collection:" + (globalId++);
+
       // Inject given models
       if (models != null) {
         this.append(models);
       }
-
-      this.id = "collection:" + (globalId++);
     },
 
     events :
@@ -69,9 +70,21 @@
 
     members :
     {
+      id : null,
+
       // Interface implementation
       getId : function() {
         return this.id;
+      },
+
+      // Interface implementation
+      setId : function(id) {
+        return this.id = id;
+      },
+
+      // Interface implementation
+      getClientId : function() {
+        return this.cid;
       },
 
       // Interface implementation

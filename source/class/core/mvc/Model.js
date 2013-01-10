@@ -34,11 +34,13 @@
         }
       }
 
+      // Automatically created client-side ID
+      this.cid = "model:" + (globalId++);
+
+      // Import given values
       if (values != null) {
         this.set(values);
       }
-
-      this.id = "model:" + (globalId++);
     },
 
     events :
@@ -53,9 +55,21 @@
         console.error("Model Error: " + message);
       },
 
+      id : null,
+
       // Interface implementation
       getId : function() {
         return this.id;
+      },
+
+      // Interface implementation
+      setId : function(id) {
+        return this.id = id;
+      },
+
+      // Interface implementation
+      getClientId : function() {
+        return this.cid;
       },
 
       // Interface implementation

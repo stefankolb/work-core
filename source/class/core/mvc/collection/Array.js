@@ -13,12 +13,12 @@
   };
 
   /**
-   * Collections are ordered sets of models. You can bind individual "change" events 
+   * Arrays are ordered sets of models. You can bind individual "change" events 
    * to be notified when any model in the collection has been modified, 
    * listen for "add" and "remove" events, fetch the collection from the 
    * server, etc.
    */
-  core.Class("core.mvc.Collection", 
+  core.Class("core.mvc.collection.Array", 
   {
     include: [core.property.MGeneric, core.event.MEvent],
     implement : [core.mvc.IModel],

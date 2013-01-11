@@ -19,54 +19,52 @@ core.Class("core.property.Event",
    */
   construct : function(type, value, old, name) 
   {
-    var self = this;
-
-    self.type = type;
-    self.value = value;
-    self.old = old;
-    self.name = name;
+    this.__type = type;
+    this.__value = value;
+    this.__old = old;
+    this.__name = name;
   },
 
   members : 
   {
     /** {=var} Type of event */
-    type : null,
+    __type : null,
 
     /** {=var} Current property value */
-    value : null,
+    __value : null,
 
     /** {=var} Previous property value */
-    old : null,
+    __old : null,
 
     /** {=var} Property name */
-    name : null,
+    __name : null,
 
     /**
      * {var} Returns event type
      */
     getType : function() {
-      return this.type;
+      return this.__type;
     },
 
     /**
      * {var} Returns the current property value
      */
     getValue : function() {
-      return this.value;
+      return this.__value;
     },
 
     /**
      * {var} Returns the previous property value
      */
     getOldValue : function() {
-      return this.old;
+      return this.__old;
     },
 
     /**
      * {String} Returns the name of the property
      */
     getName : function() {
-      return this.name;
+      return this.__name;
     }
   }
 });

@@ -16,6 +16,7 @@
 core.Class("core.event.Simple",
 {
   pooling : true,
+  include : [core.event.MBasicEvent],
   implement : [core.event.IEvent],
 
   /**

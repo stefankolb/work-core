@@ -2,9 +2,14 @@ core.Interface("core.mvc.model.ICollection",
 {
   events :
   {
+    /** Fires whenever a model or the collection itself has been changed */
+    "change" : core.event.Simple,
+
+    /** Fires whenever a model has been added. */
     "add" : core.event.Simple,
-    "remove" : core.event.Simple,
-    "change" : core.event.Simple
+
+    /** Fires whenever a model has been removed. */
+    "remove" : core.event.Simple
   },
 
   properties :

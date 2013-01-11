@@ -29,7 +29,7 @@ core.Class("core.mvc.event.Remove",
     },
     
     /**
-     * Sets the added {core.mvc.model.IModel}.
+     * Sets the removed @model {core.mvc.model.IModel}.
      */
     setModel : function(model) {
       this.__model = model;

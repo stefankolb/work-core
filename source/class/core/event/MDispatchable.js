@@ -13,12 +13,16 @@ core.Class("core.event.MDispatchable",
 {
   members :
   {
-    // Interface implementation
+    /**
+     * Sets the given @target {Object} during dispatching of the event object.
+     */    
     setTarget : function(target) {
       this.__target = target;
     },
 
-    // Interface implementation
+    /**
+     * {Object} Returns the target on which the event is fired.
+     */
     getTarget : function() {
       return this.__target;
     }   

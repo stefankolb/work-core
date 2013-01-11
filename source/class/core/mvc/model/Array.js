@@ -44,13 +44,13 @@
 
     events :
     {
-      /** Fires whenever a model or the collection itself has been changed */
+      // Collection Interface implementation
       "change" : core.event.Simple,
 
-      /** Fires whenever a model has been added. */
+      // Collection Interface implementation
       "add" : core.event.Simple,
 
-      /** Fires whenever a model has been removed. */
+      // Collection Interface implementation
       "remove" : core.event.Simple
     },
 

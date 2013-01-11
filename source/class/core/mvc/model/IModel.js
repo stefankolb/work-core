@@ -15,7 +15,7 @@ core.Interface("core.mvc.model.IModel",
     /** 
      * Fired whenever the model do change 
      */
-    change : core.event.Notification
+    change : core.event.Simple
   },
 
   members : 

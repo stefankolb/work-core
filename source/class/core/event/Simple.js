@@ -16,13 +16,15 @@
 core.Class("core.event.Simple",
 {
   pooling : true,
+  implement : [core.event.IEvent],
 
   /**
    * @data {Object|Array} Data to be attached to the event
    * @message {String} Message for user feedback etc.
    */
-  construct : function(type, data, message) 
+  construct : function(target, type, data, message) 
   {
+    this.__target = target;
     this.__type = type;
     this.__data = data;
     this.__message = message;
@@ -30,13 +32,15 @@ core.Class("core.event.Simple",
 
   members :
   {  
-    /**
-     * {String} Returns the type of the event.
-     */
+    // Interface implementation
+    getTarget : function() {
+      return this.__target;
+    },
+
+    // Interface implementation
     getType : function() {
       return this.__type;
     },
-
 
     /**
      * {Object|Array} Returns the data attached to the event.
@@ -44,7 +48,6 @@ core.Class("core.event.Simple",
     getData : function() {
       return this.__data;
     },
-
 
     /**
      * {String} Returns the message attached to the event.

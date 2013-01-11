@@ -11,22 +11,34 @@
 core.Class("core.mvc.event.AddModel", 
 {
   pooling: true,
-  include : [core.event.MEvent],
+  implement : [core.event.IEvent],
 
-  construct: function(model) {
-    this.model = model;
+  /**
+   * @model {core.mvc.model.IModel} Model which was added
+   */
+  construct: function(model, target) 
+  {
+    this.__model = model;
+    this.__target = target;
   },
 
   members: 
   {
-    type : "add",
+    // Interface implementation
+    getTarget : function() {
+      return this.__target;
+    },
 
+    // Interface implementation
     getType : function() {
-      return this.type;
+      return "add";
     },
     
+    /**
+     * {core.mvc.model.IModel} Returns the added model.
+     */
     getModel : function() {
-      return this.model;
+      return this.__model;
     }
   }
 });

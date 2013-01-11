@@ -19,7 +19,7 @@
   /**
    * Generic event interface for Core classes.
    */
-  core.Class("core.event.MEvent", 
+  core.Class("core.event.MEventTarget", 
   {
     members :
     {
@@ -212,34 +212,8 @@
         }
 
         return !!length;
-      },
-
-
-      /**
-       * Fires a simple notification like event with the given @type {String} without 
-       * creating any event object (so no additional data at all). The method returns 
-       * whether any listers were processed.
-       */
-      fireEvent : function(type) 
-      {
-        if (jasy.Env.isSet("debug")) 
-        {
-          core.Assert.isType(type, "String", "Invalid event type to dispatch!");
-          core.Assert.isNotEmpty(type, "Invalid event type to dispatch!");
-        }
-
-        var self = this;
-        var handlers = slice.call(getHandlers(self, type));
-        var length = handlers.length;
-
-        for (var i=0; i<length; ++i) {
-          handlers[i].call(self);
-        }
-
-        return !!length;
       }
     }
-
   });
 
 })();

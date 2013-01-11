@@ -16,7 +16,7 @@ suite.test("Basic", function()
 
   core.Class("events.Simple1", 
   {
-    include : [core.event.MEvent],
+    include : [core.event.MEventTarget],
     members : 
     {
       testBasic : function() 
@@ -45,7 +45,7 @@ suite.test("Context", function()
   
   core.Class("events.Simple2", 
   {
-    include : [core.event.MEvent],
+    include : [core.event.MEventTarget],
     members : 
     {
       testContext : function() 
@@ -70,7 +70,7 @@ suite.test("Deconnect", function()
 
   core.Class("events.Simple4", 
   {
-    include : [core.event.MEvent],
+    include : [core.event.MEventTarget],
     members : 
     {
       testDeconnect : function() {
@@ -113,7 +113,7 @@ suite.test("Has", function()
 
   core.Class("events.Simple5", 
   {
-    include : [core.event.MEvent],
+    include : [core.event.MEventTarget],
     members : 
     {
       testHasListener : function() {
@@ -148,7 +148,7 @@ suite.test("Connect While Fire", function()
 
   core.Class("events.Simple6", 
   {
-    include : [core.event.MEvent],
+    include : [core.event.MEventTarget],
     members : 
     {
       testConnectWhileFire : function() {
@@ -192,7 +192,7 @@ suite.test("Deconnect While Fire", function()
 
   core.Class("events.Simple7", 
   {
-    include : [core.event.MEvent],
+    include : [core.event.MEventTarget],
     members : 
     {
       testDeconnectWhileFire : function() {
@@ -238,7 +238,7 @@ suite.test("Deconnect Self", function()
 
   core.Class("events.Simple8", 
   {
-    include : [core.event.MEvent],
+    include : [core.event.MEventTarget],
     members : 
     {
       testDeconnectSelf : function() {
@@ -271,7 +271,7 @@ suite.test("Listen Once", function()
 
   core.Class("events.Simple9", 
   {
-    include : [core.event.MEvent],
+    include : [core.event.MEventTarget],
     members : 
     {
       testListenOnce : function() {

@@ -20,7 +20,7 @@
  */
 core.Class("core.mvc.view.Abstract", 
 {
-  include : [core.property.MGeneric, core.event.MEvent],
+  include : [core.property.MGeneric, core.event.MEventTarget],
 
   /**
    * @properties {Map} Properties to set initially

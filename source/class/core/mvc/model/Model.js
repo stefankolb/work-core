@@ -19,7 +19,7 @@
    */
   core.Class("core.mvc.model.Model", 
   {
-    include: [core.property.MGeneric, core.event.MEvent],
+    include: [core.property.MGeneric, core.event.MEventTarget],
     implement : [core.mvc.model.IModel],
 
     /**

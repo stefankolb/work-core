@@ -376,7 +376,7 @@ suite.test("Creating Properties", function()
 {
   core.Class("properties.Simple", 
   {
-    include : [core.event.MEvent],
+    include : [core.event.MEventTarget],
 
     properties : 
     {
@@ -447,7 +447,7 @@ suite.test("Property Interfaces", function()
   core.Class("properties.ColorImplementer", 
   {
     implement : [properties.IColor],
-    include : [core.event.MEvent],      
+    include : [core.event.MEventTarget],      
     properties : 
     {
       color : 

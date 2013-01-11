@@ -212,6 +212,21 @@
         }
 
         return !!length;
+      },
+
+
+      /**
+       * {Boolean} Shorthand for firing automatically pooled instances of {core.event.Simple}
+       * with the given @type {String}, @data {var} and @message {String}.
+       * The method returns whether any listers were processed.
+       */
+      fireEvent : function(type, data, message) 
+      {
+        var eventObject = core.event.Simple.obtain(this, type, data, message);
+        var retval = this.dispatchEvent(eventObject);
+        eventObject.release();
+
+        return retval;
       }
     }
   });

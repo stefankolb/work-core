@@ -1,9 +1,19 @@
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2012-2013 Sebastian Werner
+==================================================================================================
+*/
+
+/**
+ * Basic interface any event class needs to implement.
+ */
 core.Interface("core.event.IEvent",
 {
   members : 
   {
     /** 
-     * {String} Returns the type of the event 
+     * {String} Returns the type of the event.
      */
     getType : function() {},
 

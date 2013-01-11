@@ -14,13 +14,7 @@ core.Class("core.event.MDispatchable",
   members :
   {
     // Interface implementation
-    setTarget : function(target) 
-    {
-      /** #break(core.event.MEventTarget) */
-      if (target != null && !core.Class.includesClass(target.constructor, core.event.MEventTarget)) {
-        throw new Error("Event targets must include core.event.MEventTarget!");
-      }
-
+    setTarget : function(target) {
       this.__target = target;
     },
 

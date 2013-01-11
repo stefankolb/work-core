@@ -386,15 +386,6 @@ suite.test("Creating Properties", function()
         apply : function(value, old) {
           // pass
         }
-      },
-      
-      backgroundColor : 
-      {
-        type : "String",
-        apply : function(value, old) {
-          // pass
-        },
-        fire : "changeBackgroundColor"
       }
     }
   });
@@ -403,31 +394,23 @@ suite.test("Creating Properties", function()
     core.Class.assertIsClass(properties.Simple);
     return true;
   })());
-  this.isEqual(Object.keys(core.Class.getProperties(properties.Simple)).join(","), "color,backgroundColor");
+  this.isEqual(Object.keys(core.Class.getProperties(properties.Simple)).join(","), "color");
 
   this.isEqual(core.Class.getProperties(properties.Simple).color.type, "String");
   this.isEqual(typeof core.Class.getProperties(properties.Simple).color.apply, "function");
 
   this.isTrue(properties.Simple.prototype.getColor instanceof Function);
-  this.isTrue(properties.Simple.prototype.getBackgroundColor instanceof Function);
   this.isTrue(properties.Simple.prototype.setColor instanceof Function);
-  this.isTrue(properties.Simple.prototype.setBackgroundColor instanceof Function);
 
   this.isEqual(properties.Simple.prototype.getColor.displayName, "properties.Simple.getColor");
-  this.isEqual(properties.Simple.prototype.getBackgroundColor.displayName, "properties.Simple.getBackgroundColor");
   this.isEqual(properties.Simple.prototype.setColor.displayName, "properties.Simple.setColor");
-  this.isEqual(properties.Simple.prototype.setBackgroundColor.displayName, "properties.Simple.setBackgroundColor");
   
   this.isEqual(properties.Simple.prototype.getColor.length, 0);
-  this.isEqual(properties.Simple.prototype.getBackgroundColor.length, 0);
   this.isEqual(properties.Simple.prototype.setColor.length, 1);
-  this.isEqual(properties.Simple.prototype.setBackgroundColor.length, 1);
   
   var obj1 = new properties.Simple;
   this.isEqual(obj1.setColor("red"), "red");
-  this.isEqual(obj1.setBackgroundColor("black"), "black");
   this.isEqual(obj1.getColor(), "red");
-  this.isEqual(obj1.getBackgroundColor(), "black");
 });
 
 

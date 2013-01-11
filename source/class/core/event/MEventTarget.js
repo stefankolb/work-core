@@ -198,18 +198,27 @@
       {
         if (jasy.Env.isSet("debug")) 
         {
-          core.Assert.isType(eventObject, "Object", "Invalid event type to dispatch!");
-          core.Assert.isType(eventObject.type, "String", "Invalid event type to dispatch!");
-          core.Assert.isNotEmpty(eventObject.type, "Invalid event type to dispatch!");
+          core.Assert.isType(eventObject, "Object", "Invalid event object to dispatch!");
+          if (!eventObject.setTarget) {
+            console.error(eventObject)
+          }
+
+          core.Assert.isType(eventObject.setTarget, "Function", "Invalid event object to dispatch! Misses setTarget() method!");
+          core.Assert.isType(eventObject.getType(), "String", "Invalid event type to dispatch!");
+          core.Assert.isNotEmpty(eventObject.getType(), "Invalid event type to dispatch!");
         }
 
+        eventObject.setTarget(this);
+
         var self = this;
-        var handlers = slice.call(getHandlers(self, eventObject.type));
+        var handlers = slice.call(getHandlers(self, eventObject.getType()));
         var length = handlers.length;
 
         for (var i=0; i<length; ++i) {
           handlers[i].call(self, eventObject);
         }
+
+        eventObject.setTarget(null);
 
         return !!length;
       },
@@ -222,7 +231,7 @@
        */
       fireEvent : function(type, data, message) 
       {
-        var eventObject = core.event.Simple.obtain(this, type, data, message);
+        var eventObject = core.event.Simple.obtain(type, data, message);
         var retval = this.dispatchEvent(eventObject);
         eventObject.release();
 

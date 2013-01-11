@@ -139,7 +139,7 @@
           model = models[i];
           db.push(model);
 
-          addEvent.model = model;
+          addEvent.setModel(model);
           this.dispatchEvent(addEvent);
         }
 
@@ -172,7 +172,7 @@
           db.length--;
 
           // Inform others
-          removeEvent.model = model;
+          removeEvent.setModel(model);
           this.dispatchEvent(removeEvent);
         }
 
@@ -226,7 +226,7 @@
         {
           model = arguments[i];
           this.__models.push(model);
-          addEvent.model = model;
+          addEvent.setModel(model);
           this.dispatchEvent(addEvent);
         }
 
@@ -270,7 +270,7 @@
 
           // Inserting in right order. Using unshift() would reverse the list.
           this.__models.splice(i, 0, model);
-          addEvent.model = model;
+          addEvent.setModel(model);
           this.dispatchEvent(addEvent);
         }
 

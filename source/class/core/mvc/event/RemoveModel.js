@@ -11,27 +11,28 @@
 core.Class("core.mvc.event.RemoveModel", 
 {
   pooling: true,
+  include : [core.event.MBasicEvent],
   implement : [core.event.IEvent],
 
   /**
    * @model {core.mvc.model.IModel} Model which was removed
    */
-  construct: function(model) 
-  {
+  construct: function(model) {
     this.__model = model;
-    this.__target = target;
   },
 
   members: 
   {
     // Interface implementation
-    getTarget : function() {
-      return this.__target;
-    },
-
-    // Interface implementation
     getType : function() {
       return "remove";
+    },
+    
+    /**
+     * Sets the added {core.mvc.model.IModel}.
+     */
+    setModel : function(model) {
+      this.__model = model;
     },
     
     /**

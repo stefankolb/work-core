@@ -11,6 +11,7 @@
 core.Class("core.property.Event", 
 {
   pooling: true,
+  include : [core.event.MBasicEvent],
 
   /**
    * Creates a new event object with the given @type {String}. It stores the current @value {var}, 

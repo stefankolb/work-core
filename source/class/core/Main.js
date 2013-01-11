@@ -145,7 +145,8 @@
 		 * - `Boolean`
 		 * - `Map`
 		 * - `Integer`
-		 * - `Primitive`,
+		 * - `Primitive`
+		 * - `Node
 		 */
 		isTypeOf : function(value, type) 
 		{

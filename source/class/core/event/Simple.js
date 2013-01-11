@@ -19,28 +19,21 @@ core.Class("core.event.Simple",
   implement : [core.event.IEvent],
 
   /**
-   * @target {Object} Any object which includes {core.event.MEventTarget}
    * @type {String} Type of the event e.g. `click`, `load`, ...
    * @data {var?null} Data to be attached to the event.
    * @message {String?null} Message for user feedback etc.
    */
-  construct : function(target, type, data, message) 
+  construct : function(type, data, message) 
   {
     if (jasy.Env.isSet("debug"))
     {
-      core.Assert.isType(target, "object");
-      core.Assert.isType(type, "string");
+      core.Assert.isType(type, "String", "Invalid event type!" + type + " :: " + typeof type);
 
       if (message != null) {
-        core.Assert.isType(message, "string");
-      }
-
-      if (!core.Class.includesClass(target.constructor, core.event.MEventTarget)) {
-        throw new Error("Event targets must include core.event.MEventTarget!");
+        core.Assert.isType(message, "String", "Invalid event message!");
       }
     }
 
-    this.__target = target;
     this.__type = type;
     this.__data = data;
     this.__message = message;
@@ -48,11 +41,6 @@ core.Class("core.event.Simple",
 
   members :
   {  
-    // Interface implementation
-    getTarget : function() {
-      return this.__target;
-    },
-
     // Interface implementation
     getType : function() {
       return this.__type;

@@ -44,8 +44,13 @@
 
     events :
     {
+      /** Fires whenever a model or the collection itself has been changed */
       "change" : core.event.Simple,
+
+      /** Fires whenever a model has been added. */
       "add" : core.event.Simple,
+
+      /** Fires whenever a model has been removed. */
       "remove" : core.event.Simple
     },
 
@@ -112,9 +117,32 @@
       },
 
       // Collection Interface implementation
+      getLength : function() {
+        return this.__models.length;
+      },      
+
+      // Collection Interface implementation
       add : function(model) {
         this.push.apply(this, arguments);
       },
+
+      // Collection Interface Implementation
+      remove : function(model) 
+      {
+        /** #require(ext.sugar.Array) */
+        var removedModel = this.__models.remove(model);
+        if (!removedModel) {
+          return;
+        }
+
+        var removeEvent = core.mvc.event.Remove.obtain(removedModel);
+        this.dispatchEvent(removeEvent);
+        removeEvent.release();
+
+        return removedModel;
+      },      
+
+
 
 
       update : function(models)
@@ -124,12 +152,8 @@
       },
 
 
-      /**
-       * {Integer} Returns the length of the collection.
-       */
-      getLength : function() {
-        return this.__models.length;
-      },
+
+
 
 
       /**
@@ -149,7 +173,7 @@
           this.dispatchEvent(addEvent);
         }
 
-        core.mvc.event.Add.release(addEvent);
+        addEvent.release();
 
         return db.length;
       },
@@ -182,7 +206,7 @@
           this.dispatchEvent(removeEvent);
         }
 
-        core.mvc.event.Remove.release(removeEvent);
+        removeEvent.release();
         return 0;
       },
 
@@ -215,7 +239,7 @@
         
         var removeEvent = core.mvc.event.Remove.obtain(removedModel);
         this.dispatchEvent(removeEvent);
-        core.mvc.event.Remove.release(removeEvent);
+        removeEvent.release();
 
         return removedModel;
       },
@@ -236,7 +260,7 @@
           this.dispatchEvent(addEvent);
         }
 
-        core.mvc.event.Add.release(addEvent);
+        addEvent.release();
 
         return this.__models.length;
       },
@@ -254,7 +278,7 @@
 
         var removeEvent = core.mvc.event.Remove.obtain(removedModel);
         this.dispatchEvent(removeEvent);
-        core.mvc.event.Remove.release(removeEvent);
+        removeEvent.release();
 
         return removedModel;
       },
@@ -278,28 +302,9 @@
           this.dispatchEvent(addEvent);
         }
 
-        core.mvc.event.Add.release(addEvent);
+        addEvent.release();
 
         return this.__models.length;
-      },
-
-
-      /**
-       * {core.mvc.model.Model} Removes and returns the given @model {core.mvc.model.Model} of the collection. 
-       */
-      remove : function(model) 
-      {
-        /** #require(ext.sugar.Array) */
-        var removedModel = this.__models.remove(model);
-        if (!removedModel) {
-          return;
-        }
-
-        var removeEvent = core.mvc.event.Remove.obtain(removedModel);
-        this.dispatchEvent(removeEvent);
-        core.mvc.event.Remove.release(removeEvent);
-
-        return removedModel;
       },
 
 

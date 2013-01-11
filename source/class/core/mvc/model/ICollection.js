@@ -31,6 +31,11 @@ core.Interface("core.mvc.model.ICollection",
     /**
      * {core.mvc.model.IModel} Returns the model with the given @id {String|Number}.
      */
-    find : function(id) {}
+    find : function(id) {},
+
+    /**
+     * {Integer} Returns the length of the collection.
+     */
+    getLength : function() {}
   }
 });

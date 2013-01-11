@@ -11,7 +11,7 @@
 core.Class("core.mvc.event.RemoveModel", 
 {
   pooling: true,
-  include : [core.event.MBasicEvent],
+  include : [core.event.MDispatchable],
   implement : [core.event.IEvent],
 
   /**

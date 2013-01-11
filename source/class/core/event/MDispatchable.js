@@ -9,7 +9,7 @@
  * Basic event class adding support for setTarget/getTarget which is used during
  * event dispatching by {core.event.MEventTarget}.
  */
-core.Class("core.event.MBasicEvent",
+core.Class("core.event.MDispatchable",
 {
   members :
   {

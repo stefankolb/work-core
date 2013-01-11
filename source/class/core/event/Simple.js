@@ -16,7 +16,7 @@
 core.Class("core.event.Simple",
 {
   pooling : true,
-  include : [core.event.MBasicEvent],
+  include : [core.event.MDispatchable],
   implement : [core.event.IEvent],
 
   /**

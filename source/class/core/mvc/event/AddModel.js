@@ -11,7 +11,7 @@
 core.Class("core.mvc.event.AddModel", 
 {
   pooling: true,
-  include : [core.event.MBasicEvent],
+  include : [core.event.MDispatchable],
   implement : [core.event.IEvent],
 
   /**

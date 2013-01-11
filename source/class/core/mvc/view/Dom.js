@@ -5,13 +5,13 @@
 ==================================================================================================
 */
 
-core.Class("core.mvc.DomView",
+core.Class("core.mvc.view.Dom",
 {
-  include : [core.mvc.View],
+  include : [core.mvc.view.Abstract],
 
   construct: function(properties, events) 
   {
-    core.mvc.View.call(this, properties);
+    core.mvc.view.Abstract.call(this, properties);
 
     for (var key in events) {
 

@@ -1,4 +1,4 @@
-core.Interface("core.mvc.collection.ICollection",
+core.Interface("core.mvc.model.ICollection",
 {
   events :
   {

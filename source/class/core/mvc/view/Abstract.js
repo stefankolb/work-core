@@ -18,7 +18,7 @@
  * and now everywhere that model data is displayed in the UI, it is 
  * always immediately up to date.
  */
-core.Class("core.mvc.View", 
+core.Class("core.mvc.view.Abstract", 
 {
   include : [core.property.MGeneric, core.event.MEvent],
 
@@ -78,7 +78,7 @@ core.Class("core.mvc.View",
     render : function() 
     {
       if (jasy.Env.isSet("debug")) {
-        throw new Error("render() is abstract in core.mvc.View!");
+        throw new Error("render() is abstract in core.mvc.view.Abstract!");
       }
     }
   }

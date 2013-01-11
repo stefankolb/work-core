@@ -2,9 +2,9 @@ var suite = new core.testrunner.Suite("MVC/View");
 
 suite.test("Empty", function() 
 {
-  var empty = new core.mvc.View();
+  var empty = new core.mvc.view.Abstract();
 
-  this.isInstance(empty, core.mvc.View);
+  this.isInstance(empty, core.mvc.view.Abstract);
 
   this.isNull(empty.getModel());
   this.isNull(empty.getTemplate());
@@ -14,11 +14,11 @@ suite.test("Constructor Args", function()
 {
   core.Class("TestView",
   {
-    include : [core.mvc.View],
+    include : [core.mvc.view.Abstract],
 
     construct : function(properties, renderCallBack) {
       this.renderCallBack = renderCallBack;
-      core.mvc.View.call(this, properties);
+      core.mvc.view.Abstract.call(this, properties);
     },
 
     members : 

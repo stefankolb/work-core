@@ -18,10 +18,10 @@
    * listen for "add" and "remove" events, fetch the collection from the 
    * server, etc.
    */
-  core.Class("core.mvc.collection.Array", 
+  core.Class("core.mvc.model.Array", 
   {
     include: [core.property.MGeneric, core.event.MEvent],
-    implement : [core.mvc.IModel, core.mvc.collection.ICollection],
+    implement : [core.mvc.IModel, core.mvc.model.ICollection],
 
     /**
      * Prefill the collection with @models {core.mvc.Model[]}.

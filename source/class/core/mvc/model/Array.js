@@ -132,7 +132,7 @@
       append : function(models) 
       {
         var db = this.__models;
-        var addEvent = core.mvc.event.AddModel.obtain(null);
+        var addEvent = core.mvc.event.Add.obtain(null);
         
         for (var i=0, l=models.length, model; i<l; i++) 
         {
@@ -143,7 +143,7 @@
           this.dispatchEvent(addEvent);
         }
 
-        core.mvc.event.AddModel.release(addEvent);
+        core.mvc.event.Add.release(addEvent);
 
         return db.length;
       },
@@ -162,7 +162,7 @@
           return;
         }
 
-        var removeEvent = core.mvc.event.RemoveModel.obtain(null);
+        var removeEvent = core.mvc.event.Remove.obtain(null);
 
         for (var i=length, model; i>0; i--) 
         {
@@ -176,7 +176,7 @@
           this.dispatchEvent(removeEvent);
         }
 
-        core.mvc.event.RemoveModel.release(removeEvent);
+        core.mvc.event.Remove.release(removeEvent);
         return 0;
       },
 
@@ -207,9 +207,9 @@
           return;
         }
         
-        var removeEvent = core.mvc.event.RemoveModel.obtain(removedModel);
+        var removeEvent = core.mvc.event.Remove.obtain(removedModel);
         this.dispatchEvent(removeEvent);
-        core.mvc.event.RemoveModel.release(removeEvent);
+        core.mvc.event.Remove.release(removeEvent);
 
         return removedModel;
       },
@@ -220,7 +220,7 @@
        */
       push : function(model) 
       {
-        var addEvent = core.mvc.event.AddModel.obtain(null);
+        var addEvent = core.mvc.event.Add.obtain(null);
 
         for (var i=0, l=arguments.length; i<l; i++) 
         {
@@ -230,7 +230,7 @@
           this.dispatchEvent(addEvent);
         }
 
-        core.mvc.event.AddModel.release(addEvent);
+        core.mvc.event.Add.release(addEvent);
 
         return this.__models.length;
       },
@@ -248,9 +248,9 @@
           return;
         }
 
-        var removeEvent = core.mvc.event.RemoveModel.obtain(removedModel);
+        var removeEvent = core.mvc.event.Remove.obtain(removedModel);
         this.dispatchEvent(removeEvent);
-        core.mvc.event.RemoveModel.release(removeEvent);
+        core.mvc.event.Remove.release(removeEvent);
 
         return removedModel;
       },
@@ -262,7 +262,7 @@
        */
       unshift: function(model) 
       {
-        var addEvent = core.mvc.event.AddModel.obtain(null);
+        var addEvent = core.mvc.event.Add.obtain(null);
 
         for (var i=0, l=arguments.length; i<l; i++)
         {
@@ -274,7 +274,7 @@
           this.dispatchEvent(addEvent);
         }
 
-        core.mvc.event.AddModel.release(addEvent);
+        core.mvc.event.Add.release(addEvent);
 
         return this.__models.length;
       },
@@ -289,9 +289,9 @@
           return;
         }
 
-        var removeEvent = core.mvc.event.RemoveModel.obtain(removedModel);
+        var removeEvent = core.mvc.event.Remove.obtain(removedModel);
         this.dispatchEvent(removeEvent);
-        core.mvc.event.RemoveModel.release(removeEvent);
+        core.mvc.event.Remove.release(removeEvent);
 
         return removedModel;
       },

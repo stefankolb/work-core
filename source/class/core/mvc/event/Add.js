@@ -6,16 +6,16 @@
 */
 
 /**
- * Event class which is fired whenever a model is removed from a collection.
+ * Event class which is fired whenever a model is added to a collection.
  */
-core.Class("core.mvc.event.RemoveModel", 
+core.Class("core.mvc.event.Add", 
 {
   pooling: true,
   include : [core.event.MDispatchable],
   implement : [core.event.IEvent],
 
   /**
-   * @model {core.mvc.model.IModel} Model which was removed
+   * @model {core.mvc.model.IModel} Model which was added
    */
   construct: function(model) {
     this.__model = model;
@@ -25,7 +25,7 @@ core.Class("core.mvc.event.RemoveModel",
   {
     // Interface implementation
     getType : function() {
-      return "remove";
+      return "add";
     },
     
     /**
@@ -34,10 +34,10 @@ core.Class("core.mvc.event.RemoveModel",
     setModel : function(model) {
       this.__model = model;
     },
-    
+
     /**
-     * {core.mvc.model.IModel} Returns the removed model.
-     */    
+     * {core.mvc.model.IModel} Returns the added model.
+     */
     getModel : function() {
       return this.__model;
     }

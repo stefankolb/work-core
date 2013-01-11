@@ -19,17 +19,17 @@ core.Interface("core.mvc.model.ICollection",
   members : 
   {
     /** 
-     * Adds the given @model {core.mvc.IModel...} to the collection.
+     * Adds the given @model {core.mvc.model.IModel...} to the collection.
      */
     add : function(model) {},
 
     /** 
-     * Removes the given @model {core.mvc.IModel} from the collection.
+     * Removes the given @model {core.mvc.model.IModel} from the collection.
      */
     remove : function(model) {},
 
     /**
-     * {core.mvc.IModel} Returns the model with the given @id {String|Number}.
+     * {core.mvc.model.IModel} Returns the model with the given @id {String|Number}.
      */
     find : function(id) {}
   }

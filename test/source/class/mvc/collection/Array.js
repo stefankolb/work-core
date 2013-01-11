@@ -5,7 +5,7 @@ suite.test("Empty", function()
   var empty = new core.mvc.model.Array();
 
   this.isInstance(empty, core.mvc.model.Array);
-  core.Interface.assert(empty, core.mvc.IModel);
+  core.Interface.assert(empty, core.mvc.model.IModel);
 
   this.isIdentical(typeof empty.getClientId(), "string");
   this.isIdentical(typeof empty.toJSON(), "object");
@@ -18,7 +18,7 @@ suite.test("Constructor", function()
   var filled = new core.mvc.model.Array([1,2,3]);
 
   this.isInstance(filled, core.mvc.model.Array);
-  core.Interface.assert(filled, core.mvc.IModel);
+  core.Interface.assert(filled, core.mvc.model.IModel);
 
   this.isIdentical(filled.toJSON().toString(), "1,2,3");
   this.isIdentical(filled.getLength(), 3);

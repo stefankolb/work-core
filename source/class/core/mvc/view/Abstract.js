@@ -47,7 +47,7 @@ core.Class("core.mvc.view.Abstract",
     /** The model/collection to render */
     model :
     {
-      type : core.mvc.IModel,
+      type : core.mvc.model.IModel,
       nullable : true,
       apply : function(value, old)
       {

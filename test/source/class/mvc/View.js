@@ -31,10 +31,10 @@ suite.test("Constructor Args", function()
 
   core.Class("TestModel",
   {
-    include : [core.mvc.Model],
+    include : [core.mvc.model.Model],
 
     construct : function(values) {
-      core.mvc.Model.call(this, values);
+      core.mvc.model.Model.call(this, values);
     },
 
     properties : 

@@ -13,14 +13,14 @@
    * Models are the heart of any JavaScript application, 
    * containing the interactive data as well as a large 
    * part of the logic surrounding it: conversions, validations, 
-   * computed properties, and access control. You extend `core.mvc.Model`
+   * computed properties, and access control. You extend `core.mvc.model.Model`
    * with your domain-specific methods, and `Model` provides a basic 
    * set of functionality for managing changes.
    */
-  core.Class("core.mvc.Model", 
+  core.Class("core.mvc.model.Model", 
   {
     include: [core.property.MGeneric, core.event.MEvent],
-    implement : [core.mvc.IModel],
+    implement : [core.mvc.model.IModel],
 
     /**
      * Initial data structure is imported from @values {Map}.

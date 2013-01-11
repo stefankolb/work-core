@@ -8,7 +8,7 @@
 /**
  * Interface for models for fulfilling needs of typical external users.
  */
-core.Interface("core.mvc.IModel",
+core.Interface("core.mvc.model.IModel",
 {
   events :
   {

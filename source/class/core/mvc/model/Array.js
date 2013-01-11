@@ -21,10 +21,10 @@
   core.Class("core.mvc.model.Array", 
   {
     include: [core.property.MGeneric, core.event.MEvent],
-    implement : [core.mvc.IModel, core.mvc.model.ICollection],
+    implement : [core.mvc.model.IModel, core.mvc.model.ICollection],
 
     /**
-     * Prefill the collection with @models {core.mvc.Model[]}.
+     * Prefill the collection with @models {core.mvc.model.Model[]}.
      */
     construct: function(models) 
     {
@@ -56,7 +56,7 @@
        */
       model : 
       {
-        type: core.mvc.Model,
+        type: core.mvc.model.Model,
         nullable : true
       },
 
@@ -127,7 +127,7 @@
       },
 
       /**
-       * Imports an array of @models {core.mvc.Model[]} into the collection.
+       * Imports an array of @models {core.mvc.model.Model[]} into the collection.
        */
       append : function(models) 
       {
@@ -183,7 +183,7 @@
 
       /**
        * {Integer} Combined call to replace all existing data with new 
-       * list of @models {core.mvc.Model}. Returns the new length
+       * list of @models {core.mvc.model.Model}. Returns the new length
        * of the collection.
        */
       reset : function(models) 
@@ -193,13 +193,13 @@
       },
 
 
-      /** {core.mvc.Model} Returns the model at the given @index {Integer}. */
+      /** {core.mvc.model.Model} Returns the model at the given @index {Integer}. */
       at : function(index) {
         return this.__models[index] || null;
       },
 
 
-      /** {core.mvc.Model} Removes and returns the last model of the collection. */
+      /** {core.mvc.model.Model} Removes and returns the last model of the collection. */
       pop : function() 
       {
         var removedModel = this.__models.pop();
@@ -216,7 +216,7 @@
 
 
       /**
-       * Pushes one or multiple @model {core.mvc.Model...} to the end of the collection.
+       * Pushes one or multiple @model {core.mvc.model.Model...} to the end of the collection.
        */
       push : function(model) 
       {
@@ -240,7 +240,7 @@
         this.push.apply(this, arguments);
       },
 
-      /** {core.mvc.Model} Removes and returns the first model of the collection. */
+      /** {core.mvc.model.Model} Removes and returns the first model of the collection. */
       shift : function() 
       {
         var removedModel = this.__models.shift();
@@ -257,7 +257,7 @@
 
 
       /**
-       * {Integer} Pushes one or multiple @model {core.mvc.Model...} to the beginning of the collection.
+       * {Integer} Pushes one or multiple @model {core.mvc.model.Model...} to the beginning of the collection.
        * Returns the new length of the collection.
        */
       unshift: function(model) 
@@ -280,7 +280,7 @@
       },
 
 
-      /** {core.mvc.Model} Removes and returns the given @model {core.mvc.Model} of the collection. */
+      /** {core.mvc.model.Model} Removes and returns the given @model {core.mvc.model.Model} of the collection. */
       remove : function(model) 
       {
         /** #require(ext.sugar.Array) */
@@ -330,7 +330,7 @@
 
 
       /**
-       * {core.mvc.Model} Returns the model with the given @id {String}.
+       * {core.mvc.model.Model} Returns the model with the given @id {String}.
        */ 
       get : function(id) 
       {
@@ -379,7 +379,7 @@
 
 
       /**
-       * {core.mvc.Model} Creates a new model with the given 
+       * {core.mvc.model.Model} Creates a new model with the given 
        * @properties {Map?} and appends it to the collection.
        */
       create : function(properties) 

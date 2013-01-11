@@ -111,6 +111,10 @@
         return null;
       },
 
+      // Collection Interface implementation
+      add : function(model) {
+        this.push.apply(this, arguments);
+      },
 
 
       update : function(models)
@@ -119,12 +123,14 @@
         // add, remove and merge automatically
       },
 
+
       /**
        * {Integer} Returns the length of the collection.
        */
       getLength : function() {
         return this.__models.length;
       },
+
 
       /**
        * Imports an array of @models {core.mvc.model.Model[]} into the collection.
@@ -235,12 +241,10 @@
         return this.__models.length;
       },
 
-      // Interface implementation
-      add : function(model) {
-        this.push.apply(this, arguments);
-      },
 
-      /** {core.mvc.model.Model} Removes and returns the first model of the collection. */
+      /** 
+       * {core.mvc.model.Model} Removes and returns the first model of the collection. 
+       */
       shift : function() 
       {
         var removedModel = this.__models.shift();
@@ -280,7 +284,9 @@
       },
 
 
-      /** {core.mvc.model.Model} Removes and returns the given @model {core.mvc.model.Model} of the collection. */
+      /**
+       * {core.mvc.model.Model} Removes and returns the given @model {core.mvc.model.Model} of the collection. 
+       */
       remove : function(model) 
       {
         /** #require(ext.sugar.Array) */
@@ -298,7 +304,7 @@
 
 
       /** 
-       * {core.mvc.Collection} Returns a new collection filtered by the given filter @method {Function}.
+       * {Array} Returns a new array filtered by the given filter @method {Function}.
        */
       filter : function(method) {
         return this.__models.filter(method);
@@ -337,7 +343,7 @@
         var models = this.__models;
         for (var i=0, l=models.length; i<l; i++) 
         {
-          if (models[i].getId() == id) {
+          if (models[i].getId() == id || models[i].getClientId() == id) {
             return models[i];
           }
         }
@@ -358,23 +364,6 @@
        */
       parse : function(response) {
         return response;
-      },
-
-
-      /**
-       * Fetch the default set of models for this collection from the server, resetting the 
-       * collection when they arrive. The options hash takes success and error callbacks which 
-       * will be passed (collection, response, options) and (collection, xhr, options) 
-       * as arguments, respectively. When the model data returns from the server, 
-       * the collection will reset. Delegates to `sync` under the covers for 
-       * custom persistence strategies and returns a XHR. The server handler 
-       * for fetch requests should return a JSON array of models.
-       */
-      fetch : function(reset) 
-      {
-        // TODO
-        // support either update or reset
-        
       },
 
 

@@ -20,11 +20,11 @@ core.Interface("core.event.IEvent",
     /**
      * {Object} Returns the target on which the event is fired.
      */
-    //getTarget : function() {},
+    getTarget : function() {},
 
     /**
      * Sets the given @target {Object} during dispatching of the event object.
      */
-    //setTarget : function(target) {}
+    setTarget : function(target) {}
   }
 });

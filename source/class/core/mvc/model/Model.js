@@ -75,8 +75,11 @@
       },
 
       // Interface implementation
-      toJSON : function() {
-        return this.get(Object.keys(core.Class.getProperties(this.constructor)));
+      toJSON : function() 
+      {
+        return this.get(Object.keys(core.Class.getProperties(this.constructor))).map(function(value) {
+          value.toJSON ? value.toJSON() : value
+        });
       },
 
       // Interface implementation

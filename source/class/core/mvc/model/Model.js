@@ -51,6 +51,7 @@
 
     properties :
     {
+      // Model Interface implementation
       id : 
       {
         type : "String",
@@ -63,20 +64,6 @@
       error : function(message) {
         console.error("Model Error: " + message);
       },
-
-      /*
-      __id : null,
-
-      // Interface implementation
-      getId : function() {
-        return this.__id;
-      },
-
-      // Interface implementation
-      setId : function(id) {
-        return this.__id = id;
-      },
-      */
 
       __clientId : null,
 

@@ -56,6 +56,13 @@
 
     properties : 
     {
+      // Model Interface implementation
+      id : 
+      {
+        type : "String",
+        nullable : true
+      },
+
       /**
        * Model to use for creating new entries.
        */
@@ -77,18 +84,6 @@
 
     members :
     {
-      __id : null,
-
-      // Model Interface implementation
-      getId : function() {
-        return this.__id;
-      },
-
-      // Model Interface implementation
-      setId : function(id) {
-        return this.__id = id;
-      },
-
       __clientId : null,
 
       // Model Interface implementation

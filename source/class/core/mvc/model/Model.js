@@ -49,12 +49,22 @@
       "change" : core.event.Simple
     },
 
+    properties :
+    {
+      id : 
+      {
+        type : "String",
+        nullable : true
+      }
+    },
+
     members: 
     {
       error : function(message) {
         console.error("Model Error: " + message);
       },
 
+      /*
       __id : null,
 
       // Interface implementation
@@ -66,6 +76,7 @@
       setId : function(id) {
         return this.__id = id;
       },
+      */
 
       __clientId : null,
 
@@ -82,7 +93,7 @@
         for (var name in values) 
         {
           var value = values[name];
-          if (value.toJSON) {
+          if (value != null && value.toJSON) {
             values[name] = value.toJSON();
           }
         }

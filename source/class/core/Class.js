@@ -210,7 +210,7 @@
 		// Assign generic toString() method
 		// This is assigned before mixins or members are applied
 		proto.toString = function() {
-			return "[object " + this.constructor.className + "#" + core.util.Id.get(this) + "]";
+			return "[" + this.constructor.className + "-" + core.util.Id.get(this) + "]";
 		};
 
 

@@ -1,4 +1,4 @@
-(function(doc) 
+(function() 
 {
   var doc = document;
 

@@ -5,9 +5,6 @@ Core prepares the ground for JavaScript projects. It fills what is missing, fixe
 
 Core was designed to work together with the JavaScript tooling project [Jasy](https://github.com/sebastian-software/jasy).
 
-## Authors
-
-Core is developed by [Sebastian Werner](mailto:info@sebastian-werner.net) (supported by Zynga during 2011 and 2012). 
 
 ## Creating Projects
 
@@ -18,6 +15,7 @@ jasy create --name myproject --origin https://github.com/sebastian-software/core
 ```
 
 Note: Replace `myproject` with the name of the project (lowecase characters, no spaces) you want to create.
+
 
 ## Jasy Compatibility
 

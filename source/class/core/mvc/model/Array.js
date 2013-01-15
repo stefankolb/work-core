@@ -124,17 +124,19 @@
       // Collection Interface Implementation
       remove : function(model) 
       {
-        /** #require(ext.sugar.Array) */
-        var removedModel = this.__models.remove(model);
-        if (!removedModel) {
+        var index = this.__models.indexOf(model);
+        if (index == -1) {
           return;
         }
 
-        var removeEvent = core.mvc.event.Remove.obtain(removedModel);
+        this.__models.splice(index, 1);
+        model.removeListener("change", this.__onModelChange, this);
+
+        var removeEvent = core.mvc.event.Remove.obtain(model);
         this.dispatchEvent(removeEvent);
         removeEvent.release();
 
-        return removedModel;
+        return model;
       },      
 
 
@@ -148,7 +150,12 @@
 
 
 
-
+      __onModelChange : function(evt) 
+      {
+        var event = core.mvc.Event.obtain(evt.getTarget());
+        this.dispatchEvent(event);
+        event.release();
+      },
 
 
       /**
@@ -163,6 +170,8 @@
         {
           model = models[i];
           db.push(model);
+
+          model.addListener("change", this.__onModelChange, this);
 
           addEvent.setModel(model);
           this.dispatchEvent(addEvent);
@@ -192,6 +201,7 @@
         for (var i=length, model; i>0; i--) 
         {
           model = db[i];
+          model.removeListener("change", this.__onModelChange, this);
 
           // Pop out last model
           db.length--;
@@ -232,6 +242,8 @@
           return;
         }
         
+        removedModel.removeListener("change", this.__onModelChange, this);
+
         var removeEvent = core.mvc.event.Remove.obtain(removedModel);
         this.dispatchEvent(removeEvent);
         removeEvent.release();
@@ -251,6 +263,9 @@
         {
           model = arguments[i];
           this.__models.push(model);
+
+          model.addListener("change", this.__onModelChange, this);
+          
           addEvent.setModel(model);
           this.dispatchEvent(addEvent);
         }
@@ -271,6 +286,8 @@
           return;
         }
 
+        removedModel.removeListener("change", this.__onModelChange, this);
+
         var removeEvent = core.mvc.event.Remove.obtain(removedModel);
         this.dispatchEvent(removeEvent);
         removeEvent.release();
@@ -290,6 +307,8 @@
         for (var i=0, l=arguments.length; i<l; i++)
         {
           model = arguments[i];
+
+          model.addListener("change", this.__onModelChange, this);
 
           // Inserting in right order. Using unshift() would reverse the list.
           this.__models.splice(i, 0, model);
@@ -324,7 +343,7 @@
 
 
       /**
-       * Pluck a @property {String} from each model in the collection. 
+       * {Array} Pluck a @property {String} from each model in the collection. 
        * Equivalent to calling {#map}, and returning a single property from the iterator.
        */
       pluck : function(property) 

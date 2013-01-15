@@ -18,20 +18,12 @@
         print(this, "log", arguments);
       },
 
-      debug : function() {
-        print(this, "log", arguments);
-      },
-
       warn : function() {
         print(this, "warn", arguments);
       },
 
       error : function() {
         print(this, "error", arguments);
-      },
-
-      info : function() {
-        print(this, "info", arguments);
       }
     }
   });

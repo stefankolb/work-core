@@ -34,7 +34,7 @@
 		construct.base = clazz.superclass = superClass;
 
 		// Store statics/constructor onto constructor/prototype
-	 	// Store correct constructor
+		// Store correct constructor
 		// Store statics onto prototype
 		construct.self = clazz.constructor = proto.constructor = clazz;
 	};
@@ -207,6 +207,12 @@
 		// Prototype (stuff attached to all instances)
 		var proto = construct.prototype;
 	
+		// Assign generic toString() method
+		// This is assigned before mixins or members are applied
+		proto.toString = function() {
+			return "[object " + this.constructor.className + "#" + core.util.Id.get(this) + "]";
+		};
+
 
 		// ------------------------------------
 		//   POOLING
@@ -238,46 +244,46 @@
 					if (length < max) {
 						pool[length++] = obj;
 					}
-		    };
+				};
 
-		    /**
-		     * {Object} Obtains a new object from the pool or create one
-		     * dynamically based on the given constructor arguments.
-		     */
-		    construct.obtain = function(varargs) 
-		    {
-		    	if (length > 0)
-		    	{
-		    		var obj = pool[--length];
-		    		pool[length] = null;
-		    	}
-		    	else
-		    	{
-		    		var obj = new fakeConstruct;
-		    	}
+				/**
+				 * {Object} Obtains a new object from the pool or create one
+				 * dynamically based on the given constructor arguments.
+				 */
+				construct.obtain = function(varargs) 
+				{
+					if (length > 0)
+					{
+						var obj = pool[--length];
+						pool[length] = null;
+					}
+					else
+					{
+						var obj = new fakeConstruct;
+					}
 
 					// Execute original constructor as inexpensive as possible
-			    arguments.length ? construct.apply(obj, arguments) : construct.call(obj);
+					arguments.length ? construct.apply(obj, arguments) : construct.call(obj);
 
-		      return obj;
-		    };
+					return obj;
+				};
 
-		    /**
-		     * {Integer} Returns the current size of the pool
-		     */
-		    construct.getPoolSize = function() {
-		    	return length;
-		    };
+				/**
+				 * {Integer} Returns the current size of the pool
+				 */
+				construct.getPoolSize = function() {
+					return length;
+				};
 
-		    /**
-		     * Releases the object to the pool.
-		     */
-		    proto.release = function() 
-		    {
+				/**
+				 * Releases the object to the pool.
+				 */
+				proto.release = function() 
+				{
 					if (length < max) {
 						pool[length++] = this;
 					}
-		    };
+				};
 
 			})(config.pooling);
 		}

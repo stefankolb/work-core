@@ -82,6 +82,14 @@ core.Class("core.testrunner.reporter.Console",
             }
           }
         }
+        else if (test.getFailureReason() == "exception")
+        {
+          var stacktrace = test.getFailureStack();
+          var lines = stacktrace.split("\n");
+          for (var j=0, jl=lines.length; j<jl; j++) {
+            console.log("  " + lines[j])
+          }          
+        }
       }
     }
   }

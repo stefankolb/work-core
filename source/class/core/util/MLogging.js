@@ -3,7 +3,7 @@
   var console = core.Main.getGlobal().console;
   var slice = Array.prototype.slice;
 
-  var print = function(method, obj, args) 
+  var print = function(obj, method, args) 
   {
     var extended = slice.call(args);
     extended.push(obj.toString());

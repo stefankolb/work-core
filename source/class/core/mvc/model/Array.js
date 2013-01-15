@@ -152,7 +152,7 @@
 
       __onModelChange : function(evt) 
       {
-        var event = core.mvc.Event.obtain(evt.getTarget());
+        var event = core.mvc.Event.obtain("change", evt.getTarget());
         this.dispatchEvent(event);
         event.release();
       },

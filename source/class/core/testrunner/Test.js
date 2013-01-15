@@ -335,6 +335,14 @@ core.Class("core.testrunner.Test",
 
 
     /**
+     * {String} Returns the actual stack trace of the failure - if one happened.
+     */
+    getFailureStack : function() {
+      return this.__failureStack;
+    },
+
+
+    /**
      * {String} Returns the title of the test. This should be a human readable
      * explanation of the issue to solve in the test case.
      */
@@ -436,6 +444,7 @@ core.Class("core.testrunner.Test",
       {
         this.__failureReason = "exception";
         this.__failureMessage = "Exception: " + ex;
+        this.__failureStack = ex.stack;
 
         this.__updateOnFatalError();
 

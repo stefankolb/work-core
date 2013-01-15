@@ -6,7 +6,7 @@
   var print = function(obj, method, args) 
   {
     var extended = slice.call(args);
-    extended.push(obj.toString());
+    extended.unshift(obj.toString() + ":");
     console[method].apply(console, extended);
   };
 

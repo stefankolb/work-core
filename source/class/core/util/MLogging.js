@@ -7,7 +7,7 @@
   {
     var extended = slice.call(args);
     extended.push(obj.toString());
-    console[method].apply(console, args)
+    console[method].apply(console, extended);
   };
 
   core.Class("core.util.MLogging",

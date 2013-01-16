@@ -170,7 +170,7 @@
           model = models[i];
 
           if (core.Main.isTypeOf(model, "Plain")) {
-            model = this.wrap(model);
+            model = this.cast(model);
           }
 
           this.__models.push(model);
@@ -268,7 +268,7 @@
           model = arguments[i];
 
           if (core.Main.isTypeOf(model, "Plain")) {
-            model = this.wrap(model);
+            model = this.cast(model);
           }
 
           this.__models.push(model);
@@ -318,7 +318,7 @@
           model = arguments[i];
 
           if (core.Main.isTypeOf(model, "Plain")) {
-            model = this.wrap(model);
+            model = this.cast(model);
           }          
 
           model.addListener("change", this.__onModelChange, this);
@@ -384,8 +384,10 @@
       },
 
 
-      wrap : function(properties)
+      cast : function(properties)
       {
+        this.debug("Casting properties map into model instance...");
+
         var modelClass = this.getModel();
         if (!modelClass) {
           throw new Error("create() requires a model being assigned to work!");
@@ -404,7 +406,7 @@
        */
       create : function(properties) 
       {
-        var model = this.wrap(properties);
+        var model = this.cast(properties);
         this.push(model);
         return model;
       }

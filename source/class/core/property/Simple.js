@@ -57,6 +57,7 @@
 			var propertyType = config.type;
 			var propertyFire = config.fire;
 			var propertyApply = config.apply;
+			var propertyCast = config.cast;
 
 			// Validation
 			if (jasy.Env.isSet("debug"))
@@ -83,6 +84,16 @@
 
 				if (propertyApply) {
 					core.Assert.isType(propertyApply, "Function");
+				}
+
+				if (propertyCast != null) 
+				{
+					core.Assert.isType(propertyCast, "Boolean");
+
+					// When enabled the `type` should refer to a `core.Class`
+					if (propertyCast && !core.Class.isClass(propertyType)) {
+						throw new Error("Property declaration of " + propertyName + " contains invalid configuration: Casting support requires a core.Class for the type of the property!");
+					}
 				}
 			}
 

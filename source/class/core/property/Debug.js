@@ -15,6 +15,15 @@
 core.Module("core.property.Debug",
 {
 	/**
+	 * Checks whether the given property type definition is valid.
+	 */
+	isValidType : function(type)
+	{
+		// TODO
+	},
+
+
+	/**
 	 * Validates the incoming parameters of a setter method
 	 *
 	 * - @obj {Object} Object which is modified

@@ -348,6 +348,28 @@
       },
 
 
+      findBy : function(properties)
+      {
+        var db = this.__models;
+        for (var i=0, l=db.length; i<l; i++)
+        {
+          var model = db[i];
+
+          for (var name in properties)
+          { 
+            // Looking for false matches for faster failures 
+            if (model.get(name) !== properties[name]) {
+              continue;
+            }
+          }
+
+          return model;
+        }
+
+        return null;
+      },
+
+
       /** 
        * {Array} Creates a new array with the results of calling a provided 
        * @callback {Function} on every model in this collection. It's possible 
@@ -369,23 +391,6 @@
         return this.__models.map(function() {
           return this.get(property);
         });
-      },
-
-
-      /**
-       * {core.mvc.model.Model} Returns the model with the given @id {String}.
-       */ 
-      getxxx : function(id) 
-      {
-        var models = this.__models;
-        for (var i=0, l=models.length; i<l; i++) 
-        {
-          if (models[i].getId() == id || models[i].getClientId() == id) {
-            return models[i];
-          }
-        }
-
-        return null;
       },
 
 

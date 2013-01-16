@@ -185,13 +185,11 @@
 				var context=this, data, old;
 
 				// Wrap plain types to match property type
+				// Modifying `value` should also modify the arguments object which
+				// is required for value tests happening via checkSetter
 				if (config.wrap && core.Main.isTypeOf(value, "Plain")) {
 					value = new config.type(value);
-
-					console.debug("XXX: ", arguments[0])
 				}
-
-
 
 				// Check types
 				if (jasy.Env.isSet("debug")) {

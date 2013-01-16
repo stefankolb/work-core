@@ -340,14 +340,10 @@
       },
 
 
-      /** 
-       * {Array} Returns a new array filtered by the given filter @method {Function}.
+      /**
+       * {core.mvc.model.IModel} Returns the first model which 
+       * matches all values of the given @properties {Map}.
        */
-      filterxxx : function(method) {
-        return this.__models.filter(method);
-      },
-
-
       findBy : function(properties)
       {
         var db = this.__models;
@@ -367,6 +363,15 @@
         }
 
         return null;
+      },
+
+
+      /**
+       * {Boolean} Returns whether the collection contains a model
+       * where all values of the given @properties {Map} match.
+       */
+      containsBy : function(properties) {
+        !!this.findBy(properties);
       },
 
 

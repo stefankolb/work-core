@@ -163,13 +163,17 @@
        */
       append : function(models) 
       {
-        var db = this.__models;
         var addEvent = core.mvc.event.Add.obtain(null);
         
         for (var i=0, l=models.length, model; i<l; i++) 
         {
           model = models[i];
-          db.push(model);
+
+          if (core.Main.isTypeOf(model, "Plain")) {
+            model = this.wrap(model);
+          }
+
+          this.__models.push(model);
 
           model.addListener("change", this.__onModelChange, this);
 
@@ -179,7 +183,7 @@
 
         addEvent.release();
 
-        return db.length;
+        return this.__models.length;
       },
 
 
@@ -262,6 +266,11 @@
         for (var i=0, l=arguments.length; i<l; i++) 
         {
           model = arguments[i];
+
+          if (core.Main.isTypeOf(model, "Plain")) {
+            model = this.wrap(model);
+          }
+
           this.__models.push(model);
 
           model.addListener("change", this.__onModelChange, this);
@@ -307,6 +316,10 @@
         for (var i=0, l=arguments.length; i<l; i++)
         {
           model = arguments[i];
+
+          if (core.Main.isTypeOf(model, "Plain")) {
+            model = this.wrap(model);
+          }          
 
           model.addListener("change", this.__onModelChange, this);
 
@@ -371,18 +384,17 @@
       },
 
 
-      /**
-       * {Map[]} The method is called by whenever a collection's models are returned 
-       * by the server, in `fetch`. The function is passed the raw @response {Object} object, 
-       * and should return the array of model attributes to be added to the collection.
-       *
-       * The default implementation is a no-op, simply passing through the JSON response. 
-       * Override this if you need to work with a preexisting API, or better namespace 
-       * your responses. Note that afterwards, if your model class already has a parse 
-       * function, it will be run against each fetched model.
-       */
-      parse : function(response) {
-        return response;
+      wrap : function(properties)
+      {
+        var modelClass = this.getModel();
+        if (!modelClass) {
+          throw new Error("create() requires a model being assigned to work!");
+        }
+
+        // Prefer pooling when available
+        var model = modelClass.obtain ? modelClass.obtain(properties) : new modelClass(properties);
+
+        return model;
       },
 
 
@@ -392,18 +404,8 @@
        */
       create : function(properties) 
       {
-        var modelClass = this.getModel();
-
-        if (!modelClass) {
-          throw new Error("create() requires a model being assigned to work!");
-        }
-
-        // Prefer pooling when available
-        var model = modelClass.obtain ? modelClass.obtain(properties) : new modelClass(properties);
-        
-        // Auto-append
+        var model = this.wrap(properties);
         this.push(model);
-
         return model;
       }
     }

@@ -137,16 +137,17 @@
 		 * - `Null`
 		 * - `Array`
 		 * - `Function`
-		 * - `RegExp`
-		 * - `Object`
-		 * - `Date`
+		 * - `RegExp` - Instance of RegExp constructor
+		 * - `Object` - Any object (better use a more detailed type)
+		 * - `Date` - Instance of Date constructor
 		 * - `Number`
 		 * - `String`
 		 * - `Boolean`
 		 * - `Map`
 		 * - `Integer`
-		 * - `Primitive`
-		 * - `Node
+		 * - `Primitive` - either String, Number or Boolean
+		 * - `Plain` - either Primitive, Array or Map
+		 * - `Node` - any DOM node
 		 */
 		isTypeOf : function(value, type) 
 		{
@@ -172,6 +173,10 @@
 			{
 				var type = typeof value;
 				result = value == null || type == "boolean" || type == "number" || type == "string";
+			}
+			else if (type == "Plain")
+			{
+				result = this.isTypeOf(value, "Primitive") || this.isTypeOf(value, "Map") || this.isTypeOf(value, "Array");
 			}
 			else if (type == "Node")
 			{

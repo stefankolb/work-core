@@ -63,7 +63,7 @@
 			if (jasy.Env.isSet("debug"))
 			{
 				/** #require(ext.sugar.Object) */
-				var invalidKeys = Object.validateKeys(config, "name,nullable,init,type,fire,apply,wrap".split(","));
+				var invalidKeys = Object.validateKeys(config, "name,nullable,init,type,fire,apply,cast".split(","));
 				if (invalidKeys.length > 0) {
 					throw new Error("Property declaration of " + propertyName + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
 				}

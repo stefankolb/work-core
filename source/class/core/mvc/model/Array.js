@@ -170,7 +170,7 @@
           model = models[i];
 
           if (core.Main.isTypeOf(model, "Plain")) {
-            model = this.cast(model);
+            model = this.__fromProperties(model);
           }
 
           this.__models.push(model);
@@ -268,7 +268,7 @@
           model = arguments[i];
 
           if (core.Main.isTypeOf(model, "Plain")) {
-            model = this.cast(model);
+            model = this.__fromProperties(model);
           }
 
           this.__models.push(model);
@@ -318,7 +318,7 @@
           model = arguments[i];
 
           if (core.Main.isTypeOf(model, "Plain")) {
-            model = this.cast(model);
+            model = this.__fromProperties(model);
           }          
 
           model.addListener("change", this.__onModelChange, this);
@@ -338,7 +338,7 @@
       /** 
        * {Array} Returns a new array filtered by the given filter @method {Function}.
        */
-      filter : function(method) {
+      filterxxx : function(method) {
         return this.__models.filter(method);
       },
 
@@ -370,7 +370,7 @@
       /**
        * {core.mvc.model.Model} Returns the model with the given @id {String}.
        */ 
-      get : function(id) 
+      getxxx : function(id) 
       {
         var models = this.__models;
         for (var i=0, l=models.length; i<l; i++) 
@@ -384,10 +384,12 @@
       },
 
 
-      cast : function(properties)
+      /**
+       * {core.mvc.model.IModel} Casts @properties {Map} into a model 
+       * instance of the Class configured in this instance.
+       */
+      __fromProperties : function(properties)
       {
-        this.log("Casting properties map into model instance...");
-
         var modelClass = this.getModel();
         if (!modelClass) {
           throw new Error("create() requires a model being assigned to work!");
@@ -396,18 +398,6 @@
         // Prefer pooling when available
         var model = modelClass.obtain ? modelClass.obtain(properties) : new modelClass(properties);
 
-        return model;
-      },
-
-
-      /**
-       * {core.mvc.model.Model} Creates a new model with the given 
-       * @properties {Map?} and appends it to the collection.
-       */
-      create : function(properties) 
-      {
-        var model = this.cast(properties);
-        this.push(model);
         return model;
       }
     }

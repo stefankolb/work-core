@@ -62,7 +62,7 @@
 			if (jasy.Env.isSet("debug"))
 			{
 				/** #require(ext.sugar.Object) */
-				var invalidKeys = Object.validateKeys(config, "name,nullable,init,type,fire,apply".split(","));
+				var invalidKeys = Object.validateKeys(config, "name,nullable,init,type,fire,apply,wrap".split(","));
 				if (invalidKeys.length > 0) {
 					throw new Error("Property declaration of " + propertyName + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
 				}
@@ -74,7 +74,7 @@
 				}
 
 				if (propertyType) {
-					// TODO
+					core.property.Debug.isValidType(propertyType);
 				}
 
 				if (propertyFire) {
@@ -107,8 +107,8 @@
 
 			members.get = function()
 			{
-				var context, data, value;
-				context = this;
+				var data, value;
+				var context = this;
 
 				if (jasy.Env.isSet("debug")) {
 					core.property.Debug.checkGetter(context, config, arguments);
@@ -150,7 +150,8 @@
 			{
 				members.init = function()
 				{
-					var context=this, data=context[store];
+					var context = this;
+					var data = context[store];
 
 					// Check whether there is already local data (which is higher prio than init data)
 					if (!data || data[propertyId] === undef)
@@ -183,6 +184,16 @@
 			{
 				var context=this, data, old;
 
+				// Wrap plain types to match property type
+				if (config.wrap && core.Main.isTypeOf(value, "Plain")) {
+					value = new config.type(value);
+
+					console.debug("XXX: ", arguments[0])
+				}
+
+
+
+				// Check types
 				if (jasy.Env.isSet("debug")) {
 					core.property.Debug.checkSetter(context, config, arguments);
 				}

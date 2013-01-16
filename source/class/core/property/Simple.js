@@ -202,7 +202,7 @@
 				// Wrap plain types to match property type
 				// Modifying `value` should also modify the arguments object which
 				// is required for value tests happening via checkSetter
-				if (config.wrap && core.Main.isTypeOf(value, "Plain")) {
+				if (config.cast && core.Main.isTypeOf(value, "Plain")) {
 					value = new config.type(value);
 				}
 

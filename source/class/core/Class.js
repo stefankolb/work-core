@@ -566,8 +566,8 @@
 		{
 			if (jasy.Env.isSet("debug")) 
 			{
-				core.Class.assertIsClass(cls, "Class to check for including class is itself not a class!");
-				core.Class.assertIsClass(inc, "Class to check for being included is not a class!");
+				core.Class.assertIsClass(cls, "Class to check for wether it includes class " + inc + " is itself not a class (" + cls + ")!");
+				core.Class.assertIsClass(inc, "Class to check for being included is not a class: " + inc + "!");
 			}
 
 			return cls.__includes.indexOf(inc) != -1;

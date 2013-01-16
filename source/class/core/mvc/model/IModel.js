@@ -44,12 +44,12 @@ core.Interface("core.mvc.model.IModel",
     toJSON : function() {},
 
     /**
-     * The function is passed the raw response object, and should return the properties
+     * {Map|Array} The function is passed the raw @data {var}, and should return the properties
      * to be set on the model. The default implementation is a no-op, simply passing 
      * through the response (which should be JSON and where the keys match the name
      * of the model properties). Override this if you need to work with a preexisting API, 
      * or better namespace your responses.
      */
-    parse : function() {}
+    parse : function(data) {}
   }
 });

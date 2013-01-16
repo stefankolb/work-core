@@ -24,9 +24,9 @@
     implement : [core.mvc.model.IModel, core.mvc.model.ICollection],
 
     /**
-     * Prefill the collection with @models {core.mvc.model.Model[]}.
+     * Prefill the collection with @data {var}.
      */
-    construct: function(models) 
+    construct: function(data) 
     {
       // Do not directly use given models to have a internal 
       // "protected" copy of the original data and using
@@ -36,9 +36,9 @@
       // Automatically created client-side ID
       this.__clientId = "collection:" + (globalId++);
 
-      // Inject given models
-      if (models != null) {
-        this.append(models);
+      // Inject given data
+      if (data != null) {
+        this.append(this.parse(data));
       }
     },
 

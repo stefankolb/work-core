@@ -96,6 +96,11 @@
         return this.__models.map(modelToJson);
       },
 
+      // Model Interface implementation
+      parse : function(data) {
+        return data;
+      },
+
       // Collection Interface implementation
       find : function(id) 
       {

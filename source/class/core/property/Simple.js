@@ -90,7 +90,11 @@
 				{
 					core.Assert.isType(propertyCast, "Boolean");
 
-					// When enabled the `type` should refer to a `core.Class`
+					/**
+					 * When enabled the `type` should refer to a `core.Class`
+					 *
+					 * #break(core.Class)
+					 */
 					if (propertyCast && !core.Class.isClass(propertyType)) {
 						throw new Error("Property declaration of " + propertyName + " contains invalid configuration: Casting support requires a core.Class for the type of the property!");
 					}

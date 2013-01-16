@@ -386,7 +386,7 @@
 
       cast : function(properties)
       {
-        this.debug("Casting properties map into model instance...");
+        this.log("Casting properties map into model instance...");
 
         var modelClass = this.getModel();
         if (!modelClass) {

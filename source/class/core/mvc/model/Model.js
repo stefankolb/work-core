@@ -37,9 +37,9 @@
       // Automatically created client-side ID
       this.__clientId = "model:" + (globalId++);
 
-      // Import given values
+      // Import given values with parse method
       if (values != null) {
-        this.set(values);
+        this.set(this.parse(values));
       }
     },
 
@@ -61,11 +61,13 @@
 
     members: 
     {
-      error : function(message) {
-        console.error("Model Error: " + message);
-      },
-
+      /** {String} Internal storage field for client ID */
       __clientId : null,
+
+      // Interface implementation
+      parse : function(data) {
+        return data;
+      },
 
       // Interface implementation
       getClientId : function() {
@@ -75,6 +77,9 @@
       // Interface implementation
       toJSON : function() 
       {
+        // Typically uses all existing properties
+        // Override the method if you need to include other fields
+
         var values = this.get(Object.keys(core.Class.getProperties(this.constructor)));
 
         for (var name in values) 
@@ -86,11 +91,6 @@
         }
 
         return values;
-      },
-
-      // Interface implementation
-      sync : function() {
-        return core.mvc.Sync.sync(this);
       }
     }
   });

@@ -1,6 +1,6 @@
 core.Class("core.mvc.presenter.Abstract",
 {
-  include: [core.event.MEventTarget, core.util.MLogging],
+  include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
 
   construct : function() 
   {

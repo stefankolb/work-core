@@ -29,7 +29,7 @@
 		return htmlMap[str];
 	};
 
-	var getter = function(obj, key) 
+	var getter = function(key, obj) 
 	{
 		if (obj != null) 
 		{
@@ -63,7 +63,7 @@
 			var splits = key.split(".");
 			for (var i=0, l=splits.length; i<l; i++) 
 			{
-				data = getter(data, splits[i]);
+				data = getter(splits[i], data);
 				if (data == null) {
 					return;
 				}
@@ -72,9 +72,7 @@
 			return data;
 		},
 		
-		0: function(key, data) {
-			return getter(data, key);
-		}
+		0: getter
 	};
 	
 

@@ -28,38 +28,52 @@
 	var htmlEscape = function(str) {
 		return htmlMap[str];
 	};
+
+	var getter = function(obj, key) 
+	{
+		if (obj != null) 
+		{
+			if (obj.constructor === Object) 
+			{
+				if (hasOwnProperty.call(obj, key)) {
+					return obj[key];
+				}
+			}
+			else if (typeof obj.get == "function") 
+			{
+				var value = obj.get(key);
+				if (value != null) {
+					return value;
+				}
+			}
+		}
+	};
 	
 	var accessor = 
 	{
-		2: function(key, data) {
-			return data;
+		2: function(key, data) 
+		{
+			if (data != null) {
+				return data;
+			}
 		},
 		
 		1: function(key, data) 
 		{
-			if (key == ".") {
-				return data;
-			}
-
 			var splits = key.split(".");
 			for (var i=0, l=splits.length; i<l; i++) 
 			{
-				var sub = splits[i];
-				if (!hasOwnProperty.call(data, sub)) {
+				data = getter(data, splits[i]);
+				if (data == null) {
 					return;
 				}
-
-				data = data[sub];
 			}
 
 			return data;
 		},
 		
-		0: function(key, data) 
-		{
-			if (hasOwnProperty.call(data, key)) {
-				return data[key];
-			}
+		0: function(key, data) {
+			return getter(data, key);
 		}
 	};
 	

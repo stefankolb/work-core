@@ -9,11 +9,8 @@ core.Class("core.mvc.view.Dom",
 {
   include : [core.mvc.view.Abstract],
 
-  construct: function(presenter) 
-  {
+  construct: function(presenter) {
     core.mvc.view.Abstract.call(this, presenter);
-
-
   },
 
   properties : 
@@ -44,8 +41,7 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      // Allow both MVP and MVC approaches
-      var presenterOrModel = this.getPresenter() || this.getModel() || {};
+      var presenterOrModel = this.getPresenter() || {};
       elem.innerHTML = template.render(presenterOrModel);
 
       return this;

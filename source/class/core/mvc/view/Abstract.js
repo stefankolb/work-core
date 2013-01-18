@@ -12,7 +12,7 @@
  * which can be updated independently when the model changes, without 
  * having to redraw the entire page. 
  * 
- * Instead of digging into a JSON object, 
+ * Instead of digging into a JSON object or class instance, 
  * looking up an element in the DOM, and updating the HTML by hand, 
  * you can bind your view's render function to the model's "change" event — 
  * and now everywhere that model data is displayed in the UI, it is 
@@ -23,14 +23,13 @@ core.Class("core.mvc.view.Abstract",
   include : [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
 
   /**
-   * @presenter {Object} Presenter instance to connect to
+   * @presenter {core.mvc.presenter.Abstract} Presenter instance to connect to
    */ 
   construct: function(presenter) 
   {
     core.Main.isTypeOf(presenter, "Object", "Invalid presenter instance!");
 
     this.__presenter = presenter;
-
   },
 
   properties : 
@@ -43,38 +42,13 @@ core.Class("core.mvc.view.Abstract",
       apply : function() {
         this.render();
       }
-    },
-
-    /** The model/collection to render */
-    model :
-    {
-      type : core.mvc.model.IModel,
-      nullable : true,
-      apply : function(value, old)
-      {
-        if (old) 
-        {
-          old.removeListener("change", this.render, this);
-          old.removeListener("add", this.render, this);
-          old.removeListener("remove", this.render, this);
-        }
-
-        if (value) 
-        {
-          value.addListener("change", this.render, this);
-          value.addListener("add", this.render, this);
-          value.addListener("remove", this.render, this);
-        }
-
-        this.render();
-      }
     }
   },
 
   members :
   {
     /**
-     * Returns the attached presenter instance
+     * {core.mvc.presenter.Abstract} Returns the attached presenter instance
      */
     getPresenter : function() {
       return this.__presenter;

@@ -9,16 +9,12 @@ core.Class("core.mvc.view.Dom",
 {
   include : [core.mvc.view.Abstract],
 
-  construct: function(properties, events) 
+  construct: function(presenter) 
   {
-    core.mvc.view.Abstract.call(this, properties);
-
-    for (var key in events) {
+    core.mvc.view.Abstract.call(this, presenter);
 
 
-    }
   },
-
 
   properties : 
   {
@@ -31,9 +27,7 @@ core.Class("core.mvc.view.Dom",
         this.render();
       }
     }
-
   },
-
 
   members : 
   {
@@ -41,19 +35,7 @@ core.Class("core.mvc.view.Dom",
     render : function() 
     {
       var elem = this.getRoot();
-      if (!elem)
-      {
-        var id = this.getId();
-        if (jasy.Env.isSet("debug")) 
-        {
-          if (!id) {
-            throw new Error("Please define either an element or an ID for having a valid render target.");
-          }
-        }
-
-        this.setRoot(document.getElementById(id));
-
-        // Setting the root leads to another render() call
+      if (!elem) {
         return;
       }
 

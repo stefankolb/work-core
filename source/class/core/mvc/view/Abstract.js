@@ -23,13 +23,14 @@ core.Class("core.mvc.view.Abstract",
   include : [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
 
   /**
-   * @properties {Map} Properties to set initially
+   * @presenter {Object} Presenter instance to connect to
    */ 
-  construct: function(properties) 
+  construct: function(presenter) 
   {
-    if (properties) {
-      this.set(properties);
-    }
+    core.Main.isTypeOf(presenter, "Object", "Invalid presenter instance!");
+
+    this.__presenter = presenter;
+
   },
 
   properties : 
@@ -72,6 +73,14 @@ core.Class("core.mvc.view.Abstract",
 
   members :
   {
+    /**
+     * Returns the attached presenter instance
+     */
+    getPresenter : function() {
+      return this.__presenter;
+    },
+
+
     /**
      * Renders the view using data from the attached model.
      */

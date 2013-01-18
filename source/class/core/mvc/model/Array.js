@@ -119,7 +119,16 @@
       // Collection Interface implementation
       getLength : function() {
         return this.__models.length;
-      },      
+      },    
+
+      // Collection Interface implementation
+      isEmpty : function() {
+        return this.__models.length > 0;
+      },
+
+      toArray : function() {
+        return this.__models.slice(0);
+      },
 
       // Collection Interface implementation
       add : function(model) {

@@ -151,6 +151,11 @@
 			{
 				var value = accessor[method](key, data);
 				
+				// Auto cast
+				if (value.toArray) {
+					value = value.toArray();
+				}
+
 				if (value instanceof Array) 
 				{
 					for (var i=0, l=value.length; i<l; i++) {
@@ -172,6 +177,8 @@
 				var value = accessor[method](key, data);
 				if (value instanceof Array) {
 					return value.length > 0;
+				} else if (value.isEmpty) {
+					return !value.isEmpty();
 				} else {
 					return value === '' || !!value
 				}

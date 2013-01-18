@@ -41,6 +41,11 @@ core.Interface("core.mvc.model.ICollection",
     /**
      * {Integer} Returns the length of the collection.
      */
-    getLength : function() {}
+    getLength : function() {},
+
+    /**
+     * {Boolean} Whether the collection is empty.
+     */
+    isEmpty : function() {}
   }
 });

@@ -44,10 +44,11 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      var data = this.getModel();
+      // Allow both MVP and MVC approaches
+      var presenterOrModel = this.getPresenter() || this.getModel();
 
-      this.log("Rendering with:", data);
-      elem.innerHTML = template.render(data ? data.toJSON() : {});
+      this.log("Rendering with:", presenterOrModel);
+      elem.innerHTML = template.render(presenterOrModel);
 
       return this;
     }    

@@ -45,6 +45,8 @@ core.Class("core.mvc.view.Dom",
       }
 
       var data = this.getModel();
+
+      this.log("Rendering with:", data);
       elem.innerHTML = template.render(data ? data.toJSON() : {});
 
       return this;

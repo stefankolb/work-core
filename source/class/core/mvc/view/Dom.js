@@ -45,9 +45,7 @@ core.Class("core.mvc.view.Dom",
       }
 
       // Allow both MVP and MVC approaches
-      var presenterOrModel = this.getPresenter() || this.getModel();
-
-      this.log("Rendering with:", presenterOrModel);
+      var presenterOrModel = this.getPresenter() || this.getModel() || {};
       elem.innerHTML = template.render(presenterOrModel);
 
       return this;

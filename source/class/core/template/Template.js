@@ -106,8 +106,8 @@
 			{
 				if (jasy.Env.isSet("debug")) 
 				{
-					if (!(core.Main.isTypeOf(data, "Map") || core.Main.isTypeOf(data, "Array"))) {
-						throw new Error("Data needs to be type of Array or Map: " + data);
+					if (!(core.Main.isTypeOf(data, "Object") || core.Main.isTypeOf(data, "Array"))) {
+						throw new Error("Data needs to be type of Object, Map or Array: " + data);
 					}
 										
 					if (arguments.length > 1) {

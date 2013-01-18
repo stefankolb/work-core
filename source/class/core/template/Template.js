@@ -148,21 +148,23 @@
 			_section: function(key, method, data, partials, section) 
 			{
 				var value = accessor[method](key, data);
-				
-				// Auto cast
-				if (value.toArray) {
-					value = value.toArray();
-				}
-
-				if (value instanceof Array) 
+				if (value !== undef)
 				{
-					for (var i=0, l=value.length; i<l; i++) {
-						section.call(this, value[i], partials);
+					// Auto cast
+					if (value.toArray) {
+						value = value.toArray();
 					}
-				}
-				else if (value !== undef)
-				{
-					section.call(this, value, partials);
+
+					if (value instanceof Array) 
+					{
+						for (var i=0, l=value.length; i<l; i++) {
+							section.call(this, value[i], partials);
+						}
+					}
+					else
+					{
+						section.call(this, value, partials);
+					}					
 				}
 			},
 

@@ -41,9 +41,12 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      var presenterOrModel = this.getPresenter() || {};
-      elem.innerHTML = template.render(presenterOrModel);
+      var presenter = this.getPresenter() || {};
+      if (this.getPresenter() == null) {
+        this.warn("Missing presenter!");
+      }
 
+      elem.innerHTML = template.render(presenter);
       return this;
     }    
   }

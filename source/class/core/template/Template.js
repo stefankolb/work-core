@@ -46,6 +46,10 @@
 					return value;
 				}
 			}
+			else if (jasy.Env.isSet("debug"))
+			{
+				console.warn("Could not read " + key + " from object " + obj + "! Missing generic get(property) method!");
+      }
 		}
 	};
 	

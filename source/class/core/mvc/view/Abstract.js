@@ -42,6 +42,12 @@ core.Class("core.mvc.view.Abstract",
       apply : function() {
         this.render();
       }
+    },
+
+    buffered :
+    {
+      type : "Boolean",
+      init : true
     }
   },
 

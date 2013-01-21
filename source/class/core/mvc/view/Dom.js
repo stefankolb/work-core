@@ -28,8 +28,7 @@ core.Class("core.mvc.view.Dom",
 
   members : 
   {
-    // Definition of abstract method
-    render : function() 
+    render : (function()
     {
       var elem = this.getRoot();
       if (!elem) {
@@ -48,8 +47,8 @@ core.Class("core.mvc.view.Dom",
 
       this.log("Rendering view...");
       elem.innerHTML = template.render(presenter);
-      return this;
-    },
+      return this;      
+    }).debounce(10),
 
     show : function()
     {

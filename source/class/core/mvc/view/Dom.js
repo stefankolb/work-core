@@ -46,7 +46,7 @@ core.Class("core.mvc.view.Dom",
         this.warn("Missing presenter!");
       }
 
-      this.debug("Render...");
+      this.log("Rendering view...");
       elem.innerHTML = template.render(presenter);
       return this;
     },

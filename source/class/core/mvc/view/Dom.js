@@ -108,6 +108,23 @@ core.Class("core.mvc.view.Dom",
 
       elem.style.display = "none";
       this.fireEvent("hide");
-    } 
+    },
+
+
+    /**
+     * Loads the given @tmpl {Uri} via the text loader (XHR) and creates
+     * a new template instance which is auto applied to the #text property afterwards.
+     */
+    loadTemplate : function(tmpl)
+    {
+      core.io.Text.load(jasy.Asset.toUri(tmpl), function(uri, errornous, data) 
+      {
+        if (errornous) {
+          throw new Error("Could not load template: " + uri + "!");
+        }
+
+        this.setTemplate(core.template.Compiler.compile(data.text));  
+      }, this);      
+    }
   }
 });

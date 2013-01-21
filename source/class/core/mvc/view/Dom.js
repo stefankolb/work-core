@@ -49,7 +49,7 @@ core.Class("core.mvc.view.Dom",
       this.log("Rendering view...");
       elem.innerHTML = template.render(presenter);
       return this;      
-    }).debounce(10),
+    }).debounce(100),
 
     show : function()
     {

@@ -2,8 +2,9 @@ core.Interface("core.mvc.view.IView",
 {
   /**
    * @presenter {core.mvc.presenter.Abstract} Presenter instance to connect to
-   */  
-  construct: function(presenter) {},
+   */
+  // Not supported yet  
+  // construct: function(presenter) {},
   
   events :
   {

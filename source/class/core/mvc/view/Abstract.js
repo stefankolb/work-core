@@ -29,7 +29,7 @@ core.Class("core.mvc.view.Abstract",
     {
       core.Main.isTypeOf(presenter, "Object", "Invalid presenter instance!");
 
-      if (!core.Class.includesClass(presenter, core.mvc.presenter.Abstract)) {
+      if (!core.Class.includesClass(presenter.constructor, core.mvc.presenter.Abstract)) {
         throw new Error("Presenter classes should include the abstract class 'core.presenter.Abstract'!");
       }
     }

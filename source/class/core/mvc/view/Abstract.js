@@ -29,7 +29,7 @@ core.Class("core.mvc.view.Abstract",
     {
       core.Main.isTypeOf(presenter, "Object", "Invalid presenter instance!");
 
-      if (!core.Class.includesClass(presenter, core.presenter.Abstract)) {
+      if (!core.Class.includesClass(presenter, core.mvc.presenter.Abstract)) {
         throw new Error("Presenter classes should include the abstract class 'core.presenter.Abstract'!");
       }
     }
@@ -45,7 +45,7 @@ core.Class("core.mvc.view.Abstract",
     /** Fired after the view has been hidden */
     "hide" : core.event.Simple
   },
-  
+
   members :
   {
     // Interface implementation

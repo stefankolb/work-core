@@ -46,9 +46,32 @@ core.Class("core.mvc.view.Dom",
         this.warn("Missing presenter!");
       }
 
+      this.debug("Render...");
       elem.innerHTML = template.render(presenter);
       return this;
-    }    
+    },
+
+    show : function()
+    {
+      var elem = this.getRoot();
+      if (!elem) {
+        return;
+      }
+
+      elem.style.display = "";
+      this.fireEvent("show");
+    },
+
+    hide : function()
+    {
+      var elem = this.getRoot();
+      if (!elem) {
+        return;
+      }
+
+      elem.style.display = "none";
+      this.fireEvent("hide");
+    } 
   }
 
 });

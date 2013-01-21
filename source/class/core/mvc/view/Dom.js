@@ -15,6 +15,16 @@ core.Class("core.mvc.view.Dom",
 
   properties : 
   {
+    /** Instance of compiled template to produce final data / text for output e.g. HTML, JSON, ... */
+    template : 
+    {
+      type: core.template.Template,
+      nullable : true,
+      apply : function() {
+        this.render();
+      }
+    },
+        
     /** The root element to render into */
     root : 
     {
@@ -28,8 +38,32 @@ core.Class("core.mvc.view.Dom",
 
   members : 
   {
-    /** #require(ext.sugar.Function) */
-    render : (function()
+    /**
+     * Renders the view.
+     */
+    render : function()
+    {
+      if (this.__renderScheduled) {
+        return;
+      }
+
+      this.__renderScheduled = true;
+
+      var self = this;
+
+      /** #require(ext.RequestAnimationFrame) */
+      requestAnimationFrame(function() {
+        self.__render();
+        self.__renderScheduled = false;
+      });
+    },
+
+
+    /**
+     * Internal render method which is called in buffered mode
+     * so that only one rendering happens per frame.
+     */
+    __render : function()
     {
       var elem = this.getRoot();
       if (!elem) {
@@ -49,8 +83,12 @@ core.Class("core.mvc.view.Dom",
       this.log("Rendering view...");
       elem.innerHTML = template.render(presenter);
       return this;      
-    }).debounce(100),
+    },
 
+
+    /**
+     * Shows the DOM element
+     */
     show : function()
     {
       var elem = this.getRoot();
@@ -62,6 +100,10 @@ core.Class("core.mvc.view.Dom",
       this.fireEvent("show");
     },
 
+
+    /**
+     * Hides the root DOM element
+     */
     hide : function()
     {
       var elem = this.getRoot();
@@ -73,5 +115,4 @@ core.Class("core.mvc.view.Dom",
       this.fireEvent("hide");
     } 
   }
-
 });

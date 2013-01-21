@@ -32,23 +32,13 @@ core.Class("core.mvc.view.Abstract",
     this.__presenter = presenter;
   },
 
-  properties : 
+  events :
   {
-    /** Instance of compiled template to produce final data / text for output e.g. HTML, JSON, ... */
-    template : 
-    {
-      type: core.template.Template,
-      nullable : true,
-      apply : function() {
-        this.render();
-      }
-    },
+    /** Fired after the view has been shown */
+    "show" : core.event.Simple,
 
-    buffered :
-    {
-      type : "Boolean",
-      init : true
-    }
+    /** Fired after the view has been hidden */
+    "hide" : core.event.Simple
   },
 
   members :
@@ -68,6 +58,28 @@ core.Class("core.mvc.view.Abstract",
     {
       if (jasy.Env.isSet("debug")) {
         throw new Error("render() is abstract in core.mvc.view.Abstract!");
+      }
+    },
+
+
+    /**
+     * Hides the view.
+     */
+    hide : function() 
+    {
+      if (jasy.Env.isSet("debug")) {
+        throw new Error("hide() is abstract in core.mvc.view.Abstract!");
+      }
+    },
+
+
+    /**
+     * Shows the view.
+     */
+    show : function() 
+    {
+      if (jasy.Env.isSet("debug")) {
+        throw new Error("show() is abstract in core.mvc.view.Abstract!");
       }
     }
   }

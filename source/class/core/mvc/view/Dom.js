@@ -28,6 +28,7 @@ core.Class("core.mvc.view.Dom",
 
   members : 
   {
+    /** #require(ext.sugar.Function) */
     render : (function()
     {
       var elem = this.getRoot();

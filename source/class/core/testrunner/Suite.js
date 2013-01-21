@@ -199,8 +199,16 @@ core.Class("core.testrunner.Suite",
       // Process tests in queue
       for (var i=0; i<length; i++) 
       {
+        if (this.__setup) {
+          this.__setup();  
+        }        
+
         testStartedCallback(queue[i]);
         queue[i].run();
+
+        if (this.__teardown) {
+          this.__teardown();  
+        }        
       }
 
       return true;

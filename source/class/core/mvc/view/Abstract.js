@@ -21,13 +21,18 @@
 core.Class("core.mvc.view.Abstract", 
 {
   include : [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
-
-  /**
-   * @presenter {core.mvc.presenter.Abstract} Presenter instance to connect to
-   */ 
+ 
+  // Interface implementation
   construct: function(presenter) 
   {
-    core.Main.isTypeOf(presenter, "Object", "Invalid presenter instance!");
+    if (jasy.Env.isSet("debug"))
+    {
+      core.Main.isTypeOf(presenter, "Object", "Invalid presenter instance!");
+
+      if (!core.Class.includesClass(presenter, core.presenter.Abstract)) {
+        throw new Error("Presenter classes should include the abstract class 'core.presenter.Abstract'!");
+      }
+    }
 
     this.__presenter = presenter;
   },
@@ -40,47 +45,12 @@ core.Class("core.mvc.view.Abstract",
     /** Fired after the view has been hidden */
     "hide" : core.event.Simple
   },
-
+  
   members :
   {
-    /**
-     * {core.mvc.presenter.Abstract} Returns the attached presenter instance
-     */
+    // Interface implementation
     getPresenter : function() {
       return this.__presenter;
-    },
-
-
-    /**
-     * Renders the view using data from the attached model.
-     */
-    render : function() 
-    {
-      if (jasy.Env.isSet("debug")) {
-        throw new Error("render() is abstract in core.mvc.view.Abstract!");
-      }
-    },
-
-
-    /**
-     * Hides the view.
-     */
-    hide : function() 
-    {
-      if (jasy.Env.isSet("debug")) {
-        throw new Error("hide() is abstract in core.mvc.view.Abstract!");
-      }
-    },
-
-
-    /**
-     * Shows the view.
-     */
-    show : function() 
-    {
-      if (jasy.Env.isSet("debug")) {
-        throw new Error("show() is abstract in core.mvc.view.Abstract!");
-      }
     }
   }
 });

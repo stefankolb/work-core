@@ -8,6 +8,7 @@
 core.Class("core.mvc.view.Dom",
 {
   include : [core.mvc.view.Abstract],
+  implement : [core.mvc.view.IView],
 
   construct: function(presenter) {
     core.mvc.view.Abstract.call(this, presenter);
@@ -24,7 +25,7 @@ core.Class("core.mvc.view.Dom",
         this.render();
       }
     },
-        
+
     /** The root element to render into */
     root : 
     {
@@ -38,9 +39,7 @@ core.Class("core.mvc.view.Dom",
 
   members : 
   {
-    /**
-     * Renders the view.
-     */
+    // Interface implementation
     render : function()
     {
       if (this.__renderScheduled) {
@@ -86,9 +85,7 @@ core.Class("core.mvc.view.Dom",
     },
 
 
-    /**
-     * Shows the DOM element
-     */
+    // Interface implementation
     show : function()
     {
       var elem = this.getRoot();
@@ -101,9 +98,7 @@ core.Class("core.mvc.view.Dom",
     },
 
 
-    /**
-     * Hides the root DOM element
-     */
+    // Interface implementation
     hide : function()
     {
       var elem = this.getRoot();

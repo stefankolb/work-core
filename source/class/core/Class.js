@@ -570,7 +570,8 @@
 				core.Class.assertIsClass(inc, "Class to check for being included is not a class: " + inc + "!");
 			}
 
-			return cls.__includes.indexOf(inc) != -1;
+			var includes = cls.__includes;
+			return includes && includes.indexOf(inc) != -1;
 		}
 	});
 

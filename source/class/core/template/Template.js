@@ -181,7 +181,7 @@
 				var value = accessor[method](key, data);
 				if (value instanceof Array) {
 					return value.length > 0;
-				} else if (value.isEmpty) {
+				} else if (value != null && value.isEmpty) {
 					return !value.isEmpty();
 				} else {
 					return value === '' || !!value

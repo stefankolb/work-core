@@ -79,10 +79,16 @@ core.Class("core.mvc.view.Dom",
         this.warn("Missing presenter!");
       }
 
+      this._beforeRender();
+
       this.log("Rendering view...");
       elem.innerHTML = template.render(presenter);
-      return this;      
+
+      this._afterRender();
     },
+
+    _beforeRender : function() {},
+    _afterRender : function() {},
 
 
     // Interface implementation

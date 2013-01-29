@@ -42,19 +42,26 @@ core.Class("core.mvc.view.Dom",
     // Interface implementation
     render : function()
     {
-      if (this.__renderScheduled) {
+      if (this.__renderScheduled != null) {
         return;
       }
 
-      this.__renderScheduled = true;
-
-      var self = this;
-
       /** #require(ext.RequestAnimationFrame) */
-      requestAnimationFrame(function() {
-        self.__render();
-        self.__renderScheduled = false;
-      });
+      this.__renderScheduled = requestAnimationFrame(core.util.Function.bind(this.__renderRequest, this));
+    },
+
+
+    __renderRequest : function()
+    {
+      if (this._shouldRender()) 
+      {
+        this.__render();
+        this.__renderScheduled = null;
+      }
+      else
+      {
+        this.__renderScheduled = requestAnimationFrame(core.util.Function.bind(this.__renderRequest, this));
+      }
     },
 
 
@@ -85,6 +92,11 @@ core.Class("core.mvc.view.Dom",
       elem.innerHTML = template.render(presenter);
 
       this._afterRender();
+    },
+
+
+    _shouldRender : function() {
+      return true;
     },
 
     _beforeRender : function() {},

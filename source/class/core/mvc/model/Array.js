@@ -359,16 +359,21 @@
         for (var i=0, l=db.length; i<l; i++)
         {
           var model = db[i];
+          var matched = true;
 
           for (var name in properties)
           { 
             // Looking for false matches for faster failures 
-            if (model.get(name) !== properties[name]) {
-              continue;
+            if (model.get(name) !== properties[name]) 
+            {
+              matched = false;
+              break;
             }
           }
 
-          return model;
+          if (matched) {
+            return model;
+          }
         }
 
         return null;

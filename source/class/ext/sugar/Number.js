@@ -11,6 +11,14 @@
  */
 core.Main.addMembers("Number",
 {
+	/** 
+	 * {Integer} Converts the number to integer 
+	 */
+	toInteger : function() {
+    return this < 0 ? Math.ceil(this) : Math.floor(this);
+  },
+
+
 	/**
 	 * {String} Pads the number to reach the given @length {Integer}.
 	 */

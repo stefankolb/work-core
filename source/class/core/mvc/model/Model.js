@@ -23,23 +23,23 @@
     implement : [core.mvc.model.IModel],
 
     /**
-     * Initial data structure is imported from @values {Map}.
+     * Initial data structure is imported from @data {var}.
      */
-    construct: function(values) 
+    construct: function(data) 
     {
-      if (jasy.Env.isSet("debug")) 
-      {
-        if (values != null) {
-          core.Assert.isType(values, "Map", "Invalid values to import!");
-        }
-      }
-
       // Automatically created client-side ID
       this.__clientId = "model:" + (globalId++);
 
       // Import given values with parse method
-      if (values != null) {
-        this.set(this.parse(values));
+      if (data != null) 
+      {
+        var values = this.parse(data);
+
+        if (jasy.Env.isSet("debug")) {
+          core.Assert.isType(values, "Map", "Invalid values to import!");
+        }
+
+        this.set(values);
       }
     },
 

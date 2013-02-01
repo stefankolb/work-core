@@ -69,7 +69,7 @@
 			}
 
 			// Browser-less (e.g. NodeJS) support
-			if (!doc) 
+			if (jasy.Env.isSet("runtime", "native"))
 			{
 			  eval("//@ sourceURL=" + uri + "\n" + require("fs").readFileSync(uri, "utf-8"));
 			  if (callback) {
@@ -78,47 +78,47 @@
 
 			  return;
 			}
-
-			/**
-			 * #require(ext.DocumentHead)
-			 */
-			var head = doc.head;
-			var elem = doc.createElement("script");
-
-			// load script via 'src' attribute, set onload/onreadystatechange listeners
-			assignCallback(elem, function(e)
+			else
 			{
-				var errornous = (e||global.event).type === "error";
-				if (errornous)
+				/**
+				 * #require(ext.DocumentHead)
+				 */
+				var head = doc.head;
+				var elem = doc.createElement("script");
+
+				// load script via 'src' attribute, set onload/onreadystatechange listeners
+				assignCallback(elem, function(e)
 				{
-					console.warn("Could not load script: " + uri);
-				}
-				else
-				{
-					var readyState = elem.readyState;
-					if (readyState && readyState !== "complete" && readyState !== "loaded") {
-						return;
+					var errornous = (e||global.event).type === "error";
+					if (errornous)
+					{
+						console.warn("Could not load script: " + uri);
 					}
+					else
+					{
+						var readyState = elem.readyState;
+						if (readyState && readyState !== "complete" && readyState !== "loaded") {
+							return;
+						}
+					}
+
+					// Prevent memory leaks
+					assignCallback(elem, null);
+
+					// Execute callback
+					if (callback) {
+						callback.call(context||global, uri, errornous, elem);
+					}
+				});
+
+				elem.src = nocache ? uri + dynamicExtension : uri;
+
+				if (supportsScriptAsync) {
+					elem.async = false;
 				}
 
-				// Prevent memory leaks
-				assignCallback(elem, null);
-
-				// Execute callback
-				if (callback) {
-					callback.call(context||global, uri, errornous, elem);
-				}
-			});
-
-			elem.src = nocache ? uri + dynamicExtension : uri;
-
-			if (supportsScriptAsync) {
-				elem.async = false;
+				head.insertBefore(elem, head.firstChild);
 			}
-
-			head.insertBefore(elem, head.firstChild);
-
-			return elem;
 		}
 	});
 })(core.Main.getGlobal());

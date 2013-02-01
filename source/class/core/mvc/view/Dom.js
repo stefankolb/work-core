@@ -163,7 +163,7 @@ core.Class("core.mvc.view.Dom",
     loadStyle : function(sheet, nocache)
     {
       this.__isLoading++;
-      core.io.StyleSheet.load(jasy.Asset.toUri(sheet)), this.__loadStyleCallback, this, nocache);
+      core.io.StyleSheet.load(jasy.Asset.toUri(sheet), this.__loadStyleCallback, this, nocache);
     },
 
     __loadStyleCallback : function(uri, errornous) 

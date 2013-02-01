@@ -79,6 +79,9 @@
 			  return;
 			}
 
+			/**
+			 * #require(ext.DocumentHead)
+			 */
 			var head = doc.head;
 			var elem = doc.createElement("script");
 

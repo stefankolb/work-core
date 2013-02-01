@@ -96,11 +96,18 @@ core.Class("core.mvc.view.Dom",
 
 
     _shouldRender : function() {
-      return true;
+      return this.__isLoading == 0;
     },
 
-    _beforeRender : function() {},
-    _afterRender : function() {},
+
+    _beforeRender : function() {
+      // placeholder
+    },
+
+
+    _afterRender : function() {
+      // placeholder
+    },
 
 
     // Interface implementation
@@ -129,20 +136,43 @@ core.Class("core.mvc.view.Dom",
     },
 
 
+    __isLoading : 0,
+
+
     /**
      * Loads the given @tmpl {Uri} via the text loader (XHR) and creates
      * a new template instance which is auto applied to the #text property afterwards.
      */
-    loadTemplate : function(tmpl)
+    loadTemplate : function(tmpl, nocache)
     {
-      core.io.Text.load(jasy.Asset.toUri(tmpl), function(uri, errornous, data) 
-      {
-        if (errornous) {
-          throw new Error("Could not load template: " + uri + "!");
-        }
+      this.__isLoading++;
+      core.io.Text.load(jasy.Asset.toUri(tmpl), this.__loadTemplateCallback, this, nocache);      
+    },
 
-        this.setTemplate(core.template.Compiler.compile(data.text));  
-      }, this);      
+    __loadTemplateCallback : function(uri, errornous, data) 
+    {
+      this.__isLoading--;
+
+      if (errornous) {
+        throw new Error("Could not load template: " + uri + "!");
+      }
+
+      this.setTemplate(core.template.Compiler.compile(data.text));  
+    },
+
+    loadStyle : function(sheet, nocache)
+    {
+      this.__isLoading++;
+      core.io.StyleSheet.load(jasy.Asset.toUri(sheet)), this.__loadStyleCallback, this, nocache);
+    },
+
+    __loadStyleCallback : function(uri, errornous) 
+    {
+      this.__isLoading--;
+
+      if (errornous) {
+        throw new Error("Could not load style sheet: " + uri + "!");
+      }
     }
   }
 });

@@ -71,6 +71,11 @@ core.Class("core.mvc.view.Dom",
      */
     __render : function()
     {
+      var presenter = this.getPresenter();
+      if (!presenter) {
+        return;
+      }
+
       var elem = this.getRoot();
       if (!elem) {
         return;
@@ -81,16 +86,8 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      var presenter = this.getPresenter() || {};
-      if (this.getPresenter() == null) {
-        this.warn("Missing presenter!");
-      }
-
       this._beforeRender();
-
-      this.log("Rendering view...");
       elem.innerHTML = template.render(presenter);
-
       this._afterRender();
     },
 

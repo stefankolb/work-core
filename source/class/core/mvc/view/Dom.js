@@ -10,8 +10,18 @@ core.Class("core.mvc.view.Dom",
   include : [core.mvc.view.Abstract],
   implement : [core.mvc.view.IView],
 
-  construct: function(presenter) {
+  construct: function(presenter, root)
+  {
     core.mvc.view.Abstract.call(this, presenter);
+
+    if (root != null) 
+    {
+      if (jasy.Env.isSet("debug")) {
+        core.Assert.isType(root, "Node", "Invalid root node!");  
+      }
+      
+      this.setRoot(root);
+    }
   },
 
   properties : 

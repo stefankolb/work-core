@@ -37,6 +37,12 @@ core.Class("core.mvc.view.Dom",
     }
   },
 
+  events :
+  {
+    render : core.event.Simple
+
+  },
+
   members : 
   {
     // Interface implementation
@@ -89,6 +95,9 @@ core.Class("core.mvc.view.Dom",
       this._beforeRender();
       elem.innerHTML = template.render(presenter);
       this._afterRender();
+
+      // Let others know
+      this.fireEvent("render");
     },
 
 
@@ -145,6 +154,7 @@ core.Class("core.mvc.view.Dom",
       this.__isLoading++;
       core.io.Text.load(jasy.Asset.toUri(tmpl), this.__loadTemplateCallback, this, nocache);      
     },
+
 
     __loadTemplateCallback : function(uri, errornous, data) 
     {

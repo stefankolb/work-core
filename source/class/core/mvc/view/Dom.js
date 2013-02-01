@@ -160,13 +160,13 @@ core.Class("core.mvc.view.Dom",
       this.setTemplate(core.template.Compiler.compile(data.text));  
     },
 
-    loadStyle : function(sheet, nocache)
+    loadStyleSheet : function(sheet, nocache)
     {
       this.__isLoading++;
-      core.io.StyleSheet.load(jasy.Asset.toUri(sheet), this.__loadStyleCallback, this, nocache);
+      core.io.StyleSheet.load(jasy.Asset.toUri(sheet), this.__loadStyleSheetCallback, this, nocache);
     },
 
-    __loadStyleCallback : function(uri, errornous) 
+    __loadStyleSheetCallback : function(uri, errornous) 
     {
       this.__isLoading--;
 

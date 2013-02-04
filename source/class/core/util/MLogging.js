@@ -14,7 +14,14 @@
   {
     var extended = slice.call(args);
     extended.unshift(obj.toString() + ":");
-    console[method].apply(console, extended);
+
+    // Failsafe output of multiple arguments
+    // e.g. IE8 does not support apply on console methods.
+    try{
+      console[method].apply(console, extended);
+    } catch(ex) {
+      console[method](extended.join(" "));
+    }
   };
 
   core.Class("core.util.MLogging",

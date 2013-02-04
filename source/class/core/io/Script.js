@@ -18,16 +18,8 @@
 	var dynamicExtension = "?r=" + Date.now();
 
 	// Used for shorten calls
-	var assignCallback = function(elem, value) 
-	{
-		// Prefer onload when supported e.g. >=IE9, Firefox, Chrome, Safari, ...
-		elem.onload = elem.onerror = value;
-
-		// Add onreadystatechange listener if onload is not found being 
-		// supported by our simple feature testing approach.
-		if (!("onload" in elem)) {
-			elem.onreadystatechange = value;
-		}
+	var assignCallback = function(elem, value) {
+		elem.onload = elem.onerror = elem.onreadystatechange = value;		
 	};
 
 	/**
@@ -89,17 +81,23 @@
 				// load script via 'src' attribute, set onload/onreadystatechange listeners
 				assignCallback(elem, function(e)
 				{
-					var errornous = (e||global.event).type === "error";
+					if (!e) {
+						e = global.event;
+					}
+
+					var errornous = e.type === "error";
 					if (errornous)
 					{
 						console.warn("Could not load script: " + uri);
 					}
+					else if (e.type == "load" || (/loaded|complete/.test(elem.readyState) && (!doc.documentMode || doc.documentMode < 9)))
+					{
+						// ready
+					}
 					else
 					{
-						var readyState = elem.readyState;
-						if (readyState && readyState !== "complete" && readyState !== "loaded") {
-							return;
-						}
+						// not yet ready
+						return;
 					}
 
 					// Prevent memory leaks

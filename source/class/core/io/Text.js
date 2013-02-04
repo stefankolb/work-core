@@ -63,6 +63,11 @@
 				{
 					request.onreadystatechange = empty;
 					clearTimeout(timeoutHandle);
+
+					// Fixes for IE memory leaks
+					if (jasy.Env.isSet("engine", "trident") && global.detachEvent) {
+						global.detachEvent("onunload", onUnload);
+					}
 					
 					// Finally call the user defined callback (succeed with data)
 					var status = request.status;

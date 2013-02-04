@@ -174,7 +174,8 @@ core.Class("core.mvc.view.Dom",
         throw new Error("Could not load template: " + uri + "!");
       }
 
-      this.setTemplate(core.template.Compiler.compile(data.text));  
+      // Enable stripping (to remove white spaces from formatting)
+      this.setTemplate(core.template.Compiler.compile(data.text, true));  
     },
 
     loadStyleSheet : function(sheet, nocache)

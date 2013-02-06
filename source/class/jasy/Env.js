@@ -22,6 +22,9 @@
 		}
 	}
 
+	/**
+	 * {var} Returns the value of the field with the given @name {String}.
+	 */
 	var getValue = function(name) 
 	{
 		if (!(name in selected)) {
@@ -108,6 +111,9 @@
 		},
 
 
+		getValue : getValue,
+		
+		
 		/**
 		 * {Boolean} Whether the field with the given @name {String} was set to the given @value {var?true}. 
 		 *
@@ -122,22 +128,16 @@
 			}
 
 			// Explicit use of normal equal here to not differ between numbers and strings etc.
-			return get(name) == value;
+			return getValue(name) == value;
 		},
 
 
-		/**
-		 * {var} Returns the value of the field with the given @name {String}.
-		 */
-		getValue : getValue,
-		
-		
 		/**
 		 * {var} Selects and returns the current value of the field with the given 
 		 * @name {String} from the given @map {Map}.
 		 */
 		select: function(name, map) {
-			return map[get(name)];
+			return map[getValue(name)];
 		}
 	});
 })();

@@ -17,7 +17,7 @@ core.Module("core.detect.Engine",
 	{
 		var engine;
 		
-		if (jasy.detect.Runtime.VALUE == "browser")
+		if (core.detect.Runtime.VALUE == "browser")
 		{
 			var doc = global.document;
 			var nav = global.navigator;

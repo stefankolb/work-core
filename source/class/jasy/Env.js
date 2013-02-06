@@ -22,6 +22,15 @@
 		}
 	}
 
+	var getValue = function(name) 
+	{
+		if (!(name in selected)) {
+			throw new Error("jasy.Env: Field " + name + " is not available (yet)!");
+		}
+
+		return selected[name];
+	};
+
 	/**
 	 * This class is the client-side representation for the permutation features of
 	 * Jasy and supports features like auto-selecting builds based on specific feature sets.
@@ -113,16 +122,14 @@
 			}
 
 			// Explicit use of normal equal here to not differ between numbers and strings etc.
-			return selected[name] == value;
+			return get(name) == value;
 		},
 
 
 		/**
 		 * {var} Returns the value of the field with the given @name {String}.
 		 */
-		getValue : function(name) {
-			return selected[name];
-		},
+		getValue : getValue,
 		
 		
 		/**
@@ -130,7 +137,7 @@
 		 * @name {String} from the given @map {Map}.
 		 */
 		select: function(name, map) {
-			return map[selected[name]];
+			return map[get(name)];
 		}
 	});
 })();

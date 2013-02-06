@@ -16,18 +16,18 @@ core.Module("core.detect.Engine",
 	VALUE : (function(global, toString)
 	{
 		var engine;
-		var doc = global.document;
-		var nav = global.navigator;
-		var docStyle = doc && doc.documentElement.style;
 		
-		// isOldIE = '\v' == 'v'
-
-		if (jasy.Env.isSet("runtime", "browser"))
+		if (jasy.detect.Runtime.VALUE == "browser")
 		{
+			var doc = global.document;
+			var nav = global.navigator;
+
 			// Priority based detection
 			// Omit possibility to fake user agent string by using object based detection first
-			// Fall back to other ways for special cases like NodeJS and special environments like PhoneGap or AppMobi
-			if (global.opera && toString.call(global.opera) == "[object Opera]") {
+
+			if ('\v' == 'v') {
+				engine = "trident"; // Old Internet Explorer
+			} else if (global.opera && toString.call(global.opera) == "[object Opera]") {
 				engine = "presto"; // Opera
 			} else if (global.WebKitPoint && toString.call(global.WebKitPoint) == "[object WebKitPoint]") {
 				engine = "webkit"; // Chrome, Safari, ...
@@ -37,12 +37,9 @@ core.Module("core.detect.Engine",
 				engine = "trident"; // Internet Explorer
 			}			
 		}
- 		else if (typeof window != "undefined") {
+ 		else
+ 		{
 			engine = "webkit"; // NodeJS
-		} else if (nav && /(webkit)[ \/]([\w.]+)/.exec(nav.userAgent)) {
-			engine = "webkit"; // PhoneGap, AppMobi, etc.
-		} else if (nav && /(mozilla)(?:.*? rv:([\w.]+))?/i.exec(nav.userAgent)) {
-			engine = "gecko"; // Non XUL Firefox like
 		}
 		
 		return engine;

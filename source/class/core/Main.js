@@ -9,12 +9,9 @@
 /**
  * #load(ext.Console)
  * #load(ext.DateNow)
- * #load(ext.DocumentHead)
  * #load(ext.IsArray)
  * #load(ext.FunctionBind)
- * #load(ext.HTML5Markup)
  * #load(ext.StringTrim)
- * #load(ext.TimeoutArgs)
  */
 (function(toString, undef) 
 {

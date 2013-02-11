@@ -309,22 +309,37 @@
 			---------------------------------------------------------------------------
 			*/			
 
-			members.isValid = function()
+			if (propertyValidate)
 			{
-				var data, value;
-				var context = this;
+				members.isValid = function()
+				{
+					var data, value;
+					var context = this;
 
-				if (jasy.Env.isSet("debug")) {
-					core.property.Debug.checkIsValid(context, config, arguments);
-				}
+					if (jasy.Env.isSet("debug")) {
+						core.property.Debug.checkIsValid(context, config, arguments);
+					}
 
-				data = context[store];
-				if (data) {
-					value = data[propertyId];
-				}
+					data = context[store];
+					if (data) {
+						value = data[propertyId];
+					}
 
-				return propertyValidate ? propertyValidate.call(context, value) : true;
-			};
+					if (value === undef)
+					{
+						if (propertyInit !== undef) {
+							value = propertyInit;
+						}
+						else if (!propertyNullable) 
+						{
+							context.error("Missing value for: " + propertyName + " (during isValid())");
+							return false;
+						}
+					}					
+
+					return propertyValidate.call(context, value);
+				};
+			}
 
 
 

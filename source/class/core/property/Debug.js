@@ -118,5 +118,20 @@ core.Module("core.property.Debug",
 		if (args.length != 0) {
 			throw new Error("Called get method of property " + config.name + " on " + obj + " with too many arguments!");
 		}
+	},
+
+
+	/**
+	 * Validates the incoming parameters of a isValid method
+	 *
+	 * - @obj {Object} Object which is queried
+	 * - @config {Map} Property configuration
+	 * - @args {arguments} List of all arguments send to the setter
+	 */
+	checkIsValid : function(obj, config, args)
+	{
+		if (args.length != 0) {
+			throw new Error("Called isValid method of property " + config.name + " on " + obj + " with too many arguments!");
+		}
 	}
 });

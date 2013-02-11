@@ -30,6 +30,8 @@
 	 * - `nullable`: Whether the property is able to store null values. This also allows the system to
 	 * return `null` when no other value is available. Otherwise an error is thrown whenever no value is
 	 * available.
+	 * - `validate`: Link to function which should return a bool based on whether the valud passed detailed
+	 * value validation. Especially useful for using properties inside data models (MVC, MVP, etc.)
 	 *
 	 * #break(core.property.Debug)
 	 * #break(core.property.Event)
@@ -58,12 +60,13 @@
 			var propertyFire = config.fire;
 			var propertyApply = config.apply;
 			var propertyCast = config.cast;
+			var propertyValidate = config.validate;
 
 			// Validation
 			if (jasy.Env.isSet("debug"))
 			{
 				/** #require(ext.sugar.Object) */
-				var invalidKeys = Object.validateKeys(config, "name,nullable,init,type,fire,apply,cast".split(","));
+				var invalidKeys = Object.validateKeys(config, "name,nullable,init,type,fire,apply,cast,validate".split(","));
 				if (invalidKeys.length > 0) {
 					throw new Error("Property declaration of " + propertyName + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
 				}
@@ -98,6 +101,10 @@
 					if (propertyCast && !core.Class.isClass(propertyType)) {
 						throw new Error("Property declaration of " + propertyName + " contains invalid configuration: Casting support requires a core.Class for the type of the property!");
 					}
+				}
+
+				if (propertyValidate) {
+					core.Assert.isType(propertyValidate, "Function");
 				}
 			}
 
@@ -292,6 +299,31 @@
 						eventObject.release();
 					}
 				}
+			};
+
+
+
+			/*
+			---------------------------------------------------------------------------
+				 METHODS :: ISVALID
+			---------------------------------------------------------------------------
+			*/			
+
+			members.isValid = function()
+			{
+				var data, value;
+				var context = this;
+
+				if (jasy.Env.isSet("debug")) {
+					core.property.Debug.checkIsValid(context, config, arguments);
+				}
+
+				data = context[store];
+				if (data) {
+					value = data[propertyId];
+				}
+
+				return propertyValidate ? propertyValidate.call(context, value) : true;
 			};
 
 

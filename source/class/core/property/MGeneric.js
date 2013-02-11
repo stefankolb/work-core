@@ -10,6 +10,7 @@
 {
 	var setters = {};
 	var getters = {};
+	var validators = {};
 
 	var up = function(name) {
 		return name.charAt(0).toUpperCase() + name.slice(1);
@@ -51,7 +52,7 @@
 					}
 
 					if (jasy.Env.isSet("debug")) {
-						core.Assert.isType(this[method], "Function", "Invalid property to set(): " + property);
+						core.Assert.isType(this[method], "Function", "Invalid property to set: " + property);
 					}
 
 					return this[method](value);
@@ -70,7 +71,7 @@
 						}
 
 						if (jasy.Env.isSet("debug")) {
-							core.Assert.isType(this[method], "Function", "Invalid property to set(): " + name);
+							core.Assert.isType(this[method], "Function", "Invalid property to set: " + name);
 						}
 
 						this[method](property[name]);
@@ -99,7 +100,7 @@
 					}
 
 					if (jasy.Env.isSet("debug")) {
-						core.Assert.isType(this[method], "Function", "Invalid property to get(): " + property);
+						core.Assert.isType(this[method], "Function", "Invalid property to get: " + property);
 					}
 
 					return this[method]();
@@ -121,13 +122,62 @@
 						}
 
 						if (jasy.Env.isSet("debug")) {
-							core.Assert.isType(this[method], "Function", "Invalid property to get(): " + name);
+							core.Assert.isType(this[method], "Function", "Invalid property to get: " + name);
 						}
 
 						ret[name] = this[method]();
 					}
 
 					return ret;
+				}
+			},
+
+
+			isValid : function(property)
+			{
+				if (typeof property == "string")
+				{
+					if (jasy.Env.isSet("debug")) {
+						core.Assert.isType(property, "String");
+					}
+
+					var method = validators[property];
+					if (!method) {
+						method = validators[property] = "isValid" + up(property);
+					}
+
+					if (jasy.Env.isSet("debug")) {
+						core.Assert.isType(this[method], "Function", "Invalid property to validate: " + property);
+					}
+
+					return this[method]();
+				}
+				else
+				{
+					if (jasy.Env.isSet("debug")) {
+						core.Assert.isType(property, "Array");
+					}
+
+					var ret = true;
+
+					for (var i=0, l=property.length; i<l; i++)
+					{
+						var name = property[i];
+						var method = validators[name];
+						if (!method) {
+							method = validators[name] = "isValid" + up(name);
+						}
+
+						if (jasy.Env.isSet("debug")) {
+							core.Assert.isType(this[method], "Function", "Invalid property to validate: " + name);
+						}
+
+						if (!this[method]()) {
+							return false;
+						}
+					}
+
+					return true;
 				}
 			}
 		}

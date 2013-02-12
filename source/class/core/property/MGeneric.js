@@ -90,10 +90,6 @@
 			{
 				if (typeof property == "string")
 				{
-					if (jasy.Env.isSet("debug")) {
-						core.Assert.isType(property, "String");
-					}
-
 					var method = getters[property];
 					if (!method) {
 						method = getters[property] = "get" + up(property);
@@ -133,14 +129,16 @@
 			},
 
 
+			/**
+			 * {var} Generic checker for @property {String|Array} being valid. Supports two possible use cases:
+			 *
+			 *     var valid = isValid("property");
+			 *     var allValid = isValid(["property1", "property2"]);
+			 */
 			isValid : function(property)
 			{
 				if (typeof property == "string")
 				{
-					if (jasy.Env.isSet("debug")) {
-						core.Assert.isType(property, "String");
-					}
-
 					var method = validators[property];
 					if (!method) {
 						method = validators[property] = "isValid" + up(property);
@@ -157,8 +155,6 @@
 					if (jasy.Env.isSet("debug")) {
 						core.Assert.isType(property, "Array");
 					}
-
-					var ret = true;
 
 					for (var i=0, l=property.length; i<l; i++)
 					{

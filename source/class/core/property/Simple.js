@@ -327,7 +327,8 @@
 
 					if (value === undef)
 					{
-						if (propertyInit !== undef) {
+						if (propertyInit !== undef) 
+						{
 							value = propertyInit;
 						}
 						else if (!propertyNullable) 

@@ -157,7 +157,7 @@
 				{
 					if (!property) 
 					{
-						property = core.Class.getProperties(this.constructor);
+						property = Object.keys(core.Class.getProperties(this.constructor));
 						var all = true;
 					}
 
@@ -172,7 +172,7 @@
 						if (all && !this[method]) {
 							continue;
 						}
-						
+
 						if (jasy.Env.isSet("debug")) {
 							core.Assert.isType(this[method], "Function", "Invalid property to validate: " + name);
 						}

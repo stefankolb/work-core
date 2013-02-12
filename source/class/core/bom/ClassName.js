@@ -123,8 +123,16 @@
 				elem.className += space + className;
 			}
 		};
-		
 	}
+
+
+	/**
+	 * Adds/removes the @className {String} for the given @elem {Element} depending
+	 * on whether @enabled is `true` or `false`.
+	 */
+	var setClass = function(elem, className, enabled) {
+		return enabled ? addClass(elem, className) : removeClass(elem, className);
+	};
 	
 
 	/**
@@ -139,7 +147,8 @@
 		add : addClass,
 		remove : removeClass,
 		contains : containsClass,
-		toggle : toggleClass
+		toggle : toggleClass,
+		set : setClass
 	});
 	
 })();

@@ -28,7 +28,7 @@
     construct: function(data) 
     {
       // Automatically created client-side ID
-      this.__clientId = "model:" + (globalId++);
+      this.__clientId = "model-" + (globalId++);
 
       // Import given values with parse method
       if (data != null) 

@@ -34,7 +34,7 @@
       this.__models = [];
 
       // Automatically created client-side ID
-      this.__clientId = "collection:" + (globalId++);
+      this.__clientId = "collection-" + (globalId++);
 
       // Inject given data
       if (data != null) {

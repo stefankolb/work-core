@@ -16,6 +16,8 @@
 		return name.charAt(0).toUpperCase() + name.slice(1);
 	};
 
+	var undef;
+
 
 	/**
 	 * Generic setter/getter support for property API.
@@ -132,8 +134,9 @@
 			/**
 			 * {var} Generic checker for @property {String|Array} being valid. Supports two possible use cases:
 			 *
-			 *     var valid = isValid("property");
-			 *     var allValid = isValid(["property1", "property2"]);
+			 *     var singleIsValid = isValid("property");
+			 *     var givenAreValid = isValid(["property1", "property2"]);
+			 *     var allAreValid = isValid();
 			 */
 			isValid : function(property)
 			{
@@ -150,10 +153,12 @@
 
 					return this[method]();
 				}
-				else
+				else if (property === undef || core.Assert.isType(property, "Array"))
 				{
-					if (jasy.Env.isSet("debug")) {
-						core.Assert.isType(property, "Array");
+					if (!property) 
+					{
+						property = core.Class.getProperties(this.constructor);
+						var all = true;
 					}
 
 					for (var i=0, l=property.length; i<l; i++)
@@ -164,6 +169,10 @@
 							method = validators[name] = "isValid" + up(name);
 						}
 
+						if (all && !this[method]) {
+							continue;
+						}
+						
 						if (jasy.Env.isSet("debug")) {
 							core.Assert.isType(this[method], "Function", "Invalid property to validate: " + name);
 						}
@@ -174,6 +183,10 @@
 					}
 
 					return true;
+				}
+				else if (jasy.Env.isSet("debug"))
+				{
+					throw new Error("Invalid value for validation: " + property);
 				}
 			}
 		}

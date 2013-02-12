@@ -25,7 +25,7 @@ core.Class("core.mvc.presenter.Abstract",
      * {core.mvc.presenter.Abstract} Returns the parent presenter.
      */
     getParent : function() {
-      return this.__presenter;
+      return this.__parent;
     }
 
 

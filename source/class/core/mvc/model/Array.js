@@ -216,7 +216,7 @@
 
         var removeEvent = core.mvc.event.Remove.obtain(null);
 
-        for (var i=length, model; i>0; i--) 
+        for (var i=length-1, model; i>=0; i--) 
         {
           model = db[i];
           model.removeListener("change", this.__onModelChange, this);

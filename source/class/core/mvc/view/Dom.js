@@ -14,6 +14,8 @@ core.Class("core.mvc.view.Dom",
   {
     core.mvc.view.Abstract.call(this, presenter);
 
+    this.__subViews = {};
+
     if (root != null) 
     {
       if (jasy.Env.isSet("debug")) {
@@ -67,6 +69,24 @@ core.Class("core.mvc.view.Dom",
     },
 
 
+
+    addSubView : function(name, view) 
+    {
+      this.__subViews[name] = view;
+      this.__partials = null;
+
+      this.render();
+    },
+
+    removeSubView : function(name) 
+    {
+      delete this.__subViews[name];
+      this.__partials = null;
+
+      this.render();
+    },
+
+
     __renderRequest : function()
     {
       if (this._shouldRender()) 
@@ -102,8 +122,19 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
+      var partials = this.__partials;
+      if (partials == null)
+      {
+        this.__partials = partials = {};
+
+        var subViews = this.__subViews;
+        for (var name in subViews) {
+          partials[name] = subViews[name].getTemplate();
+        }
+      }
+
       this._beforeRender();
-      elem.innerHTML = template.render(presenter);
+      elem.innerHTML = template.render(presenter, partials);
       this._afterRender();
 
       // Let others know

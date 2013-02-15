@@ -151,17 +151,13 @@
         removeEvent.release();
 
         return model;
-      },      
-
-
-
-
-      update : function(models)
-      {
-        // TODO
-        // add, remove and merge automatically
       },
 
+
+
+      setItemPresenter : function(presenter) {
+        this.__itemPresenter = presenter;
+      },
 
 
       __onModelChange : function(evt) 

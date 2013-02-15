@@ -27,7 +27,7 @@ core.Class("core.mvc.view.Abstract",
   {
     if (jasy.Env.isSet("debug"))
     {
-      core.Main.isTypeOf(presenter, "Object", "Invalid presenter instance!");
+      core.Assert.isType(presenter, "Object", "Invalid presenter instance!");
 
       if (!core.Class.includesClass(presenter.constructor, core.mvc.presenter.Abstract)) {
         throw new Error("Presenter classes should include the abstract class 'core.mvc.presenter.Abstract': " + presenter.constructor.className + "!");

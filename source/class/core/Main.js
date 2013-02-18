@@ -72,6 +72,14 @@
 	
 	// Temporary hack to make next statement workable
 	declareNamespace("core.Main.declareNamespace", declareNamespace);
+
+	// By Lowdash 1.0.1
+	var objectRef = {};
+	var isNativeRepExp = RegExp('^' +
+    (objectRef.valueOf + '')
+      .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      .replace(/valueOf|for [^\]]+/g, '.+?') + '$'
+  );
 	
 	/**
 	 * Useful root methods to add members to objects
@@ -100,6 +108,11 @@
 			var type = object != null ? typeof object[property] : 'number';
 
 			return !/^(?:boolean|number|string|undefined)$/.test(type) && (type == 'object' ? !!object[property] : true);
+		},
+
+
+		isNative : function(func) {
+			return isNativeRepExp.test(func);
 		},
 
 

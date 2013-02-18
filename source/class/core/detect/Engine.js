@@ -29,7 +29,7 @@ core.Module("core.detect.Engine",
 				engine = "trident"; // Old Internet Explorer
 			} else if (global.opera && toString.call(global.opera) == "[object Opera]") {
 				engine = "presto"; // Opera
-			} else if (global.WebKitPoint && toString.call(global.WebKitPoint) == "[object WebKitPoint]") {
+			} else if (core.Main.isNative(global.WebKitPoint)) {
 				engine = "webkit"; // Chrome, Safari, ...
 			} else if (global.controllers && toString.call(global.controllers) == "[object XULControllers]") {
 				engine = "gecko"; // Firefox, Camino, ...

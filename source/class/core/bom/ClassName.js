@@ -22,7 +22,9 @@
 		{
 			core.Assert.equal(args.length, 2);
 			core.dom.Node.assertIsNode(args[0]);
-			core.Assert.isTrue(isValid(args[1], "Invalid CSS class name!"));
+			if (!isValid(args[1])) {
+				throw new Error("Invalid CSS class name!");
+			}
 		};
 	}
 	

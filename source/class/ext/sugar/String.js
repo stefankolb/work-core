@@ -8,8 +8,6 @@
 
 (function() 
 {
-	var hexTable = "0123456789abcdef".split("");
-
 	/**
 	 * Adds useful non-standard extensions to the `String.prototype` like {#hyphenate}, {#startsWith} and {#contains}.
 	 */
@@ -34,24 +32,6 @@
 			return atob(this);
 		},
 		
-		
-		/**
-		 * {String} Converts the string into a hex string
-		 */
-		toHex : function() 
-		{
-			var output = "";
-			var code;
-
-			for (var i = 0, l = this.length; i < l; i++)
-			{
-				code = this.charCodeAt(i);
-				output += hexTable[(code >>> 4) & 0x0F] + hexTable[code & 0x0F];
-			}
-
-			return output;
-		},
-
 		
 		/**
 		 * {String} Encodes the string as UTF-8.

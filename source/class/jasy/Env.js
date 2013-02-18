@@ -8,6 +8,9 @@
 
 (function(undef)
 {
+	/** {=Array} List of selected field values */
+	var key = [];
+
 	/** {=Map} Internal database of available fields with their current values */
 	var selected = {};
 
@@ -20,7 +23,23 @@
 				return true;
 			}
 		}
-	}
+	};
+
+	var hexTable = "0123456789abcdef".split("");
+
+	var toHex = function(str) 
+	{
+		var output = "";
+		var code;
+
+		for (var i = 0, l = str.length; i < l; i++)
+		{
+			code = str.charCodeAt(i);
+			output += hexTable[(code >>> 4) & 0x0F] + hexTable[code & 0x0F];
+		}
+
+		return output;
+	};
 
 	/**
 	 * {var} Returns the value of the field with the given @name {String}.
@@ -54,60 +73,60 @@
 		},
 
 
-		/**
-		 * Used by Jasy to inject @fields {Array} data
-		 */
-		setFields : function(fields)
+		addField : function(field)
 		{
-			// Process entries
-			var key = [];
-			for (var i=0, l=fields.length; i<l; i++)
+			// possible variants
+			// 1: name, 1, test, [val1, val2]
+			// 2: name, 2, value
+			// 3: name, 3, test, default (not permutated)
+
+			var name = field[0];
+			var type = field[1]
+			if (type == 1 || type == 3)
 			{
-				// possible variants
-				// 1: name, 1, test, [val1, val2]
-				// 2: name, 2, value
-				// 3: name, 3, test, default (not permutated)
+				var test = field[2];
+				var value = "VALUE" in test ? test.VALUE : test.get(name);
+				var third = field[3];
 
-				var entry = fields[i];
-				var name = entry[0];
-				var type = entry[1]
-				if (type == 1 || type == 3)
-				{
-					var test = entry[2];
-					var value = "VALUE" in test ? test.VALUE : test.get(name);
-					var third = entry[3];
-
-					// Fallback to first value if test results in unsupported value
-					if (type == 1 && !contains(third, value)) {
-						value = third[0];
-					}
-
-					// Fill in missing value with default
-					else if (type == 3 && value == null) {
-						value = third;
-					}
-				}
-				else
-				{
-					// In cases with no test, we don't have an array of fields but just a value
-					value = entry[2];
+				// Fallback to first value if test results in unsupported value
+				if (type == 1 && !contains(third, value)) {
+					value = third[0];
 				}
 
-				selected[name] = value;
-
-				if (type != 3) {
-					key.push(name + ":" + value);
+				// Fill in missing value with default
+				else if (type == 3 && value == null) {
+					value = third;
 				}
+			}
+			else
+			{
+				// In cases with no test, we don't have an array of fields but just a value
+				value = field[2];
+			}
+
+			selected[name] = value;
+
+			if (type != 3) {
+				key.push(name + ":" + value);
 			}
 
 			if (selected.debug) {
 				console.info("jasy.Env: " + key.join(", "));
 			}
 
-			/**
-			 * #require(ext.sugar.String)
-			 */
-			this.CHECKSUM = core.crypt.SHA1.checksum(key.join(";")).toHex();
+			this.CHECKSUM = toHex(core.crypt.SHA1.checksum(key.join(";")));
+		},
+
+		/**
+		 * Used by Jasy to inject @fields {Array} data
+		 */
+		setFields : function(fields)
+		{
+			// DEPRECATED
+
+			for (var i=0, l=fields.length; i<l; i++) {
+				this.addField(fields[i]);
+			}
 		},
 
 

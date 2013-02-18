@@ -25,22 +25,6 @@
 		}
 	};
 
-	var hexTable = "0123456789abcdef".split("");
-
-	var toHex = function(str) 
-	{
-		var output = "";
-		var code;
-
-		for (var i = 0, l = str.length; i < l; i++)
-		{
-			code = str.charCodeAt(i);
-			output += hexTable[(code >>> 4) & 0x0F] + hexTable[code & 0x0F];
-		}
-
-		return output;
-	};
-
 	/**
 	 * {var} Returns the value of the field with the given @name {String}.
 	 */
@@ -114,7 +98,7 @@
 				console.info("jasy.Env: " + key.join(", "));
 			}
 
-			this.CHECKSUM = toHex(core.crypt.SHA1.checksum(key.join(";")));
+			this.CHECKSUM = core.util.String.toHex(core.crypt.SHA1.checksum(key.join(";")));
 		},
 
 		/**

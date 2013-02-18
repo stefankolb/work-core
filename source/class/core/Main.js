@@ -6,13 +6,6 @@
 ==================================================================================================
 */
 
-/**
- * #load(ext.Console)
- * #load(ext.DateNow)
- * #load(ext.IsArray)
- * #load(ext.FunctionBind)
- * #load(ext.StringTrim)
- */
 (function(toString, undef) 
 {
 	var global = (function(){ return this || (1,eval)('this') })();

@@ -12,7 +12,7 @@
 ==================================================================================================
 */
 
-(function(Util) 
+(function(Util, StringUtil) 
 {
 	/**
 	 * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message Digest Algorithm, as defined in RFC 1321.
@@ -22,9 +22,9 @@
 		/**
 		 * {String} Returns the MD5 checksum of the given @str {String} as a raw string.
 		 */
-		checksum : function(str) { 
-			
-			str = str.encodeUtf8();
+		checksum : function(str) 
+		{ 
+			str = StringUtil.encodeUtf8(str);
 			var md5 = binl_md5(Util.rawStringToLittleEndian(str), str.length * 8);
 			
 			return Util.littleEndianToRawString(md5);
@@ -40,10 +40,10 @@
 		 * - @key {String} The secret key for verifying authenticity
 		 * - @str {String} Message to compute the HMAC for
 		 */
-		hmac : function(key, str) { 
-			
-			key = key.encodeUtf8();
-			str = str.encodeUtf8();
+		hmac : function(key, str) 
+		{ 
+			key = StringUtil.encodeUtf8(key);
+			str = StringUtil.encodeUtf8(str);
 			
 			var bkey = Util.rawStringToLittleEndian(key);
 			if (bkey.length > 16) {
@@ -61,7 +61,6 @@
 
 			var hash = binl_md5(ipad.concat(Util.rawStringToLittleEndian(str)), 512 + str.length * 8);
 			return Util.littleEndianToRawString(binl_md5(opad.concat(hash), 512 + 128));
-			
 		}
 	});
 
@@ -206,4 +205,4 @@
 		return (num << cnt) | (num >>> (32 - cnt));
 	};
 	
-})(core.crypt.Util);
+})(core.crypt.Util, core.util.String);

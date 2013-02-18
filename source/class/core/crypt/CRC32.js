@@ -26,7 +26,7 @@ core.Module("core.crypt.CRC32",
 		 */
 		return function(str)
 		{
-			str = str.encodeUtf8();
+			str = core.util.String.encodeUtf8(str);
 			
 			var crc = -1;
 			for(var i=0, l=str.length; i<l; i++) {

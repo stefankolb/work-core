@@ -12,7 +12,7 @@
 ==================================================================================================
 */
 
-(function(Util) 
+(function(Util, StringUtil) 
 {
 	/**
 	 * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined in FIPS 180-1
@@ -22,12 +22,10 @@
 		/**
 		 * {String} Returns the SHA1 checksum of the given @str {String} as a raw string.
 		 */
-		checksum : function(str) { 
-
-			str = str.encodeUtf8();
-			
+		checksum : function(str) 
+		{ 
+			str = StringUtil.encodeUtf8(str);
 			return Util.bigEndianToRawString(binb_sha1(Util.rawStringToBigEndian(str), str.length * 8));
-
 		},
 
 
@@ -40,10 +38,10 @@
 		 * - @key {String} The secret key for verifying authenticity
 		 * - @str {String} Message to compute the HMAC for
 		 */
-		hmac : function(key, str) { 
-			
-			key = key.encodeUtf8();
-			str = str.encodeUtf8();
+		hmac : function(key, str) 
+		{ 
+			key = StringUtil.encodeUtf8(key);
+			str = StringUtil.encodeUtf8(str);
 			
 			var bkey = Util.rawStringToBigEndian(key);
 			if (bkey.length > 16) {
@@ -61,7 +59,6 @@
 
 			var hash = binb_sha1(ipad.concat(Util.rawStringToBigEndian(str)), 512 + str.length * 8);
 			return Util.bigEndianToRawString(binb_sha1(opad.concat(hash), 512 + 160));
-
 		}
 	});
 
@@ -161,4 +158,4 @@
 		return (num << cnt) | (num >>> (32 - cnt));
 	}
 	
-})(core.crypt.Util);
+})(core.crypt.Util, core.util.String);

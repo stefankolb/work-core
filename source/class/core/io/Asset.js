@@ -96,7 +96,6 @@
 	 *
 	 * #require(ext.sugar.Array) 
 	 * #require(ext.sugar.Object)
-	 * #require(ext.sugar.String)
 	 */
 	core.Module("core.io.Asset",
 	{

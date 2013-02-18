@@ -253,8 +253,6 @@ suite.test("Number.prototype.pad", function()
   this.isEqual((0).pad(6), "000000");
 });
 
-/** #require(ext.sugar.String) */
-
 suite.test("String.prototype.contains", function() 
 {
   this.isTrue("hello world".contains("hello"));

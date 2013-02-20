@@ -15,6 +15,28 @@
 
   var slice = Array.prototype.slice;
 
+  var getTargets = function(obj) 
+  {
+    if (!obj.getEventParent) {
+      return [obj];
+    }
+
+    // Bubble phase
+    var bubble = [];
+    while (obj.getEventParent && (obj = obj.getEventParent())) {
+      bubble.push(obj);
+    }
+
+    // Capture phase = reversed bubble phase
+    var capture = bubble.slice().reverse();
+
+    // Add self in between both phases
+    capture.push(obj);
+
+    // Merged
+    return capture.concat(bubble);
+  };
+
 
   /**
    * Generic event interface for Core classes.
@@ -196,6 +218,9 @@
        */
       dispatchEvent : function(eventObject)
       {
+        var eventType = eventObject.getType();
+        var eventTarget = this;
+
         if (jasy.Env.isSet("debug")) 
         {
           core.Assert.isType(eventObject, "Object", "Invalid event object to dispatch!");
@@ -204,23 +229,77 @@
           }
 
           core.Assert.isType(eventObject.setTarget, "Function", "Invalid event object to dispatch! Misses setTarget() method!");
-          core.Assert.isType(eventObject.getType(), "String", "Invalid event type to dispatch!");
-          core.Assert.isNotEmpty(eventObject.getType(), "Invalid event type to dispatch!");
+          core.Assert.isType(eventObject.setCurrentTarget, "Function", "Invalid event object to dispatch! Misses setCurrentTarget() method!");
+          core.Assert.isType(eventObject.setEventPhase, "Function", "Invalid event object to dispatch! Misses setEventPhase() method!");
+
+          core.Assert.isType(eventType, "String", "Invalid event type to dispatch!");
+          core.Assert.isNotEmpty(eventType, "Invalid event type to dispatch!");
         }
 
-        eventObject.setTarget(this);
+        eventObject.setTarget(eventTarget);
 
-        var self = this;
-        var handlers = slice.call(getHandlers(self, eventObject.getType()));
-        var length = handlers.length;
+        // Event Phases:
+        // - CAPTURING_PHASE = 1
+        // - AT_TARGET = 2
+        // - BUBBLING_PHASE = 3
+        eventObject.setEventPhase(1);
 
-        for (var i=0; i<length; ++i) {
-          handlers[i].call(self, eventObject);
+        var targets = getTargets(eventTarget);
+        var targetsLength = targets.length;
+        var canBubble = targetsLength > 1;
+        var dispatched = false;
+
+        for (var targetIndex=0; targetIndex<targetsLength; targetIndex++)
+        {
+          var currentTarget = targets[targetIndex];
+          var atTarget = currentTarget === eventTarget;
+
+          var handlers = getHandlers(currentTarget, eventType);
+          var handlersLength = handlers.length;
+          if (handlersLength > 0)
+          {
+            dispatched = true;
+
+            // Update event object to current target
+            eventObject.setCurrentTarget(currentTarget);
+
+            // Transition to at-target
+            if (atTarget) {
+              eventObject.setEventPhase(2);
+            }
+
+            // Work on copy of handlers to ignore changes during execution of handlers
+            handlers = slice.call(handlers);
+
+            // Process handlers in order of being registered
+            for (var handlerIndex=0; handlerIndex<handlersLength; handlerIndex++) {
+              handlers[handlerIndex].call(currentTarget, eventObject);
+            }
+
+            // Don't process remaining targets if propagation was stopped from any handler
+            if (eventObject.isPropagationStopped()) {
+              break;
+            }
+          }
+
+          // Transition to bubble phase
+          if (atTarget) {
+            eventObject.setEventPhase(3);
+          }
         }
 
         eventObject.setTarget(null);
 
-        return !!length;
+        if (dispatched)
+        {
+          eventObject.setCurrentTarget(null);
+
+          if (stopped) {
+            eventObject.resetPropagationStopped();
+          }
+        }
+
+        return dispatched;
       },
 
 
@@ -236,6 +315,14 @@
         eventObject.release();
 
         return retval;
+      },
+
+
+      /**
+       * Returns the event parent of this object for bubbling.
+       */
+      getEventParent : function() {
+        return null;
       }
     }
   });

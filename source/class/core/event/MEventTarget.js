@@ -284,21 +284,12 @@
           }
 
           // Transition to bubble phase
-          if (atTarget) {
+          if (canBubble && atTarget) {
             eventObject.setEventPhase(3);
           }
         }
 
-        eventObject.setTarget(null);
-
-        if (dispatched)
-        {
-          eventObject.setCurrentTarget(null);
-
-          if (stopped) {
-            eventObject.resetPropagationStopped();
-          }
-        }
+        eventObject.resetDispatch();
 
         return dispatched;
       },

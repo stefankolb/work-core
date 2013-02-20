@@ -23,7 +23,7 @@
 
     // Bubble phase
     var bubble = [];
-    while (obj.getEventParent && (obj = obj.getEventParent())) {
+    while (obj.getEventParent && (obj = obj.getEventParent()) && obj) {
       bubble.push(obj);
     }
 
@@ -318,9 +318,6 @@
       },
 
 
-      /**
-       * Returns the event parent of this object for bubbling.
-       */
       getEventParent : function() {
         return null;
       }

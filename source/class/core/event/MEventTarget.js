@@ -23,8 +23,9 @@
 
     // Bubble phase
     var bubble = [];
-    while (obj.getEventParent && (obj = obj.getEventParent()) && obj) {
-      bubble.push(obj);
+    var currentObj = obj;
+    while (currentObj.getEventParent && (currentObj = currentObj.getEventParent()) && currentObj) {
+      bubble.push(currentObj);
     }
 
     // Capture phase = reversed bubble phase

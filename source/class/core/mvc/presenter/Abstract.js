@@ -26,8 +26,14 @@ core.Class("core.mvc.presenter.Abstract",
      */
     getParent : function() {
       return this.__parent;
+    },
+
+
+    /**
+     * {core.mvc.presenter.Abstract} Returns the event parent - which is our parent presenter.
+     */
+    getEventParent : function() {
+      return this.__parent;
     }
-
-
   }
 });

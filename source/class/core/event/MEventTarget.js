@@ -7,9 +7,14 @@
 
 (function() 
 {
-  var getHandlers = function(object, type) 
+  var getHandlers = function(object, type, capture) 
   {
-    var events = object.__events || (object.__events = {});
+    if (capture) {
+      var events = object.__capturePhaseHandlers || (object.__capturePhaseHandlers = {});  
+    } else {
+      var events = object.__bubblePhaseHandlers || (object.__bubblePhaseHandlers = {});  
+    }
+    
     return events[type] || (events[type] = []);
   };
 
@@ -34,7 +39,7 @@
     // Add self in between both phases
     capture.push(obj);
 
-    // Merged
+    // Merge both lists
     return capture.concat(bubble);
   };
 
@@ -51,7 +56,7 @@
        * execute the @callback {Function} in the given @context {Object?}. Returns
        * whether adding the listener was successful.
        */
-      addListener : function(type, callback, context) 
+      addListener : function(type, callback, context, capture) 
       {
         if (jasy.Env.isSet("debug")) 
         {
@@ -69,7 +74,7 @@
           callback = core.util.Function.bind(callback, context);
         }
 
-        var handlers = getHandlers(this, type);
+        var handlers = getHandlers(this, type, capture);
 
         if (handlers.indexOf(callback) != -1) {
           return false;
@@ -86,7 +91,7 @@
        * Supports @context {Object?} for defining the execution context as well. Returns
        * whether adding the listener was successful.
        */
-      addListenerOnce : function(type, callback, context) 
+      addListenerOnce : function(type, callback, context, capture) 
       {
         if (jasy.Env.isSet("debug")) 
         {
@@ -101,7 +106,7 @@
 
         var self = this;
 
-        if (self.hasListener(type, callback, context)) {
+        if (self.hasListener(type, callback, context, capture)) {
           return false;
         }          
 
@@ -111,7 +116,7 @@
           return callback.apply(context||self, arguments);
         };
 
-        return this.addListener(type, wrapper);
+        return this.addListener(type, wrapper, null, capture);
       },
 
 
@@ -120,7 +125,7 @@
        * execute the @callback {Function} in the given @context {Object?}. Returns
        * whether removing the listener was successful.
        */
-      removeListener : function(type, callback, context) 
+      removeListener : function(type, callback, context, capture) 
       {
         if (jasy.Env.isSet("debug")) 
         {
@@ -138,7 +143,7 @@
           callback = core.util.Function.bind(callback, context);
         }
 
-        var handlers = getHandlers(this, type);
+        var handlers = getHandlers(this, type, capture);
 
         var position = handlers.indexOf(callback);
         if (position == -1) {
@@ -154,7 +159,7 @@
        * Removes all listeners from this object with optional
        * support for only removing events of the given @type {String?}.
        */
-      removeAllListeners : function(type) 
+      removeAllListeners : function(type, capture) 
       {
         if (jasy.Env.isSet("debug")) 
         {
@@ -165,10 +170,22 @@
           }
         }
 
-        if (type != null) {
-          getHandlers(this, type).length = 0;
-        } else {
-          this.__events = {};
+        if (type != null) 
+        {
+          // Remove both, bubbling and capturing when capture is null
+          if (capture == null || capture === false) {
+            getHandlers(this, type, false).length = 0;  
+          }
+          
+          if (capture == null || capture === true) {
+            getHandlers(this, type, true).length = 0;  
+          }
+        }
+        else
+        {
+          // Plain object reset
+          this.__capturePhaseHandlers = null;
+          this.__bubblePhaseHandlers = null;
         }
       },
 
@@ -239,35 +256,36 @@
 
         eventObject.setTarget(eventTarget);
 
-        // Event Phases:
-        // - CAPTURING_PHASE = 1
-        // - AT_TARGET = 2
-        // - BUBBLING_PHASE = 3
-        eventObject.setEventPhase(1);
-
         var targets = getTargets(eventTarget);
         var targetsLength = targets.length;
         var canBubble = targetsLength > 1;
         var dispatched = false;
 
+        // Event Phases:
+        // - CAPTURING_PHASE = 1
+        // - AT_TARGET = 2
+        // - BUBBLING_PHASE = 3
+        var eventPhase = canBubble ? 1 : 2;
+        eventObject.setEventPhase(eventPhase);        
+
         for (var targetIndex=0; targetIndex<targetsLength; targetIndex++)
         {
           var currentTarget = targets[targetIndex];
-          var atTarget = currentTarget === eventTarget;
 
-          var handlers = getHandlers(currentTarget, eventType);
+          var atTarget = currentTarget === eventTarget;
+          if (canBubble && atTarget) {
+            eventObject.setEventPhase(eventPhase = 2);
+          }
+
+          var handlers = getHandlers(currentTarget, eventType, eventPhase);
           var handlersLength = handlers.length;
           if (handlersLength > 0)
           {
+            // Mark as dispatched for return value feedback
             dispatched = true;
 
             // Update event object to current target
             eventObject.setCurrentTarget(currentTarget);
-
-            // Transition to at-target
-            if (atTarget) {
-              eventObject.setEventPhase(2);
-            }
 
             // Work on copy of handlers to ignore changes during execution of handlers
             handlers = slice.call(handlers);
@@ -283,9 +301,9 @@
             }
           }
 
-          // Transition to bubble phase
+          // Transition to bubble phase when bubbling is active
           if (canBubble && atTarget) {
-            eventObject.setEventPhase(3);
+            eventObject.setEventPhase(eventPhase = 3);
           }
         }
 
@@ -307,11 +325,6 @@
         eventObject.release();
 
         return retval;
-      },
-
-
-      getEventParent : function() {
-        return null;
       }
     }
   });

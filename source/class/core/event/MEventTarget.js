@@ -277,7 +277,7 @@
             eventObject.setEventPhase(eventPhase = 2);
           }
 
-          var handlers = getHandlers(currentTarget, eventType, eventPhase==1);
+          var handlers = getHandlers(currentTarget, eventType, eventPhase === 1);
           var handlersLength = handlers.length;
           if (handlersLength > 0)
           {

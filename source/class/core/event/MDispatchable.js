@@ -16,7 +16,7 @@ core.Class("core.event.MDispatchable",
     __target : null,
     __currentTarget : null,
     __propagationStopped : false,
-    __eventPhase : 2,
+    __eventPhase : 0,
 
 
     /**
@@ -100,7 +100,7 @@ core.Class("core.event.MDispatchable",
       this.__target = null;
       this.__currentTarget = null;
       this.__propagationStopped = false;
-      this.__eventPhase = 2;
+      this.__eventPhase = 0;
     }
   }
 });

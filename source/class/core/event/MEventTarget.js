@@ -7,15 +7,15 @@
 
 (function() 
 {
-  var getHandlers = function(object, type, capture) 
+  var getHandlers = function(object, type, capture, create) 
   {
     if (capture) {
-      var events = object.__capturePhaseHandlers || (object.__capturePhaseHandlers = {});  
+      var events = object.__capturePhaseHandlers || (create && (object.__capturePhaseHandlers = {}));  
     } else {
-      var events = object.__bubblePhaseHandlers || (object.__bubblePhaseHandlers = {});  
+      var events = object.__bubblePhaseHandlers || (create && (object.__bubblePhaseHandlers = {}));  
     }
     
-    return events[type] || (events[type] = []);
+    return events && (events[type] || (create && (events[type] = [])));
   };
 
   var slice = Array.prototype.slice;
@@ -74,7 +74,7 @@
           callback = core.util.Function.bind(callback, context);
         }
 
-        var handlers = getHandlers(this, type, capture);
+        var handlers = getHandlers(this, type, capture, true);
 
         if (handlers.indexOf(callback) != -1) {
           return false;
@@ -113,7 +113,7 @@
         var wrapper = function() 
         {
           self.removeListener(type, wrapper);
-          return callback.apply(context||self, arguments);
+          return callback.apply(context || self, arguments);
         };
 
         return this.addListener(type, wrapper, null, capture);
@@ -143,7 +143,10 @@
           callback = core.util.Function.bind(callback, context);
         }
 
-        var handlers = getHandlers(this, type, capture);
+        var handlers = getHandlers(this, type, capture, false);
+        if (!handlers) {
+          return false;
+        }
 
         var position = handlers.indexOf(callback);
         if (position == -1) {
@@ -173,12 +176,20 @@
         if (type != null) 
         {
           // Remove both, bubbling and capturing when capture is null
-          if (capture == null || capture === false) {
-            getHandlers(this, type, false).length = 0;  
+          if (this.__capturePhaseHandlers && (capture === true || capture == null)) 
+          {
+            var entries = this.__capturePhaseHandlers[type];
+            if (entries) {
+              entries.length = 0;
+            }
           }
           
-          if (capture == null || capture === true) {
-            getHandlers(this, type, true).length = 0;  
+          if (this.__bubblePhaseHandlers && (capture === false || capture == null)) 
+          {
+            var entries = this.__bubblePhaseHandlers[type];
+            if (entries) {
+              entries.length = 0;
+            }
           }
         }
         else
@@ -196,7 +207,7 @@
        * @callback {Function?} (with optional @context {Object?}) is 
        * registered already.
        */
-      hasListener : function(type, callback, context) 
+      hasListener : function(type, callback, context, capture) 
       {
         if (jasy.Env.isSet("debug")) 
         {
@@ -213,7 +224,10 @@
           }
         }
 
-        var handlers = getHandlers(this, type);
+        var handlers = getHandlers(this, type, capture, false);
+        if (!handlers) {
+          return false;
+        }
 
         // Short path for callback-less usage.
         if (!callback) {
@@ -277,7 +291,21 @@
             eventObject.setEventPhase(eventPhase = 2);
           }
 
-          var handlers = getHandlers(currentTarget, eventType, eventPhase === 1);
+          // Use capture listeners for at-target as well (and append bubble listeners next)
+          var handlers = getHandlers(currentTarget, eventType, eventPhase !== 3, false);
+
+          // When at-target we use all handlers, capture and bubble
+          if (atTarget) 
+          {
+            // Note: concat() returns a new array
+            var bubbleHandlers = getHandlers(currentTarget, eventType, false, false);
+            if (handlers && bubbleHandlers) {
+              handlers = handlers.concat(bubbleHandlers);
+            } else if (bubbleHandlers) {
+              handlers = bubbleHandlers;
+            }
+          }
+
           var handlersLength = handlers.length;
           if (handlersLength > 0)
           {

@@ -25,10 +25,15 @@
     /**
      * Initial data structure is imported from @data {var}.
      */
-    construct: function(data) 
+    construct: function(data, parent) 
     {
       // Automatically created client-side ID
       this.__clientId = "model-" + (globalId++);
+
+      // Attach parent when given
+      if (parent) {
+        this.__parent = parent;  
+      }
 
       // Import given values with parse method
       if (data != null) 
@@ -46,7 +51,7 @@
     events :
     {
       /** Fired whenever the model is changed in a way that is interesting for listeners */
-      "change" : core.event.Simple
+      change : core.event.Simple
     },
 
     properties :
@@ -72,6 +77,23 @@
       // Interface implementation
       getClientId : function() {
         return this.__clientId;
+      },
+
+      __parent : null,
+
+      setParent : function(parent) {
+        this.__parent = parent;
+      },
+
+      getParent : function(parent) {
+        return this.__parent;
+      },
+
+      /**
+       * Alternative to getParent() as used for event handling (bubbling/capturing)
+       */
+      getEventParent : function() {
+        return this.__parent;
       },
 
       // Interface implementation

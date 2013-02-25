@@ -40,13 +40,9 @@
       // Inject given data
       if (modelOrPresenter)
       {
-        // TODO: Can we find a faster alternative here?
-        if (core.Interface.assert(modelOrPresenter, core.mvc.model.IModel)) 
-        {
+        if (core.Class.includesClass(modelOrPresenter, core.mvc.model.Model)) {
           this.__itemModel = modelOrPresenter;
-        }
-        else
-        {
+        } else {
           this.__itemPresenter = modelOrPresenter;
         }
       }
@@ -162,7 +158,6 @@
           for (var i=0, l=items.length; i<l; i++) 
           {
             var item = items[i];
-            this.log("ITEM: ", item, item.getId, item.getClientId)
             if (item.getId() == id || item.getClientId() == id) {
               return item;
             }

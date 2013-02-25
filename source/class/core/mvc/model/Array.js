@@ -92,35 +92,6 @@
     {
       /*
       ======================================================
-        TRANSPARENT MODEL/PRESENTER HANDLING
-      ======================================================
-      */
-
-      __toItemModel : function(item) {
-        return item.__attachedModel || item;
-      },
-
-      __toItemPresenter : function(item) 
-      {
-        if (item.__attachedModel || !this.__useItemPresenter) {
-          return item;
-        }
-
-        // Dynamically create presenter from model
-        var presenterClass = this.getPresenter();
-        var presenter = new presenterClass(this, item);
-        
-        // Establish a double link connection
-        item.__attachedPresenter = presenter;
-        presenter.__attachedModel = model;
-
-        return presenter;
-      },
-
-
-
-      /*
-      ======================================================
         MODEL INTERFACE
       ======================================================
       */
@@ -164,6 +135,8 @@
         addEvent.release();        
       },      
 
+
+      // TODO
       __onModelChange : function(evt) 
       {
         var event = core.mvc.Event.obtain("change", evt.getTarget());
@@ -189,6 +162,7 @@
           for (var i=0, l=items.length; i<l; i++) 
           {
             var item = items[i];
+            this.log("ITEM: ", item, item.getId, item.getClientId)
             if (item.getId() == id || item.getClientId() == id) {
               return item;
             }
@@ -243,7 +217,7 @@
       __autoCast : function(itemOrProperties)
       {
         // Cast JavaScript Map into desired item type
-        if (core.Main.isTypeOf(item, "Plain")) 
+        if (core.Main.isTypeOf(itemOrProperties, "Plain")) 
         {
           var itemPresenter = this.__itemPresenter;
           if (itemPresenter)

@@ -73,6 +73,19 @@
       },
 
       /**
+       * Presenter types which models are wrapped into. As soon as a presenter
+       * is assigned the collection transparently works for both models and
+       * presenters. 
+       *
+       * Note: All return methods prefer presenters instead of raw models.
+       */
+      presenter : 
+      {
+        type : core.mvc.presenter.Abstract,
+        nullable : true
+      },
+
+      /**
        * Base URL to construct URLs with to load/save data from/to the server.
        */
       url : 
@@ -104,12 +117,15 @@
       // Collection Interface implementation
       find : function(id) 
       {
-        var models = this.__models;
-        for (var i=0, l=models.length; i<l; i++) 
+        if (id != null) 
         {
-          var model = models[i];
-          if (model.getId() == id || model.getClientId() == id) {
-            return model;
+          var models = this.__models;
+          for (var i=0, l=models.length; i<l; i++) 
+          {
+            var model = models[i];
+            if (model.getId() == id || model.getClientId() == id) {
+              return model;
+            }
           }
         }
 

@@ -15,10 +15,10 @@ core.Class("core.mvc.event.Add",
   implement : [core.event.IEvent],
 
   /**
-   * @model {core.mvc.model.IModel} Model which was added
+   * @item {Object} Item which was added
    */
-  construct: function(model) {
-    this.__model = model;
+  construct: function(item) {
+    this.__item = item;
   },
 
   members: 
@@ -29,17 +29,17 @@ core.Class("core.mvc.event.Add",
     },
     
     /**
-     * Sets the added @model {core.mvc.model.IModel}.
+     * Sets the added @item {Object}.
      */
-    setModel : function(model) {
-      this.__model = model;
+    setItem : function(item) {
+      this.__item = item;
     },
 
     /**
-     * {core.mvc.model.IModel} Returns the added model.
+     * {Object} Returns the added item.
      */
-    getModel : function() {
-      return this.__model;
+    getItem : function() {
+      return this.__item;
     }
   }
 });

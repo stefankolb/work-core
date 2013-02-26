@@ -8,7 +8,7 @@
 /**
  * Event class which is fired whenever a model is removed from a collection.
  */
-core.Class("core.mvc.event.Add", 
+core.Class("core.mvc.event.Remove", 
 {
   pooling: true,
   include : [core.event.MDispatchable],

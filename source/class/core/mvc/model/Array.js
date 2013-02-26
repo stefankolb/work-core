@@ -45,7 +45,8 @@
       }
 
       // The parent is used for event bubbling for either 
-      // the collection itself and/or the presenter items.
+      // the collection itself and the presenter items.
+      // Model items refer to the collection as parent.
       if (parent != null) {
         this.__parent = parent;
       }
@@ -58,7 +59,7 @@
 
     events :
     {
-      // Collection Interface implementation
+      // Model Interface implementation
       "change" : core.event.Simple,
 
       // Collection Interface implementation
@@ -87,6 +88,7 @@
       */
 
       __clientId : null,
+      __parent : null,
 
       // Model Interface implementation
       getClientId : function() {
@@ -101,6 +103,19 @@
       // Model Interface implementation
       parse : function(data) {
         return data;
+      },
+
+      // Offer the parent for event bubbling
+      getEventParent : function() {
+        return this.__parent;
+      },
+
+      setParent : function(parent) {
+        this.__parent = parent;
+      },
+
+      getParent : function() {
+        return this.__parent;
       },
 
 
@@ -176,25 +191,36 @@
        */
       __autoCast : function(itemOrProperties)
       {
+        var item;
+
         if (core.Main.isTypeOf(itemOrProperties, "Plain")) 
         {
-          var parent = this.__parent;
           var itemPresenter = this.__itemPresenter;
-
           if (itemPresenter)
           {
-            // Parent of presenter => parent presenter
-            return new itemPresenter(parent, itemOrProperties);
+            item = new itemPresenter(null, itemOrProperties);
           }
           else
           {
-            // Parent of model => collection
             var itemModel = this.__itemModel;
-            return new itemModel(itemOrProperties, parent);
+            item = new itemModel(itemOrProperties, this);
           }
         }
+        else
+        {
+          item = itemOrProperties;
+        }
 
-        return itemOrProperties;
+        // Use either our parent or this collection as parent for items
+        if (this.__itemModel) {
+          item.setParent(this);
+        } else if (this.__parent) {
+          item.setParent(this.__parent);
+        } else {
+          this.warn("Could not setup parent for item. Missing parent setup!")
+        }
+
+        return item;
       },
 
       __fireRemove : function(item)

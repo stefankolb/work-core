@@ -14,19 +14,31 @@ core.Class("core.mvc.presenter.Abstract",
    */
   construct : function(parent) 
   {
-
     // Keep reference to parent presenter
-    this.__parent = parent;
+    if (parent != null) {
+      this.__parent = parent;  
+    }
   },
 
   members :
   {
+    __parent : null,
+    
+
     /**
      * {core.mvc.presenter.Abstract} Returns the parent presenter.
      */
     getParent : function() {
       return this.__parent;
     },
+
+
+    /**
+     * {core.mvc.presenter.Abstract} Returns the parent presenter.
+     */
+    setParent : function(parent) {
+      this.__parent = parent;
+    },    
 
 
     /**

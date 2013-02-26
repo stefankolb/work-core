@@ -30,8 +30,8 @@
       // Automatically created client-side ID
       this.__clientId = "model-" + (globalId++);
 
-      // Attach parent when given
-      if (parent) {
+      // Attach parent when given (e.g. a collection or presenter)
+      if (parent != null) {
         this.__parent = parent;  
       }
 
@@ -69,6 +69,23 @@
       /** {String} Internal storage field for client ID */
       __clientId : null,
 
+      /**
+       * Returns the assigned parent 
+       */
+      getEventParent : function() {
+        return this.__parent;
+      },
+
+      setParent : function(parent) {
+        this.__parent = parent;
+      },
+
+      getParent : function() {
+        return this.__parent;
+      },
+
+
+
       // Interface implementation
       parse : function(data) {
         return data;
@@ -77,23 +94,6 @@
       // Interface implementation
       getClientId : function() {
         return this.__clientId;
-      },
-
-      __parent : null,
-
-      setParent : function(parent) {
-        this.__parent = parent;
-      },
-
-      getParent : function(parent) {
-        return this.__parent;
-      },
-
-      /**
-       * Alternative to getParent() as used for event handling (bubbling/capturing)
-       */
-      getEventParent : function() {
-        return this.__parent;
       },
 
       // Interface implementation

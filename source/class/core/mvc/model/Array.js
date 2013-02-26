@@ -8,15 +8,13 @@
 (function() 
 {
   var globalId = 0;
-  var modelToJson = function(model) {
+
+  var itemToJSON = function(model) {
     return model.toJSON ? model.toJSON() : model;
   };
 
   /**
-   * Arrays are ordered sets of models. You can bind individual "change" events 
-   * to be notified when any model in the collection has been modified, 
-   * listen for "add" and "remove" events, fetch the collection from the 
-   * server, etc.
+   * Arrays are ordered sets of items.
    */
   core.Class("core.mvc.model.Array", 
   {
@@ -26,15 +24,32 @@
     /**
      * Prefill the collection with @data {var}.
      */
-    construct: function(data) 
+    construct: function(data, item, parent) 
     {
-      // Do not directly use given models to have a internal 
-      // "protected" copy of the original data and using
-      // the real append() method instead.
-      this.__models = [];
-
       // Automatically created client-side ID
       this.__clientId = "collection-" + (globalId++);
+
+      // Do not directly use given items to have a internal 
+      // "protected" copy of the original data and using
+      // the real append() method instead.
+      this.__items = [];
+
+      // The item is used for auto casting given data into item objects
+      if (item)
+      {
+        if (core.Class.includesClass(item, core.mvc.model.Model)) {
+          this.__itemModel = item;
+        } else {
+          this.__itemPresenter = item;
+        }
+      }
+
+      // The parent is used for event bubbling for either 
+      // the collection itself and the presenter items.
+      // Model items refer to the collection as parent.
+      if (parent != null) {
+        this.__parent = parent;
+      }
 
       // Inject given data
       if (data != null) {
@@ -44,7 +59,7 @@
 
     events :
     {
-      // Collection Interface implementation
+      // Model Interface implementation
       "change" : core.event.Simple,
 
       // Collection Interface implementation
@@ -61,30 +76,19 @@
       {
         type : "String",
         nullable : true
-      },
-
-      /**
-       * Model to use for creating new entries.
-       */
-      model : 
-      {
-        type: core.mvc.model.Model,
-        nullable : true
-      },
-
-      /**
-       * Base URL to construct URLs with to load/save data from/to the server.
-       */
-      url : 
-      {
-        type: "String",
-        nullable : true
       }
     },
 
     members :
     {
+      /*
+      ======================================================
+        MODEL INTERFACE
+      ======================================================
+      */
+
       __clientId : null,
+      __parent : null,
 
       // Model Interface implementation
       getClientId : function() {
@@ -93,7 +97,7 @@
 
       // Model Interface implementation
       toJSON : function() {
-        return this.__models.map(modelToJson);
+        return this.__items.map(itemToJSON);
       },
 
       // Model Interface implementation
@@ -101,15 +105,39 @@
         return data;
       },
 
+      // Offer the parent for event bubbling
+      getEventParent : function() {
+        return this.__parent;
+      },
+
+      setParent : function(parent) {
+        this.__parent = parent;
+      },
+
+      getParent : function() {
+        return this.__parent;
+      },
+
+
+
+      /*
+      ======================================================
+        COLLECTION INTERFACE
+      ======================================================
+      */
+
       // Collection Interface implementation
       find : function(id) 
       {
-        var models = this.__models;
-        for (var i=0, l=models.length; i<l; i++) 
+        if (id != null) 
         {
-          var model = models[i];
-          if (model.getId() == id || model.getClientId() == id) {
-            return model;
+          var items = this.__items;
+          for (var i=0, l=items.length; i<l; i++) 
+          {
+            var item = items[i];
+            if (item.getId() == id || item.getClientId() == id) {
+              return item;
+            }
           }
         }
 
@@ -118,249 +146,246 @@
 
       // Collection Interface implementation
       getLength : function() {
-        return this.__models.length;
+        return this.__items.length;
       },    
 
       // Collection Interface implementation
       isEmpty : function() {
-        return this.__models.length > 0;
-      },
-
-      toArray : function() {
-        return this.__models.slice(0);
+        return this.__items.length > 0;
       },
 
       // Collection Interface implementation
-      add : function(model) {
-        this.push.apply(this, arguments);
+      toArray : function() {
+        return this.__items.slice(0);
+      },
+
+      // Collection Interface implementation
+      add : function(items) {
+        this.append(arguments);
       },
 
       // Collection Interface Implementation
-      remove : function(model) 
+      remove : function(item) 
       {
-        var index = this.__models.indexOf(model);
+        var index = this.__items.indexOf(item);
         if (index == -1) {
           return;
         }
 
-        this.__models.splice(index, 1);
-        model.removeListener("change", this.__onModelChange, this);
+        this.__items.splice(index, 1);
+        this.__fireRemove(item);
 
-        var removeEvent = core.mvc.event.Remove.obtain(model);
-        this.dispatchEvent(removeEvent);
-        removeEvent.release();
-
-        return model;
+        return item;
       },
 
 
 
-      setItemPresenter : function(presenter) {
-        this.__itemPresenter = presenter;
-      },
-
-
-      __onModelChange : function(evt) 
-      {
-        var event = core.mvc.Event.obtain("change", evt.getTarget());
-        this.dispatchEvent(event);
-        event.release();
-      },
-
+      /*
+      ======================================================
+        UTILITIES
+      ======================================================
+      */
 
       /**
-       * Imports an array of @models {core.mvc.model.Model[]} into the collection.
+       * Cast JavaScript Map into desired item type
        */
-      append : function(models) 
+      __autoCast : function(itemOrProperties)
       {
-        var addEvent = core.mvc.event.Add.obtain(null);
-        
-        for (var i=0, l=models.length, model; i<l; i++) 
+        var item;
+
+        if (core.Main.isTypeOf(itemOrProperties, "Plain")) 
         {
-          model = models[i];
-
-          if (core.Main.isTypeOf(model, "Plain")) {
-            model = this.__fromProperties(model);
+          var itemPresenter = this.__itemPresenter;
+          if (itemPresenter)
+          {
+            item = new itemPresenter(null, itemOrProperties);
           }
-
-          this.__models.push(model);
-
-          model.addListener("change", this.__onModelChange, this);
-
-          addEvent.setModel(model);
-          this.dispatchEvent(addEvent);
+          else
+          {
+            var itemModel = this.__itemModel;
+            item = new itemModel(itemOrProperties, this);
+          }
+        }
+        else
+        {
+          item = itemOrProperties;
         }
 
-        addEvent.release();
+        // Use either our parent or this collection as parent for items
+        if (this.__itemModel) {
+          item.setParent(this);
+        } else if (this.__parent) {
+          item.setParent(this.__parent);
+        } else {
+          this.warn("Could not setup parent for item. Missing parent setup!")
+        }
 
-        return this.__models.length;
+        return item;
+      },
+
+      __fireRemove : function(item)
+      {
+        var removeEvent = core.mvc.event.Remove.obtain(item);
+        this.dispatchEvent(removeEvent);
+        removeEvent.release();        
+      },
+
+      __fireAdd : function(item)
+      {
+        var addEvent = core.mvc.event.Add.obtain(item);
+        this.dispatchEvent(addEvent);
+        addEvent.release();        
+      },   
+
+
+
+      /*
+      ======================================================
+        MUTATION FUNCTIONS
+      ======================================================
+      */
+
+      /**
+       * {Integer} Appends an array of @items {Object[]} into the collection.
+       * Returns the new length of the collection.
+       */
+      append : function(items) 
+      {
+        var db = this.__items;
+        for (var i=0, l=items.length, item; i<l; i++) 
+        {
+          item = this.__autoCast(items[i]);
+          db.push(item);
+          this.__fireAdd(item);
+        }
+
+        return db.length;
       },
 
 
       /**
-       * {Integer} Clears the collection so that all models are removed from it. Returns
+       * {Integer} Prepends an array of @items {Object[]} into the collection.
+       * Returns the new length of the collection.
+       */
+      prepend : function(items)
+      {
+        var db = this.__items;
+        for (var i=0, l=items.length, item; i<l; i++) 
+        {
+          item = this.__autoCast(items[i]);
+          db.push(item);
+          this.__fireAdd(item);
+        }
+
+        return db.length;        
+      },
+
+
+      /**
+       * Pushes one or multiple @items {Object...} to the end of the collection.
+       */
+      push : function(items) {
+        return this.append(arguments);
+      },
+
+
+      /**
+       * {Integer} Clears the collection so that all items are removed from it. Returns
        * the new length of the collection afterwards (always zero here).
        */
       clear : function() 
       {
-        var db = this.__models;
-        var length = db.length;
+        var db = this.__items;
 
-        if (db.length == 0) {
+        var length = db.length;
+        if (length == 0) {
           return;
         }
 
-        var removeEvent = core.mvc.event.Remove.obtain(null);
-
-        for (var i=length-1, model; i>=0; i--) 
+        for (var i=length-1, item; i>=0; i--) 
         {
-          model = db[i];
-          model.removeListener("change", this.__onModelChange, this);
-
-          // Pop out last model
+          item = db[i];
           db.length--;
-
-          // Inform others
-          removeEvent.setModel(model);
-          this.dispatchEvent(removeEvent);
+          this.__fireRemove(item);
         }
 
-        removeEvent.release();
         return 0;
       },
 
 
       /**
        * {Integer} Combined call to replace all existing data with new 
-       * list of @models {core.mvc.model.Model}. Returns the new length
+       * list of @items {Object...}. Returns the new length
        * of the collection.
        */
-      reset : function(models) 
+      reset : function(items) 
       {
         this.clear();
-        return this.append(models);
-      },
-
-
-      /** {core.mvc.model.Model} Returns the model at the given @index {Integer}. */
-      at : function(index) {
-        return this.__models[index] || null;
-      },
-
-
-      /** {core.mvc.model.Model} Removes and returns the last model of the collection. */
-      pop : function() 
-      {
-        var removedModel = this.__models.pop();
-        if (!removedModel) {
-          return;
-        }
-        
-        removedModel.removeListener("change", this.__onModelChange, this);
-
-        var removeEvent = core.mvc.event.Remove.obtain(removedModel);
-        this.dispatchEvent(removeEvent);
-        removeEvent.release();
-
-        return removedModel;
-      },
-
-
-      /**
-       * Pushes one or multiple @model {core.mvc.model.Model...} to the end of the collection.
-       */
-      push : function(model) 
-      {
-        var addEvent = core.mvc.event.Add.obtain(null);
-
-        for (var i=0, l=arguments.length; i<l; i++) 
-        {
-          model = arguments[i];
-
-          if (core.Main.isTypeOf(model, "Plain")) {
-            model = this.__fromProperties(model);
-          }
-
-          this.__models.push(model);
-
-          model.addListener("change", this.__onModelChange, this);
-          
-          addEvent.setModel(model);
-          this.dispatchEvent(addEvent);
-        }
-
-        addEvent.release();
-
-        return this.__models.length;
+        return this.append(items);
       },
 
 
       /** 
-       * {core.mvc.model.Model} Removes and returns the first model of the collection. 
+       * {Object} Returns the item at the given @index {Integer}. 
+       */
+      at : function(index) {
+        return this.__items[index] || null;
+      },
+
+
+      /** 
+       * {Object} Removes and returns the last model of the collection. 
+       */
+      pop : function() 
+      {
+        var removedItem = this.__items.pop();
+        if (removedItem) {
+          this.__fireRemove(removedItem);
+        }
+
+        return removedItem;
+      },
+
+
+      /** 
+       * {Object} Removes and returns the first model of the collection. 
        */
       shift : function() 
       {
-        var removedModel = this.__models.shift();
-        if (!removedModel) {
-          return;
+        var removedItem = this.__items.shift();
+        if (!removedItem) {
+          this.__fireRemove(removedItem);
         }
 
-        removedModel.removeListener("change", this.__onModelChange, this);
-
-        var removeEvent = core.mvc.event.Remove.obtain(removedModel);
-        this.dispatchEvent(removeEvent);
-        removeEvent.release();
-
-        return removedModel;
+        return removedItem;
       },
 
 
       /**
-       * {Integer} Pushes one or multiple @model {core.mvc.model.Model...} to the beginning of the collection.
+       * {Integer} Pushes one or multiple @items {Object...} to the beginning of the collection.
        * Returns the new length of the collection.
        */
-      unshift: function(model) 
-      {
-        var addEvent = core.mvc.event.Add.obtain(null);
-
-        for (var i=0, l=arguments.length; i<l; i++)
-        {
-          model = arguments[i];
-
-          if (core.Main.isTypeOf(model, "Plain")) {
-            model = this.__fromProperties(model);
-          }          
-
-          model.addListener("change", this.__onModelChange, this);
-
-          // Inserting in right order. Using unshift() would reverse the list.
-          this.__models.splice(i, 0, model);
-          addEvent.setModel(model);
-          this.dispatchEvent(addEvent);
-        }
-
-        addEvent.release();
-
-        return this.__models.length;
+      unshift: function(items) {
+        return this.prepend(arguments);
       },
 
 
       /**
-       * {core.mvc.model.IModel} Returns the first model which 
-       * matches all values of the given @properties {Map}.
+       * {Object} Returns the first item which matches all values of the 
+       * given @properties {Map}.
        */
       findBy : function(properties)
       {
-        var db = this.__models;
+        var db = this.__items;
         for (var i=0, l=db.length; i<l; i++)
         {
-          var model = db[i];
+          var item = db[i];
           var matched = true;
 
           for (var name in properties)
           { 
             // Looking for false matches for faster failures 
-            if (model.get(name) !== properties[name]) 
+            if (item.get(name) !== properties[name]) 
             {
               matched = false;
               break;
@@ -368,7 +393,7 @@
           }
 
           if (matched) {
-            return model;
+            return item;
           }
         }
 
@@ -393,7 +418,7 @@
        * callback is executed are: `value`, `key`, `array`.
        */
       map : function(callback, context) {
-        return this.__models.map(callback, context);
+        return this.__items.map(callback, context);
       },
 
 
@@ -403,27 +428,9 @@
        */
       pluck : function(property) 
       {
-        return this.__models.map(function() {
+        return this.__items.map(function() {
           return this.get(property);
         });
-      },
-
-
-      /**
-       * {core.mvc.model.IModel} Casts @properties {Map} into a model 
-       * instance of the Class configured in this instance.
-       */
-      __fromProperties : function(properties)
-      {
-        var modelClass = this.getModel();
-        if (!modelClass) {
-          throw new Error("create() requires a model being assigned to work!");
-        }
-
-        // Prefer pooling when available
-        var model = modelClass.obtain ? modelClass.obtain(properties) : new modelClass(properties);
-
-        return model;
       }
     }
   });

@@ -25,10 +25,15 @@
     /**
      * Initial data structure is imported from @data {var}.
      */
-    construct: function(data) 
+    construct: function(data, parent) 
     {
       // Automatically created client-side ID
       this.__clientId = "model-" + (globalId++);
+
+      // Attach parent when given (e.g. a collection or presenter)
+      if (parent != null) {
+        this.__parent = parent;  
+      }
 
       // Import given values with parse method
       if (data != null) 
@@ -46,7 +51,7 @@
     events :
     {
       /** Fired whenever the model is changed in a way that is interesting for listeners */
-      "change" : core.event.Simple
+      change : core.event.Simple
     },
 
     properties :
@@ -63,6 +68,23 @@
     {
       /** {String} Internal storage field for client ID */
       __clientId : null,
+
+      /**
+       * Returns the assigned parent 
+       */
+      getEventParent : function() {
+        return this.__parent;
+      },
+
+      setParent : function(parent) {
+        this.__parent = parent;
+      },
+
+      getParent : function() {
+        return this.__parent;
+      },
+
+
 
       // Interface implementation
       parse : function(data) {

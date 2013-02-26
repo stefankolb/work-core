@@ -15,10 +15,10 @@ core.Class("core.mvc.event.Remove",
   implement : [core.event.IEvent],
 
   /**
-   * @model {core.mvc.model.IModel} Model which was removed
+   * @item {Object} Item which was added
    */
-  construct: function(model) {
-    this.__model = model;
+  construct: function(item) {
+    this.__item = item;
   },
 
   members: 
@@ -29,17 +29,17 @@ core.Class("core.mvc.event.Remove",
     },
     
     /**
-     * Sets the removed @model {core.mvc.model.IModel}.
+     * Sets the removed @item {Object}.
      */
-    setModel : function(model) {
-      this.__model = model;
+    setItem : function(item) {
+      this.__item = item;
     },
-    
+
     /**
-     * {core.mvc.model.IModel} Returns the removed model.
-     */    
-    getModel : function() {
-      return this.__model;
+     * {Object} Returns the removed item.
+     */
+    getItem : function() {
+      return this.__item;
     }
   }
 });

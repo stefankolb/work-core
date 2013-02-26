@@ -14,10 +14,7 @@
   };
 
   /**
-   * Arrays are ordered sets of items. You can bind individual "change" events 
-   * to be notified when any model in the collection has been modified, 
-   * listen for "add" and "remove" events, fetch the collection from the 
-   * server, etc.
+   * Arrays are ordered sets of items.
    */
   core.Class("core.mvc.model.Array", 
   {
@@ -27,26 +24,33 @@
     /**
      * Prefill the collection with @data {var}.
      */
-    construct: function(data, modelOrPresenter) 
+    construct: function(data, item, parent) 
     {
+      // Automatically created client-side ID
+      this.__clientId = "collection-" + (globalId++);
+
       // Do not directly use given items to have a internal 
       // "protected" copy of the original data and using
       // the real append() method instead.
       this.__items = [];
 
-      // Automatically created client-side ID
-      this.__clientId = "collection-" + (globalId++);
-
-      // Inject given data
-      if (modelOrPresenter)
+      // The item is used for auto casting given data into item objects
+      if (item)
       {
-        if (core.Class.includesClass(modelOrPresenter, core.mvc.model.Model)) {
-          this.__itemModel = modelOrPresenter;
+        if (core.Class.includesClass(item, core.mvc.model.Model)) {
+          this.__itemModel = item;
         } else {
-          this.__itemPresenter = modelOrPresenter;
+          this.__itemPresenter = item;
         }
       }
 
+      // The parent is used for event bubbling for either 
+      // the collection itself and/or the presenter items.
+      if (parent != null) {
+        this.__parent = parent;
+      }
+
+      // Inject given data
       if (data != null) {
         this.append(this.parse(data));
       }
@@ -70,16 +74,6 @@
       id : 
       {
         type : "String",
-        nullable : true
-      },
-
-
-      /**
-       * Base URL to construct URLs with to load/save data from/to the server.
-       */
-      url : 
-      {
-        type: "String",
         nullable : true
       }
     },
@@ -108,38 +102,6 @@
       parse : function(data) {
         return data;
       },
-
-
-
-      /*
-      ======================================================
-        EVENT HANDLING
-      ======================================================
-      */
-
-      __fireRemove : function(item)
-      {
-        var removeEvent = core.mvc.event.Remove.obtain(item);
-        this.dispatchEvent(removeEvent);
-        removeEvent.release();        
-      },
-
-      __fireAdd : function(item)
-      {
-        var addEvent = core.mvc.event.Add.obtain(item);
-        this.dispatchEvent(addEvent);
-        addEvent.release();        
-      },      
-
-
-      // TODO
-      __onModelChange : function(evt) 
-      {
-        var event = core.mvc.Event.obtain("change", evt.getTarget());
-        this.dispatchEvent(event);
-        event.release();
-      },
-
 
 
 
@@ -209,29 +171,45 @@
       ======================================================
       */
 
+      /**
+       * Cast JavaScript Map into desired item type
+       */
       __autoCast : function(itemOrProperties)
       {
-        // Cast JavaScript Map into desired item type
         if (core.Main.isTypeOf(itemOrProperties, "Plain")) 
         {
+          var parent = this.__parent;
           var itemPresenter = this.__itemPresenter;
+
           if (itemPresenter)
           {
-            // TODO: Support models?
-            var item = new itemPresenter(this, itemOrProperties);
+            // Parent of presenter => parent presenter
+            return new itemPresenter(parent, itemOrProperties);
           }
           else
           {
+            // Parent of model => collection
             var itemModel = this.__itemModel;
-            var item = new itemModel(itemOrProperties, this);
+            return new itemModel(itemOrProperties, parent);
           }
-
-          return item;
         }
 
         return itemOrProperties;
       },
 
+      __fireRemove : function(item)
+      {
+        var removeEvent = core.mvc.event.Remove.obtain(item);
+        this.dispatchEvent(removeEvent);
+        removeEvent.release();        
+      },
+
+      __fireAdd : function(item)
+      {
+        var addEvent = core.mvc.event.Add.obtain(item);
+        this.dispatchEvent(addEvent);
+        addEvent.release();        
+      },   
 
 
 

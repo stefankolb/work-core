@@ -1,23 +1,38 @@
-(function() {
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2013 Sebastian Fastner
+==================================================================================================
+*/
 
-var id = 100;
+/**
+ * Promises implementation of A+ specification passing Promises/A+ test suite.
+ * Very efficient due to object pooling.
 
-// http://promises-aplus.github.com/promises-spec/
+ * http://promises-aplus.github.com/promises-spec/
+ */
+
 core.Class("core.event.Promise", {
-	//pooling : true,
+	pooling : true,
 	
 	construct : function() {
+		// Clean up onFulfilled handlers
 		var onFulfilled = this.__onFulfilled = this.__onFulfilled || [];
 		onFulfilled.length = 0;
+
+		// Clean up onRejected handlers
 		var onRejected = this.__onRejected = this.__onRejected || [];
 		onRejected.length = 0;
+
+		// Reset value/reason to default
 		this.resetValue();
+
+		// Reset state to pending
 		this.resetState();
-		this.__locked = false;
-		this.__id = id++;
 	},
 	
 	properties : {
+		/** {String} State of promise (pending, fulfilled, rejected) */
 		state : {
 			type : ["pending", "fulfilled", "rejected"],
 			init : "pending",
@@ -26,6 +41,7 @@ core.Class("core.event.Promise", {
 			}
 		},
 		
+		/** Value (state == fulfilled) or reason (state == rejected) of promise */
 		value : {
 			nullable: true,
 			init: null
@@ -33,6 +49,9 @@ core.Class("core.event.Promise", {
 	},
 	
 	members : {
+		/**
+		 * Fulfill promise with @value
+		 */
 		fulfill : function(value) {
 			if (this.__locked) {
 				return;
@@ -40,13 +59,19 @@ core.Class("core.event.Promise", {
 			setTimeout(this.__handler.bind(this, "fulfilled", value), 0);
 		},
 		
+		/**
+		 * Reject promise with @reason
+		 */
 		reject : function(reason) {
 			if (this.__locked) {
 				return;
 			}
 			setTimeout(this.__handler.bind(this, "rejected", reason), 0);
 		},
-		
+	
+		/**
+		 * Handle single fulfillment or rejection handler @fnt with correct subsequent promise {core.event.Promise} @myPromise.
+		 */	
 		__handleFnt : function(fnt, myPromise, value, state) {
 			if (fnt === null) {
 				if (state == "rejected") {
@@ -85,6 +110,10 @@ core.Class("core.event.Promise", {
 			
 		},
 
+		/**
+		 * Handle fulfillment or rejection of promise
+		 * Runs all registered then handlers
+		 */
 		__handler : function(state, value) {
 			if (this.__locked) {
 				return;
@@ -104,11 +133,15 @@ core.Class("core.event.Promise", {
 				this.__handleFnt(fntarr[0], fntarr[1], value, state);
 			}
 
-			//this.release();
+			this.release();
 		},
 		
+		/**
+		 * {core.event.Promise} Register fulfillment handler {function} @onFulfilled and rejection handler {function} @onRejected
+		 * returning new subsequent promise.
+		 */
 		then : function(onFulfilled, onRejected) {
-			var promise = new core.event.Promise(); //.obtain();
+			var promise = core.event.Promise.obtain();
 			
 			if (onFulfilled && (typeof onFulfilled == "function")) {
 				this.__onFulfilled.push([onFulfilled, promise]);
@@ -126,4 +159,3 @@ core.Class("core.event.Promise", {
 	}
 });
 
-})();

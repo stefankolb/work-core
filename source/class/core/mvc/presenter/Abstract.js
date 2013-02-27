@@ -18,10 +18,19 @@ core.Class("core.mvc.presenter.Abstract",
     if (parent != null) {
       this.__parent = parent;  
     }
+
+    // Child presenters
+    this.__children = {};
   },
 
   members :
   {
+    /*
+    ======================================================
+      PARENT CONNECTION
+    ======================================================
+    */
+
     __parent : null,
     
 
@@ -46,6 +55,56 @@ core.Class("core.mvc.presenter.Abstract",
      */
     getEventParent : function() {
       return this.__parent;
+    },
+
+
+
+    /*
+    ======================================================
+      CHILDREN MANAGMENT
+    ======================================================
+    */
+
+    getChild : function(name) {
+      return this.__children[name];
+    },
+
+    addChild : function(name, presenter) 
+    {
+      var db = this.__children;
+      
+      if (jasy.Env.isSet("debug") && name in db) {
+        throw new Error("Child name " + name + " is already in use!");
+      }
+
+      db[name] = presenter;
+      return presenter;
+    },
+
+    removeChild : function(name) {
+      return delete this.__children[name];
+    },
+
+    createChild : function(name, construct) 
+    {
+      var args = arguments;
+
+      if (args.length > 2)
+      {
+        if (args.length == 3) {
+          var child = new construct(this, args[2]);
+        } else if (args.length == 4) {
+          var child = new construct(this, args[2], args[3]);
+        } else if (args.length == 5) {
+          var child = new construct(this, args[2], args[3], args[4]);
+        } 
+      }
+      else
+      {
+        var child = new construct(this);
+      }
+      
+      return this.addChild(name, child);
     }
   }
 });

@@ -73,17 +73,29 @@ core.Class("core.mvc.presenter.Abstract",
     {
       var db = this.__children;
 
-      if (jasy.Env.isSet("debug") && name in db) {
-        throw new Error("Child name " + name + " is already in use!");
+      if (jasy.Env.isSet("debug")) 
+      {
+        if (name in db) {
+          throw new Error("Child name " + name + " is already in use!");  
+        }
+        
+        if (!core.Main.isType(presenter, "Object")) {
+          throw new Error("Invalid presenter instance: " + presenter);
+        }
       }
 
       db[name] = presenter;
       return presenter;
     },
 
+
+    /**
+     * {Boolean} Removes the given child by its @name {String}. Returns whether it succeeded.
+     */
     removeChild : function(name) {
       return delete this.__children[name];
     },
+
 
     /**
      * {Object} Creates and registers a child presenter under the given @name {String}

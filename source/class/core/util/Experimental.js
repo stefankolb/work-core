@@ -32,7 +32,7 @@
     }
   }
 
-  core.Module.define("core.util.Experimental", 
+  core.Module("core.util.Experimental", 
   {
     get : function(object, what, assign) 
     {

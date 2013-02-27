@@ -36,6 +36,7 @@
 
 		return selected[name];
 	};
+	
 
 	/**
 	 * This class is the client-side representation for the permutation features of
@@ -57,6 +58,9 @@
 		},
 
 
+		/**
+		 * Adds the given @field {Array} as exported by Jasy.
+		 */
 		addField : function(field)
 		{
 			// possible variants
@@ -94,12 +98,9 @@
 				key.push(name + ":" + value);
 			}
 
-			if (selected.debug) {
-				console.info("jasy.Env: " + key.join(", "));
-			}
-
 			this.CHECKSUM = core.util.String.toHex(core.crypt.SHA1.checksum(key.join(";")));
 		},
+
 
 		/**
 		 * Used by Jasy to inject @fields {Array} data

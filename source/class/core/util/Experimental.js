@@ -11,14 +11,7 @@
 (function(cache) 
 {
   var hasOwnProperty = cache.hasOwnProperty;
-  var prefixes = 
-  [
-    "O", "o",
-    "MS", "ms",
-    "Moz", "moz",
-    "WebKit", "Webkit", "webKit", "webkit",
-    ""
-  ];
+  var prefixes = "O|o|MS|ms|Moz|moz|WebKit|Webkit|webKit|webkit|".split("|");
 
   function find(object, what) 
   {

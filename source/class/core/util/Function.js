@@ -5,8 +5,31 @@
 ==================================================================================================
 */
 
-(function() 
+(function(global) 
 {
+  var immediate;
+
+  // Try NodeJS style nextTick() API
+  // http://howtonode.org/understanding-process-next-tick
+  if (global.process && process.nextTick) 
+  {
+    immediate = process.nextTick;
+  }
+  else
+  {
+    // Try experimental setImmediate() API
+    // https://developer.mozilla.org/en-US/docs/DOM/window.setImmediate
+    immediate = core.util.Experimental.get(global, "setImmediate");
+
+    // Last fallback: Timeout
+    if (!immediate)
+    {
+      immediate = function(func) {
+        return setTimeout(func, 0);
+      };
+    }
+  }
+
   /**
    * Utilities for functions
    */
@@ -94,7 +117,22 @@
           func.apply(self, args);
         }
       };
-    }    
+    },
+
+
+    /**
+     * Executes the given @func {Function} immediately, but not in the current 
+     * thread (non-blocking). Optionally is able to call the method in the given
+     * @context {Object?}.
+     */ 
+    immediate : function(func, context)
+    {
+      if (context) {
+        func = this.bind(func, context);
+      }
+
+      immediate(func);
+    }
 
   });  
-})();
+})(core.Main.getGlobal());

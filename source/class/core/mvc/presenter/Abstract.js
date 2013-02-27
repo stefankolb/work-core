@@ -72,7 +72,7 @@ core.Class("core.mvc.presenter.Abstract",
     addChild : function(name, presenter) 
     {
       var db = this.__children;
-      
+
       if (jasy.Env.isSet("debug") && name in db) {
         throw new Error("Child name " + name + " is already in use!");
       }
@@ -85,7 +85,13 @@ core.Class("core.mvc.presenter.Abstract",
       return delete this.__children[name];
     },
 
-    createChild : function(name, construct) 
+    /**
+     * {Object} Creates and registers a child presenter under the given @name {String}
+     * using the given presenter @construct {Class}. Supports optional arguments
+     * using @varargs {var...} which are passed to the constructor. Returns the
+     * presenter instance which was created.
+     */
+    createChild : function(name, construct, varargs) 
     {
       var args = arguments;
 
@@ -97,7 +103,9 @@ core.Class("core.mvc.presenter.Abstract",
           var child = new construct(this, args[2], args[3]);
         } else if (args.length == 5) {
           var child = new construct(this, args[2], args[3], args[4]);
-        } 
+        } else if (jasy.Env.isSet("debug")) {
+          throw new Error("Too many arguments!");
+        }
       }
       else
       {

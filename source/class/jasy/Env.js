@@ -8,10 +8,8 @@
 
 (function(undef)
 {
-	/** {=Array} List of selected field keys */
-	var key = [];
 	/** {=Map} Map of selected field values */
-	var values = {};
+	var permutated = {};
 
 	/** {=Map} Internal database of available fields with their current values */
 	var selected = {};
@@ -33,7 +31,7 @@
 	var getValue = function(name) 
 	{
 		if (!(name in selected)) {
-			throw new Error("jasy.Env: Field " + name + " is not available (yet)!");
+			throw new Error("[jasy.Env]: Field " + name + " is not available (yet)!");
 		}
 
 		return selected[name];
@@ -51,11 +49,8 @@
 		/** {=Number} Holds the checksum for the current permutation which is auto detected by features or by compiled-in data */
 		CHECKSUM : null,
 
-		/** {=Array} List of keys relevant for computing the checksum. Useful for debugging. */
-		KEY : key,
-
 		/** {=Map} Map of keys and values relevant for computing the checksum. Useful for debugging. */
-		VALUES : values,
+		PERMUTATED : permutated,
 
 
 		/**
@@ -100,32 +95,56 @@
 				value = field[2];
 			}
 
+			// Add all fields - even static ones - to the selected data
 			selected[name] = value;
 
-			if (type != 3) {
-				key.push(name);
-				values[name] = value;
+			// Only add permutated fields to the permutated map.
+			if (type != 3) 
+			{
+				permutated[name] = value;
+				this.CHECKSUM = null;
+			}
+		},
+
+
+		/**
+		 * {String} Returns the SHA1 checksum of the current permutated field set.
+		 * This checksum computition is compatatible with the Jasy approach for
+		 * computing it.
+		 */
+		getChecksum : function()
+		{
+			var checksum = this.CHECKSUM;
+			if (checksum != null) {
+				return checksum;
 			}
 
-			key.sort();
-			var fields = [];
-			var fieldkey;
-			for (var i=0,ii=key.length; i<ii; i++) {
-				fieldkey = key[i];
-				fields.push(fieldkey + ":" + values[fieldkey]);
+			var names = [];
+			for (var name in permutated) {
+				names.push(name);
 			}
+
+			names.sort();
+
+			var list = [];
+			for (var i=0, l=names.length; i<l; i++) 
+			{	
+				var name = names[i];
+				list.push(name + ":" + permutated[name]);
+			}			
+
 			var sha1 = core.crypt.SHA1.checksum(fields.join(";"));
-			this.CHECKSUM = core.util.String.toHex(sha1);
+			return this.CHECKSUM = core.crypt.Util.toHex(sha1);
 		},
 
 
 		/**
 		 * Used by Jasy to inject @fields {Array} data
+		 *
+		 * Deprecated!
 		 */
 		setFields : function(fields)
 		{
-			// DEPRECATED
-
 			for (var i=0, l=fields.length; i<l; i++) {
 				this.addField(fields[i]);
 			}

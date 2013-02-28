@@ -8,8 +8,10 @@
 
 (function(undef)
 {
-	/** {=Array} List of selected field values */
+	/** {=Array} List of selected field keys */
 	var key = [];
+	/** {=Map} Map of selected field values */
+	var values = {};
 
 	/** {=Map} Internal database of available fields with their current values */
 	var selected = {};
@@ -51,6 +53,9 @@
 
 		/** {=Array} List of keys relevant for computing the checksum. Useful for debugging. */
 		KEY : key,
+
+		/** {=Map} Map of keys and values relevant for computing the checksum. Useful for debugging. */
+		VALUES : values,
 
 
 		/**
@@ -98,11 +103,18 @@
 			selected[name] = value;
 
 			if (type != 3) {
-				key.push(name + ":" + value);
+				key.push(name);
+				values[name] = value;
 			}
 
 			key.sort();
-			var sha1 = core.crypt.SHA1.checksum(key.join(";"));
+			var fields = [];
+			var fieldkey;
+			for (var i=0,ii=key.length; i<ii; i++) {
+				fieldkey = key[i];
+				fields.push(fieldkey + ":" + values[fieldkey]);
+			}
+			var sha1 = core.crypt.SHA1.checksum(fields.join(";"));
 			this.CHECKSUM = core.util.String.toHex(sha1);
 		},
 

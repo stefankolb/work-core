@@ -49,6 +49,9 @@
 		/** {=Number} Holds the checksum for the current permutation which is auto detected by features or by compiled-in data */
 		CHECKSUM : null,
 
+		/** {=Array} List of keys relevant for computing the checksum. Useful for debugging. */
+		KEY : key,
+
 
 		/**
 		 * Configure environment data dynamically via setting a field @name {String} and its @value {var}.
@@ -69,7 +72,7 @@
 			// 3: name, 3, test, default (not permutated)
 
 			var name = field[0];
-			var type = field[1]
+			var type = field[1];
 			if (type == 1 || type == 3)
 			{
 				var test = field[2];

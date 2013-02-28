@@ -14,6 +14,9 @@
 	/** {=Map} Internal database of available fields with their current values */
 	var selected = {};
 
+	/** {=String} Computed checksum */
+	var checksum = null;
+
 	// At this level Array.prototype.indexOf might not be support, so we implement a custom logic for a contains check
 	var contains = function(array, value) 
 	{
@@ -44,12 +47,10 @@
 	 */
 	core.Module("jasy.Env",
 	{
+		/** {=Map} Map of all fields with their values. */
 		SELECTED : selected,
 
-		/** {=Number} Holds the checksum for the current permutation which is auto detected by features or by compiled-in data */
-		CHECKSUM : null,
-
-		/** {=Map} Map of keys and values relevant for computing the checksum. Useful for debugging. */
+		/** {=Map} Map of all permutated fields which are relevant for checksum compution */
 		PERMUTATED : permutated,
 
 
@@ -102,7 +103,7 @@
 			if (type != 3) 
 			{
 				permutated[name] = value;
-				this.CHECKSUM = null;
+				checksum = null;
 			}
 		},
 
@@ -114,7 +115,6 @@
 		 */
 		getChecksum : function()
 		{
-			var checksum = this.CHECKSUM;
 			if (checksum != null) {
 				return checksum;
 			}
@@ -133,8 +133,8 @@
 				list.push(name + ":" + permutated[name]);
 			}			
 
-			var sha1 = core.crypt.SHA1.checksum(fields.join(";"));
-			return this.CHECKSUM = core.crypt.Util.toHex(sha1);
+			var sha1 = core.crypt.SHA1.checksum(list.join(";"));
+			return checksum = core.crypt.Util.toHex(sha1);
 		},
 
 

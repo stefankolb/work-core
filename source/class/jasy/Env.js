@@ -36,7 +36,7 @@
 
 		return selected[name];
 	};
-	
+
 
 	/**
 	 * This class is the client-side representation for the permutation features of
@@ -98,7 +98,9 @@
 				key.push(name + ":" + value);
 			}
 
-			this.CHECKSUM = core.util.String.toHex(core.crypt.SHA1.checksum(key.join(";")));
+			key.sort();
+			var sha1 = core.crypt.SHA1.checksum(key.join(";"));
+			this.CHECKSUM = core.util.String.toHex(sha1);
 		},
 
 

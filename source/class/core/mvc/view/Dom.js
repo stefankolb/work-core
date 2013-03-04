@@ -14,8 +14,6 @@ core.Class("core.mvc.view.Dom",
   {
     core.mvc.view.Abstract.call(this, presenter);
 
-    this.__subViews = {};
-
     if (root != null) 
     {
       if (jasy.Env.isSet("debug")) {
@@ -69,24 +67,6 @@ core.Class("core.mvc.view.Dom",
     },
 
 
-
-    addSubView : function(name, view) 
-    {
-      this.__subViews[name] = view;
-      this.__partials = null;
-
-      this.render();
-    },
-
-    removeSubView : function(name) 
-    {
-      delete this.__subViews[name];
-      this.__partials = null;
-
-      this.render();
-    },
-
-
     __renderRequest : function()
     {
       if (this._shouldRender()) 
@@ -127,28 +107,11 @@ core.Class("core.mvc.view.Dom",
       {
         this.__partials = partials = {};
 
-        var subViews = this.__subViews;
-        for (var name in subViews) {
-          partials[name] = subViews[name].getTemplate();
-        }
+        // TODO
       }
 
-      if (!this.__resolver)
-      {
-        var self = this;
-        var helper = new Function();
-        helper.prototype = presenter;
-        helper.prototype.getLabel = function(name) {
-          return self.getLabel(name);
-        };
-
-        this.__resolver = new helper;
-      };
-
-
-
       this._beforeRender();
-      elem.innerHTML = template.render(this.__resolver, partials);
+      elem.innerHTML = template.render(presenter, partials);
       this._afterRender();
 
       // Let others know
@@ -157,7 +120,7 @@ core.Class("core.mvc.view.Dom",
 
 
     _shouldRender : function() {
-      return this.__isLoading == 0;
+      return this.__assetLoadCounter == 0;
     },
 
 
@@ -197,7 +160,7 @@ core.Class("core.mvc.view.Dom",
     },
 
 
-    __isLoading : 0,
+    __assetLoadCounter : 0,
 
 
     /**
@@ -206,14 +169,14 @@ core.Class("core.mvc.view.Dom",
      */
     loadTemplate : function(tmpl, nocache)
     {
-      this.__isLoading++;
+      this.__assetLoadCounter++;
       core.io.Text.load(jasy.Asset.toUri(tmpl), this.__loadTemplateCallback, this, nocache);      
     },
 
 
     __loadTemplateCallback : function(uri, errornous, data) 
     {
-      this.__isLoading--;
+      this.__assetLoadCounter--;
 
       if (errornous) {
         throw new Error("Could not load template: " + uri + "!");
@@ -225,13 +188,13 @@ core.Class("core.mvc.view.Dom",
 
     loadStyleSheet : function(sheet, nocache)
     {
-      this.__isLoading++;
+      this.__assetLoadCounter++;
       core.io.StyleSheet.load(jasy.Asset.toUri(sheet), this.__loadStyleSheetCallback, this, nocache);
     },
 
     __loadStyleSheetCallback : function(uri, errornous) 
     {
-      this.__isLoading--;
+      this.__assetLoadCounter--;
 
       if (errornous) {
         throw new Error("Could not load style sheet: " + uri + "!");

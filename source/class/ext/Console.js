@@ -16,6 +16,19 @@
 {
 	var methods = "log,debug,error,warn,info".split(",");
 	var console = global.console || (global.console = {});
+	
+	if (jasy.Env.isSet("runtime", "webworker")) {
+		for (var i=0, l=methods.length; i<l; i++) {
+			var method = methods[i];
+			console[method] = function() {
+				self.postMessage({
+					type: "core/debug/" + this, 
+					msg: Array.prototype.slice.call(arguments, 0) // Must convert to instance of array
+				});
+			}.bind(method);
+		}
+	}
+	
 	var log = console.log || new Function;
 
 	for (var i=0, l=methods.length; i<l; i++)

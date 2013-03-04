@@ -89,7 +89,7 @@ def api():
     outputManager.deployAssets(["core.apibrowser.Browser"])
 
     # Write kernel script
-    outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
+    outputManager.storeKernel("$prefix/script/kernel.js", bootCode="api.Kernel.init();")
 
     # Copy files from source
     fileManager.updateFile(sourceFolder + "/apibrowser.html", "$prefix/index.html")
@@ -154,7 +154,7 @@ def test_source(main="test.Main"):
     fileManager = FileManager(session)
     
     # Store kernel script
-    outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
+    outputManager.storeKernel("$prefix/script/kernel.js", bootCode="test.Kernel.init();")
     
     for permutation in session.permutate():
 
@@ -183,7 +183,7 @@ def test_build(main="test.Main"):
     outputManager.deployAssets([main])
 
     # Store kernel script
-    outputManager.storeKernel("$prefix/script/kernel.js", debug=True)
+    outputManager.storeKernel("$prefix/script/kernel.js", bootCode="test.Kernel.init();")
 
     # Copy files from source
     for name in ["index.html", "phantom.js", "node.js"]:

@@ -252,23 +252,23 @@ suite.test("Number.prototype.pad", function()
   this.isEqual((0).pad(6), "000000");
 });
 
-suite.test("core.util.String", function() 
+suite.test("core.util.String.contains()", function() 
 {
-  this.isTrue("hello world".contains("hello"));
-  this.isTrue("hello world".contains(""));
-  this.isTrue("hello world".contains(" "));
-  this.isTrue(!"hello world".contains(12));
-  this.isTrue(!"hello world".contains("dlrow"));
+  this.isTrue(core.util.String.contains("hello world", "hello"));
+  this.isTrue(core.util.String.contains("hello world", ""));
+  this.isTrue(core.util.String.contains("hello world", " "));
+  this.isTrue(!core.util.String.contains("hello world", 12));
+  this.isTrue(!core.util.String.contains("hello world", "dlrow"));
 });
 
-suite.test("String.prototype.hyphenate", function() 
+suite.test("core.util.String.hyphenate()", function() 
 {
   this.isEqual(core.util.String.hyphenate("backgroundColor"), "background-color");
   this.isEqual(core.util.String.hyphenate("WebkitTransform"), "-webkit-transform");
   this.isEqual(core.util.String.hyphenate("ISOString"), "-i-s-o-string");
 });
 
-suite.test("String.prototype.repeat", function() 
+suite.test("core.util.String.repeat()", function() 
 {
   this.isEqual(core.util.String.repeat("x", 3), "xxx");
   this.isEqual(core.util.String.repeat("xyz", 3), "xyzxyzxyz");

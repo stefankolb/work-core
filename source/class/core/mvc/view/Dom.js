@@ -137,7 +137,7 @@ core.Class("core.mvc.view.Dom",
       {
         var self = this;
         var helper = new Function();
-        helper.prototype = this;
+        helper.prototype = presenter;
         helper.prototype.getLabel = function(name) {
           return self.getLabel(name);
         };

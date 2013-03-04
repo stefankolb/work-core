@@ -90,7 +90,7 @@
     /**
      * {String} Camelizes this string.
      */
-    camelize : function (str)
+    camelize : function(str)
     {
       return str.replace(/\-+(\S)?/g, function(match, chr) {
         return chr ? chr.toUpperCase() : '';

@@ -23,7 +23,7 @@ core.Main.addMembers("Number",
 	 * {String} Pads the number to reach the given @length {Integer}.
 	 */
 	pad : function(length) {
-		return ("0".repeat(length) + this).slice(-length);
+		return (core.util.String.repeat("0", length) + this).slice(-length);
 	},
 
 

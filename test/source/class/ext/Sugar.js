@@ -202,8 +202,7 @@ suite.test("Array.prototype.flatten", function()
   this.isEqual([["a"],[],"b","c"].flatten().toString(), ["a","b","c"].toString());
 });
 
-/** #require(ext.sugar.Function) */
-
+/*
 suite.test("Function.prototype.debounce - END", function() 
 {
   var test = this;
@@ -242,9 +241,9 @@ suite.test("Function.prototype.debounce - ASAP", function()
   
   this.isEqual(counter, 1);
 });
+*/
 
 /** #require(ext.sugar.Number) */
-
 suite.test("Number.prototype.pad", function() 
 {
   this.isEqual((23).pad(2), "23");
@@ -253,7 +252,7 @@ suite.test("Number.prototype.pad", function()
   this.isEqual((0).pad(6), "000000");
 });
 
-suite.test("String.prototype.contains", function() 
+suite.test("core.util.String", function() 
 {
   this.isTrue("hello world".contains("hello"));
   this.isTrue("hello world".contains(""));
@@ -264,15 +263,15 @@ suite.test("String.prototype.contains", function()
 
 suite.test("String.prototype.hyphenate", function() 
 {
-  this.isEqual("backgroundColor".hyphenate(), "background-color");
-  this.isEqual("WebkitTransform".hyphenate(), "-webkit-transform");
-  this.isEqual("ISOString".hyphenate(), "-i-s-o-string");
+  this.isEqual(core.util.String.hyphenate("backgroundColor"), "background-color");
+  this.isEqual(core.util.String.hyphenate("WebkitTransform"), "-webkit-transform");
+  this.isEqual(core.util.String.hyphenate("ISOString"), "-i-s-o-string");
 });
 
 suite.test("String.prototype.repeat", function() 
 {
-  this.isEqual("x".repeat(3), "xxx");
-  this.isEqual("xyz".repeat(3), "xyzxyzxyz");
-  this.isEqual("xyz".repeat(0), "");
+  this.isEqual(core.util.String.repeat("x", 3), "xxx");
+  this.isEqual(core.util.String.repeat("xyz", 3), "xyzxyzxyz");
+  this.isEqual(core.util.String.repeat("xyz", 0), "");
 });
 

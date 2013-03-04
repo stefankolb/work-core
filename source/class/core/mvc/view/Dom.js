@@ -133,8 +133,21 @@ core.Class("core.mvc.view.Dom",
         }
       }
 
+      if (!this.__resolver)
+      {
+        var helper = new Function();
+        helper.prototype = this;
+        helper.prototype.getLabel = function(name) {
+          return this.getLabel(name);
+        };
+
+        this.__resolver = new helper;
+      };
+
+
+
       this._beforeRender();
-      elem.innerHTML = template.render(presenter, partials);
+      elem.innerHTML = template.render(this.__resolver, partials);
       this._afterRender();
 
       // Let others know

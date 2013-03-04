@@ -40,6 +40,8 @@
       }
 
       this.__presenter = presenter;
+
+      this.__labels = {};
     },
 
     events :
@@ -63,6 +65,23 @@
       getPresenter : function() {
         return this.__presenter;
       },
+
+
+
+      /*
+      ======================================================
+        LABELS
+      ======================================================
+      */
+
+      addLabel : function(name, text) {
+        this.__labels[name] = text;
+      },
+
+      getLabel : function(name) {
+        return this.__labels[name];
+      },
+
 
 
 

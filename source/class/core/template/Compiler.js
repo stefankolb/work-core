@@ -26,13 +26,14 @@
 	};
 	
 	var accessTags = {
-		"#" : 1,
-		"?" : 1,
-		"^" : 1,
-		"&" : 1,
-		"$" : 1
+		"#" : 1, // go into section / loop start
+		"?" : 1, // if / has
+		"^" : 1, // if not / has not
+		"&" : 1, // insert HTML
+		"$" : 1  // insert variable
 	};
 	
+	// Tags which support children
 	var innerTags = {
 		"#" : 1,
 		"?" : 1,

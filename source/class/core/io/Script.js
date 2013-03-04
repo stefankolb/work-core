@@ -63,12 +63,20 @@
 			// Browser-less (e.g. NodeJS) support
 			if (jasy.Env.isSet("runtime", "native"))
 			{
-			  eval("//@ sourceURL=" + uri + "\n" + require("fs").readFileSync(uri, "utf-8"));
-			  if (callback) {
-			  	callback.call(context||global, uri, false);
-			  }
-
-			  return;
+				eval("//@ sourceURL=" + uri + "\n" + require("fs").readFileSync(uri, "utf-8"));
+				if (callback) {
+					callback.call(context||global, uri, false);
+				}
+				
+				return;
+			}
+			else
+			if (jasy.Env.isSet("runtime", "webworker"))
+			{
+				importScripts(uri);
+				if (callback) {
+					callback.call(context||global, uri, false);
+				}
 			}
 			else
 			{

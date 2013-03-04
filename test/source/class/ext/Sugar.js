@@ -202,7 +202,6 @@ suite.test("Array.prototype.flatten", function()
   this.isEqual([["a"],[],"b","c"].flatten().toString(), ["a","b","c"].toString());
 });
 
-/*
 suite.test("Function.prototype.debounce - END", function() 
 {
   var test = this;
@@ -212,7 +211,7 @@ suite.test("Function.prototype.debounce - END", function()
     counter++;
   };
   
-  var debounced = callback.debounce();
+  var debounced = core.util.Function.debounce(callback);
   debounced();
   debounced();
   debounced();
@@ -232,7 +231,7 @@ suite.test("Function.prototype.debounce - ASAP", function()
     counter++;
   };
   
-  var debounced = callback.debounce(100, true);
+  var debounced = core.util.Function.debounce(callback, 100, true);
   debounced();
   debounced();
   debounced();
@@ -241,7 +240,6 @@ suite.test("Function.prototype.debounce - ASAP", function()
   
   this.isEqual(counter, 1);
 });
-*/
 
 /** #require(ext.sugar.Number) */
 suite.test("Number.prototype.pad", function() 

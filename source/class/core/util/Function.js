@@ -43,6 +43,8 @@
      * - Uses ES5 bind() to connect functions to objects internally.
      *
      * Inspired by: http://webreflection.blogspot.de/2012/11/my-name-is-bound-method-bound.html
+     *
+     * #require(ext.FunctionBind)
      */
     bind : function(func, object) 
     {

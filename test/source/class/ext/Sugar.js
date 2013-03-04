@@ -202,7 +202,7 @@ suite.test("Array.prototype.flatten", function()
   this.isEqual([["a"],[],"b","c"].flatten().toString(), ["a","b","c"].toString());
 });
 
-suite.test("Function.prototype.debounce - END", function() 
+suite.test("core.util.Function.debounce - END", function() 
 {
   var test = this;
 
@@ -224,7 +224,7 @@ suite.test("Function.prototype.debounce - END", function()
   }, 200)
 }, 1, 1000);
 
-suite.test("Function.prototype.debounce - ASAP", function() 
+suite.test("core.util.Function.debounce - ASAP", function() 
 {
   var counter = 0;
   var callback = function() {

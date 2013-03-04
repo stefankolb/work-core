@@ -1,7 +1,7 @@
 var suite = new core.testrunner.Suite("Template");
 
-suite.test("Basic", function() {
-  
+suite.test("Basic", function() 
+{
   var template = core.template.Compiler.compile("Follow @{{screenName}}.");
   this.isTrue(template instanceof core.template.Template);
 
@@ -16,11 +16,10 @@ suite.test("Basic", function() {
   });
   
   this.isEqual(output, "Follow @wpbasti.");
-  
 });
 
-suite.test("Line Breaks", function() {
-  
+suite.test("Line Breaks", function()
+{
   var template = core.template.Compiler.compile("Break\nHere {{value}}.");
   this.isTrue(template instanceof core.template.Template);
 
@@ -29,11 +28,10 @@ suite.test("Line Breaks", function() {
   });
   
   this.isEqual(output, "Break\nHere xxx.");
-
 });
 
-suite.test("Lists", function() {
-
+suite.test("Lists", function() 
+{
   var template = core.template.Compiler.compile("{{#repo}}<b>{{name}}</b>{{/repo}}");
   this.isTrue(template instanceof core.template.Template);
   
@@ -46,11 +44,10 @@ suite.test("Lists", function() {
   });
   
   this.isEqual(output, "<b>resque</b><b>hub</b><b>rip</b>");
-  
 });
 
-suite.test("Conditional Lists", function() {
-
+suite.test("Conditional Lists", function() 
+{
   var template = core.template.Compiler.compile("{{?repo}}Repos<br/>{{#repo}}<b>{{name}}</b>{{/repo}}{{/repo}}");
   this.isTrue(template instanceof core.template.Template);
   
@@ -100,11 +97,10 @@ suite.test("Conditional Lists", function() {
   });
 
   this.isEqual(output, "<em>bar</em>Repos<br/><b>resque</b><b>hub</b><b>rip</b>");    
-  
 }); 
 
-suite.test("Non False", function() {
-
+suite.test("Non False", function()
+{
   var template = core.template.Compiler.compile("{{#person?}}Hi {{name}}!{{/person?}}");
   this.isTrue(template instanceof core.template.Template);
   
@@ -113,11 +109,10 @@ suite.test("Non False", function() {
   });
   
   this.isEqual(output, "Hi Jon!");
-  
 });
 
-suite.test("Inverted Sections", function() {
-
+suite.test("Inverted Sections", function() 
+{
   var template = core.template.Compiler.compile("{{#repo}}<b>{{.}}</b>{{/repo}}{{^repo}}No repos :({{/repo}}");
   this.isTrue(template instanceof core.template.Template);
   
@@ -132,11 +127,10 @@ suite.test("Inverted Sections", function() {
   });
   
   this.isEqual(output, "<b>1</b><b>2</b><b>3</b>");
-  
 });
 
-suite.test("Comments", function() {
-
+suite.test("Comments", function() 
+{
   var template = core.template.Compiler.compile("<h1>Today{{! ignore me }}.</h1>");
   this.isTrue(template instanceof core.template.Template);
   
@@ -145,12 +139,11 @@ suite.test("Comments", function() {
   });
   
   this.isEqual(output, "<h1>Today.</h1>");
-  
 });
 
 
-suite.test("Unescaped", function() {
-
+suite.test("Unescaped", function() 
+{
   var template = core.template.Compiler.compile("{{code}}");
   this.isTrue(template instanceof core.template.Template);
   
@@ -174,11 +167,10 @@ suite.test("Unescaped", function() {
   });
   
   this.isEqual(output, "<b>Foo</b>");
-  
 }); 
 
-suite.test("Partials", function() {
-
+suite.test("Partials", function() 
+{
   var template = core.template.Compiler.compile("{{#tweets}}{{> tweet}}{{/tweets}}");
   this.isTrue(template instanceof core.template.Template);
 
@@ -201,11 +193,10 @@ suite.test("Partials", function() {
   });
   
   this.isEqual(output, "<p data-id=\"1\">hello world</p><p data-id=\"2\">this is a test tweet</p><p data-id=\"3\">to impress you</p>");
-  
 });
 
-suite.test("Parser", function() {
-  
+suite.test("Parser", function() 
+{
   var text = "{{^check}}No{{/check}}{{#check}}Yes{{/check}}";
   var tree = core.template.Parser.parse(text);
 
@@ -213,17 +204,16 @@ suite.test("Parser", function() {
   this.isEqual(tree[0].name, "check");
   this.isEqual(tree[1].tag, "#");
   this.isEqual(tree[1].name, "check");
-  
 });
 
 
-suite.test("Dots", function() {
-  
+suite.test("Dots", function() 
+{
   var template = core.template.Compiler.compile("{{#tweets}}{{author.name}}[{{author.id}}]{{/tweets}}");
   var output = template.render({
     "tweets": [{
       author: {
-        name : "Sascha",
+        name : "Reinhardt",
         id : 0
       }
     }, {
@@ -233,13 +223,12 @@ suite.test("Dots", function() {
       }
     }, {
       author: {
-        name : "Ivo",
+        name : "Harald",
         id : 2
       }
     }]
   });
   
-  this.isEqual(output, "Sascha[0]Christoph[1]Ivo[2]");
-  
+  this.isEqual(output, "Reinhardt[0]Christoph[1]Harald[2]");
 }); 
 

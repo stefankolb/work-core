@@ -11,8 +11,6 @@
 
 /**
  * Adds HTML5 tag support to Internet Explorer 
- *
- * #custom
  */
 if (jasy.Env.isSet("runtime", "browser"))
 {

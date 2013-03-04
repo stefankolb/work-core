@@ -27,3 +27,6 @@ fields:
     - native
     default: browser
     detect: core.detect.Runtime
+  webworker.prefixurl:
+    check: String
+    default: ""

@@ -73,7 +73,12 @@
 			else
 			if (jasy.Env.isSet("runtime", "webworker"))
 			{
-				importScripts(uri);
+				try {
+					importScripts(jasy.Env.getValue("webworker.prefixurl") + uri);
+				} catch (e) {
+					e.fileName = jasy.Env.getValue("webworker.prefixurl") + uri;
+					throw e;
+				}
 				if (callback) {
 					callback.call(context||global, uri, false);
 				}

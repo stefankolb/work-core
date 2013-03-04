@@ -135,10 +135,11 @@ core.Class("core.mvc.view.Dom",
 
       if (!this.__resolver)
       {
+        var self = this;
         var helper = new Function();
         helper.prototype = this;
         helper.prototype.getLabel = function(name) {
-          return this.getLabel(name);
+          return self.getLabel(name);
         };
 
         this.__resolver = new helper;

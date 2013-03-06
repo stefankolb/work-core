@@ -111,6 +111,10 @@
 		},
 
 
+		/**
+		 * {Boolean} Whether the given @func {Function} is a natively implemented method
+		 * inside the runtime environment aka browser, NodeJS.
+		 */
 		isNative : function(func) {
 			return isNativeRepExp.test(func);
 		},

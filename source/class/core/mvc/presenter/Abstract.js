@@ -70,7 +70,12 @@ core.Class("core.mvc.presenter.Abstract",
     /** 
      * {Object} Returns a model by its @name {String}. 
      */
-    getModel : function(name) {
+    getModel : function(name) 
+    {
+      if (jasy.Env.isSet("debug")) {
+        core.Assert.isType(name, "String", "Invalid model name!");
+      }
+
       return this.__models[name];
     },
 
@@ -88,9 +93,7 @@ core.Class("core.mvc.presenter.Abstract",
           throw new Error("Model name " + name + " is already in use!");  
         }
         
-        if (!core.Main.isTypeOf(model, "Object")) {
-          throw new Error("Invalid model instance: " + model);
-        }
+        core.Assert.isType(model, "Object", "Invalid model instance!");
       }
 
       db[name] = model;
@@ -176,7 +179,12 @@ core.Class("core.mvc.presenter.Abstract",
     /** 
      * {Object} Returns a view by its @name {String}. 
      */
-    getView : function(name) {
+    getView : function(name) 
+    {
+      if (jasy.Env.isSet("debug")) {
+        core.Assert.isType(name, "String", "Invalid view name!");
+      }
+
       return this.__views[name];
     },
 
@@ -193,10 +201,8 @@ core.Class("core.mvc.presenter.Abstract",
         if (name in db) {
           throw new Error("View name " + name + " is already in use!");  
         }
-        
-        if (!core.Main.isTypeOf(view, "Object")) {
-          throw new Error("Invalid view instance: " + view);
-        }
+
+        core.Assert.isType(view, "Object", "Invalid view instance!");
       }
 
       db[name] = view;
@@ -281,7 +287,12 @@ core.Class("core.mvc.presenter.Abstract",
     /**
      * Returns a child presenter by its @name {String}.
      */
-    getChild : function(name) {
+    getChild : function(name) 
+    {
+      if (jasy.Env.isSet("debug")) {
+        core.Assert.isType(name, "String", "Invalid child name!");
+      }
+
       return this.__children[name];
     },
 
@@ -300,9 +311,7 @@ core.Class("core.mvc.presenter.Abstract",
           throw new Error("Child name " + name + " is already in use!");  
         }
         
-        if (!core.Main.isTypeOf(presenter, "Object")) {
-          throw new Error("Invalid presenter instance: " + presenter);
-        }
+        core.Assert.isType(presenter, "Object", "Invalid presenter instance!");
       }
 
       db[name] = presenter;

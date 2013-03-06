@@ -5,6 +5,12 @@
 ==================================================================================================
 */
 
+/**
+ * Base class for a DOM based view. Uses debounced rendering using RequestAnimationFrame
+ * for optimal performance. Supports easy DOM event managment for view content.
+ *
+ * #require(ext.RequestAnimationFrame)
+ */
 core.Class("core.mvc.view.Dom",
 {
   include : [core.mvc.view.Abstract],
@@ -49,12 +55,36 @@ core.Class("core.mvc.view.Dom",
 
   events :
   {
+    /** Fired whenever the view has been rendered */
     render : core.event.Simple
 
   },
 
   members : 
   {
+    /*
+    ======================================================
+      DOM EVENT HANDLING
+    ======================================================
+    */
+
+    addDomListener : function(selector, type, callback) {
+      $(this.getRoot()).on(type, selector, core.util.Function.bind(callback, this));
+    },
+
+    removeDomListener : function(selector, type, callback) {
+      $(this.getRoot()).on(type, selector, core.util.Function.bind(callback, this));
+    },
+
+
+
+
+    /*
+    ======================================================
+      DEBOUNCED RENDER LOGIC
+    ======================================================
+    */
+
     // Interface implementation
     render : function()
     {
@@ -62,7 +92,7 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      /** #require(ext.RequestAnimationFrame) */
+      /**  */
       this.__renderScheduled = requestAnimationFrame(core.util.Function.bind(this.__renderRequest, this));
     },
 
@@ -134,6 +164,13 @@ core.Class("core.mvc.view.Dom",
     },
 
 
+
+    /*
+    ======================================================
+      PUBLIC API
+    ======================================================
+    */
+
     // Interface implementation
     show : function()
     {
@@ -160,6 +197,22 @@ core.Class("core.mvc.view.Dom",
     },
 
 
+    /**
+     * {Object} Returns the event parent which is used to bubble view events, to
+     */
+    getEventParent : function() {
+      return this.getPresenter();
+    },
+
+
+
+    /*
+    ======================================================
+      REMOTE ASSET LOADING
+    ======================================================
+    */
+
+    /** {=Integer} Number of assets currently being loaded */
     __assetLoadCounter : 0,
 
 

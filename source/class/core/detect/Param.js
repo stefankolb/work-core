@@ -13,7 +13,7 @@ core.Module("core.detect.Param",
 {
 	get : (function()
 	{
-		if (core.detect.Runtime.VALUE == "browser") {
+		if (jasy.Env.isSet("runtime", "browser")) {
 			var items = location.search.substring(1).split("&");
 		} else {
 			var items = ""; // TODO: NodeJS support

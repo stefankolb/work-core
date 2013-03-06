@@ -27,8 +27,6 @@ core.Module("core.detect.Platform",
 			name = "mac";
 		} else if (/X11|Linux|BSD|Sun OS|Maemo|Android|webOS/.exec(input)) {
 			name = "unix";
-		} else if (/RIM Tablet OS|SymbianOS/.exec(input)) {
-			name = "other";
 		}
 
 		/** 

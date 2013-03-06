@@ -16,9 +16,9 @@
 	var match, version, name;
 	var platform = core.detect.Platform.VALUE;
 
-	if (platform == "win")
+	if (jasy.Env.isSet("platform", "win"))
 	{
-		name = platform;
+		name = "win";
 		match = /((Windows NT|Windows|Win) ?([0-9\.]+))/.exec(agent);
 		if (match)
 		{
@@ -68,7 +68,7 @@
 			}
 		}
 	}
-	else if (platform == "mac")
+	else if (jasy.Env.isSet("platform", "mac"))
 	{
 		match = /(((Mac OS X)|(Mac OS)) ([0-9\.]+))/.exec(agent);
 		name = "macos";
@@ -86,7 +86,7 @@
 			}
 		}
 	}
-	else if (platform == "unix")
+	else if (jasy.Env.isSet("platform", "unix"))
 	{
 		if (agent.indexOf("Linux") != -1)
 		{
@@ -118,22 +118,10 @@
 			name = "unix";
 		}
 	}
-	else if (platform == "other")
-	{
-		if (agent.indexOf("RIM Tablet OS") != -1) 
-		{
-			name = "rim tablet os";
-			match = /RIM Tablet OS ([\.0-9]+)/.exec(agent);
-			if (match) {
-				version = parseFloat(match[1]);
-			}
-		}
-		else if (agent.indexOf("Symbian") != -1)
-		{
-			name = "symbian";
-		}
-	}
 
+	if (name == null) {
+		name = "unknown";
+	}
 
 	if (version == null) {
 		version = "0.0";
@@ -149,11 +137,10 @@
 	 * phase of the class. The defaults listed in the API viewer need not
 	 * to be identical to the values at runtime.
 	 */
-	core.Module("core.detect.System", {
-		
+	core.Module("core.detect.System", 
+	{	
 		/** System identification */
-		VALUE: name + " " + version
-		
+		VALUE: name + " " + version	
 	});
 	
 })();

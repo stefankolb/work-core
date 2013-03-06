@@ -30,7 +30,7 @@ core.Module("core.detect.Platform",
 		}
 
 		/** 
-		 * {=String} One of `win`, `mac`, `unix` or `other`
+		 * {=String} One of `win`, `mac` or `unix`
 		 */
 		return name;
 	})()

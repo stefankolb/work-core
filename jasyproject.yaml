@@ -20,6 +20,12 @@ fields:
     check: String
     default: en
     detect: core.detect.Locale
+  platform:
+    check:
+    - win
+    - mac
+    - unix
+    detect: core.detect.Platform
   runtime:
     check:
     - browser

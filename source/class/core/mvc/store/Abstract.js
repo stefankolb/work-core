@@ -2,18 +2,33 @@ core.Class("core.mvc.store.Abstract",
 {
   include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
 
-  construct : function(presenter, path, storeDebounce, loadDebounce)
+  construct : function(path, config)
   {
-    this.__presenter = presenter;
+    this.__activityTracker = 
+    {
+      load : 0,
+      save : 0,
+      remove : 0,
+      create : 0
+    };
+
+    if (!config) {
+      config = {};
+    }
+
     this.__path = path;
+    
+    var saveDebounce = config.saveDebounce || config.debounce || 0;
+    this.save = core.util.Function.debounce(this.save, saveDebounce);
 
-    if (storeDebounce) {
-      this.store = core.util.Function.debounce(this.store, storeDebounce);
-    }
+    var loadDebounce = config.loadDebounce || config.debounce || 0;
+    this.load = core.util.Function.debounce(this.load, loadDebounce);
 
-    if (loadDebounce) {
-      this.load = core.util.Function.debounce(this.load, loadDebounce);
-    }
+    var removeDebounce = config.removeDebounce || config.debounce || 0;
+    this.remove = core.util.Function.debounce(this.remove, removeDebounce);
+
+    var createDebounce = config.createDebounce || config.debounce || 0;
+    this.create = core.util.Function.debounce(this.create, createDebounce);
   },
 
   events :
@@ -36,17 +51,50 @@ core.Class("core.mvc.store.Abstract",
 
   members :
   {
+    /**
+     * {String} Returns the REST communication path.
+     */
     getPath : function() {
       return this.__path;
     },
 
-    getEventParent : function() {
-      return this.__presenter;
+    /**
+     * {Boolean} Whether there are currently any requests running.
+     */
+    isActive : function() 
+    {
+      var tracker = this.__activityTracker;
+      return tracker.load > 0 || tracker.save > 0 || tracker.remove > 0 || tracker.create > 0;
     },
 
-    isActive : function() {
-      return this.__activeCounter > 0;
+    /**
+     * {Boolean} Whether there are currently requests active for loading data/entries.
+     */
+    isLoading : function() {
+      return this.__activityTracker.load > 0;
     },
+
+    /**
+     * {Boolean} Whether there are currently requests active for saving data/entries.
+     */
+    isSaving : function() {
+      return this.__activityTracker.save > 0;
+    },
+
+    /**
+     * {Boolean} Whether there are currently requests active for removing data/entries.
+     */
+    isRemoving : function() {
+      return this.__activityTracker.remove > 0;
+    },
+
+    /**
+     * {Boolean} Whether there are currently requests active for creating data/entries.
+     */
+    isCreating : function() {
+      return this.__activityTracker.create > 0;
+    },
+
 
 
 
@@ -85,27 +133,39 @@ core.Class("core.mvc.store.Abstract",
 
     /*
     ======================================================
-      STATE TRACKING
+      ACTIVITY TRACKING
     ======================================================
     */
 
-    __isSaving : false,
-    __isLoading : false,
-    __isRemoving : false,
-    __isCreating : false,
+    /** {=Map} Keeping track of individual activities */
+    __activityTracker : null,
 
-    __activeCounter : 0,
 
-    __increaseActive : function() 
+    /**
+     * Increments the counter for given @activity {String}.
+     */ 
+    __increaseActive : function(activity) 
     {
-      if (++this.__activeCounter == 1) {
+      var wasActive = this.isActive();
+      
+      this.__activityTracker[activity]++;
+      this.log("ACTIVITY TRACK: ", this.__activityTracker);
+
+      if (!wasActive) {
         this.fireEvent("active");
       }
     },
 
-    __decreaseActive : function() 
+
+    /**
+     * Decrements the counter for given @activity {String}.
+     */ 
+    __decreaseActive : function(activity) 
     {
-      if (--this.__activeCounter == 0) {
+      this.__activityTracker[activity]--;
+      this.log("ACTIVITY TRACK: ", this.__activityTracker);
+
+      if (!this.isActive()) {
         this.fireEvent("inactive");
       }
     },
@@ -119,17 +179,12 @@ core.Class("core.mvc.store.Abstract",
     ======================================================
     */
 
+    /**
+     * Saves the given @data {var}.
+     */
     save : function(data)
     {
-      if (this.__isSaving) 
-      {
-        this.warn("Is already saving!");
-        return;
-      }
-
-      this.__isSaving = true;
-      this.__increaseActive();
-
+      this.__increaseActive("save");
       this.fireEvent("saving");
       this._request("save", 
       {
@@ -139,21 +194,20 @@ core.Class("core.mvc.store.Abstract",
       });
     },
 
+
+    // Internal event handler
     __onSaveSucceeded : function(data) 
     {
-      this.__isSaving = false;
-      this.__decreaseActive();
-
+      this.__decreaseActive("save");
       this.fireEvent("saved", this._decode(data, "save"));
     },
 
+
+    // Internal event handler
     __onSaveFailed : function(msg) 
     {
       this.warn("Unable to save data!", msg);
-
-      this.__isSaving = false;
-      this.__decreaseActive();
-
+      this.__decreaseActive("save");
       this.fireEvent("saved", null);
     },
 
@@ -165,17 +219,12 @@ core.Class("core.mvc.store.Abstract",
     ======================================================
     */
 
+    /**
+     * Loads the data from e.g. a remote server.
+     */
     load : function()
     {
-      if (this.__isLoading) 
-      {
-        this.warn("Is already loading!");
-        return;
-      }
-
-      this.__isLoading = true;
-      this.__increaseActive();
-
+      this.__increaseActive("load");
       this.fireEvent("loading");
       this._request("load", 
       {
@@ -184,21 +233,20 @@ core.Class("core.mvc.store.Abstract",
       });
     },
 
+
+    // Internal event handler
     __onLoadSucceeded : function(data) 
     {
-      this.__isLoading = false;
-      this.__decreaseActive();
-
+      this.__decreaseActive("load");
       this.fireEvent("loaded", this._decode(data, "load"));
     },
 
+
+    // Internal event handler
     __onLoadFailed : function(msg)
     {
       this.warn("Unable to load data!", msg);
-      
-      this.__isLoading = false;
-      this.__decreaseActive();
-
+      this.__decreaseActive("load");
       this.fireEvent("loaded", null);
     }
   }

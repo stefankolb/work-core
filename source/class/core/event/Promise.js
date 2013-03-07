@@ -161,8 +161,7 @@ core.Class("core.event.Promise",
 			}
 
 			// Cleanup lists for next usage
-			rejectedQueue.length = 0;
-			fullfilledQueue.length = 0;
+			rejectedQueue.length = fullfilledQueue.length = 0;
 
 			// Cleanup internal state
 			this.__state = "pending";

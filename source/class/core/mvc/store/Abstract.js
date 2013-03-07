@@ -105,11 +105,11 @@ core.Class("core.mvc.store.Abstract",
     */
 
     /**
-     * Requests data with the given @action {String} and the optional
-     * @config {Map}.
+     * Communicates data changes to the underlying storage using 
+     * the given @action {String} and the optional @config {Map}.
      */
-    _request : function(action, config) {
-      throw new Error("_request() is abstract!");
+    _communicate : function(action, config) {
+      throw new Error("_communicate() is abstract!");
     },
 
 
@@ -120,6 +120,7 @@ core.Class("core.mvc.store.Abstract",
     _encode : function(data, type) {
       return data;
     },
+
 
     /**
      * Applying correction on incoming @data {var} as the result of
@@ -186,7 +187,7 @@ core.Class("core.mvc.store.Abstract",
     {
       this.__increaseActive("save");
       this.fireEvent("saving");
-      this._request("save", 
+      this._communicate("save", 
       {
         data : this._encode(data),
         success : this.__onSaveSucceeded, 
@@ -226,7 +227,7 @@ core.Class("core.mvc.store.Abstract",
     {
       this.__increaseActive("load");
       this.fireEvent("loading");
-      this._request("load", 
+      this._communicate("load", 
       {
         success : this.__onLoadSucceeded,
         failed : this.__onLoadFailed

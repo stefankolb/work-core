@@ -80,7 +80,7 @@ core.Class("core.event.Promise",
 		/**
 		 * Handle single fulfillment or rejection handler @fnt with correct subsequent promise {core.event.Promise} @myPromise.
 		 */	
-		__handleFnt : function(fnt, myPromise, value, state) 
+		__handleFnt : function(fnt, myPromise, context, value, state) 
 		{
 			if (fnt === null) 
 			{
@@ -103,8 +103,10 @@ core.Class("core.event.Promise",
 
 			try 
 			{
-				var retval = fnt(value);
-				if (retval && retval.then && typeof retval.then == "function") { //instanceof core.event.Promise) {
+				var retval = context ? fnt.call(context, value) : fnt(value);
+				if (retval && retval.then && typeof retval.then == "function") 
+				{ 
+					//instanceof core.event.Promise) {
 					var retstate = retval.getState ? retval.getState() : "pending";
 
 					if (retstate == "pending") {
@@ -126,7 +128,7 @@ core.Class("core.event.Promise",
 		 * Handle fulfillment or rejection of promise
 		 * Runs all registered then handlers
 		 */
-		__handler : function(state, value) 
+		__handler : function(state, valueOrReason) 
 		{
 			if (this.__locked) {
 				return;
@@ -138,13 +140,14 @@ core.Class("core.event.Promise",
 			} else {
 				fntList = this.__onFulfilled;
 			}
+
 			this.setState(state);
-			this.setValue(value);
+			valueOrReason == null ? this.resetValue() : this.setValue(valueOrReason);
 			
-			for (var i=0; i<fntList.length; i++) 
+			for (var i=0, l=fntList.length; i<l; i++) 
 			{
 				var fntarr = fntList[i];
-				this.__handleFnt(fntarr[0], fntarr[1], value, state);
+				this.__handleFnt(fntarr[0], fntarr[1], fntarr[2], valueOrReason, state);
 			}
 
 			this.release();
@@ -154,17 +157,17 @@ core.Class("core.event.Promise",
 		 * {core.event.Promise} Register fulfillment handler {function} @onFulfilled and rejection handler {function} @onRejected
 		 * returning new subsequent promise.
 		 */
-		then : function(onFulfilled, onRejected) 
+		then : function(onFulfilled, onRejected, context) 
 		{
 			var promise = core.event.Promise.obtain();
-			
+
 			if (onFulfilled && (typeof onFulfilled == "function")) {
-				this.__onFulfilled.push([onFulfilled, promise]);
+				this.__onFulfilled.push([onFulfilled, promise, context]);
 			} else {
 				this.__onFulfilled.push([null, promise]);
 			}
 			if (onRejected && (typeof onRejected == "function")) {
-				this.__onRejected.push([onRejected, promise]);
+				this.__onRejected.push([onRejected, promise, context]);
 			} else {
 				this.__onRejected.push([null, promise]);
 			}

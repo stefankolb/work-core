@@ -58,6 +58,7 @@ core.Class("core.mvc.store.Abstract",
       return this.__path;
     },
 
+
     /**
      * {Boolean} Whether there are currently any requests running.
      */
@@ -66,6 +67,7 @@ core.Class("core.mvc.store.Abstract",
       var tracker = this.__activityTracker;
       return tracker.load > 0 || tracker.save > 0 || tracker.remove > 0 || tracker.create > 0;
     },
+
 
     /**
      * {Boolean} Whether there are currently requests active for loading data/entries.
@@ -81,12 +83,14 @@ core.Class("core.mvc.store.Abstract",
       return this.__activityTracker.save > 0;
     },
 
+
     /**
      * {Boolean} Whether there are currently requests active for removing data/entries.
      */
     isRemoving : function() {
       return this.__activityTracker.remove > 0;
     },
+
 
     /**
      * {Boolean} Whether there are currently requests active for creating data/entries.
@@ -106,10 +110,11 @@ core.Class("core.mvc.store.Abstract",
 
     /**
      * Communicates data changes to the underlying storage using 
-     * the given @action {String} and the optional @config {Map}.
+     * the given @action {String} on the given optional @item {var?null}
+     * with the given optional @data {var?}.
      */
-    _communicate : function(action, config) {
-      throw new Error("_communicate() is abstract!");
+    _communicate : function(action, item, data) {
+      throw new Error("_communicate(action, item, data) is abstract!");
     },
 
 
@@ -148,10 +153,7 @@ core.Class("core.mvc.store.Abstract",
     __increaseActive : function(activity) 
     {
       var wasActive = this.isActive();
-      
       this.__activityTracker[activity]++;
-      this.log("ACTIVITY TRACK: ", this.__activityTracker);
-
       if (!wasActive) {
         this.fireEvent("active");
       }
@@ -164,13 +166,45 @@ core.Class("core.mvc.store.Abstract",
     __decreaseActive : function(activity) 
     {
       this.__activityTracker[activity]--;
-      this.log("ACTIVITY TRACK: ", this.__activityTracker);
-
       if (!this.isActive()) {
         this.fireEvent("inactive");
       }
     },
 
+
+
+    /*
+    ======================================================
+      ACTION :: LOAD
+    ======================================================
+    */
+
+    /**
+     * Loads the data from the store e.g. using a remote server.
+     */
+    load : function()
+    {
+      this.__increaseActive("load");
+      this.fireEvent("loading");
+      this._communicate("load").then(this.__onLoadSucceeded, this.__onLoadFailed, this).then(null, this.__onImplementationError, this);
+    },
+
+
+    // Internal promise handler
+    __onLoadSucceeded : function(data) 
+    {
+      this.__decreaseActive("load");
+      this.fireEvent("loaded", this._decode(data, "load"));
+    },
+
+
+    // Internal promise handler
+    __onLoadFailed : function(msg)
+    {
+      this.warn("Unable to load data!", msg);
+      this.__decreaseActive("load");
+      this.fireEvent("loaded", null);
+    },
 
 
 
@@ -187,16 +221,11 @@ core.Class("core.mvc.store.Abstract",
     {
       this.__increaseActive("save");
       this.fireEvent("saving");
-      this._communicate("save", 
-      {
-        data : this._encode(data),
-        success : this.__onSaveSucceeded, 
-        failed : this.__onSaveFailed
-      });
+      this._communicate("save", null, this._encode(data)).then(this.__onSaveSucceeded, this.__onSaveFailed, this).then(null, this.__onImplementationError, this);      
     },
 
 
-    // Internal event handler
+    // Internal promise handler
     __onSaveSucceeded : function(data) 
     {
       this.__decreaseActive("save");
@@ -204,7 +233,7 @@ core.Class("core.mvc.store.Abstract",
     },
 
 
-    // Internal event handler
+    // Internal promise handler
     __onSaveFailed : function(msg) 
     {
       this.warn("Unable to save data!", msg);
@@ -214,41 +243,16 @@ core.Class("core.mvc.store.Abstract",
 
 
 
+
     /*
     ======================================================
-      ACTION :: LOAD
+      EXCEPTION HANDLING
     ======================================================
     */
 
-    /**
-     * Loads the data from e.g. a remote server.
-     */
-    load : function()
-    {
-      this.__increaseActive("load");
-      this.fireEvent("loading");
-      this._communicate("load", 
-      {
-        success : this.__onLoadSucceeded,
-        failed : this.__onLoadFailed
-      });
-    },
-
-
-    // Internal event handler
-    __onLoadSucceeded : function(data) 
-    {
-      this.__decreaseActive("load");
-      this.fireEvent("loaded", this._decode(data, "load"));
-    },
-
-
-    // Internal event handler
-    __onLoadFailed : function(msg)
-    {
-      this.warn("Unable to load data!", msg);
-      this.__decreaseActive("load");
-      this.fireEvent("loaded", null);
+    // Internal promise handler
+    __onImplementationError : function(ex) {
+      this.error("Implementation error: " + ex);
     }
   }
 });

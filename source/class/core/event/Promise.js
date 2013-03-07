@@ -5,18 +5,17 @@
 ==================================================================================================
 */
 
-(function() {
-
-})();
 /**
  * Promises implementation of A+ specification passing Promises/A+ test suite.
  * Very efficient due to object pooling.
  * http://promises-aplus.github.com/promises-spec/
  */
-core.Class("core.event.Promise", {
+core.Class("core.event.Promise", 
+{
 	pooling : true,
 	
-	construct : function() {
+	construct : function() 
+	{
 		// Clean up onFulfilled handlers
 		var onFulfilled = this.__onFulfilled = this.__onFulfilled || [];
 		onFulfilled.length = 0;
@@ -32,9 +31,11 @@ core.Class("core.event.Promise", {
 		this.resetState();
 	},
 	
-	properties : {
+	properties : 
+	{
 		/** {String} State of promise (pending, fulfilled, rejected) */
-		state : {
+		state : 
+		{
 			type : ["pending", "fulfilled", "rejected"],
 			init : "pending",
 			apply : function(value) {
@@ -43,54 +44,65 @@ core.Class("core.event.Promise", {
 		},
 		
 		/** Value (state == fulfilled) or reason (state == rejected) of promise */
-		value : {
+		value : 
+		{
 			nullable: true,
 			init: null
 		}
 	},
 	
-	members : {
+	members : 
+	{
 		/**
 		 * Fulfill promise with @value
 		 */
-		fulfill : function(value) {
+		fulfill : function(value) 
+		{
 			if (this.__locked) {
 				return;
 			}
+
 			core.util.Function.immediate(this.__handler.bind(this, "fulfilled", value));
 		},
 		
 		/**
 		 * Reject promise with @reason
 		 */
-		reject : function(reason) {
+		reject : function(reason) 
+		{
 			if (this.__locked) {
 				return;
 			}
+
 			core.util.Function.immediate(this.__handler.bind(this, "rejected", reason));
 		},
 	
 		/**
 		 * Handle single fulfillment or rejection handler @fnt with correct subsequent promise {core.event.Promise} @myPromise.
 		 */	
-		__handleFnt : function(fnt, myPromise, value, state) {
-			if (fnt === null) {
+		__handleFnt : function(fnt, myPromise, value, state) 
+		{
+			if (fnt === null) 
+			{
 				if (state == "rejected") {
 					myPromise.reject(value);
 				} else {
 					myPromise.fulfill(value);
 				}
+
 				return;
 			}
 
 			var fulFnt = function(value) {
 				myPromise.fulfill(value);
 			};
+
 			var rejFnt = function(reason) {
 				myPromise.reject(reason);
 			};				
 
-			try {
+			try 
+			{
 				var retval = fnt(value);
 				if (retval && retval.then && typeof retval.then == "function") { //instanceof core.event.Promise) {
 					var retstate = retval.getState ? retval.getState() : "pending";
@@ -108,14 +120,14 @@ core.Class("core.event.Promise", {
 			} catch (e) {
 				myPromise.reject(e);
 			}
-			
 		},
 
 		/**
 		 * Handle fulfillment or rejection of promise
 		 * Runs all registered then handlers
 		 */
-		__handler : function(state, value) {
+		__handler : function(state, value) 
+		{
 			if (this.__locked) {
 				return;
 			}
@@ -129,7 +141,8 @@ core.Class("core.event.Promise", {
 			this.setState(state);
 			this.setValue(value);
 			
-			for (var i=0; i<fntList.length; i++) {
+			for (var i=0; i<fntList.length; i++) 
+			{
 				var fntarr = fntList[i];
 				this.__handleFnt(fntarr[0], fntarr[1], value, state);
 			}
@@ -141,7 +154,8 @@ core.Class("core.event.Promise", {
 		 * {core.event.Promise} Register fulfillment handler {function} @onFulfilled and rejection handler {function} @onRejected
 		 * returning new subsequent promise.
 		 */
-		then : function(onFulfilled, onRejected) {
+		then : function(onFulfilled, onRejected) 
+		{
 			var promise = core.event.Promise.obtain();
 			
 			if (onFulfilled && (typeof onFulfilled == "function")) {

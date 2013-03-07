@@ -155,7 +155,8 @@ core.Class("core.event.Promise",
 
 			// Process the relevant queue
 			var queue = this.__state == "rejected" ? rejectedQueue : fullfilledQueue;
-			for (var i=0, l=queue.length; i<l; i++) {
+			// Always repeat queue length check as queue could be changed within handler
+			for (var i=0; i<queue.length; i++) {
 				this.__executeEntry(queue[i], valueOrReason, state);
 			}
 

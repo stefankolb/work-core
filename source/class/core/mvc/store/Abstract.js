@@ -33,20 +33,32 @@ core.Class("core.mvc.store.Abstract",
 
   events :
   {
+    /** Fired when the process of loading something was started. */
     loading : core.event.Simple,
+
+    /** Fired when the process of loading something was completed. */
     loaded : core.event.Simple,
 
+    /** Fired when the process of saving something was started. */
     saving : core.event.Simple,
+
+    /** Fired when the process of saving something was completed. */
     saved : core.event.Simple,
 
+    /** Fired when the process of creating something was started. */
     creating : core.event.Simple,
+
+    /** Fired when the process of creating something was completed. */
     created : core.event.Simple,
 
+    /** Fired when the process of deleting something was started. */
     deleting : core.event.Simple,
+
+    /** Fired when the process of deleting something was completed. */
     deleted : core.event.Simple,
 
-    active : core.event.Simple,
-    inactive : core.event.Simple
+    /** Fired whenever the activity state was changed */
+    changeActive : core.event.Simple
   },
 
   members :
@@ -120,18 +132,18 @@ core.Class("core.mvc.store.Abstract",
 
     /**
      * Applying correction on outgoing @data {var}, typically the model/collection 
-     * for the given @type {String} of transaction.
+     * for the given @action {String}.
      */
-    _encode : function(data, type) {
+    _encode : function(data, action) {
       return data;
     },
 
 
     /**
      * Applying correction on incoming @data {var} as the result of
-     * the given @type {String} of transaction.
+     * the given @action {String}.
      */
-    _decode : function(data, type) {
+    _decode : function(data, action) {
       return data;
     },
 
@@ -155,7 +167,7 @@ core.Class("core.mvc.store.Abstract",
       var wasActive = this.isActive();
       this.__activityTracker[activity]++;
       if (!wasActive) {
-        this.fireEvent("active");
+        this.fireEvent("changeActive", true);
       }
     },
 
@@ -167,7 +179,7 @@ core.Class("core.mvc.store.Abstract",
     {
       this.__activityTracker[activity]--;
       if (!this.isActive()) {
-        this.fireEvent("inactive");
+        this.fireEvent("changeActive", false);
       }
     },
 
@@ -221,7 +233,7 @@ core.Class("core.mvc.store.Abstract",
     {
       this.__increaseActive("save");
       this.fireEvent("saving");
-      this._communicate("save", null, this._encode(data)).then(this.__onSaveSucceeded, this.__onSaveFailed, this).then(null, this.__onImplementationError, this);      
+      this._communicate("save", null, this._encode(data, "save")).then(this.__onSaveSucceeded, this.__onSaveFailed, this).then(null, this.__onImplementationError, this);      
     },
 
 

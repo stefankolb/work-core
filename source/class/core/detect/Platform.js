@@ -16,7 +16,7 @@
  */
 core.Module("core.detect.Platform", 
 {
-	VALUE: (function() 
+	VALUE: jasy.Env.isSet("runtime", "browser") ? (function() 
 	{
 		var input = navigator.platform || navigator.userAgent;
 		var name;
@@ -33,6 +33,6 @@ core.Module("core.detect.Platform",
 		 * {=String} One of `win`, `mac` or `unix`
 		 */
 		return name;
-	})()
+	})() : "server"
 });
 

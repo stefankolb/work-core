@@ -116,6 +116,6 @@
 
 			return new core.template.Template(new Function('data', 'partials', wrapped), text);
 		}
-	});
-	
+	});	
 })();
+

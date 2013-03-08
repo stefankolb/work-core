@@ -400,6 +400,8 @@
 		{
 			for (var key in members) 
 			{
+				// Chrome as of version 22 does not support displayName: 
+				// https://code.google.com/p/chromium/issues/detail?id=17356
 				var entry = proto[key] = members[key];
 				if (entry instanceof Function) {
 					entry.displayName = name + "." + key;

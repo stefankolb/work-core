@@ -148,13 +148,9 @@ core.Class("core.event.Promise",
 		__execute : function() 
 		{
 			// Shorthands
-			var rejectedQueue = this.__onRejectedQueue;
-			var fullfilledQueue = this.__onFulfilledQueue;
-			var valueOrReason = this.__valueOrReason;
 			var state = this.__state;
-
-			// Process the relevant queue
-			var queue = this.__state == "rejected" ? rejectedQueue : fullfilledQueue;
+			var queue = state == "rejected" ? this.__onRejectedQueue : this.__onFulfilledQueue;
+			var valueOrReason = this.__valueOrReason;
 
 			// Always repeat queue length check as queue could be changed within handler
 			for (var i=0; i<queue.length; i++) {
@@ -166,6 +162,9 @@ core.Class("core.event.Promise",
 		},
 
 
+		/**
+		 * Releases the promise instance to the pool for reusage.
+		 */
 		release : function()
 		{
 			// Cleanup lists for next usage

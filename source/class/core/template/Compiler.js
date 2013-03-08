@@ -15,17 +15,20 @@
 (function () 
 {
 	var escapeMatcher = /[\\\"\n\r]/g;
+
 	var escapeMap = {
 		"\\" : '\\\\',
 		"\"" : '\\\"',
 		"\n" : '\\n',
 		"\r" : '\\r'
 	};
+
 	var escapeReplacer = function(str) {
 		return escapeMap[str];
 	};
 	
-	var accessTags = {
+	var accessTags = 
+	{
 		"#" : 1, // go into section / loop start
 		"?" : 1, // if / has
 		"^" : 1, // if not / has not
@@ -34,7 +37,8 @@
 	};
 	
 	// Tags which support children
-	var innerTags = {
+	var innerTags = 
+	{
 		"#" : 1,
 		"?" : 1,
 		"^" : 1
@@ -53,6 +57,10 @@
 			{
 				code += 'buf+="' + current.replace(escapeMatcher, escapeReplacer) + '";';
 			}
+			else if (tag == '\n')
+			{
+				code += 'buf+="\\n";';
+			}			
 			else
 			{
 				var name = current.name;
@@ -82,10 +90,6 @@
 				else if (tag == '>') 
 				{
 					code += 'buf+=this._partial("' + escaped + '",data,partials);';
-				}
-				else if (tag == '\n')
-				{
-					code += 'buf+="\\n";';
 				}
 			}
 		}

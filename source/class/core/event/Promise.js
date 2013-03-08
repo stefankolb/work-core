@@ -95,7 +95,7 @@ core.Class("core.event.Promise",
 			var child = entry[0];
 			var callback = entry[1];
 
-			if (callback === null) 
+			if (callback == null) 
 			{
 				if (state == "rejected") {
 					child.reject(valueOrReason);
@@ -161,15 +161,22 @@ core.Class("core.event.Promise",
 				this.__executeEntry(queue[i], valueOrReason, state);
 			}
 
+			// Auto release promise after fulfill/reject and all handlers being processed
+			core.util.Function.immediate(this.release, this);
+		},
+
+
+		release : function()
+		{
 			// Cleanup lists for next usage
-			rejectedQueue.length = fullfilledQueue.length = 0;
+			this.__onRejectedQueue.length = this.__onFulfilledQueue.length = 0;
 
 			// Cleanup internal state
 			this.__state = "pending";
 			this.__locked = false;
-			
-			// Auto release promise after fulfill/reject and all handlers being processed
-			this.release();
+
+			// Release for next usage
+			core.event.Promise.release(this);
 		},
 		
 

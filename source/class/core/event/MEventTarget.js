@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function() 
 {
   var getHandlers = function(object, type, capture, create) 

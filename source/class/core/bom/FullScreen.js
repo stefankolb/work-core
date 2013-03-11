@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(document) {
 	
 	var root = document.documentElement;

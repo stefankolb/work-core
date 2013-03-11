@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Basic event class adding support for setTarget/getTarget which is used during
  * event dispatching by {core.event.MEventTarget}.

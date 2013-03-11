@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Promises implementation of A+ specification passing Promises/A+ test suite.
  * Very efficient due to object pooling.

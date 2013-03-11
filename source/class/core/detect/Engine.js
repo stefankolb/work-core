@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Detects the browser engine in which the script is executed. It respects full browser engines
  * only and does not differentiate between different script engines or versions (like V8 vs. Nitro)

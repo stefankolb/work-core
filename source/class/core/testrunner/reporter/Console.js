@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * A reporter for the `console` interface which is available in 
  * web browsers, NodeJS, PhantomJS, etc.

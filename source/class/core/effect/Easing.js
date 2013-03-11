@@ -11,6 +11,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Collection of pretty much standard easing methods. Based on the work of Robert Penner.
  */

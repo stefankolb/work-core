@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(undef)
 {
 	/** {Map} Maps simple property names to global property IDs */

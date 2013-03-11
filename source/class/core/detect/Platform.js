@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * This class comes with all relevant information regarding
  * the client's platform.

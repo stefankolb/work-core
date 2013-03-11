@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function()
 {
 	var time = Date.now;
@@ -24,8 +26,8 @@
 	 * rendering. This eases a lot of cases where it might be pretty complex to break down a state
 	 * based on the pure time difference.
 	 */
-	core.Module("core.effect.Animate", {
-
+	core.Module("core.effect.Animate", 
+	{
 		/**
 		 * A requestAnimationFrame wrapper / polyfill.
 		 *

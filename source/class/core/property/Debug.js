@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * This helper class is only included into debug builds and do the
  * generic property checks defined using the property configuration.

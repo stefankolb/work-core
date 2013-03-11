@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Reporter which produces visual HTML output into the document.
  */

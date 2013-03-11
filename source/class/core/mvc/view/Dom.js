@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Base class for a DOM based view. Uses debounced rendering using RequestAnimationFrame
  * for optimal performance. Supports easy DOM event managment for view content.

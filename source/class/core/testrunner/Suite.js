@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Wrapper around a group of {core.testrunner.Test}s. All tests in a suite are 
  * processed in arbitrary order.

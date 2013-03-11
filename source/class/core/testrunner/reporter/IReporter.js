@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Interface which any reporter has to implement to be compatible to the testing framework.
  */

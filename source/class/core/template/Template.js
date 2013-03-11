@@ -12,6 +12,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function () 
 {
 	var hasOwnProperty = Object.prototype.hasOwnProperty;

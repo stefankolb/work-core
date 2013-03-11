@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Main controller of test environment in Core. Is automatically used
  * by {core.testrunner.Suite} instances for self registration. The controller

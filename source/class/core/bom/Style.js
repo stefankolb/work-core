@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function() 
 {
 	/** Caches CSS property names to browser specific names. Can be used as a fast lookup alternative to {#property}. */

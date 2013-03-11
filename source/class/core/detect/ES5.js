@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Checks whether the ES5 extensions should be loaded to fix missing engine functions.
  *

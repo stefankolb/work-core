@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Interface for models for fulfilling needs of typical external users.
  */

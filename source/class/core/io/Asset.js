@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(global, Object)
 {
 	/** {Map} Internal cache for holding preloaded data */

@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(Translate, slice) 
 {
   core.Class("core.locale.MTranslate",

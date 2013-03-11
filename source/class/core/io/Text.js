@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Loads all kinds of text content like text, HTML and JSON.
  *

@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function() 
 {
 	var transform = core.bom.Style.property('transform');

@@ -86,12 +86,13 @@
        */
       addLabel : function(name, textOrFunction) 
       {
-        if (jasy.Env.isSet("debugh"))
+        if (jasy.Env.isSet("debug"))
         {
           core.Assert.isType(name, "String", "The label name must be type of string!");
           
-          // FIXME
-          // core.Assert.isType(name, "String", "The label value must be either type of string or function!");
+          if (typeof textOrFunction != "string" && typeof textOrFunction != "function") {
+            throw new Error("The label value must be either type of string or function!");
+          }
         }
 
         if (typeof textOrFunction == "function") {

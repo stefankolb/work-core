@@ -228,7 +228,7 @@ core.Class("core.mvc.view.Dom",
       }
 
       // Enable stripping (to remove white spaces from formatting)
-      this.setTemplate(core.template.Compiler.compile(data.text, this.__labels));  
+      this.setTemplate(core.template.Compiler.compile(data.text, this.getLabels()));  
     },
 
     loadStyleSheet : function(sheet, nocache)

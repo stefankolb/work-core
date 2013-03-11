@@ -79,12 +79,21 @@
 		 * where tags are returned as an object with the keys `tag` and `name` while
 		 * normal strings are kept as strings.
 		 *
-		 * Optionally you can remove white spaces (line breaks,
-		 * leading, trailing, etc.) by enabling @strip {Boolean?false}.
+		 * Optionally you can keep white spaces (line breaks,
+		 * leading, trailing, etc.) by enabling @nostrip {Boolean?false}.
 		 */
-		tokenize: function(text, strip) 
+		tokenize: function(text, nostrip) 
 		{
-			if (strip) 
+			if (jasy.Env.isSet("debug"))
+			{
+				core.Assert.isType(text, "String", "Template text must be type of string.");
+
+				if (nostrip != null) {
+					core.Assert.isType(nostrip, "Boolean", "Nostrip must be type of boolean.");	
+				}
+			}
+
+			if (nostrip !== true) 
 			{
 				var splits = text.split("\n");
 				for (var i=0, l=splits.length; i<l; i++) {
@@ -134,13 +143,12 @@
 		 * - `name`: name of the token
 		 * - `nodes`: children of the node
 		 *
-		 * Optionally you can remove white spaces (line breaks,
-		 * leading, trailing, etc.) by enabling @strip {Boolean?false}.
+		 * Optionally you can keep white spaces (line breaks,
+		 * leading, trailing, etc.) by enabling @nostrip {Boolean?false}.
 		 */
-		parse: function(text, strip) {
-			return buildTree(this.tokenize(text, strip), []);
+		parse: function(text, nostrip) {
+			return buildTree(this.tokenize(text, nostrip), []);
 		}
-		
 	});
 })();
 

@@ -37,9 +37,145 @@ suite.test("Basic", function()
   this.isEqual(output, "Follow @wpbasti.");
 });
 
+suite.test("Labels", function() 
+{
+  var template = core.template.Compiler.compile("{{_follow}} @{{screenName}}.", {
+    follow : "Follow"
+  });
+  this.isTrue(template instanceof core.template.Template);
+
+  var output = template.render({ screenName: "dhg" });
+  this.isEqual(output, "Follow @dhg.");
+});
+
+suite.test("Labels - Undefined", function() 
+{
+  var template = core.template.Compiler.compile("{{_follow}} @{{screenName}}.");
+  this.isTrue(template instanceof core.template.Template);
+
+  var output = template.render({ screenName: "dhg" });
+  this.isEqual(output, " @dhg.");
+});
+
+suite.test("Labels - Static with Placeholder", function() 
+{
+  var template = core.template.Compiler.compile("<b>{{_follow}}</b>", {
+    follow : "Follow @{{screenName}}."
+  });
+  this.isTrue(template instanceof core.template.Template);
+
+  var output = template.render({ screenName: "dhg" });
+  this.isEqual(output, "<b>Follow @dhg.</b>");
+});
+
+suite.test("Labels - Dynamic", function() 
+{
+  var template = core.template.Compiler.compile("<label>{{_selected}}</label>");
+  this.isTrue(template instanceof core.template.Template);
+
+  var number = 3;
+  var output = template.render({}, null, {
+    selected : number > 1 ? "Selected many files." : "Selected one file."
+  });
+  this.isEqual(output, "<label>Selected many files.</label>");
+
+  var number = 1;
+  var output = template.render({}, null, {
+    selected : number > 1 ? "Selected many files." : "Selected one file."
+  });
+  this.isEqual(output, "<label>Selected one file.</label>");  
+});
+
+suite.test("Labels - Dynamic with Placeholder", function() 
+{
+  var template = core.template.Compiler.compile("<label>{{_selected}}</label>");
+  this.isTrue(template instanceof core.template.Template);
+
+  var number = 3;
+  var output = template.render({ number : number }, null, {
+    selected : number > 1 ? "Selected {{number}} files." : "Selected one file."
+  });
+  this.isEqual(output, "<label>Selected 3 files.</label>");
+
+  var number = 1;
+  var output = template.render({ number : number }, null, {
+    selected : number > 1 ? "Selected {{number}} files." : "Selected one file."
+  });
+  this.isEqual(output, "<label>Selected one file.</label>");  
+});
+
+suite.test("Labels - Mixed", function() 
+{
+  var template = core.template.Compiler.compile("<label>{{_staticl}}</label> <label>{{_dynamicl}}</label>", {
+    staticl : "This is static: {{value1}}."
+  });
+  this.isTrue(template instanceof core.template.Template);
+
+  var output = template.render({value1: 123, value2: 456}, null, {
+    dynamicl : "This is dynamic: {{value2}}."
+  });
+  this.isEqual(output, "<label>This is static: 123.</label> <label>This is dynamic: 456.</label>");
+
+  var output = template.render({value1: 123, value2: 456}, null, {
+    dynamicl : "This is dynamic - changed: {{value2}}."
+  });
+  this.isEqual(output, "<label>This is static: 123.</label> <label>This is dynamic - changed: 456.</label>");  
+});
+
+suite.test("Labels - Dotted", function() 
+{
+  var template = core.template.Compiler.compile("{{_user.follow}} @{{screenName}}.", {
+    "user.follow" : "Follow"
+  });
+  this.isTrue(template instanceof core.template.Template);
+
+  var output = template.render({ screenName: "dhg" });
+  this.isEqual(output, "Follow @dhg.");
+});
+
+suite.test("Labels - Looped Static", function() 
+{
+  var template = core.template.Compiler.compile("{{#users}}<li>{{_follow}}</li>{{/users}}", {
+    follow : "Follow @{{screenName}}"
+  });
+  this.isTrue(template instanceof core.template.Template);
+
+  var output = template.render({
+    users : 
+    [
+      {screenName : "gruber"},
+      {screenName : "dhg"},
+      {screenName : "neutralshow"},
+      {screenName : "boosc"},
+      {screenName : "wpbasti"}
+    ]
+  });
+  this.isEqual(output, "<li>Follow @gruber</li><li>Follow @dhg</li><li>Follow @neutralshow</li><li>Follow @boosc</li><li>Follow @wpbasti</li>");
+});
+
+suite.test("Labels - Looped Dynamic", function() 
+{
+  var template = core.template.Compiler.compile("{{#users}}<li>{{_follow}}</li>{{/users}}");
+  this.isTrue(template instanceof core.template.Template);
+
+  var output = template.render({
+    users : 
+    [
+      {screenName : "gruber"},
+      {screenName : "dhg"},
+      {screenName : "neutralshow"},
+      {screenName : "boosc"},
+      {screenName : "wpbasti"}
+    ]
+  }, null, {
+    follow : "Folge @{{screenName}}"
+  });
+  this.isEqual(output, "<li>Folge @gruber</li><li>Folge @dhg</li><li>Folge @neutralshow</li><li>Folge @boosc</li><li>Folge @wpbasti</li>");
+});
+
 suite.test("Line Breaks", function()
 {
-  var template = core.template.Compiler.compile("Break\nHere {{value}}.");
+  var template = core.template.Compiler.compile("Break\nHere {{value}}.", null, true);
   this.isTrue(template instanceof core.template.Template);
 
   var output = template.render({

@@ -211,8 +211,17 @@
 				// Wrap plain types to match property type
 				// Modifying `value` should also modify the arguments object which
 				// is required for value tests happening via checkSetter
-				if (config.cast && core.Main.isTypeOf(value, "Plain")) {
+				if (config.cast && core.Main.isTypeOf(value, "Plain")) 
+				{
 					value = new config.type(value);
+
+					if (jasy.Env.isSet("debug")) 
+					{
+						// arguments object is not updated in strict mode anymore, fix this
+						if (arguments[0] !== value) {
+							arguments[0] = value;	
+						}
+					}
 				}
 
 				// Check types

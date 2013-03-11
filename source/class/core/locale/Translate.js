@@ -32,7 +32,9 @@
 	}
 	else 
 	{
-		console.warn("Using locale fallback support (no detailed plural rules!)")
+		if (jasy.Env.isSet("debug")) {
+			console.warn("Using locale fallback support (Detailed plural rules are not available!)")	
+		}
 
 		/**
 		 * {Integer} Applies the plural rule to the given @n {Number} of the current locale and returns the
@@ -67,14 +69,6 @@
 	{
 		template : template,
 		plural : plural,
-
-
-		/**
-		 * {String} Mark @message {String} for tranlsation, but always return the original text.
-		 */
-		marktr : function(message) {
-			return message;
-		},
 
 
 		/**

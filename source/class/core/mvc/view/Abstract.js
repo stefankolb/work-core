@@ -42,6 +42,7 @@
       this.__presenter = presenter;
 
       this.__labels = {};
+      this.__dynamicLabels = {};
     },
 
     events :
@@ -74,13 +75,14 @@
       ======================================================
       */
 
-      addLabel : function(name, text) {
+      addLabel : function(name, text, dynamic) {
         this.__labels[name] = text;
       },
 
-      getLabel : function(name) {
-        return this.__labels[name];
+      addDynamicLabel : function() {
+
       },
+
 
 
 
@@ -107,7 +109,7 @@
        * given @context {String} and replaces any numeric placeholders (`%[0-9]`) with the corresponding 
        * number arguments passed via @varargs {var...?}.
        */
-      trc : function(message, varargs) {
+      trc : function(context, message, varargs) {
         return Translate.trc.apply(Translate, slice.call(arguments));
       },
 
@@ -118,7 +120,7 @@
        * Like the other methods it also supports replacing any numeric placeholders 
        * (`%[0-9]`) with the corresponding number arguments passed via @varargs {var...?}.
        */
-      trn : function(message, varargs) {
+      trn : function(messageSingular, messagePlural, varargs) {
         return Translate.trn.apply(Translate, slice.call(arguments));
       },
 
@@ -126,7 +128,7 @@
       /**
        * Optimized method being used by Jasy-replaced `trn()` method
        */
-      trnc : function(message, varargs) {
+      trnc : function(messages, number, varargs) {
         return Translate.trnc.apply(Translate, slice.call(arguments));
       }
     }

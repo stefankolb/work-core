@@ -9,6 +9,9 @@
 
 (function(Translate, slice) 
 {
+  /**
+   * Adds translation features from static class {core.locale.Translate} to class instances.
+   */
   core.Class("core.locale.MTranslate",
   {
     members :
@@ -44,7 +47,10 @@
 
 
       /**
-       * Optimized method being used by Jasy-replaced `trn()` method
+       * Optimized method being used by Jasy-replaced `trn()` method. Uses an array of 
+       * @messages {Array} and a positioning number for resolving the correct plural rule. 
+       * Like the other methods it also supports replacing any numeric placeholders 
+       * (`%[0-9]`) with the corresponding @number {Integer} arguments passed via @varargs {var...?}.
        */
       trnc : function(messages, number, varargs) {
         return Translate.trnc.apply(Translate, slice.call(arguments));

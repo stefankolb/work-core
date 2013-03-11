@@ -32,8 +32,8 @@
 		"#" : 1, // go into section / loop start
 		"?" : 1, // if / has
 		"^" : 1, // if not / has not
-		"&" : 1, // insert HTML
-		"$" : 1  // insert variable
+		"$" : 1, // insert variable
+		"=" : 1  // insert raw / non escaped
 	};
 	
 	// Tags which support children
@@ -81,10 +81,10 @@
 						code += 'if(!this._has(' + accessorCode + ')){' + innerCode + '}';
 					} else if (tag == '#') {
 						code += 'this._section(' + accessorCode + ',partials,labels,function(data,partials,labels){' + innerCode + '});';
-					} else if (tag == '&') {
+					} else if (tag == '=') {
 						code += 'buf+=this._data(' + accessorCode + ');';
 					} else if (tag == '$') {
-						code += 'buf+=this._data(' + accessorCode + ',true);';
+						code += 'buf+=this._variable(' + accessorCode + ');';
 					}
 				} 
 				else if (tag == '>') 

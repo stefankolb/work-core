@@ -128,15 +128,25 @@
 
 			/** 
 			 * {String} Outputs the @key {String} of @data {Map} 
-			 * using the given accessor @method {Integer} as pure data or
-			 * via enabling @escape {Boolean?false} as HTML escaped.
-			 */
-			_data: function(key, method, data, escape) 
+			 * using the given accessor @method {Integer} as HTML escaped variable.
+			 */			 
+			_variable: function(key, method, data) 
 			{
 				var value = accessor[method](key, data);
 				var str = value == null ? "" : "" + value;
 				
-				return escape ? str.replace(htmlChars, htmlEscape) : str;
+				return str.replace(htmlChars, htmlEscape);
+			},
+
+
+			/** 
+			 * {String} Outputs the @key {String} of @data {Map} 
+			 * using the given accessor @method {Integer} as raw data.
+			 */
+			_data : function(key, method, data, escape) 
+			{
+				var value = accessor[method](key, data);
+				return value == null ? "" : "" + value;
 			},
 
 

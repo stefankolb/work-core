@@ -97,7 +97,7 @@
 				{
 					// Support either static labels and dynamic labels
 					var resolved = labels && labels[escaped];
-					if (resolved != null) {
+					if (typeof resolved == "string") {
 						code += walk(core.template.Parser.parse(resolved, true), labels);
 					} else {
 						code += 'buf+=this._label("' + escaped + '",data,partials,labels);';

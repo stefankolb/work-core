@@ -134,8 +134,11 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
+      var partials = null;
+      var labels = this.getLabels();
+
       this._beforeRender();
-      elem.innerHTML = template.render(presenter);
+      elem.innerHTML = template.render(presenter, partials, labels);
       this._afterRender();
 
       // Let others know

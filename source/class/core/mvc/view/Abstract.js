@@ -39,9 +39,7 @@
       }
 
       this.__presenter = presenter;
-
       this.__labels = {};
-      this.__dynamicLabels = {};
     },
 
     events :
@@ -74,16 +72,44 @@
       ======================================================
       */
 
+      /**
+       * {Map} Returns a map of registered labels.
+       */
       getLabels : function() {
         return this.__labels;
       },
 
-      addLabel : function(name, text) {
-        this.__labels[name] = text;
+
+      /**
+       * Registers a label with the @name {String} and a possible
+       * static string or function @textOrFunction {any}.
+       */
+      addLabel : function(name, textOrFunction) 
+      {
+        if (jasy.Env.isSet("debugh"))
+        {
+          core.Assert.isType(name, "String", "The label name must be type of string!");
+          
+          // FIXME
+          // core.Assert.isType(name, "String", "The label value must be either type of string or function!");
+        }
+
+        if (typeof textOrFunction == "function") {
+          textOrFunction = textOrFunction.bind(this);
+        }
+
+        this.__labels[name] = textOrFunction;
       },
 
-      addDynamicLabel : function() {
 
+      /**
+       * Registers the given @labels {Map} to the presenter.
+       */
+      addLabels : function(labels)
+      {
+        for (var name in labels) {
+          this.addLabel(name, labels[name]);
+        }
       }
     }
   });

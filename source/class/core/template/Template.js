@@ -30,7 +30,6 @@
 	var htmlEscape = function(str) {
 		return htmlMap[str];
 	};
-	var compiledTexts = {};
 
 	var getter = function(key, obj) 
 	{
@@ -179,11 +178,12 @@
 					return "";
 				}
 
-				var compiledLabel = compiledTexts[text];
-				if (!compiledLabel) {
-					compiledLabel = compiledTexts[name] = core.template.Compiler.compile(text);	
+				// Automatically execute dynamic labels e.g. trn() with plural strings
+				if (typeof text == "function") {
+					text = text();
 				}
 
+				var compiledLabel = core.template.Compiler.compile(text);	
 				return compiledLabel.__render(data, partials, labels);
 			},
 

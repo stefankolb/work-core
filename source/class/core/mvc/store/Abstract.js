@@ -222,7 +222,7 @@ core.Class("core.mvc.store.Abstract",
      */
     fireStorageEvent : function(type, success, item, data, message) 
     {
-      var evt = core.mvc.event.Store.obtain(type, item, data, message);
+      var evt = core.mvc.event.Store.obtain(type, success, item, data, message);
       var retval = this.dispatchEvent(evt);
       evt.release();
 

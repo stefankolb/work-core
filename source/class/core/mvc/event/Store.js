@@ -19,7 +19,7 @@ core.Class("core.mvc.event.Store",
 
   /**
    * @type {String} Type of the event e.g. `click`, `load`, ...
-   * @succes {Boolean?true} Whether the reason for the event was a success or failure.
+   * @success {Boolean} Whether the reason for the event was a success or failure.
    * @item {var?null} Item ID to attach to the event.
    * @data {var?null} Data to be attached to the event.
    * @message {String?null} Message for user feedback etc.
@@ -29,6 +29,7 @@ core.Class("core.mvc.event.Store",
     if (jasy.Env.isSet("debug"))
     {
       core.Assert.isType(type, "String", "Invalid event type!" + type + " :: " + typeof type);
+      core.Assert.isType(success, "Boolean", "Invalid event success state!");
 
       if (message != null) {
         core.Assert.isType(message, "String", "Invalid event message!");
@@ -36,7 +37,7 @@ core.Class("core.mvc.event.Store",
     }
 
     this.__type = type;
-    this.__success = success == null ? true : success;
+    this.__success = success;
     this.__item = item;
     this.__data = data;
     this.__message = message;

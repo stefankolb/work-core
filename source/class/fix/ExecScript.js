@@ -41,15 +41,15 @@
 			 * This emulates the global `execScript` function of Internet Explorer for other browsers. 
 			 * See also: http://msdn.microsoft.com/en-us/library/ms536420(v=vs.85).aspx
 			 */
-			execScript : function(expression) {
+			execScript : function(expression) 
+			{
 				global.eval(expression);
 
-				// Always returns null according to msdn docs
+				// Always returns null according to MSDN docs
 				return null;
-			}
-			
-		}, true);
+			}			
+		});
 	};
 
 	// otherwise, execScript is `undefined` since nothing is returned
-})(this);
+})(core.Main.getGlobal());

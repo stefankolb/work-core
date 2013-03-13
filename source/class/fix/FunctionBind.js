@@ -11,6 +11,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Adds missing ES5 `Function.prototype.bind` when not implemented natively by the browser engine.
  */

@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Just a dump placeholder for environments without "console" object.
  *

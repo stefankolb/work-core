@@ -16,13 +16,9 @@ if (jasy.Env.isSet("runtime", "browser"))
 {
   (function(doc) 
   {
-  	// Verify browser environment
-  	if (doc) 
-  	{
-  		var tags = 'abbr article aside audio canvas details figcaption figure footer header hgroup mark meter nav output progress section summary time video';
-  		tags.replace(/\w+/g, function(tagName) {
-  			doc.createElement(tagName); 
-  		});
-  	}
+		var tags = 'abbr article aside audio canvas details figcaption figure footer header hgroup main mark meter nav output progress section summary time video';
+		tags.replace(/\w+/g, function(tagName) {
+			doc.createElement(tagName); 
+		});
   })(document);
 }

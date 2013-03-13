@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function()
 {
 	// http://blog.stevenlevithan.com/archives/faster-trim-javascript
@@ -46,5 +48,4 @@
 			return (""+this).replace(trimEndRegexp, "");
 		}
 	});
-
 })();

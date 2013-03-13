@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /** Adds the pretty essential `Date.now()` method from ES5 if it is missing. */
 core.Main.addStatics("Date",
 {

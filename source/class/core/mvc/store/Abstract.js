@@ -60,11 +60,11 @@ core.Class("core.mvc.store.Abstract",
     /** Fired when the process of creating something was completed. */
     created : core.event.Simple,
 
-    /** Fired when the process of deleting something was started. */
-    deleting : core.event.Simple,
+    /** Fired when the process of removing something was started. */
+    removing : core.event.Simple,
 
-    /** Fired when the process of deleting something was completed. */
-    deleted : core.event.Simple,
+    /** Fired when the process of removing something was completed. */
+    removed : core.event.Simple,
 
     /** Fired whenever the activity state was changed */
     changeActive : core.event.Simple
@@ -91,11 +91,22 @@ core.Class("core.mvc.store.Abstract",
 
 
     /**
+     * {Boolean} Whether there are currently requests for modifying data on the server.
+     */
+    isModifying : function() 
+    {
+      var tracker = this.__activityTracker;
+      return tracker.save > 0 || tracker.remove > 0 || tracker.create > 0;
+    },    
+
+
+    /**
      * {Boolean} Whether there are currently requests active for loading data/entries.
      */
     isLoading : function() {
       return this.__activityTracker.load > 0;
     },
+
 
     /**
      * {Boolean} Whether there are currently requests active for saving data/entries.
@@ -262,6 +273,75 @@ core.Class("core.mvc.store.Abstract",
       this.fireEvent("saved", null);
     },
 
+
+
+    /*
+    ======================================================
+      ACTION :: CREATE
+    ======================================================
+    */
+
+    /**
+     * Creates an entry based on the given @data {var}.
+     */
+    create : function(data)
+    {
+      this.__increaseActive("create");
+      this.fireEvent("creating");
+      this._communicate("create", null, this._encode(data, "create")).then(this.__onCreateSucceeded, this.__onCreateFailed, this).then(null, this.__onImplementationError, this);      
+    },
+
+
+    // Internal promise handler
+    __onCreateSucceeded : function(data) 
+    {
+      this.__decreaseActive("create");
+      this.fireEvent("created", this._decode(data, "create"));
+    },
+
+
+    // Internal promise handler
+    __onCreateFailed : function(msg) 
+    {
+      this.warn("Unable to create data!", msg);
+      this.__decreaseActive("create");
+      this.fireEvent("created", null);
+    },
+
+
+
+    /*
+    ======================================================
+      ACTION :: REMOVE
+    ======================================================
+    */
+
+    /**
+     * Removes the given @data {var}.
+     */
+    remove : function(data)
+    {
+      this.__increaseActive("remove");
+      this.fireEvent("removing");
+      this._communicate("remove", null, this._encode(data, "remove")).then(this.__onRemoveSucceeded, this.__onRemoveFailed, this).then(null, this.__onImplementationError, this);      
+    },
+
+
+    // Internal promise handler
+    __onRemoveSucceeded : function(data) 
+    {
+      this.__decreaseActive("remove");
+      this.fireEvent("removed", this._decode(data, "remove"));
+    },
+
+
+    // Internal promise handler
+    __onRemoveFailed : function(msg) 
+    {
+      this.warn("Unable to remove data!", msg);
+      this.__decreaseActive("remove");
+      this.fireEvent("removed", null);
+    },
 
 
 

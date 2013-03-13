@@ -8,6 +8,9 @@
 
 "use strict";
 
+/**
+ * #load(fix.*)
+ */
 (function(toString, undef) 
 {
 	var global = (function(){ return this || (1,eval)('this') })();

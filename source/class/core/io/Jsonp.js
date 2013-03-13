@@ -11,9 +11,6 @@
 
 "use strict";
 
-/**
- * #require(ext.DateNow)
- */
 (function(global, doc) {
 	
 	var id = 0;

@@ -12,7 +12,7 @@
 /**
  * Adds HTML5 tag support to Internet Explorer 
  */
-if (jasy.Env.isSet("runtime", "browser"))
+if (jasy.Env.isSet("runtime", "browser") && jasy.Env.isSet("engine", "trident"))
 {
   (function(doc) 
   {

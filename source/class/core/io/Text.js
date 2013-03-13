@@ -10,8 +10,6 @@
 
 /**
  * Loads all kinds of text content like text, HTML and JSON.
- *
- * #require(ext.DateNow)
  */
 (function(global) 
 {

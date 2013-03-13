@@ -93,6 +93,6 @@
 
 			return chars.join("");
 		}
-	}, true);
+	});
 
 }(core.Main.getGlobal()));

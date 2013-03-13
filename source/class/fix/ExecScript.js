@@ -8,6 +8,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(global) 
 {
 	// if indirect eval executes code globally, use it

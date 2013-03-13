@@ -17,4 +17,4 @@ core.Main.addStatics("Date",
 	now: function() {
 		return +new Date;
 	}
-}, true);
+});

@@ -12,7 +12,7 @@
  * Emulates just the basic logging methods with an empty function. Maps missing functions
  * to `console.log` automatically.
  */
-(function(global)
+(function(global, slice)
 {
 	var methods = "log,debug,error,warn,info".split(",");
 	var console = global.console || (global.console = {});
@@ -31,8 +31,8 @@
 		console.assert = function(expression) 
 		{
 			if (!expression) {
-				throw new Error(Array.prototype.slice.call(arguments, 1).join(" "));
+				throw new Error(slice.call(arguments, 1).join(" "));
 			}
 		}
 	}
-})(core.Main.getGlobal());
+})(core.Main.getGlobal(), Array.prototype.slice);

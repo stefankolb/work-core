@@ -16,4 +16,4 @@ core.Main.addStatics("Array",
 	isArray : function(value) {
 		return value != null && Object.prototype.toString.call(value) == "[object Array]";
 	}
-}, true);
+});

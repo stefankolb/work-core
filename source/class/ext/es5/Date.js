@@ -88,5 +88,5 @@ core.Main.addMembers("Date",
 		// stringification.
 	}
 	
-}, true);
+});
 

@@ -255,15 +255,14 @@
 
 		/**
 		 * Add @statics {Map} to the object found under the given @name {String}.
-		 * It is possible to control whether to @keep {Boolean?false} existing statics.
 		 */
-		addStatics : function(name, statics, keep) 
+		addStatics : function(name, statics, override) 
 		{
 			var object = global[name] || cache[name];
 			var prefix = name + ".";
 			for (var staticName in statics) 
 			{
-				if (!keep || object[staticName] === undef) 
+				if (override || object[staticName] === undef) 
 				{
 					var item = statics[staticName];
 					if (item instanceof Function) {
@@ -278,16 +277,15 @@
 
 		/**
 		 * Add @members {Map} to the prototype of the object found under the given @name {String}.
-		 * It is possible to control whether to @keep {Boolean?false} existing members.
 		 */
-		addMembers : function(name, members, keep) 
+		addMembers : function(name, members, override) 
 		{
 			var object = global[name] || cache[name];
 			var proto = object.prototype;
 			var prefix = name + ".prototype.";
 			for (var memberName in members) 
 			{
-				if (!keep || proto[memberName] === undef) 
+				if (override || proto[memberName] === undef) 
 				{
 					var item = members[memberName];
 					if (item instanceof Function) {

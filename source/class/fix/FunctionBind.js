@@ -64,5 +64,4 @@ core.Main.addMembers("Function",
 			};
 		}
 	}
-}, true);
-
+});

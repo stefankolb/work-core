@@ -8,6 +8,9 @@
 
 "use strict";
 
+/**
+ * #require(ext.DateNow)
+ */
 (function(global)
 {
 	var doc = global.document;

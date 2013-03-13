@@ -16,7 +16,11 @@ core.Class("core.mvc.store.Abstract",
 {
   include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
 
-  construct : function(path, config)
+  /**
+   * @path {String} Path to use for all requests
+   * @debounce {Map} Map with activity (e.g. save, remove, ...) as key and milliseconds as value
+   */
+  construct : function(path, debounce)
   {
     this.__scheduleTracker = {};
 
@@ -28,23 +32,8 @@ core.Class("core.mvc.store.Abstract",
       create : 0
     };
 
-    if (!config) {
-      config = {};
-    }
-
     this.__path = path;
-    
-    var saveDebounce = config.saveDebounce || config.debounce || 0;
-    //this.save = core.util.Function.debounce(this.save, saveDebounce);
-
-    var loadDebounce = config.loadDebounce || config.debounce || 0;
-    //this.load = core.util.Function.debounce(this.load, loadDebounce);
-
-    var removeDebounce = config.removeDebounce || config.debounce || 0;
-    //this.remove = core.util.Function.debounce(this.remove, removeDebounce);
-
-    var createDebounce = config.createDebounce || config.debounce || 0;
-    //this.create = core.util.Function.debounce(this.create, createDebounce);
+    this.__debounce = debounce;
   },
 
   events :
@@ -234,8 +223,10 @@ core.Class("core.mvc.store.Abstract",
         tracker[hash] = true;
         this.fireEvent("change");  
 
-        if (method == null) {
-          method = debounced[hash] = core.util.Function.debounce(this.__scheduleCallback, 1000);
+        if (method == null) 
+        {
+          var delay = this.__debounce[activity];
+          method = debounced[hash] = delay == null ? this.__scheduleCallback : core.util.Function.debounce(this.__scheduleCallback, delay);
         }
       }
 

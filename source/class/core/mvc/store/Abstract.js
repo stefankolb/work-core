@@ -18,6 +18,14 @@ core.Class("core.mvc.store.Abstract",
 
   construct : function(path, config)
   {
+    this.__scheduleTracker = 
+    {
+      load : 0,
+      save : 0,
+      remove : 0,
+      create : 0
+    };
+
     this.__activityTracker = 
     {
       load : 0,
@@ -76,7 +84,7 @@ core.Class("core.mvc.store.Abstract",
      * (Please note that every single change produces a new event - 
      * even if the storage is still active e.g. when the second request is send out.)
      */
-    changeActive : core.event.Simple
+    change : core.event.Simple
   },
 
   members :
@@ -96,6 +104,25 @@ core.Class("core.mvc.store.Abstract",
     {
       var tracker = this.__activityTracker;
       return tracker.load > 0 || tracker.save > 0 || tracker.remove > 0 || tracker.create > 0;
+    },
+
+
+    /**
+     * {Boolean} Whether there are any scheduled requests waiting for being processed.
+     */
+    hasScheduled : function()
+    {
+      var tracker = this.__scheduleTracker;
+      return tracker.load > 0 || tracker.save > 0 || tracker.remove > 0 || tracker.create > 0;
+    },
+
+
+    /**
+     * {Boolean} Returns whether the storage has any outstanding tasks to wait for.
+     * Useful for figuring out whether the application/section/window can be closed.
+     */
+    isFinished : function() {
+      return !this.isActive() && !this.hasScheduled();
     },
 
 
@@ -187,14 +214,28 @@ core.Class("core.mvc.store.Abstract",
     /** {=Map} Keeping track of individual activities */
     __activityTracker : null,
 
+    /** {=Map} Keeping track of individual scheduled activities */
+    __scheduleTracker : null,
+
+
+    /**
+     * Schedules the given @activity {String}.
+     */ 
+    __schedule : function(activity)
+    {
+      this.__scheduleTracker[activity]++;
+      this.fireEvent("change");
+    },
+
 
     /**
      * Increments the counter for given @activity {String}.
      */ 
     __increaseActive : function(activity) 
     {
+      this.__scheduleTracker[activity]--;
       this.__activityTracker[activity]++;
-      this.fireEvent("changeActive", true);
+      this.fireEvent("change");
     },
 
 
@@ -204,7 +245,7 @@ core.Class("core.mvc.store.Abstract",
     __decreaseActive : function(activity) 
     {
       this.__activityTracker[activity]--;
-      this.fireEvent("changeActive", this.isActive());
+      this.fireEvent("change");
     },
 
 
@@ -236,6 +277,14 @@ core.Class("core.mvc.store.Abstract",
       ACTIONS
     ======================================================
     */
+
+
+    load____ : function() 
+    {
+      this.__debouncedLoad();
+      this.__schedule("load");
+    },
+
 
     /**
      * Loads the data (of the optional @item {any}) from e.g. a remote server.

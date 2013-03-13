@@ -306,27 +306,48 @@ core.Class("core.mvc.store.Abstract",
     ======================================================
     */
 
+    /**
+     * Loads the data (of the optional @item {any}) from e.g. a remote server.
+     */
     load : function(item) {
-      this.__scheduleActivity("load", this.loadExecute, item);
+      this.__scheduleActivity("load", this.__loadExecute, item);
     },
 
+    /**
+     * Saves the given @data {var} (of the optional @item {any}) to e.g. the remote server.
+     */
     save : function(data, item) {
-      this.__scheduleActivity("save", this.saveExecute, item, data);
-    },
-
-    remove : function(item) {
-      this.__scheduleActivity("remove", this.removeExecute, item);
-    },
-
-    create : function(data) {
-      this.__scheduleActivity("create", this.createExecute, null, data);
+      this.__scheduleActivity("save", this.__saveExecute, item, data);
     },
 
 
     /**
-     * Loads the data (of the optional @item {any}) from e.g. a remote server.
+     * Creates an item based on the given @data {var} on e.g. the remote server.
+     * The item ID not yet known so one typically create a new 
+     * entry on the parent object/node.
      */
-    loadExecute : function(item)
+    create : function(data) {
+      this.__scheduleActivity("create", this.__createExecute, null, data);
+    },
+
+
+    /**
+     * Removes the given @data {var} (of the optional @item {any}) from e.g. the remote server.
+     */
+    remove : function(item) {
+      this.__scheduleActivity("remove", this.__removeExecute, item);
+    },    
+
+
+
+    /*
+    ======================================================
+      ACTIONS - EXECUTERS
+    ======================================================
+    */
+
+    // Internal real implementation of load()
+    __loadExecute : function(item)
     {
       this.__increaseActivity("load");
       this.fireStorageEvent("loading", true, item);
@@ -350,10 +371,8 @@ core.Class("core.mvc.store.Abstract",
     },
 
 
-    /**
-     * Saves the given @data {var} (of the optional @item {any}) to e.g. the remote server.
-     */
-    saveExecute : function(data, item)
+    // Internal real implementation of save()
+    __saveExecute : function(data, item)
     {
       this.__increaseActivity("save");
       this.fireStorageEvent("saving", true, item);
@@ -377,12 +396,8 @@ core.Class("core.mvc.store.Abstract",
     },
 
 
-    /**
-     * Creates an item based on the given @data {var} on e.g. the remote server.
-     * The item ID not yet known so one typically create a new 
-     * entry on the parent object/node.
-     */
-    createExecute : function(data)
+    // Internal real implementation of create()
+    __createExecute : function(data)
     {
       this.__increaseActivity("create");
       this.fireStorageEvent("creating", true);
@@ -406,10 +421,8 @@ core.Class("core.mvc.store.Abstract",
     },
 
 
-    /**
-     * Removes the given @data {var} (of the optional @item {any}) from e.g. the remote server.
-     */
-    removeExecute : function(data, item)
+    // Internal real implementation of remove()
+    __removeExecute : function(data, item)
     {
       this.__increaseActivity("remove");
       this.fireStorageEvent("removing", true, item);
@@ -440,7 +453,7 @@ core.Class("core.mvc.store.Abstract",
     ======================================================
     */
 
-    // Internal promise handler
+    // Internal promise error handler
     __onImplementationError : function(ex) {
       this.error("Implementation error: " + ex);
     }

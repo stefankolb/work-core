@@ -7,6 +7,11 @@
 
 "use strict";
 
+/**
+ * A store is pretty much a combination of the adapter pattern (convert data
+ * betweeen storage/server and client) and a asynchronous storage API with 
+ * activity reporting.
+ */
 core.Class("core.mvc.store.Abstract",
 {
   include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
@@ -43,30 +48,34 @@ core.Class("core.mvc.store.Abstract",
   events :
   {
     /** Fired when the process of loading something was started. */
-    loading : core.event.Simple,
+    loading : core.mvc.event.Storage,
 
     /** Fired when the process of loading something was completed. */
-    loaded : core.event.Simple,
+    loaded : core.mvc.event.Storage,
 
     /** Fired when the process of saving something was started. */
-    saving : core.event.Simple,
+    saving : core.mvc.event.Storage,
 
     /** Fired when the process of saving something was completed. */
-    saved : core.event.Simple,
+    saved : core.mvc.event.Storage,
 
     /** Fired when the process of creating something was started. */
-    creating : core.event.Simple,
+    creating : core.mvc.event.Storage,
 
     /** Fired when the process of creating something was completed. */
-    created : core.event.Simple,
+    created : core.mvc.event.Storage,
 
     /** Fired when the process of removing something was started. */
-    removing : core.event.Simple,
+    removing : core.mvc.event.Storage,
 
     /** Fired when the process of removing something was completed. */
-    removed : core.event.Simple,
+    removed : core.mvc.event.Storage,
 
-    /** Fired whenever the activity state was changed */
+    /** 
+     * Fired whenever the activity state was changed 
+     * (Please note that every single change produces a new event - 
+     * even if the storage is still active e.g. when the second request is send out.)
+     */
     changeActive : core.event.Simple
   },
 
@@ -184,11 +193,8 @@ core.Class("core.mvc.store.Abstract",
      */ 
     __increaseActive : function(activity) 
     {
-      var wasActive = this.isActive();
       this.__activityTracker[activity]++;
-      if (!wasActive) {
-        this.fireEvent("changeActive", true);
-      }
+      this.fireEvent("changeActive", true);
     },
 
 
@@ -198,149 +204,146 @@ core.Class("core.mvc.store.Abstract",
     __decreaseActive : function(activity) 
     {
       this.__activityTracker[activity]--;
-      if (!this.isActive()) {
-        this.fireEvent("changeActive", false);
-      }
+      this.fireEvent("changeActive", this.isActive());
     },
 
 
 
     /*
     ======================================================
-      ACTION :: LOAD
+      EVENT HANDLING
     ======================================================
     */
 
     /**
-     * Loads the data from the store e.g. using a remote server.
+     * {Boolean} Shorthand for firing automatically pooled instances of {core.mvc.event.Store}
+     * with the given @type {String}, @success {Boolean}, @item {var}, @data {var} and @message {String}.
+     * The method returns whether any listers were processed.
      */
-    load : function()
+    fireStorageEvent : function(type, success, item, data, message) 
+    {
+      var evt = core.mvc.event.Store.obtain(type, item, data, message);
+      var retval = this.dispatchEvent(evt);
+      evt.release();
+
+      return retval;
+    },
+
+
+
+    /*
+    ======================================================
+      ACTIONS
+    ======================================================
+    */
+
+    /**
+     * Loads the data (of the optional @item {any}) from e.g. a remote server.
+     */
+    load : function(item)
     {
       this.__increaseActive("load");
-      this.fireEvent("loading");
-      this._communicate("load").then(this.__onLoadSucceeded, this.__onLoadFailed, this).then(null, this.__onImplementationError, this);
+      this.fireStorageEvent("loading", true, item);
+
+      var success = function(data) 
+      {
+        this.__decreaseActive("load");
+        this.fireStorageEvent("loaded", true, item, this._decode(data, "load"));
+      };      
+
+      var failed = function(msg)
+      {
+        this.warn("Unable to load data!", msg);
+        this.__decreaseActive("load");
+        this.fireStorageEvent("loaded", false, item);
+      };
+
+      this._communicate("load", item).
+        then(success, failed, this).
+        then(null, this.__onImplementationError, this);
     },
 
-
-    // Internal promise handler
-    __onLoadSucceeded : function(data) 
-    {
-      this.__decreaseActive("load");
-      this.fireEvent("loaded", this._decode(data, "load"));
-    },
-
-
-    // Internal promise handler
-    __onLoadFailed : function(msg)
-    {
-      this.warn("Unable to load data!", msg);
-      this.__decreaseActive("load");
-      this.fireEvent("loaded", null);
-    },
-
-
-
-    /*
-    ======================================================
-      ACTION :: SAVE
-    ======================================================
-    */
 
     /**
-     * Saves the given @data {var}.
+     * Saves the given @data {var} (of the optional @item {any}) to e.g. the remote server.
      */
-    save : function(data)
+    save : function(data, item)
     {
       this.__increaseActive("save");
-      this.fireEvent("saving");
-      this._communicate("save", null, this._encode(data, "save")).then(this.__onSaveSucceeded, this.__onSaveFailed, this).then(null, this.__onImplementationError, this);      
+      this.fireStorageEvent("saving", true, item);
+
+      var success = function(data) 
+      {
+        this.__decreaseActive("save");
+        this.fireStorageEvent("saved", true, item, this._decode(data, "save"));
+      };
+
+      var failed = function(msg) 
+      {
+        this.warn("Unable to save data!", msg);
+        this.__decreaseActive("save");
+        this.fireStorageEvent("saved", false, item);
+      };
+
+      this._communicate("save", item, this._encode(data, "save")).
+        then(success, failed, this).
+        then(null, this.__onImplementationError, this);      
     },
 
-
-    // Internal promise handler
-    __onSaveSucceeded : function(data) 
-    {
-      this.__decreaseActive("save");
-      this.fireEvent("saved", this._decode(data, "save"));
-    },
-
-
-    // Internal promise handler
-    __onSaveFailed : function(msg) 
-    {
-      this.warn("Unable to save data!", msg);
-      this.__decreaseActive("save");
-      this.fireEvent("saved", null);
-    },
-
-
-
-    /*
-    ======================================================
-      ACTION :: CREATE
-    ======================================================
-    */
 
     /**
-     * Creates an entry based on the given @data {var}.
+     * Creates an item based on the given @data {var} on e.g. the remote server.
+     * The item ID not yet known so one typically create a new 
+     * entry on the parent object/node.
      */
     create : function(data)
     {
       this.__increaseActive("create");
-      this.fireEvent("creating");
-      this._communicate("create", null, this._encode(data, "create")).then(this.__onCreateSucceeded, this.__onCreateFailed, this).then(null, this.__onImplementationError, this);      
+      this.fireStorageEvent("creating", true);
+
+      var success = function(data) 
+      {
+        this.__decreaseActive("create");
+        this.fireStorageEvent("created", true, null, this._decode(data, "create"));
+      };
+
+      var failed = function(msg) 
+      {
+        this.warn("Unable to create data!", msg);
+        this.__decreaseActive("create");
+        this.fireStorageEvent("created", false);
+      };
+ 
+      this._communicate("create", item, this._encode(data, "create")).
+        then(success, failed, this).
+        then(null, this.__onImplementationError, this);      
     },
 
-
-    // Internal promise handler
-    __onCreateSucceeded : function(data) 
-    {
-      this.__decreaseActive("create");
-      this.fireEvent("created", this._decode(data, "create"));
-    },
-
-
-    // Internal promise handler
-    __onCreateFailed : function(msg) 
-    {
-      this.warn("Unable to create data!", msg);
-      this.__decreaseActive("create");
-      this.fireEvent("created", null);
-    },
-
-
-
-    /*
-    ======================================================
-      ACTION :: REMOVE
-    ======================================================
-    */
 
     /**
-     * Removes the given @data {var}.
+     * Removes the given @data {var} (of the optional @item {any}) from e.g. the remote server.
      */
-    remove : function(data)
+    remove : function(data, item)
     {
       this.__increaseActive("remove");
-      this.fireEvent("removing");
-      this._communicate("remove", null, this._encode(data, "remove")).then(this.__onRemoveSucceeded, this.__onRemoveFailed, this).then(null, this.__onImplementationError, this);      
-    },
+      this.fireStorageEvent("removing", true, item);
 
+      var success = function(data) 
+      {
+        this.__decreaseActive("remove");
+        this.fireStorageEvent("removed", true, item, this._decode(data, "remove"));
+      };
 
-    // Internal promise handler
-    __onRemoveSucceeded : function(data) 
-    {
-      this.__decreaseActive("remove");
-      this.fireEvent("removed", this._decode(data, "remove"));
-    },
+      var failed = function(msg) 
+      {
+        this.warn("Unable to remove data!", msg);
+        this.__decreaseActive("remove");
+        this.fireStorageEvent("removed", false, item);
+      };
 
-
-    // Internal promise handler
-    __onRemoveFailed : function(msg) 
-    {
-      this.warn("Unable to remove data!", msg);
-      this.__decreaseActive("remove");
-      this.fireEvent("removed", null);
+      this._communicate("remove", item, this._encode(data, "remove")).
+        then(success, failed, this).
+        then(null, this.__onImplementationError, this);      
     },
 
 

@@ -18,13 +18,7 @@ core.Class("core.mvc.store.Abstract",
 
   construct : function(path, config)
   {
-    this.__scheduleTracker = 
-    {
-      load : 0,
-      save : 0,
-      remove : 0,
-      create : 0
-    };
+    this.__scheduleTracker = {};
 
     this.__activityTracker = 
     {
@@ -41,16 +35,16 @@ core.Class("core.mvc.store.Abstract",
     this.__path = path;
     
     var saveDebounce = config.saveDebounce || config.debounce || 0;
-    this.save = core.util.Function.debounce(this.save, saveDebounce);
+    //this.save = core.util.Function.debounce(this.save, saveDebounce);
 
     var loadDebounce = config.loadDebounce || config.debounce || 0;
-    this.load = core.util.Function.debounce(this.load, loadDebounce);
+    //this.load = core.util.Function.debounce(this.load, loadDebounce);
 
     var removeDebounce = config.removeDebounce || config.debounce || 0;
-    this.remove = core.util.Function.debounce(this.remove, removeDebounce);
+    //this.remove = core.util.Function.debounce(this.remove, removeDebounce);
 
     var createDebounce = config.createDebounce || config.debounce || 0;
-    this.create = core.util.Function.debounce(this.create, createDebounce);
+    //this.create = core.util.Function.debounce(this.create, createDebounce);
   },
 
   events :
@@ -110,10 +104,8 @@ core.Class("core.mvc.store.Abstract",
     /**
      * {Boolean} Whether there are any scheduled requests waiting for being processed.
      */
-    hasScheduled : function()
-    {
-      var tracker = this.__scheduleTracker;
-      return tracker.load > 0 || tracker.save > 0 || tracker.remove > 0 || tracker.create > 0;
+    hasScheduled : function() {
+      return !Object.isEmpty(this.__scheduleTracker);
     },
 
 
@@ -217,23 +209,68 @@ core.Class("core.mvc.store.Abstract",
     /** {=Map} Keeping track of individual scheduled activities */
     __scheduleTracker : null,
 
+    /** {=Map} Debounced helper methods for each action/item combination */
+    __debouncedMethods : {},
+
 
     /**
      * Schedules the given @activity {String}.
      */ 
-    __schedule : function(activity)
+    __scheduleActivity : function(activity, exec, item, data)
     {
-      this.__scheduleTracker[activity]++;
+      // Compute hash based on activity and item ID
+      var hash = item == null ? activity : activity + "-" + item;
+
+      // Shorthands
+      var tracker = this.__scheduleTracker;
+      var debounced = this.__debouncedMethods;
+
+      // Access previously created method
+      var method = debounced[hash];
+
+      // Track scheduling and dynamic method creation
+      if (!tracker[hash]) 
+      {
+        tracker[hash] = true;
+        this.fireEvent("change");  
+
+        if (method == null) {
+          method = debounced[hash] = core.util.Function.debounce(this.__scheduleCallback, 1000);
+        }
+      }
+
+      // Trigger debounced method
+      if (activity == "load" || activity == "remove") {
+        method.call(this, hash, exec, item);  
+      } else if (activity == "create") {
+        method.call(this, hash, exec, data);  
+      } else if (activity == "save") {
+        method.call(this, hash, exec, data, item);  
+      }
+    },
+
+
+    /**
+     * Generic callback handler for the scheduling infrastructure.
+     */
+    __scheduleCallback : function(hash, exec, arg1, arg2)
+    {
+      var tracker = this.__scheduleTracker;
+      if (!tracker[hash]) {
+        return;
+      }
+
+      delete tracker[hash];
       this.fireEvent("change");
+      exec.call(this, arg1, arg2);
     },
 
 
     /**
      * Increments the counter for given @activity {String}.
      */ 
-    __increaseActive : function(activity) 
+    __increaseActivity : function(activity) 
     {
-      this.__scheduleTracker[activity]--;
       this.__activityTracker[activity]++;
       this.fireEvent("change");
     },
@@ -242,7 +279,7 @@ core.Class("core.mvc.store.Abstract",
     /**
      * Decrements the counter for given @activity {String}.
      */ 
-    __decreaseActive : function(activity) 
+    __decreaseActivity : function(activity) 
     {
       this.__activityTracker[activity]--;
       this.fireEvent("change");
@@ -278,32 +315,41 @@ core.Class("core.mvc.store.Abstract",
     ======================================================
     */
 
+    load : function(item) {
+      this.__scheduleActivity("load", this.loadExecute, item);
+    },
 
-    load____ : function() 
-    {
-      this.__debouncedLoad();
-      this.__schedule("load");
+    save : function(data, item) {
+      this.__scheduleActivity("save", this.saveExecute, item, data);
+    },
+
+    remove : function(item) {
+      this.__scheduleActivity("remove", this.removeExecute, item);
+    },
+
+    create : function(data) {
+      this.__scheduleActivity("create", this.createExecute, null, data);
     },
 
 
     /**
      * Loads the data (of the optional @item {any}) from e.g. a remote server.
      */
-    load : function(item)
+    loadExecute : function(item)
     {
-      this.__increaseActive("load");
+      this.__increaseActivity("load");
       this.fireStorageEvent("loading", true, item);
 
       var success = function(data) 
       {
-        this.__decreaseActive("load");
+        this.__decreaseActivity("load");
         this.fireStorageEvent("loaded", true, item, this._decode(data, "load"));
       };      
 
       var failed = function(msg)
       {
         this.warn("Unable to load data!", msg);
-        this.__decreaseActive("load");
+        this.__decreaseActivity("load");
         this.fireStorageEvent("loaded", false, item);
       };
 
@@ -316,21 +362,21 @@ core.Class("core.mvc.store.Abstract",
     /**
      * Saves the given @data {var} (of the optional @item {any}) to e.g. the remote server.
      */
-    save : function(data, item)
+    saveExecute : function(data, item)
     {
-      this.__increaseActive("save");
+      this.__increaseActivity("save");
       this.fireStorageEvent("saving", true, item);
 
       var success = function(data) 
       {
-        this.__decreaseActive("save");
+        this.__decreaseActivity("save");
         this.fireStorageEvent("saved", true, item, this._decode(data, "save"));
       };
 
       var failed = function(msg) 
       {
         this.warn("Unable to save data!", msg);
-        this.__decreaseActive("save");
+        this.__decreaseActivity("save");
         this.fireStorageEvent("saved", false, item);
       };
 
@@ -345,21 +391,21 @@ core.Class("core.mvc.store.Abstract",
      * The item ID not yet known so one typically create a new 
      * entry on the parent object/node.
      */
-    create : function(data)
+    createExecute : function(data)
     {
-      this.__increaseActive("create");
+      this.__increaseActivity("create");
       this.fireStorageEvent("creating", true);
 
       var success = function(data) 
       {
-        this.__decreaseActive("create");
+        this.__decreaseActivity("create");
         this.fireStorageEvent("created", true, null, this._decode(data, "create"));
       };
 
       var failed = function(msg) 
       {
         this.warn("Unable to create data!", msg);
-        this.__decreaseActive("create");
+        this.__decreaseActivity("create");
         this.fireStorageEvent("created", false);
       };
  
@@ -372,21 +418,21 @@ core.Class("core.mvc.store.Abstract",
     /**
      * Removes the given @data {var} (of the optional @item {any}) from e.g. the remote server.
      */
-    remove : function(data, item)
+    removeExecute : function(data, item)
     {
-      this.__increaseActive("remove");
+      this.__increaseActivity("remove");
       this.fireStorageEvent("removing", true, item);
 
       var success = function(data) 
       {
-        this.__decreaseActive("remove");
+        this.__decreaseActivity("remove");
         this.fireStorageEvent("removed", true, item, this._decode(data, "remove"));
       };
 
       var failed = function(msg) 
       {
         this.warn("Unable to remove data!", msg);
-        this.__decreaseActive("remove");
+        this.__decreaseActivity("remove");
         this.fireStorageEvent("removed", false, item);
       };
 

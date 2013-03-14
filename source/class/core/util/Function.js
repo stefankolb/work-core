@@ -101,7 +101,7 @@
      * every interval of @delay {Number} milliseconds. Supports optional
      * @args {arguments...} which are passed to the @callback.
      */
-    interval : createDelayed(setInterval)
+    interval : createDelayed(setInterval),
 
 
     /**

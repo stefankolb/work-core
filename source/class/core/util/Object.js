@@ -57,7 +57,7 @@
 		},
 
 
-		keys : Object.keys || function(object) {
+		keys__TODO : Object.keys || function(object) {
 			// TODO
 		},
 

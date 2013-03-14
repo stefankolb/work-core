@@ -7,8 +7,56 @@
 
 "use strict";
 
-(function(global) 
+(function(global, slice) 
 {
+  /**
+   * {Function} Binds the given function @func {Function} to the given @object {Object} and returns 
+   * the resulting function. 
+   * 
+   * - Only one connection is made to allow proper disconnecting without access to the bound function. 
+   * - Uses ES5 bind() to connect functions to objects internally.
+   *
+   * Inspired by: http://webreflection.blogspot.de/2012/11/my-name-is-bound-method-bound.html
+   */
+  var bind = function(func, object) 
+  {
+    // Using name which is not common to store these references in their objects
+    // Storing it on the object has the benefit that when the object is 
+    // garbage collected its bound methods are gone as well.
+    var boundName = "bound:" + core.util.Id.get(func);
+
+    return object[boundName] || (
+      object[boundName] = func.bind(object)
+    );
+  };
+
+  var createDelayed = function(nativeMethod)
+  {
+    return function(callback, context, delay, args)
+    {
+      if (arguments.length > 3)
+      {
+        if (!context) {
+          context = global;
+        }          
+
+        var callbackArgs = slice.call(arguments, 3);
+        
+        return nativeMethod(function() {
+          callback.apply(context, callbackArgs);
+        }, delay);  
+      }
+      else
+      {
+        if (context) {
+          callback = bind(callback, context);
+        }
+
+        return nativeMethod(callback, delay);
+      }          
+    }
+  };
+
   var immediate;
 
   // Try NodeJS style nextTick() API
@@ -37,26 +85,23 @@
    */
   core.Module("core.util.Function", 
   {
-    /**
-     * {Function} Binds the given function @func {Function} to the given @object {Object} and returns 
-     * the resulting function. 
-     * 
-     * - Only one connection is made to allow proper disconnecting without access to the bound function. 
-     * - Uses ES5 bind() to connect functions to objects internally.
-     *
-     * Inspired by: http://webreflection.blogspot.de/2012/11/my-name-is-bound-method-bound.html
-     */
-    bind : function(func, object) 
-    {
-      // Using name which is not common to store these references in their objects
-      // Storing it on the object has the benefit that when the object is 
-      // garbage collected its bound methods are gone as well.
-      var boundName = "bound:" + core.util.Id.get(func);
+    bind : bind,
 
-      return object[boundName] || (
-        object[boundName] = func.bind(object)
-      );
-    },
+
+    /**
+     * {Number} Executes the given @callback {Function} in the given @context {Object?global}
+     * after a timeout of @delay {Number} milliseconds. Supports optional
+     * @args {arguments...} which are passed to the @callback.
+     */
+    timeout : createDelayed(setTimeout),
+
+
+    /**
+     * {Number} Executes the given @callback {Function} in the given @context {Object?global}
+     * every interval of @delay {Number} milliseconds. Supports optional
+     * @args {arguments...} which are passed to the @callback.
+     */
+    interval : createDelayed(setInterval)
 
 
     /**
@@ -137,4 +182,4 @@
     }
 
   });  
-})(core.Main.getGlobal());
+})(core.Main.getGlobal(), Array.prototype.slice);

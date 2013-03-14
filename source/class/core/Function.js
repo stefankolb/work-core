@@ -71,9 +71,13 @@
     // https://developer.mozilla.org/en-US/docs/DOM/window.setImmediate
     immediate = core.util.Experimental.get(global, "setImmediate");
 
-    // Last fallback: Timeout
-    if (!immediate)
+    if (immediate)
     {
+      immediate = global[immediate];
+    }
+    else
+    {
+      // Last fallback: Timeout
       immediate = function(func) {
         return setTimeout(func, 0);
       };

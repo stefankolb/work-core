@@ -16,6 +16,6 @@ core.Main.addStatics("Array",
 	 * See also: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
 	 */
 	isArray : function(value) {
-		return value != null && Object.prototype.toString.call(value) == "[object Array]";
+    return core.Main.isTypeOf(value, "Array");
 	}
 });

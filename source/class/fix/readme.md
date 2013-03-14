@@ -9,3 +9,10 @@ Content:
 - `String.trim()`, ...
 - `Array.isArray()`
 
+TODO:
+
+
+html5markup
+document.head
+
+test ob setField("runtime", "browser") oder "native" entsprechend aufräumt.

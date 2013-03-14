@@ -11,30 +11,20 @@
 
 (function (global) 
 {
-	// Keep native methods
-	if (global.btoa) {
-		return;
-	}
-	
-	var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-	var fromCharCode = String.fromCharCode;
-	
-	// Slight performance impact for much better compression
-	var charAt = "charAt";
-	var charCodeAt = "charCodeAt";
-	var indexOf = "indexOf";
+	var btoa = global.btoa;
+	var atob = global.atob;
 
-	/**
-	 * Polyfill for Base64 support which is natively implemented in most recent browsers.
-	 */
-	core.Main.addStatics("global",
+	if (!btoa)
 	{
-		/**
-		 * {String} Creates a base-64 encoded ASCII string from a @string {String} of binary data.
-		 *
-		 * See also: https://developer.mozilla.org/en/DOM/window.btoa
-		 */
-		btoa : function(string) 
+		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+		var fromCharCode = String.fromCharCode;
+		
+		// Slight performance impact for much better compression
+		var charAt = "charAt";
+		var charCodeAt = "charCodeAt";
+		var indexOf = "indexOf";
+
+		btoa = function(string) 
 		{
 			var i = 0;
 			var len = string.length;
@@ -61,14 +51,9 @@
 			}
 
 			return result.join("");
-		},
+		};
 
-		/**
-		 * {String} Decodes a @string {String} of data which has been encoded using base-64 encoding.
-		 *
-		 * See also: https://developer.mozilla.org/en/DOM/window.atob
-		 */
-		atob : function(string) 
+		atob = function(string) 
 		{
 			string = string.replace(/=+$/, "");
 
@@ -92,7 +77,26 @@
 			}
 
 			return chars.join("");
-		}
-	});
+		};
+	}
 
+	/**
+	 * Polyfill for Base64 support which is natively implemented in most recent browsers.
+	 */
+	core.Module("core.util.Base64",
+	{
+		/**
+		 * {String} Creates a base-64 encoded ASCII string from a @string {String} of binary data.
+		 *
+		 * See also: https://developer.mozilla.org/en/DOM/window.btoa
+		 */
+		encode : btoa,
+
+		/**
+		 * {String} Decodes a @string {String} of data which has been encoded using base-64 encoding.
+		 *
+		 * See also: https://developer.mozilla.org/en/DOM/window.atob
+		 */
+		decode : atob
+	});
 }(core.Main.getGlobal()));

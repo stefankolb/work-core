@@ -1,1 +1,0 @@
-Contains polyfills for missing ES5 features (matching specification). These automatically only apply modifications when needed. They could be loaded based on feature test {core.detect.ES5}

@@ -154,8 +154,7 @@
 			
 			core.Assert.isType(config, "Map", "Invalid class configuration in " + name);
 			
-			/** #require(ext.sugar.Object) */
-			var invalidKeys = Object.validateKeys(config, "construct,pooling,events,members,properties,include,implement".split(","));
+			var invalidKeys = core.util.Object.validateKeys(config, "construct,pooling,events,members,properties,include,implement".split(","));
 			if (invalidKeys.length > 0) {
 				throw new Error("Class declaration of " + name + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
 			}

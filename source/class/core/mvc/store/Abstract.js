@@ -94,7 +94,7 @@ core.Class("core.mvc.store.Abstract",
      * {Boolean} Whether there are any scheduled requests waiting for being processed.
      */
     hasScheduled : function() {
-      return !Object.isEmpty(this.__scheduleTracker);
+      return !core.util.Object.isEmpty(this.__scheduleTracker);
     },
 
 

@@ -6,43 +6,39 @@
 ==================================================================================================
 */
 
-/**
- * Adds useful non-standard extensions to the `Number.prototype` like {#pad}, {#times} and {#hex}.
- */
-core.Main.addMembers("Number",
+core.Module("core.util.Number",
 {
 	/** 
-	 * {Integer} Converts the number to integer 
+	 * {Integer} Converts the @number {Number} to integer 
 	 */
-	toInteger : function() {
-    return this < 0 ? Math.ceil(this) : Math.floor(this);
+	toInteger : function(number) {
+    return number < 0 ? Math.ceil(number) : Math.floor(number);
   },
 
 
 	/**
-	 * {String} Pads the number to reach the given @length {Integer}.
+	 * {String} Pads the @number {Number} to reach the given @length {Integer}.
 	 */
-	pad : function(length) {
-		return (core.util.String.repeat("0", length) + this).slice(-length);
+	pad : function(number, length) {
+		return (core.util.String.repeat("0", length) + number).slice(-length);
 	},
 
 
 	/**
-	 * Executes the given @func {Function} x-times.
+	 * Executes the given @func {Function} @number {Number} of times.
 	 * Support an optional @context {Object?} for execution.
 	 */
-	times : function(func, context) {
-		for (var i=0; i<this; i++) {
+	times : function(number, func, context) {
+		for (var i=0; i<number; i++) {
 			context ? func.call(context) : func();
 		}
 	},
 
 
 	/**
-	 * {String} Converts the number to a hex string.
+	 * {String} Converts the @number {Number} to a hex string.
 	 */
-	hex : function() {
-		return this.toString(16);
+	hex : function(number) {
+		return number.toString(16);
 	}
 });
-

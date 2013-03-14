@@ -24,6 +24,11 @@
 		var charCodeAt = "charCodeAt";
 		var indexOf = "indexOf";
 
+		/**
+		 * {String} Creates a base-64 encoded ASCII string from a @string {String} of binary data.
+		 *
+		 * See also: https://developer.mozilla.org/en/DOM/window.btoa
+		 */
 		btoa = function(string) 
 		{
 			var i = 0;
@@ -53,6 +58,12 @@
 			return result.join("");
 		};
 
+
+		/**
+		 * {String} Decodes a @string {String} of data which has been encoded using base-64 encoding.
+		 *
+		 * See also: https://developer.mozilla.org/en/DOM/window.atob
+		 */
 		atob = function(string) 
 		{
 			string = string.replace(/=+$/, "");
@@ -85,18 +96,7 @@
 	 */
 	core.Module("core.util.Base64",
 	{
-		/**
-		 * {String} Creates a base-64 encoded ASCII string from a @string {String} of binary data.
-		 *
-		 * See also: https://developer.mozilla.org/en/DOM/window.btoa
-		 */
 		encode : btoa,
-
-		/**
-		 * {String} Decodes a @string {String} of data which has been encoded using base-64 encoding.
-		 *
-		 * See also: https://developer.mozilla.org/en/DOM/window.atob
-		 */
 		decode : atob
 	});
 }(core.Main.getGlobal()));

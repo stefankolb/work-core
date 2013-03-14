@@ -14,10 +14,7 @@
 		hasDontEnumBug = false;	
 	}
 	
-	/**
-	 * Adds useful non-standard extensions to the Object class like {#fromArray} and {#values}.
-	 */
-	core.Main.addStatics("Object", 
+	core.Module("core.util.Object", 
 	{
 		/**
 		 * {Integer} Returns the number of keys the given @object {Object} has.

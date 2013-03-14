@@ -4,42 +4,31 @@
   Copyright 2010-2012 Zynga Inc.
   Copyright 2012-2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
-  Inspired by Sugar.js, Copyright © 2011 Andrew Plummer
+  Inspired by Sugar.js, Copyright 2011 Andrew Plummer
 ==================================================================================================
 */
 
-// Enforce loading of ES5 array fixes if required
-if (!jasy.Env.isSet("es5")) 
-{
-	/** #require(ext.es5.Array) */
-	0;
-}
-
-/**
- * Adds useful non-standard extensions to the `Array.prototype` like {#min}, {#contains} and {#remove}.
- */
-core.Main.addStatics("Array", 
+core.Module("core.util.Array", 
 {
 	/**
 	 * {Array} Converts the given @args {arguments} into an array.
 	 */
-	fromArguments : function(args) {
+	fromArguments : function(args) 
+	{
 		// See also: http://jsperf.com/arrayifying-arguments/7
 		return args.length === 1 ? [ args[0] ] : Array.apply(null, args);
-	}
-});
+	},
 
-core.Main.addMembers("Array", 
-{
+
 	/**
-	 * Merges both arrays into an object where values of this array are used
+	 * Merges both arrays into an object where values of array array are used
 	 * as keys and values of @values {Array} are used as values.
 	 */
-	zip : function(values) 
+	zip : function(array, values) 
 	{
 		var result = {};
-		for (var i=0, l=this.length; i<l; i++) {
-			result[this[i]] = values[i];
+		for (var i=0, l=array.length; i<l; i++) {
+			result[array[i]] = values[i];
 		}
 
 		return result;
@@ -49,26 +38,26 @@ core.Main.addMembers("Array",
 	/**
 	 * {Number} Returns the maximum number in the array.
 	 */
-	max : function() {
-		return Math.max.apply(Math, this);
+	max : function(array) {
+		return Math.max.apply(Math, array);
 	},
 	
 
 	/**
 	 * {Number} Returns the minimum number in the array.
 	 */
-	min : function() {
-		return Math.min.apply(Math, this);
+	min : function(array) {
+		return Math.min.apply(Math, array);
 	},
 
 
 	/**
 	 * {Number} Returns the sum of all values in the array.
 	 */
-	sum : function() 
+	sum : function(array) 
 	{
 		var sum = 0;
-		this.forEach(function(value) {
+		array.forEach(function(value) {
 			sum += value;
 		});
 		
@@ -80,9 +69,9 @@ core.Main.addMembers("Array",
 	 * {var} Inserts and returns the given @value {var} at the given @position {Integer?-1}. 
 	 * Supports negative position values, too. Appends to the end if no position is defined.
 	 */
-	insertAt : function(value, position) 
+	insertAt : function(array, value, position) 
 	{
-		position == null ? this.push(value) : this.splice(position < 0 ? this.length+position : position, 0, value);
+		position == null ? array.push(value) : array.splice(position < 0 ? array.length+position : position, 0, value);
 		return value;
 	},
 	
@@ -90,39 +79,39 @@ core.Main.addMembers("Array",
 	/**
 	 * {Boolean} Whether the array contains the given @value {var}.
 	 */
-	contains : function(value) {
-		return this.indexOf(value) > -1;
+	contains : function(array, value) {
+		return array.indexOf(value) > -1;
 	},
 	
 	
 	/**
 	 * {Array} Clones the whole array and returns it.
 	 */
-	clone : function() 
+	clone : function(array) 
 	{
 		// Wrap method for security reaons, so params to concat are safely ignored.
-		return this.concat();
+		return array.concat();
 	},
 	
 	
 	/**
 	 * {Array} Filters out sparse fields (including all null/undefined values if @nulls is `true`) and returns a new compacted array.
 	 */
-	compact : function(nulls) 
+	compact : function(array, nulls) 
 	{
 		// Pretty cheap way to iterate over all relevant values and create a copy
-		return this.filter(nulls ? function(value) { return value != null; } : function() { return true; });
+		return array.filter(nulls ? function(value) { return value != null; } : function() { return true; });
 	},
 	
 	
 	/**
 	 * {Array} Returns a flattened, one-dimensional copy of the array.
 	 */
-	flatten: function() 
+	flatten: function(array) 
 	{
 		var result = [];
 		
-		this.forEach(function(value) 
+		array.forEach(function(value) 
 		{
 			if (value instanceof Array) {
 				result.push.apply(result, value.flatten());
@@ -138,20 +127,20 @@ core.Main.addMembers("Array",
 	/**
 	 * Randomizes the array via Fisher-Yates algorithm.
 	 */
-	randomize : function() {
-		for(var j, x, self=this, i=self.length; i; j = parseInt(Math.random() * i), x = self[--i], self[i] = self[j], self[j] = x);
+	randomize : function(array) {
+		for(var j, x, self=array, i=self.length; i; j = parseInt(Math.random() * i), x = self[--i], self[i] = self[j], self[j] = x);
 	},
 	
 	
 	/** 
 	 * {var} Removes the given @value {var} (first occourence only) from the array and returns it.
 	 */
-	remove : function(value) 
+	remove : function(array, value) 
 	{
-		var position = this.indexOf(value);
+		var position = array.indexOf(value);
 		if (position != -1) 
 		{
-			this.splice(position, 1);
+			array.splice(position, 1);
 			return value;
 		}
 	},
@@ -164,10 +153,10 @@ core.Main.addMembers("Array",
 	 * and booleans might be unified with strings with the same "value".
 	 * This is mainly because of performance reasons.
 	 */
-	unique : function() 
+	unique : function(array) 
 	{
 		var strings = {};
-		return this.filter(function(value) 
+		return array.filter(function(value) 
 		{
 			if (!strings.hasOwnProperty(value)) {
 				return strings[value] = true;
@@ -179,25 +168,25 @@ core.Main.addMembers("Array",
 	/**
 	 * {var} Returns the value at the given @position {Integer}. Supports negative indexes, too.
 	 */
-	at : function(position) {
-		return this[position < 0 ? this.length + position : position];
+	at : function(array, position) {
+		return array[position < 0 ? array.length + position : position];
 	},
 	
 	
 	/**
 	 * {var} Returns the last item in the array.
 	 */
-	last: function() {
-		return this[this.length-1];
+	last: function(array) {
+		return array[array.length-1];
 	},
 	
 
 	/** 
 	 * {var} Removes and returns the value at the given @position {Integer}.
 	 */
-	removeAt : function(position) 
+	removeAt : function(array, position) 
 	{
-		var ret = this.splice(position < 0 ? this.length + position : position, 1);
+		var ret = array.splice(position < 0 ? array.length + position : position, 1);
 		if (ret.length) {
 			return ret[0];
 		}
@@ -207,14 +196,14 @@ core.Main.addMembers("Array",
 	/**
 	 * Removes a specific range (@from {Integer} <-> @to {Integer}) from the array. Supports negative indexes, too.
 	 */
-	removeRange : function(from, to) 
+	removeRange : function(array, from, to) 
 	{
 		// Based on Array Remove - By John Resig (MIT Licensed)
 		// http://ejohn.org/blog/javascript-array-remove/
 		
-		var rest = this.slice((to || from) + 1 || this.length);
-		this.length = from < 0 ? this.length + from : from;
-		this.push.apply(this, rest);
+		var rest = array.slice((to || from) + 1 || array.length);
+		array.length = from < 0 ? array.length + from : from;
+		array.push.apply(array, rest);
 	}
 });
 

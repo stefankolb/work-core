@@ -487,13 +487,6 @@
 	};
 
 
-	// Enforce loading of ES5 array fixes if required
-	if (!jasy.Env.isSet("es5")) 
-	{
-		/** #require(ext.es5.Array) #require(ext.es5.Date) #require(ext.es5.JSON) #require(ext.es5.Object) */
-		0;
-	}
-
 	core.Main.addStatics("core.Class", 
 	{
 		isClass : isClass,

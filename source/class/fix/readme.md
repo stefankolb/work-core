@@ -12,6 +12,8 @@ Content:
 TODO:
 
 
+Object.keys() polyfill, wo?
+
 html5markup
 document.head
 

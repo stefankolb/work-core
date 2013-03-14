@@ -89,9 +89,7 @@
      * - camelCase => camel-case
      * - HelloWorld => -hello-world
      */
-    hyphenate : function(str) 
-    {
-      // Via: http://es5.github.com/#x15.5.4.11
+    hyphenate : function(str) {
       return str.replace(/[A-Z]/g,'-$&').toLowerCase();
     },
 

@@ -29,76 +29,6 @@
 	core.Module("core.effect.Animate", 
 	{
 		/**
-		 * A requestAnimationFrame wrapper / polyfill.
-		 *
-		 * @param callback {Function} The callback to be invoked before the next repaint.
-		 * @param root {HTMLElement} The root element for the repaint
-		 */
-		requestAnimationFrame: (function() {
-
-			// Check for request animation Frame support
-			var requestFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame;
-			var isNative = !!requestFrame;
-
-			if (requestFrame && !/requestAnimationFrame\(\)\s*\{\s*\[native code\]\s*\}/i.test(requestFrame.toString())) {
-				isNative = false;
-			}
-
-			if (isNative) {
-				return function(callback, root) {
-					requestFrame(callback, root)
-				};
-			}
-
-			var TARGET_FPS = 60;
-			var requests = {};
-			var requestCount = 0;
-			var rafHandle = 1;
-			var intervalHandle = null;
-			var lastActive = +new Date();
-
-			return function(callback, root) {
-				var callbackHandle = rafHandle++;
-
-				// Store callback
-				requests[callbackHandle] = callback;
-				requestCount++;
-
-				// Create timeout at first request
-				if (intervalHandle === null) {
-
-					intervalHandle = setInterval(function() {
-
-						var time = +new Date();
-						var currentRequests = requests;
-
-						// Reset data structure before executing callbacks
-						requests = {};
-						requestCount = 0;
-
-						for(var key in currentRequests) {
-							if (currentRequests.hasOwnProperty(key)) {
-								currentRequests[key](time);
-								lastActive = time;
-							}
-						}
-
-						// Disable the timeout when nothing happens for a certain
-						// period of time
-						if (time - lastActive > 2500) {
-							clearInterval(intervalHandle);
-							intervalHandle = null;
-						}
-
-					}, 1000 / TARGET_FPS);
-				}
-
-				return callbackHandle;
-			};
-
-		})(),
-
-		/**
 		 * {Boolean} Stops the given animation via its @id {Integer}. Returns whether the animation was stopped.
 		 */
 		stop: function(id) {
@@ -131,11 +61,11 @@
 		 * - @duration {Integer} Milliseconds to run the animation
 		 * - @easingMethod {Function} Pointer to easing function
 		 *   Signature of the method should be `function(percent) { return modifiedValue; }`
-		 * - @root {Element ? document.body} Render root, when available. Used for internal
-		 *   usage of requestAnimationFrame.
+		 * - @root {Element ? document.body} Render root, when available. Used for
+		 *   optimizing native requestAnimationFrame.
 		 */
-		start: function(stepCallback, verifyCallback, completedCallback, duration, easingMethod, root) {
-
+		start: function(stepCallback, verifyCallback, completedCallback, duration, easingMethod, root) 
+		{
 			var start = time();
 			var lastFrame = start;
 			var percent = 0;
@@ -147,17 +77,19 @@
 			}
 
 			// Compacting running db automatically every few new animations
-			if (id % 20 === 0) {
+			if (id % 20 === 0) 
+			{
 				var newRunning = {};
 				for (var usedId in running) {
 					newRunning[usedId] = true;
 				}
+
 				running = newRunning;
 			}
 
 			// This is the internal step method which is called every few milliseconds
-			var step = function(virtual) {
-
+			var step = function(virtual) 
+			{
 				// Normalize virtual value
 				var render = virtual !== true;
 
@@ -200,7 +132,7 @@
 					completedCallback && completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, percent === 1 || duration == null);
 				} else if (render) {
 					lastFrame = now;
-					core.effect.Animate.requestAnimationFrame(step, root);
+					core.effect.AnimationFrame.request(step, root);
 				}
 			};
 
@@ -208,7 +140,7 @@
 			running[id] = true;
 
 			// Init first step
-			core.effect.Animate.requestAnimationFrame(step, root);
+			core.effect.AnimationFrame.request(step, root);
 
 			// Return unique animation ID
 			return id;

@@ -57,6 +57,11 @@
 		},
 
 
+		keys : Object.keys || function(object) {
+			// TODO
+		},
+
+
 		/**
 		 * {Array} Returns all the values of the given @object {Map}.
 		 */

@@ -10,8 +10,6 @@
 /**
  * Base class for a DOM based view. Uses debounced rendering using RequestAnimationFrame
  * for optimal performance. Supports easy DOM event managment for view content.
- *
- * #require(ext.RequestAnimationFrame)
  */
 core.Class("core.mvc.view.Dom",
 {
@@ -95,7 +93,7 @@ core.Class("core.mvc.view.Dom",
       }
 
       /**  */
-      this.__renderScheduled = requestAnimationFrame(core.util.Function.bind(this.__renderRequest, this));
+      this.__renderScheduled = core.effect.AnimationFrame.request(core.util.Function.bind(this.__renderRequest, this));
     },
 
 
@@ -108,7 +106,7 @@ core.Class("core.mvc.view.Dom",
       }
       else
       {
-        this.__renderScheduled = requestAnimationFrame(core.util.Function.bind(this.__renderRequest, this));
+        this.__renderScheduled = core.effect.AnimationFrame.request(core.util.Function.bind(this.__renderRequest, this));
       }
     },
 

@@ -20,8 +20,6 @@
 	
 	/** 
 	 * Stylesheet loader with support for load callback.
-	 *
-	 * #require(ext.DocumentHead)
 	 */
 	core.Module("core.io.StyleSheet",
 	{

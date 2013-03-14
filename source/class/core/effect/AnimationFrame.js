@@ -12,43 +12,17 @@ if (jasy.Env.isSet("runtime", "browser"))
 {
 	(function(global) 
 	{
-		if (global.requestAnimationFrame) {
-			return;
-		}
-		
-		// requestAnimationFrame polyfill
-		// http://webstuff.nfshost.com/anim-timing/Overview.html
+		var request = core.util.Experimental.get(global, "requestAnimationFrame");
+		var cancel = core.util.Experimental.get(global, "cancelRequestAnimationFrame");
 
-		var postfix = "RequestAnimationFrame";
-		var prefix = (function() 
+		if (!request)
 		{
-			var all = "webkit,moz,o,ms".split(",");
-			for (var i=0; i<4; i++) {
-				if (global[all[i]+postfix] != null) {
-					return all[i];
-				}
-			}
-		})();
-		
-		// Vendor specific implementation
-		if (prefix) 
-		{
-			global.requestAnimationFrame = global[prefix+postfix];
-			global.cancelRequestAnimationFrame = global[prefix+"Cancel"+postfix];
-			return;
-		}
+			// Custom implementation
+			var TARGET_FPS = 60;
+			var requests = {};
+			var rafHandle = 1;
+			var timeoutHandle = null;
 
-		// Custom implementation
-		var TARGET_FPS = 60;
-		var requests = {};
-		var rafHandle = 1;
-		var timeoutHandle = null;
-		
-		/**
-		 * Adds new style `requestAnimationFrame` API to browser engines which are missing it.
-		 */
-		core.Main.addStatics("global", 
-		{
 			/** 
 			 * {var} Tells the browser that you wish to perform an animation; this requests that the browser schedule a 
 			 * repaint of the window for the next animation frame. The method takes as an argument a @callback {Function} to 
@@ -57,7 +31,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 			 *
 			 * See also: https://developer.mozilla.org/en/DOM/window.requestAnimationFrame
 			 */
-			requestAnimationFrame : function(callback, root) 
+			request = function(callback, root) 
 			{
 				var callbackHandle = rafHandle++;
 
@@ -71,7 +45,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 					{
 						var time = Date.now();
 						var currentRequests = requests;
-						var keys = Object.keys(currentRequests);
+						var keys = core.util.Object.keys(currentRequests);
 
 						// Reset data structure before executing callbacks
 						requests = {};
@@ -85,24 +59,30 @@ if (jasy.Env.isSet("runtime", "browser"))
 				}
 
 				return callbackHandle;
-			},
+			};
 
 			/**
 			 * Stops the animation scheduled under the given @handle {var}.
 			 * 
 			 * See also: https://developer.mozilla.org/en/DOM/window.requestAnimationFrame
 			 */
-			cancelRequestAnimationFrame : function(handle) 
+			cancel = function(handle) 
 			{
 				delete requests[handle];
 
 				// Stop timeout if all where removed
-				if (Object.isEmpty(requests)) 
+				if (core.util.Object.isEmpty(requests)) 
 				{
 					clearTimeout(timeoutHandle);
 					timeoutHandle = null;
 				}
-			}
+			};			
+		}
+
+		core.Module("core.effect.AnimationFrame", 
+		{
+			request : request,
+			cancel : cancel
 		});
 
 	})(core.Main.getGlobal());

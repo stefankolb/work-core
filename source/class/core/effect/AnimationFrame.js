@@ -15,7 +15,14 @@ if (jasy.Env.isSet("runtime", "browser"))
 		var request = core.util.Experimental.get(global, "requestAnimationFrame");
 		var cancel = core.util.Experimental.get(global, "cancelRequestAnimationFrame");
 
-		if (!request)
+		if (request)
+		{
+			// Prefer native support: Resolve returned name on global object.
+			// Bind to window because otherwise it throws errors in V8 and maybe other engines.
+			request = global[request].bind(global);
+			cancel = global[cancel].bind(global);
+		}
+		else
 		{
 			// Custom implementation
 			var TARGET_FPS = 60;

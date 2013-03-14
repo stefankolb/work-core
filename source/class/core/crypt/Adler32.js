@@ -23,7 +23,7 @@ core.Module("core.crypt.Adler32",
 		var MOD_ADLER = 65521;
 		var a=1, b=0;
 		
-		str = core.util.String.encodeUtf8(str);
+		str = core.String.encodeUtf8(str);
 
 		// Process each byte of the string in order
 		for (var index=0, len=str.length; index<len; ++index)

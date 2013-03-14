@@ -16,7 +16,7 @@
 		hasDontEnumBug = false;	
 	}
 	
-	core.Module("core.util.Object", 
+	core.Module("core.Object", 
 	{
 		/**
 		 * {Integer} Returns the number of keys the given @object {Object} has.

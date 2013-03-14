@@ -156,4 +156,4 @@
 		return (msw << 16) | (lsw & 0xFFFF);
 	}
 	
-})(core.crypt.Util, core.util.String);
+})(core.crypt.Util, core.String);

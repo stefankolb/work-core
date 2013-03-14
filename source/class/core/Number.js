@@ -8,7 +8,7 @@
 
 "use strict";
 
-core.Module("core.util.Number",
+core.Module("core.Number",
 {
 	/** 
 	 * {Integer} Converts the @number {Number} to integer 
@@ -22,7 +22,7 @@ core.Module("core.util.Number",
 	 * {String} Pads the @number {Number} to reach the given @length {Integer}.
 	 */
 	pad : function(number, length) {
-		return (core.util.String.repeat("0", length) + number).slice(-length);
+		return (core.String.repeat("0", length) + number).slice(-length);
 	},
 
 

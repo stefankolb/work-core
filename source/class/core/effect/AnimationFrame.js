@@ -52,7 +52,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 					{
 						var time = Date.now();
 						var currentRequests = requests;
-						var keys = core.util.Object.keys(currentRequests);
+						var keys = core.Object.keys(currentRequests);
 
 						// Reset data structure before executing callbacks
 						requests = {};
@@ -78,7 +78,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 				delete requests[handle];
 
 				// Stop timeout if all where removed
-				if (core.util.Object.isEmpty(requests)) 
+				if (core.Object.isEmpty(requests)) 
 				{
 					clearTimeout(timeoutHandle);
 					timeoutHandle = null;

@@ -10,7 +10,7 @@
 
 "use strict";
 
-core.Module("core.util.Array", 
+core.Module("core.Array", 
 {
 	/**
 	 * {Array} Converts the given @args {arguments} into an array.

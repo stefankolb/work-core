@@ -94,7 +94,7 @@ core.Class("core.mvc.store.Abstract",
      * {Boolean} Whether there are any scheduled requests waiting for being processed.
      */
     hasScheduled : function() {
-      return !core.util.Object.isEmpty(this.__scheduleTracker);
+      return !core.Object.isEmpty(this.__scheduleTracker);
     },
 
 
@@ -226,7 +226,7 @@ core.Class("core.mvc.store.Abstract",
         if (method == null) 
         {
           var delay = this.__debounce[activity];
-          method = debounced[hash] = delay == null ? this.__scheduleCallback : core.util.Function.debounce(this.__scheduleCallback, delay);
+          method = debounced[hash] = delay == null ? this.__scheduleCallback : core.Function.debounce(this.__scheduleCallback, delay);
         }
       }
 

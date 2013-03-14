@@ -73,7 +73,7 @@
 
         // Simplify internal storage using Function.bind()
         if (context) {
-          callback = core.util.Function.bind(callback, context);
+          callback = core.Function.bind(callback, context);
         }
 
         var handlers = getHandlers(this, type, capture, true);
@@ -142,7 +142,7 @@
 
         // Simplify internal storage using Function.bind()
         if (context) {
-          callback = core.util.Function.bind(callback, context);
+          callback = core.Function.bind(callback, context);
         }
 
         var handlers = getHandlers(this, type, capture, false);
@@ -238,7 +238,7 @@
 
         // Simplify internal storage using Function.bind()
         if (context) {
-          callback = core.util.Function.bind(callback, context);
+          callback = core.Function.bind(callback, context);
         }
         
         return handlers.indexOf(callback) != -1;

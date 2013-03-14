@@ -69,11 +69,11 @@ core.Class("core.mvc.view.Dom",
     */
 
     addDomListener : function(selector, type, callback) {
-      $(this.getRoot()).on(type, selector, core.util.Function.bind(callback, this));
+      $(this.getRoot()).on(type, selector, core.Function.bind(callback, this));
     },
 
     removeDomListener : function(selector, type, callback) {
-      $(this.getRoot()).on(type, selector, core.util.Function.bind(callback, this));
+      $(this.getRoot()).on(type, selector, core.Function.bind(callback, this));
     },
 
 
@@ -93,7 +93,7 @@ core.Class("core.mvc.view.Dom",
       }
 
       /**  */
-      this.__renderScheduled = core.effect.AnimationFrame.request(core.util.Function.bind(this.__renderRequest, this));
+      this.__renderScheduled = core.effect.AnimationFrame.request(core.Function.bind(this.__renderRequest, this));
     },
 
 
@@ -106,7 +106,7 @@ core.Class("core.mvc.view.Dom",
       }
       else
       {
-        this.__renderScheduled = core.effect.AnimationFrame.request(core.util.Function.bind(this.__renderRequest, this));
+        this.__renderScheduled = core.effect.AnimationFrame.request(core.Function.bind(this.__renderRequest, this));
       }
     },
 

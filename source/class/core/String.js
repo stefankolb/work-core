@@ -11,7 +11,7 @@
 {
   var hexTable = "0123456789abcdef".split("");
 
-  core.Module("core.util.String",
+  core.Module("core.String",
   {
     /**
      * {String} Converts the string into a hex string

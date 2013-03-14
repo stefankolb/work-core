@@ -83,7 +83,7 @@
   /**
    * Utilities for functions
    */
-  core.Module("core.util.Function", 
+  core.Module("core.Function", 
   {
     bind : bind,
 

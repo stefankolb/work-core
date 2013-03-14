@@ -202,7 +202,7 @@ suite.test("Array.prototype.flatten", function()
   this.isEqual([["a"],[],"b","c"].flatten().toString(), ["a","b","c"].toString());
 });
 
-suite.test("core.util.Function.debounce - END", function() 
+suite.test("core.Function.debounce - END", function() 
 {
   var test = this;
 
@@ -211,7 +211,7 @@ suite.test("core.util.Function.debounce - END", function()
     counter++;
   };
   
-  var debounced = core.util.Function.debounce(callback);
+  var debounced = core.Function.debounce(callback);
   debounced();
   debounced();
   debounced();
@@ -224,14 +224,14 @@ suite.test("core.util.Function.debounce - END", function()
   }, 200)
 }, 1, 1000);
 
-suite.test("core.util.Function.debounce - ASAP", function() 
+suite.test("core.Function.debounce - ASAP", function() 
 {
   var counter = 0;
   var callback = function() {
     counter++;
   };
   
-  var debounced = core.util.Function.debounce(callback, 100, true);
+  var debounced = core.Function.debounce(callback, 100, true);
   debounced();
   debounced();
   debounced();
@@ -250,26 +250,26 @@ suite.test("Number.prototype.pad", function()
   this.isEqual((0).pad(6), "000000");
 });
 
-suite.test("core.util.String.contains()", function() 
+suite.test("core.String.contains()", function() 
 {
-  this.isTrue(core.util.String.contains("hello world", "hello"));
-  this.isTrue(core.util.String.contains("hello world", ""));
-  this.isTrue(core.util.String.contains("hello world", " "));
-  this.isTrue(!core.util.String.contains("hello world", 12));
-  this.isTrue(!core.util.String.contains("hello world", "dlrow"));
+  this.isTrue(core.String.contains("hello world", "hello"));
+  this.isTrue(core.String.contains("hello world", ""));
+  this.isTrue(core.String.contains("hello world", " "));
+  this.isTrue(!core.String.contains("hello world", 12));
+  this.isTrue(!core.String.contains("hello world", "dlrow"));
 });
 
-suite.test("core.util.String.hyphenate()", function() 
+suite.test("core.String.hyphenate()", function() 
 {
-  this.isEqual(core.util.String.hyphenate("backgroundColor"), "background-color");
-  this.isEqual(core.util.String.hyphenate("WebkitTransform"), "-webkit-transform");
-  this.isEqual(core.util.String.hyphenate("ISOString"), "-i-s-o-string");
+  this.isEqual(core.String.hyphenate("backgroundColor"), "background-color");
+  this.isEqual(core.String.hyphenate("WebkitTransform"), "-webkit-transform");
+  this.isEqual(core.String.hyphenate("ISOString"), "-i-s-o-string");
 });
 
-suite.test("core.util.String.repeat()", function() 
+suite.test("core.String.repeat()", function() 
 {
-  this.isEqual(core.util.String.repeat("x", 3), "xxx");
-  this.isEqual(core.util.String.repeat("xyz", 3), "xyzxyzxyz");
-  this.isEqual(core.util.String.repeat("xyz", 0), "");
+  this.isEqual(core.String.repeat("x", 3), "xxx");
+  this.isEqual(core.String.repeat("xyz", 3), "xyzxyzxyz");
+  this.isEqual(core.String.repeat("xyz", 0), "");
 });
 

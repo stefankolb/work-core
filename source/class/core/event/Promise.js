@@ -67,7 +67,7 @@ core.Class("core.event.Promise",
 				this.__state = "fulfilled";
 				this.__valueOrReason = value;
 
-				core.util.Function.immediate(this.__execute, this);
+				core.Function.immediate(this.__execute, this);
 			}
 		},
 		
@@ -83,7 +83,7 @@ core.Class("core.event.Promise",
 				this.__state = "rejected";
 				this.__valueOrReason = reason;
 
-				core.util.Function.immediate(this.__execute, this);
+				core.Function.immediate(this.__execute, this);
 			}
 		},
 
@@ -160,7 +160,7 @@ core.Class("core.event.Promise",
 			}
 
 			// Auto release promise after fulfill/reject and all handlers being processed
-			core.util.Function.immediate(this.release, this);
+			core.Function.immediate(this.release, this);
 		},
 
 

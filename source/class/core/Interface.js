@@ -34,7 +34,7 @@
 			
 			core.Assert.isType(config, "Map", "Invalid interface configuration in " + name);
 
-			var invalidKeys = core.util.Object.validateKeys(config, "properties,events,members".split(","));
+			var invalidKeys = core.Object.validateKeys(config, "properties,events,members".split(","));
 			if (invalidKeys.length > 0) {
 				throw new Error("Interface declaration of " + name + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
 			}

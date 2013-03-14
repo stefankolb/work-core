@@ -174,9 +174,9 @@ core.Module("core.testrunner.Controller",
     {
       this.__reporter.suiteStarted(currentSuite);
 
-      var allComplete = core.util.Function.bind(this.__runNextSuite, this);
-      var testStarted = core.util.Function.bind(this.__testStarted, this);
-      var testFinished = core.util.Function.bind(this.__testFinished, this);
+      var allComplete = core.Function.bind(this.__runNextSuite, this);
+      var testStarted = core.Function.bind(this.__testStarted, this);
+      var testFinished = core.Function.bind(this.__testFinished, this);
 
       currentSuite.run(allComplete, testStarted, testFinished, true);
     }

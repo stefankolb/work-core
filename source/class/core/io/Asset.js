@@ -116,7 +116,7 @@
 					throw new Error("Invalid section: " + section);
 				}
 				
-				if (core.util.String.endsWith(section, "/")) {
+				if (core.String.endsWith(section, "/")) {
 					throw new Error("Sections must not end with a slash!")
 				}
 
@@ -187,7 +187,7 @@
 			{
 				// Execute user defined callback method
 				if (callback) {
-					callback.call(context||global, core.util.Object.keys(entries));
+					callback.call(context||global, core.Object.keys(entries));
 				}
 			}
 			else
@@ -206,7 +206,7 @@
 
 					// Execute user defined callback method
 					if (callback) {
-						callback.call(context||global, core.util.Object.keys(entries));
+						callback.call(context||global, core.Object.keys(entries));
 					}
 
 				}, this, random);
@@ -242,7 +242,7 @@
 			var urisToIds = uris.zip(ids);
 
 			var helper = callback ? function(data) {
-				callback.call(context||global, core.util.Object.translate(data, urisToIds));
+				callback.call(context||global, core.Object.translate(data, urisToIds));
 			} : callback;
 			
 			core.io.Queue.load(uris, helper, this, random);

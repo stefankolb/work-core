@@ -6,8 +6,10 @@
 ==================================================================================================
 */
 
-(function() {
-	
+"use strict";
+
+(function() 
+{	
 	// Fix for IE bug with enumerables
 	var hasDontEnumBug = true;
 	for (var key in {"toString": null}) {

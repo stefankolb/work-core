@@ -9,10 +9,12 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Adds HTML5 tag support to Internet Explorer 
  */
-if (jasy.Env.isSet("runtime", "browser") && core.detect.Engine.VALUE == "trident")
+if (jasy.Env.isSet("runtime", "browser"))
 {
   (function(doc) 
   {

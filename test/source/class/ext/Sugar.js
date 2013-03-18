@@ -1,54 +1,51 @@
-/** #require(ext.sugar.Object) */
 var suite = new core.testrunner.Suite("Ext :: Sugar");
 
-suite.test("Object.isEmpty", function() 
+suite.test("core.Object.isEmpty", function() 
 {
   // toString etc. are special in IE because these are built-in keys
-  this.isTrue(Object.isEmpty({}));
-  this.isTrue(!Object.isEmpty({toString:null}));
-  this.isTrue(!Object.isEmpty({toString:null, hello:null, foo:1}));
+  this.isTrue(core.Object.isEmpty({}));
+  this.isTrue(!core.Object.isEmpty({toString:null}));
+  this.isTrue(!core.Object.isEmpty({toString:null, hello:null, foo:1}));
 });
 
-suite.test("Object.values", function() 
+suite.test("core.Object.values", function() 
 {
-  var values = Object.values({x:1, y:2, z:3}).sort().join(",");
+  var values = core.Object.values({x:1, y:2, z:3}).sort().join(",");
   this.isEqual(values, "1,2,3");
 });
 
-suite.test("Object.fromArray", function() 
+suite.test("core.Object.fromArray", function() 
 {
-  this.isEqual(Object.keys(Object.fromArray(["foo","bar","baz"])).join(","), "foo,bar,baz");
-  this.isEqual(Object.values(Object.fromArray(["foo","bar","baz"])).join(","), "true,true,true");
+  this.isEqual(core.Object.keys(core.Object.fromArray(["foo","bar","baz"])).join(","), "foo,bar,baz");
+  this.isEqual(core.Object.values(core.Object.fromArray(["foo","bar","baz"])).join(","), "true,true,true");
 
-  this.isEqual(Object.keys(Object.fromArray(["foo","bar","baz"], "hello")).join(","), "foo,bar,baz");
-  this.isEqual(Object.values(Object.fromArray(["foo","bar","baz"], "hello")).join(","), "hello,hello,hello");
+  this.isEqual(core.Object.keys(core.Object.fromArray(["foo","bar","baz"], "hello")).join(","), "foo,bar,baz");
+  this.isEqual(core.Object.values(core.Object.fromArray(["foo","bar","baz"], "hello")).join(","), "hello,hello,hello");
 });
 
 
-/** #require(ext.sugar.Array) */
-
-suite.test("Array.prototype.max", function() 
+suite.test("core.Array.max", function() 
 {
-  this.isEqual([1,4,23,3].max(), 23);
-  this.isEqual([10,10,10].max(), 10);
-  this.isEqual([].max(), -Infinity);
+  this.isEqual(core.Array.max([1,4,23,3]), 23);
+  this.isEqual(core.Array.max([10,10,10]), 10);
+  this.isEqual(core.Array.max([]), -Infinity);
 });
 
-suite.test("Array.prototype.min", function() 
+suite.test("core.Array.min", function() 
 {
-  this.isEqual([1,4,23,3].min(), 1);
-  this.isEqual([10,10,10].min(), 10);
-  this.isEqual([].min(), Infinity);
+  this.isEqual(core.Array.min([1,4,23,3]), 1);
+  this.isEqual(core.Array.min([10,10,10]), 10);
+  this.isEqual(core.Array.min([]), Infinity);
 });
 
-suite.test("Array.prototype.sum", function() 
+suite.test("core.Array.sum", function() 
 {
-  this.isEqual([1,4,23,3].sum(), 31);
-  this.isEqual([1,4,23,,,3].sum(), 31);
-  this.isEqual([].sum(), 0);
+  this.isEqual(core.Array.sum([1,4,23,3]), 31);
+  this.isEqual(core.Array.sum([1,4,23,,,3]), 31);
+  this.isEqual(core.Array.sum([]), 0);
 });
   
-suite.test("Array.prototype.insertAt", function() 
+suite.test("core.Array.insertAt", function() 
 {
   var arr1 = [1,2,3,4,5,6,7];
   this.isEqual(arr1.insertAt("end"), "end");
@@ -67,7 +64,7 @@ suite.test("Array.prototype.insertAt", function()
   this.isEqual(arr1.join(","), "1,2,3,4,fromEnd,5,6,7");
 });
   
-suite.test("Array.prototype.contains", function() 
+suite.test("core.Array.contains", function() 
 {
   var arr1 = [1,2,3,5,6,7];
   this.isTrue(arr1.contains(3));
@@ -241,7 +238,6 @@ suite.test("core.Function.debounce - ASAP", function()
   this.isEqual(counter, 1);
 });
 
-/** #require(ext.sugar.Number) */
 suite.test("Number.prototype.pad", function() 
 {
   this.isEqual((23).pad(2), "23");

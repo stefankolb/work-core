@@ -298,8 +298,6 @@ core.Class("core.testrunner.Test",
 
     /**
      * {String} Returns a useful one liner of the status of the test
-     *
-     * #require(ext.sugar.Number)
      */
     getSummary : function() 
     {
@@ -307,7 +305,7 @@ core.Class("core.testrunner.Test",
       var message = this.__failureMessage;
 
       var prefix = reason == null ? "Success" : "Failure"
-      var base = ": " + this.__title + " [" + this.__passedCount.pad(2) + "/" + this.getTotalCount().pad(2) + "]";
+      var base = ": " + this.__title + " [" + core.Number.pad(this.__passedCount, 2) + "/" + core.Number.pad(this.getTotalCount(), 2) + "]";
       var postfix = message == null ? reason == null ? "" : ": " + reason : ": " + message;
 
       return prefix + base + postfix;

@@ -10,10 +10,50 @@
 
 (function() 
 {	
+	var hasOwnProperty = Object.hasOwnProperty;
+
+  // Used to fix the JScript [[DontEnum]] bug 
+  var shadowed = 
+  [
+    'constructor', 
+    'hasOwnProperty', 
+    'isPrototypeOf', 
+    'propertyIsEnumerable',
+    'toLocaleString', 
+    'toString', 
+    'valueOf'
+  ];
+  var shadowedLength = shadowed.length;
+
 	// Fix for IE bug with enumerables
 	var hasDontEnumBug = true;
 	for (var key in {"toString": null}) {
 		hasDontEnumBug = false;	
+	}
+
+	var keys = Object.keys;
+	if (!keys)
+	{
+		var keys = function(object) 
+		{
+			var result = [];
+			for (var key in object) {
+				result.push(key);
+			}
+
+			if (hasDontEnumBug) 
+			{
+				for (var i=0; i<shadowedLength; i++) 
+				{
+					var key = shadowed[i];
+					if (hasOwnProperty.call(object, key)) {
+						result.push(key);
+					}
+				}
+			}
+
+			return result;
+		};
 	}
 	
 	core.Module("core.Object", 
@@ -21,8 +61,28 @@
 		/**
 		 * {Integer} Returns the number of keys the given @object {Object} has.
 		 */
-		getLength : function(object) {
-			return Object.keys(object).length;
+		getLength : function(object) 
+		{
+			var count = 0;
+
+			if (hasDontEnumBug) 
+			{
+				for (var i=0; i<shadowedLength; i++) 
+				{
+					if (hasOwnProperty.call(object, shadowed[i])) {
+						count++;
+					}
+				}
+			}
+
+			for (var key in object) 
+			{
+				if (hasOwnProperty.call(object, key)) {
+					count++;	
+				}
+			}
+
+			return count;
 		},
 		
 		
@@ -46,22 +106,32 @@
 
 
 		/**
-		 * {Boolean} Tests whether the given @object {Object} is empty
+		 * {Boolean} Tests whether the given @object {Object} is empty.
 		 */
 		isEmpty: function(object) 
 		{
-			for (var key in object) {
-				return false;
+			for (var key in object) 
+			{
+				if (hasOwnProperty.call(object, key)) {
+					return false;
+				}
 			}
 			
-			// Another check required for buggy browsers (wrong enum handling)
-			return !hasDontEnumBug || Object.keys(object).length == 0;
+			if (hasDontEnumBug) 
+			{
+				for (var i=0; i<shadowedLength; i++) 
+				{
+					if (hasOwnProperty.call(object, shadowed[i])) {
+						return false;
+					}
+				}
+			}
+
+			return true;
 		},
 
 
-		keys__TODO : Object.keys || function(object) {
-			// TODO
-		},
+		keys : keys,
 
 
 		/**
@@ -69,7 +139,7 @@
 		 */
 		values : function(object) 
 		{
-			return Object.keys(object).map(function(key) {
+			return keys(object).map(function(key) {
 				return object[key];
 			});
 		},
@@ -137,7 +207,7 @@
 			}
 
 			// Collect used keys
-			var list = Object.keys(object);
+			var list = keys(object);
 
 			// Validate keys
 			var invalid = [];

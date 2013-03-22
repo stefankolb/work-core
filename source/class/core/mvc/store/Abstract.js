@@ -23,6 +23,7 @@ core.Class("core.mvc.store.Abstract",
   construct : function(path, debounce)
   {
     this.__scheduleTracker = {};
+    this.__debouncedMethods = {};
 
     this.__activityTracker = 
     {
@@ -199,7 +200,7 @@ core.Class("core.mvc.store.Abstract",
     __scheduleTracker : null,
 
     /** {=Map} Debounced helper methods for each action/item combination */
-    __debouncedMethods : {},
+    __debouncedMethods : null,
 
 
     /**

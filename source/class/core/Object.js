@@ -8,6 +8,9 @@
 
 "use strict";
 
+/**
+ * #require(core.Object2)
+ */
 (function() 
 {	
 	var hasOwnProperty = Object.hasOwnProperty;

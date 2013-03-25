@@ -236,7 +236,7 @@ core.Class("core.testrunner.Test",
 
       this.__updateOnFatalError();
 
-      this.__suite.failure(this);
+      this.__suite.testFailed(this);
     },
 
 

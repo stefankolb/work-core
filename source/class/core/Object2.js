@@ -113,6 +113,10 @@
 
 
 
+  var callbackArgs = "callback,context";
+  var contextFix = "if(!context)context=global;";
+  var executeCallback = "callback.call(context,object[key],key,object);";
+
   core.Module("core.Object2",
   {
     isEmpty : createIterator(
@@ -138,17 +142,17 @@
     {
       has : true,
       stable : true,
-      args : "callback,context",
-      init : "if(!context)context=global;",
-      iter : "callback.call(context,object[key],key,object);"
+      args : callbackArgs,
+      init : contextFix,
+      iter : executeCallback
     }),
 
     forAll : createIterator(
     {
       stable : true,
-      args : "callback,context",
-      init : "if(!context)context=global;",
-      iter : "callback.call(context,object[key],key,object);"
+      args : callbackArgs,
+      init : contextFix,
+      iter : executeCallback
     })
 
   });

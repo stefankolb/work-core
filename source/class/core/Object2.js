@@ -28,7 +28,7 @@
 
     code += config.init || '';
 
-    if (config.has && nativeKeys)
+    if (config.has && nativeKeys && !config.nokeys)
     {
       code += 'for(var i=0,keys=Object.keys(object),l=keys.length,key;i<l;i++)'
       code += '{';
@@ -38,57 +38,68 @@
     }
     else
     {
-      
-      code += 'for(var key in object) ';
-      code += '{';
-
-      if (config.has) {
-        code += 'if(hasOwnProperty.call(object,key)){'
+      if (config.stable) { 
+        code += 'var keys=[];';
       }
 
-      code += config.iter || '';
-      
+      code += 'for(var key in object){';
+
+      if (config.has) {
+        code += 'if(hasOwnProperty.call(object,key)){';
+      }
+
+      if (config.stable) {
+        code += "keys.push(key);";
+      } else if (config.iter) {
+        code += config.iter;
+      }
+
       if (config.has) {
         code += '}';
       }
 
       if (hasDontEnumBug)
       {
-        code += 'var undef;';
-        code += 'for (var i=0;i<shadowedLength;i++) ';
+        code += 'for(var i=0;i<shadowedLength;i++) ';
         code += '{';
         code += 'var key=shadowed[key];';
 
         if (config.has) {
           code += 'if(hasOwnProperty.call(object,key)){';
         } else {
-          code += 'if(object[key]!==undef){';
+          code += 'if(key in object){';
         }
 
-        code += config.iter || '';
+        if (config.stable) {
+          code += "keys.push(key);";
+        } else if (config.iter) {
+          code += config.iter;
+        }
+
         code += '}}';
       }
 
       code += '}';
+
+      if (config.stable)
+      {
+        code += "for(var i=0,l=keys.length;i<l;i++){";
+        code += config.iter || "";
+        code += "}";
+      }
     }
 
     code += config.exit || "";
 
+    console.log("Code: " + code);
 
-
-console.log("Code: " + code);
-
-    var wrapperCode = '';
-
-    wrapperCode += 'return function(object' + (config.args ? "," + config.args : "") + '){' + code + '};'
-
-    compiledWrapper = Function("hasOwnProperty", "shadowed", "shadowedLength", wrapperCode);
-    var compiled = compiledWrapper(hasOwnProperty, shadowed, shadowedLength);
-
-
-    console.log("Compiled: " + compiled);
-
-    return compiled;
+    // Wrap code to allow injection of scope variables and
+    // for being able to support given arguments list.
+    var wrapperCode = 'return function(object' + (config.args ? "," + config.args : "") + '){' + code + '};'
+    compiledWrapper = Function("global", "hasOwnProperty", "shadowed", "shadowedLength", wrapperCode);
+    
+    // Execute compiled wrapper to return generated method
+    return compiledWrapper(global, hasOwnProperty, shadowed, shadowedLength);
   };
 
 
@@ -98,33 +109,39 @@ console.log("Code: " + code);
     isEmpty : createIterator(
     {
       has : true,
+      stable : false,
       iter : "return false;",
-      exit : "return true;"
+      exit : "return true;",
+      nokeys : true
     }),
 
     getLength : createIterator(
     {
       has : true, 
+      stable : false,
       init : "var length=0;", 
       iter : "length++;", 
-      exit : "return length;"
+      exit : "return length;",
+      nokeys : true
     }),
 
     forEach : createIterator(
     {
       has : true,
+      stable : true,
       args : "callback,context",
+      init : "if(!context)context=global;",
       iter : "callback.call(context,object[key],key,object);"
     }),
 
     forAll : createIterator(
     {
+      stable : true,
       args : "callback,context",
+      init : "if(!context)context=global;",
       iter : "callback.call(context,object[key],key,object);"
-    }),
-
+    })
 
   });
-
 
 })(core.Main.getGlobal());

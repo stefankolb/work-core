@@ -4,22 +4,31 @@
   var hasOwnProperty = Object.hasOwnProperty;
 
   // Fix for IE bug with enumerables
-  var hasDontEnumBug = true;
-  for (var key in {"toString": null}) {
-    hasDontEnumBug = false;  
-  }
-
-  if (hasDontEnumBug)
+  if (jasy.Env.isSet("engine", "trident"))
   {
-    // Used to fix the JScript [[DontEnum]] bug 
-    var shadowed = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");
-    var shadowedLength = shadowed.length;    
+    var hasDontEnumBug = true;
+    for (var key in {"toString": null}) {
+      hasDontEnumBug = false;  
+    }
+
+    if (hasDontEnumBug)
+    {
+      // Used to fix the JScript [[DontEnum]] bug 
+      var shadowed = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");
+      var shadowedLength = shadowed.length;    
+    }
   }
 
   var nativeKeys = Object.keys;
   if (!core.Main.isNative(nativeKeys)) {
     nativeKeys = null;
   }
+
+  // keys() is slow in Safari
+  var hasKeysIsFast = !/\n{2,}/.test(Function());
+
+  // bind() is slow in Chrome/Node/V8
+  var bindIsFast = false;
 
 
   var createIterator = function(config)
@@ -58,7 +67,7 @@
         code += '}';
       }
 
-      if (hasDontEnumBug)
+      if (jasy.Env.isSet("engine", "trident") && hasDontEnumBug)
       {
         code += 'for(var i=0;i<shadowedLength;i++) ';
         code += '{';

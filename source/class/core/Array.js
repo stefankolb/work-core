@@ -295,6 +295,26 @@ core.Module("core.Array",
 		return sum;
 	},
 
+
+	/**
+	 * {Map} Returns a map where the values of the given @array {Array} are used
+	 * as keys. The @value {any?true} to use for each key can be defined as well.
+	 */
+	toKeys : function(array, value)
+	{
+		var undef;
+		if (value === undef) {
+			value = true;
+		}
+
+		var result = {};
+		for (var i=0, l=array.length; i<l; i++) {
+			result[array[i]] = value;
+		}
+
+		return result;
+	},
+
 	
 	/**
 	 * {Array} Returns a new array with all elements that are unique. 
@@ -320,7 +340,7 @@ core.Module("core.Array",
 	
 
 	/**
-	 * Merges both given arrays into an object where values of @array {Array} are used
+	 * {Map} Merges both given arrays into an object where values of @array {Array} are used
 	 * as keys and values of @values {Array} are used as values.
 	 */
 	zip : function(array, values) 

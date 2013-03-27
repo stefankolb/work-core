@@ -24,13 +24,7 @@
     nativeKeys = null;
   }
 
-  // keys() is slow in Safari
-  var hasKeysIsFast = !/\n{2,}/.test(Function());
-
-  // bind() is slow in Chrome/Node/V8
-  var bindIsFast = false;
-
-
+  // Method to create iterators through objects
   var createIterator = function(config)
   {
     var code = '';
@@ -118,14 +112,18 @@
     return compiledWrapper(global, hasOwnProperty, shadowed, shadowedLength);
   };
 
-
-
   var callbackArgs = "callback,context";
   var contextFix = "if(!context)context=global;";
   var executeCallback = "callback.call(context,object[key],key,object);";
 
+  /**
+   * A collection of utility methods for native JavaScript objects.
+   */
   core.Module("core.Object2",
   {
+    /**
+     * {Integer} Returns whether the given @object is empty.
+     */
     isEmpty : createIterator(
     {
       has : true,
@@ -135,6 +133,10 @@
       nokeys : true
     }),
 
+
+    /**
+     * {Integer} Returns the length of the given @object.
+     */
     getLength : createIterator(
     {
       has : true, 
@@ -145,6 +147,7 @@
       nokeys : true
     }),
 
+
     /**
      * {Array} Returns all the keys of the given @object {Object}.
      */
@@ -154,6 +157,7 @@
       stable : true, // otherwise we might not have "keys"
       exit : "return keys;"
     }),
+
 
     /**
      * {Array} Returns all the values of the given @object {Object}.
@@ -166,6 +170,7 @@
       iter : "values.push(object[key]);",
       exit : "return values;"
     }),
+
 
     /**
      * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
@@ -180,6 +185,27 @@
       exit : "return clone;"
     }),
 
+
+    /**
+     * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
+     * objects or arrays will be copied by reference, not duplicated.
+     */
+    translate : createIterator(
+    {
+      has : true, 
+      stable : false,
+      args : "table",
+      init : "var result={};", 
+      iter : "result[table[key]||key]=object[key];", 
+      exit : "return result;"
+    }),    
+
+
+    /**
+     * Loops trough the entries of the given @object {Object} and executes the
+     * given @callback {Function} in the given @context {Object} on each entry.
+     * The @callback is called with these arguments: `value`, `key`, `object`.
+     */
     forEach : createIterator(
     {
       has : true,
@@ -189,13 +215,37 @@
       iter : executeCallback
     }),
 
+
+    /**
+     * Loops trough all entries - even inherited ones - of the given @object {Object} and executes the
+     * given @callback {Function} in the given @context {Object} on each entry.
+     * The @callback is called with these arguments: `value`, `key`, `object`.
+     */
     forAll : createIterator(
     {
       stable : true,
       args : callbackArgs,
       init : contextFix,
       iter : executeCallback
-    })
+    }),
+
+
+    /**
+     * {Map} Returns a copy of the @object {Map}, filtered to only have values for the whitelisted @keys {String...}.
+     */
+    pick : function(object, keys) 
+    {
+      var result = {};
+      var args = arguments;
+
+      for (var i=1, l=args.length; i<l; i++) 
+      {
+        var key = args[i];
+        result[key] = object[key];
+      }
+
+      return result;
+    }
 
   });
 

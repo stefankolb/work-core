@@ -153,11 +153,7 @@
 			}
 			
 			core.Assert.isType(config, "Map", "Invalid class configuration in " + name);
-			
-			var invalidKeys = core.Object.validateKeys(config, "construct,pooling,events,members,properties,include,implement".split(","));
-			if (invalidKeys.length > 0) {
-				throw new Error("Class declaration of " + name + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
-			}
+			core.Assert.doesOnlyHaveKeys(config, "construct,pooling,events,members,properties,include,implement", "Unallowed keys in class: " + name);
 			
 			if ("construct" in config) {
 				core.Assert.isType(config.construct, "Function", "Invalid constructor in class " + name + "!");

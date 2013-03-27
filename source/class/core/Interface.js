@@ -33,11 +33,7 @@
 			}
 			
 			core.Assert.isType(config, "Map", "Invalid interface configuration in " + name);
-
-			var invalidKeys = core.Object.validateKeys(config, "properties,events,members".split(","));
-			if (invalidKeys.length > 0) {
-				throw new Error("Interface declaration of " + name + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
-			}
+			core.Assert.doesOnlyHaveKeys(config, "properties,events,members", "Unallowed keys in interface: " + name);
 		}
 
 		var iface =

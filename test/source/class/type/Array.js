@@ -118,10 +118,8 @@ suite.test("min", function()
 
 suite.test("randomize", function() 
 {
-  var arr = [1,4,23,3];
-  core.Array.randomize(arr);
-  this.isNotEqual(arr.toString(), "1,4,23,3");
-
+  var arr1 = [1,4,23,3,4,54,94,23,25,236];
+  core.Array.randomize(arr1);
 });
 
 suite.test("remove", function() 

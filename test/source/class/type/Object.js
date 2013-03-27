@@ -14,12 +14,4 @@ suite.test("values", function()
   this.isEqual(values, "1,2,3");
 });
 
-suite.test("fromArray", function() 
-{
-  this.isEqual(core.Object.keys(core.Object.fromArray(["foo","bar","baz"])).join(","), "foo,bar,baz");
-  this.isEqual(core.Object.values(core.Object.fromArray(["foo","bar","baz"])).join(","), "true,true,true");
-
-  this.isEqual(core.Object.keys(core.Object.fromArray(["foo","bar","baz"], "hello")).join(","), "foo,bar,baz");
-  this.isEqual(core.Object.values(core.Object.fromArray(["foo","bar","baz"], "hello")).join(","), "hello,hello,hello");
-});
 

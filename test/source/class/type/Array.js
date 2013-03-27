@@ -173,6 +173,12 @@ suite.test("sum", function()
   this.isEqual(core.Array.sum([1,4,23,,,3]), 31);
   this.isEqual(core.Array.sum([]), 0);
 });
+
+suite.test("toKeys", function()
+{
+  this.isEqual(JSON.stringify(core.Array.toKeys(["foo","bar","baz"])), '{"foo":true,"bar":true,"baz":true}');
+  this.isEqual(JSON.stringify(core.Array.toKeys(["foo","bar","baz"], 42)), '{"foo":42,"bar":42,"baz":42}');
+});
   
 suite.test("unique", function() 
 {

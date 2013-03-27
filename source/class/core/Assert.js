@@ -8,8 +8,8 @@
 
 "use strict";
 
-(function() {
-	
+(function(undef) 
+{	
 	function raise(message) {
 		throw new Error(message);
 	}
@@ -84,6 +84,17 @@
 		{
 			if (a != false) {
 				raise(message || "Value must be false: " + a + "!");
+			}
+		},
+
+		/**
+		 * Raises an exception when the value @a {var} is `undefined`.
+		 * Customizable with a custom @message {String?} for the exception text.
+		 */
+		isNotUndefined : function(a, message) 
+		{
+			if (a === undef) {
+				raise(message || "Value " + a + " must not be undefined!");
 			}
 		},
 
@@ -208,7 +219,6 @@
 				raise(message || "Value " + a + " must not be empty: " + type);
 			}
 		}
-		
 	});
 	
 })();

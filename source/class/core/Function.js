@@ -182,7 +182,7 @@
       if (jasy.Env.isSet("debug"))
       {
         core.Assert.isType(func, "Function");
-        core.Assert.isType(threshold, "Integer");
+        core.Assert.isType(time, "Integer");
       }
 
       var lastEventTimestamp = null;

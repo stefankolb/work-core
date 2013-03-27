@@ -206,6 +206,23 @@ core.Class("core.testrunner.Test",
     
 
     /**
+     * Test whether @a {var} is type of @b {var} and registers
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    isType : function(a, b, message) 
+    {
+      try{
+        core.Assert.isType(a, b);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    }, 
+
+
+    /**
      * Test whether @func {Function} raises an exception (which it should) 
      * and register the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.

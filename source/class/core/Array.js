@@ -116,7 +116,7 @@ core.Module("core.Array",
 		array.forEach(function(value) 
 		{
 			if (value instanceof Array) {
-				result.push.apply(result, value.flatten());
+				result.push.apply(result, core.Array.flatten(value));
 			} else {
 				result.push(value);
 			}

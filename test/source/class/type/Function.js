@@ -103,13 +103,20 @@ suite.test("throttle", function()
 
 suite.test("bind", function()
 {
+  var test = this;
+
   var obj = new (new Function);
 
-  var func1 = function() {};
+  var func1 = function() {
+    test.isIdentical(this, obj);
+  };
   var bound1 = core.Function.bind(func1, obj);
   var bound2 = core.Function.bind(func1, obj);
 
   this.isType(bound1, "Function");
   this.isIdentical(bound1, bound2);
+
+  bound1();
+  bound2();
 });
 

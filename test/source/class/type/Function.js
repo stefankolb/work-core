@@ -1,4 +1,4 @@
-var suite = new core.testrunner.Suite("core.Function");
+var suite = new core.testrunner.Suite("Type/Function");
 
 suite.test("debounce - END", function() 
 {

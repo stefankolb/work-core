@@ -1,4 +1,4 @@
-var suite = new core.testrunner.Suite("core.Object");
+var suite = new core.testrunner.Suite("Type/Object");
 
 suite.test("isEmpty", function() 
 {

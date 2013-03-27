@@ -1,5 +1,28 @@
 var suite = new core.testrunner.Suite("Type/Array");
 
+suite.test("fromArguments", function() 
+{
+  var test = this;
+
+  // join not available on arguments object
+  this.raisesException(function()
+  {
+    (function(a,b,c) {
+      test.isEqual(arguments.join("+"), "1+2+3");
+    })(1,2,3);
+  });
+
+  (function(a,b,c) {
+    test.isEqual(core.Array.fromArguments(arguments).join("+"), "1+2+3");
+  })(1,2,3);
+});
+
+suite.test("zip", function() 
+{
+  var merged = core.Array.zip(["a","b","c"], [1,2,3]);
+  this.isEqual(JSON.stringify(merged), '{"a":1,"b":2,"c":3}');
+});
+
 suite.test("max", function() 
 {
   this.isEqual(core.Array.max([1,4,23,3]), 23);
@@ -166,7 +189,6 @@ suite.test("compact", function()
   var undef;
   var sparse = [1,2,3,null,5,,undef,8];
   this.isEqual(core.Array.compact(sparse).length, 7);
-  this.isEqual(core.Array.compact(sparse, true).length, 5);
 });
 
 suite.test("flatten", function() 

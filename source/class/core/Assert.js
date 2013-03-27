@@ -223,10 +223,9 @@
 				allowed = allowed.split(/,| /);
 			}
 
-			var set = core.Array.toKeys(allowed);
 			core.Object.forEach(object, function(value, key) 
 			{
-				if (!Object.hasOwnProperty.call(set, key)) {
+				if (allowed.indexOf(key) == -1) {
 					raise(message || "Unallowed key found: " + key);
 				}
 			});

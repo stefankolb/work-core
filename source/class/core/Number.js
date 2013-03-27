@@ -8,6 +8,9 @@
 
 "use strict";
 
+/**
+ * A collection of utility methods for native JavaScript numbers.
+ */
 core.Module("core.Number",
 {
 	/** 

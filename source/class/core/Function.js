@@ -85,7 +85,7 @@
   }
 
   /**
-   * Utilities for functions
+   * A collection of utility methods for native JavaScript functions.
    */
   core.Module("core.Function", 
   {

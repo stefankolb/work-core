@@ -131,8 +131,13 @@ suite.test("removeRange", function()
   this.isEqual(arr.join(","), "1,8,9");
 
   var arr = [1,2,3,4,5,6,7,8,9];
-  core.Array.removeRange(arr, -3, -1);
-  this.isEqual(arr.join(","), "1,2,3,4,5,6");
+  core.Array.removeRange(arr, -5, -1);
+  this.isEqual(arr.join(","), "1,2,3,4");
+
+  // Sparse array
+  var arr = [1,,3,4,5,6,7,8,9];
+  core.Array.removeRange(arr, -5, -1);
+  this.isEqual(arr.join(","), "1,,3,4");
 });
 
 suite.test("unique", function() 
@@ -195,4 +200,7 @@ suite.test("flatten", function()
 {
   this.isEqual(core.Array.flatten([[1], 2, [3]]).toString(), [1,2,3].toString());
   this.isEqual(core.Array.flatten([["a"],[],"b","c"]).toString(), ["a","b","c"].toString());
+
+  // Sparse array
+  this.isEqual(core.Array.flatten([["a",],[],,,"b","c"]).toString(), ["a","b","c"].toString());
 });

@@ -11,6 +11,9 @@
 {
   var hexTable = "0123456789abcdef".split("");
 
+  /**
+   * A collection of utility methods for native JavaScript strings.
+   */
   core.Module("core.String",
   {
     /**

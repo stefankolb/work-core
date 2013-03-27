@@ -10,6 +10,9 @@
 
 "use strict";
 
+/**
+ * A collection of utility methods for native JavaScript arrays.
+ */
 core.Module("core.Array", 
 {
 	/**
@@ -146,7 +149,6 @@ core.Module("core.Array",
 			core.Assert.isType(array, "Array");
 		}
 
-		// Wrap method for security reaons, so params to concat are safely ignored.
 		return array.concat();
 	},
 	
@@ -182,16 +184,20 @@ core.Module("core.Array",
 		}
 
 		var result = [];
-		
-		array.forEach(function(value) 
+
+		for (var i=0, l=array.length; i<l; i++)
 		{
-			if (value instanceof Array) {
-				result.push.apply(result, core.Array.flatten(value));
-			} else {
-				result.push(value);
-			}
-		});
-	
+			if (i in array)
+			{
+				var value = array[i];
+				if (value instanceof Array) {
+					result.push.apply(result, this.flatten(value));
+				} else {
+					result.push(value);
+				}
+			}			
+		}
+		
 		return result;
 	},
 	
@@ -299,8 +305,19 @@ core.Module("core.Array",
 
 
 	/**
-	 * Removes a specific range (@from {Integer} <-> @to {Integer}) from the @array {Array}. 
+	 * {Array} Removes a specific range (@from {Integer} <-> @to {Integer}) from the @array {Array}. 
 	 * Supports negative indexes, too.
+	 *
+	 * A few examples:
+	 * 
+	 * - `0` = first item
+	 * - `1` = second item
+	 * - `-1` = last item
+	 * - `-2` = second last item
+	 *
+	 * To remove all but the first and last do:
+	 *
+	 * `core.Array.removeRange(array, 1, -2);` 
 	 */
 	removeRange : function(array, from, to) 
 	{
@@ -317,6 +334,8 @@ core.Module("core.Array",
 		var rest = array.slice((to || from) + 1 || array.length);
 		array.length = from < 0 ? array.length + from : from;
 		array.push.apply(array, rest);
+
+		return array;
 	}
 });
 

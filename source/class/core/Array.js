@@ -23,11 +23,18 @@ core.Module("core.Array",
 
 
 	/**
-	 * Merges both arrays into an object where values of array array are used
+	 * Merges both given arrays into an object where values of @array {Array} are used
 	 * as keys and values of @values {Array} are used as values.
 	 */
 	zip : function(array, values) 
 	{
+		if (jasy.Env.isSet("debug"))
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isType(values, "Array");
+			core.Assert.equal(array.length, values.length);
+		}
+
 		var result = {};
 		for (var i=0, l=array.length; i<l; i++) {
 			result[array[i]] = values[i];
@@ -40,7 +47,12 @@ core.Module("core.Array",
 	/**
 	 * {Number} Returns the maximum number in the array.
 	 */
-	max : function(array) {
+	max : function(array) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
 		return Math.max.apply(Math, array);
 	},
 	
@@ -48,7 +60,12 @@ core.Module("core.Array",
 	/**
 	 * {Number} Returns the minimum number in the array.
 	 */
-	min : function(array) {
+	min : function(array) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
 		return Math.min.apply(Math, array);
 	},
 
@@ -58,28 +75,55 @@ core.Module("core.Array",
 	 */
 	sum : function(array) 
 	{
-		var sum = 0;
-		array.forEach(function(value) {
-			sum += value;
-		});
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
+		for (var i=0, l=array.length, sum=0; i<l; i++) 
+		{
+			if (i in array) {
+				sum += array[i];
+			}
+		}
 		
 		return sum;
 	},
 
 	
 	/**
-	 * {var} Inserts and returns the given @value {var} at the given @position {Integer?-1}. 
+	 * {any} Inserts and returns the given @value {any} at the given @position {Integer?-1}. 
 	 * Supports negative position values, too. Appends to the end if no position is defined.
 	 */
 	insertAt : function(array, value, position) 
 	{
-		position == null ? array.push(value) : array.splice(position < 0 ? array.length+position : position, 0, value);
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isNotUndefined(value);
+
+			if (position != null) {
+				core.Assert.isType(position, "Integer");
+			}
+		}
+
+		if (position == null) {
+			array.push(value)
+		} 
+		else 
+		{
+			if (position < 0) {
+				position = array.length + position;
+			}
+
+			array.splice(position, 0, value);
+		}
+
 		return value;
 	},
 	
 	
 	/**
-	 * {Boolean} Whether the array contains the given @value {var}.
+	 * {Boolean} Whether the array contains the given @value {any}.
 	 */
 	contains : function(array, value) {
 		return array.indexOf(value) > -1;
@@ -97,12 +141,19 @@ core.Module("core.Array",
 	
 	
 	/**
-	 * {Array} Filters out sparse fields (including all null/undefined values if @nulls is `true`) and returns a new compacted array.
+	 * {Array} Filters out sparse fields and returns a new compacted array.
 	 */
-	compact : function(array, nulls) 
+	compact : function(array) 
 	{
-		// Pretty cheap way to iterate over all relevant values and create a copy
-		return array.filter(nulls ? function(value) { return value != null; } : function() { return true; });
+		var compacted = [];
+		for (var i=0, l=array.length; i<l; i++)
+		{
+			if (i in array) {
+				compacted.push(array[i]);
+			}
+		}
+
+		return compacted;
 	},
 	
 	
@@ -135,7 +186,7 @@ core.Module("core.Array",
 	
 	
 	/** 
-	 * {var} Removes the given @value {var} (first occourence only) from the array and returns it.
+	 * {any} Removes the given @value {any} (first occourence only) from the array and returns it.
 	 */
 	remove : function(array, value) 
 	{
@@ -168,7 +219,7 @@ core.Module("core.Array",
 	
 	
 	/**
-	 * {var} Returns the value at the given @position {Integer}. Supports negative indexes, too.
+	 * {any} Returns the value at the given @position {Integer}. Supports negative indexes, too.
 	 */
 	at : function(array, position) {
 		return array[position < 0 ? array.length + position : position];
@@ -176,7 +227,7 @@ core.Module("core.Array",
 	
 	
 	/**
-	 * {var} Returns the last item in the array.
+	 * {any} Returns the last item in the array.
 	 */
 	last: function(array) {
 		return array[array.length-1];
@@ -184,7 +235,7 @@ core.Module("core.Array",
 	
 
 	/** 
-	 * {var} Removes and returns the value at the given @position {Integer}.
+	 * {any} Removes and returns the value at the given @position {Integer}.
 	 */
 	removeAt : function(array, position) 
 	{

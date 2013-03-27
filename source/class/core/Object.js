@@ -101,8 +101,6 @@
 
     code += config.exit || "";
 
-    console.log("Code: " + code);
-
     // Wrap code to allow injection of scope variables and
     // for being able to support given arguments list.
     var wrapperCode = 'return function(object' + (config.args ? "," + config.args : "") + '){' + code + '};'

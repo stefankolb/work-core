@@ -190,8 +190,6 @@ core.Module("core.Array",
 	},
 	
 
-	
-
 	/**
 	 * Randomizes the array via Fisher-Yates algorithm.
 	 */

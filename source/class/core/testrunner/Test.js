@@ -121,6 +121,23 @@ core.Class("core.testrunner.Test",
 
 
     /**
+     * Test whether @a {var} and @b {var} are not equal and register
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    isNotEqual : function(a, b, message) 
+    {
+      try{
+        core.Assert.notEqual(a, b);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    },    
+
+
+    /**
      * Test whether @a {var} and @b {var} are identical and register
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.

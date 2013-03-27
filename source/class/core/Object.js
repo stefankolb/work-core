@@ -119,7 +119,7 @@
   /**
    * A collection of utility methods for native JavaScript objects.
    */
-  core.Module("core.Object2",
+  core.Module("core.Object",
   {
     /**
      * {Integer} Returns whether the given @object is empty.

@@ -15,11 +15,11 @@
    * 
    * - Only one connection is made to allow proper disconnecting without access to the bound function. 
    * - Uses ES5 bind() to connect functions to objects internally.
-   *
-   * Inspired by: http://webreflection.blogspot.de/2012/11/my-name-is-bound-method-bound.html
    */
   var bind = function(func, context) 
   {
+    // Inspired by: http://webreflection.blogspot.de/2012/11/my-name-is-bound-method-bound.html
+
     if (jasy.Env.isSet("debug"))
     {
       core.Assert.isType(func, "Function");

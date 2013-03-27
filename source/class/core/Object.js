@@ -106,7 +106,7 @@
     // Wrap code to allow injection of scope variables and
     // for being able to support given arguments list.
     var wrapperCode = 'return function(object' + (config.args ? "," + config.args : "") + '){' + code + '};'
-    compiledWrapper = Function("global", "hasOwnProperty", "shadowed", "shadowedLength", wrapperCode);
+    var compiledWrapper = Function("global", "hasOwnProperty", "shadowed", "shadowedLength", wrapperCode);
     
     // Execute compiled wrapper to return generated method
     return compiledWrapper(global, hasOwnProperty, shadowed, shadowedLength);

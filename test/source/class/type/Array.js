@@ -1,4 +1,4 @@
-var suite = new core.testrunner.Suite("core.Array");
+var suite = new core.testrunner.Suite("Type/Array");
 
 suite.test("max", function() 
 {

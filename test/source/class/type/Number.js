@@ -1,4 +1,4 @@
-var suite = new core.testrunner.Suite("core.Number");
+var suite = new core.testrunner.Suite("Type/Number");
 
 suite.test("pad", function() 
 {

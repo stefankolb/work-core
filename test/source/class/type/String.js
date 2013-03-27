@@ -1,4 +1,4 @@
-var suite = new core.testrunner.Suite("core.String");
+var suite = new core.testrunner.Suite("Type/String");
 
 suite.test("contains", function() 
 {

@@ -125,7 +125,14 @@ core.Module("core.Array",
 	/**
 	 * {Boolean} Whether the array contains the given @value {any}.
 	 */
-	contains : function(array, value) {
+	contains : function(array, value) 
+	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isNotUndefined(value);
+		}
+
 		return array.indexOf(value) > -1;
 	},
 	
@@ -135,6 +142,10 @@ core.Module("core.Array",
 	 */
 	clone : function(array) 
 	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
 		// Wrap method for security reaons, so params to concat are safely ignored.
 		return array.concat();
 	},
@@ -145,6 +156,10 @@ core.Module("core.Array",
 	 */
 	compact : function(array) 
 	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
 		var compacted = [];
 		for (var i=0, l=array.length; i<l; i++)
 		{
@@ -162,6 +177,10 @@ core.Module("core.Array",
 	 */
 	flatten: function(array) 
 	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
 		var result = [];
 		
 		array.forEach(function(value) 
@@ -180,7 +199,12 @@ core.Module("core.Array",
 	/**
 	 * Randomizes the array via Fisher-Yates algorithm.
 	 */
-	randomize : function(array) {
+	randomize : function(array) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
 		for(var j, x, self=array, i=self.length; i; j = parseInt(Math.random() * i), x = self[--i], self[i] = self[j], self[j] = x);
 	},
 	
@@ -190,6 +214,12 @@ core.Module("core.Array",
 	 */
 	remove : function(array, value) 
 	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isNotUndefined(value);
+		}
+
 		var position = array.indexOf(value);
 		if (position != -1) 
 		{
@@ -208,6 +238,10 @@ core.Module("core.Array",
 	 */
 	unique : function(array) 
 	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
 		var strings = {};
 		return array.filter(function(value) 
 		{
@@ -221,7 +255,14 @@ core.Module("core.Array",
 	/**
 	 * {any} Returns the value at the given @position {Integer}. Supports negative indexes, too.
 	 */
-	at : function(array, position) {
+	at : function(array, position) 
+	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isType(position, "Integer");
+		}
+
 		return array[position < 0 ? array.length + position : position];
 	},
 	
@@ -229,7 +270,12 @@ core.Module("core.Array",
 	/**
 	 * {any} Returns the last item in the array.
 	 */
-	last: function(array) {
+	last: function(array) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
 		return array[array.length-1];
 	},
 	
@@ -239,6 +285,12 @@ core.Module("core.Array",
 	 */
 	removeAt : function(array, position) 
 	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isType(position, "Integer");
+		}
+
 		var ret = array.splice(position < 0 ? array.length + position : position, 1);
 		if (ret.length) {
 			return ret[0];
@@ -247,10 +299,18 @@ core.Module("core.Array",
 
 
 	/**
-	 * Removes a specific range (@from {Integer} <-> @to {Integer}) from the array. Supports negative indexes, too.
+	 * Removes a specific range (@from {Integer} <-> @to {Integer}) from the @array {Array}. 
+	 * Supports negative indexes, too.
 	 */
 	removeRange : function(array, from, to) 
 	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isType(from, "Integer");
+			core.Assert.isType(to, "Integer");
+		}
+
 		// Based on Array Remove - By John Resig (MIT Licensed)
 		// http://ejohn.org/blog/javascript-array-remove/
 		

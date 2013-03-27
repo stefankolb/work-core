@@ -18,15 +18,21 @@
    *
    * Inspired by: http://webreflection.blogspot.de/2012/11/my-name-is-bound-method-bound.html
    */
-  var bind = function(func, object) 
+  var bind = function(func, context) 
   {
+    if (jasy.Env.isSet("debug"))
+    {
+      core.Assert.isType(func, "Function");
+      core.Assert.isType(context, "Object");
+    }
+
     // Using name which is not common to store these references in their objects
     // Storing it on the object has the benefit that when the object is 
     // garbage collected its bound methods are gone as well.
     var boundName = "bound:" + core.util.Id.get(func);
 
-    return object[boundName] || (
-      object[boundName] = func.bind(object)
+    return context[boundName] || (
+      context[boundName] = func.bind(context)
     );
   };
 
@@ -34,6 +40,13 @@
   {
     return function(callback, context, delay, args)
     {
+      if (jasy.Env.isSet("debug"))
+      {
+        core.Assert.isType(callback, "Function");
+        core.Assert.isType(context, "Object");
+        core.Assert.isType(delay, "Integer");
+      }
+
       if (arguments.length > 3)
       {
         if (!context) {
@@ -116,11 +129,24 @@
      * the events are occurring fast enough to happen at least once in every detection
      * period, the signal will not be sent!
      *
-     * - @threshold {Integer} Number of milliseconds of distance required before reacting/resetting.
+     * - @threshold {Integer?100} Number of milliseconds of distance required before reacting/resetting.
      * - @execAsap {Boolean?false} Whether the execution should happen at begin.
      */
     debounce : function(func, threshold, execAsap)
     {
+      if (jasy.Env.isSet("debug"))
+      {
+        core.Assert.isType(func, "Function");
+
+        if (threshold != null) {
+          core.Assert.isType(threshold, "Integer");  
+        }
+
+        if (execAsap != null) {
+          core.Assert.isType(execAsap, "Boolean");  
+        }
+      }
+
       // Via: http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
       var timeout;
 
@@ -153,6 +179,12 @@
      */
     throttle : function(func, time) 
     {
+      if (jasy.Env.isSet("debug"))
+      {
+        core.Assert.isType(func, "Function");
+        core.Assert.isType(threshold, "Integer");
+      }
+
       var lastEventTimestamp = null;
       var limit = time;
 
@@ -178,12 +210,17 @@
      */ 
     immediate : function(func, context)
     {
+      if (jasy.Env.isSet("debug"))
+      {
+        core.Assert.isType(func, "Function");
+        core.Assert.isType(context, "Object");
+      }
+
       if (context) {
-        func = this.bind(func, context);
+        func = bind(func, context);
       }
 
       immediate(func);
     }
-
   });  
 })(core.Main.getGlobal(), Array.prototype.slice);

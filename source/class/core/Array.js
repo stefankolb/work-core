@@ -16,129 +16,19 @@
 core.Module("core.Array", 
 {
 	/**
-	 * {Array} Converts the given @args {arguments} into an array.
+	 * {any} Returns the value at the given @position {Integer}. Supports negative indexes, too.
 	 */
-	fromArguments : function(args) 
-	{
-		// See also: http://jsperf.com/arrayifying-arguments/7
-		return args.length === 1 ? [ args[0] ] : Array.apply(null, args);
-	},
-
-
-	/**
-	 * Merges both given arrays into an object where values of @array {Array} are used
-	 * as keys and values of @values {Array} are used as values.
-	 */
-	zip : function(array, values) 
-	{
-		if (jasy.Env.isSet("debug"))
-		{
-			core.Assert.isType(array, "Array");
-			core.Assert.isType(values, "Array");
-			core.Assert.equal(array.length, values.length);
-		}
-
-		var result = {};
-		for (var i=0, l=array.length; i<l; i++) {
-			result[array[i]] = values[i];
-		}
-
-		return result;
-	},
-	
-	
-	/**
-	 * {Number} Returns the maximum number in the array.
-	 */
-	max : function(array) 
-	{
-		if (jasy.Env.isSet("debug")) {
-			core.Assert.isType(array, "Array");
-		}
-
-		return Math.max.apply(Math, array);
-	},
-	
-
-	/**
-	 * {Number} Returns the minimum number in the array.
-	 */
-	min : function(array) 
-	{
-		if (jasy.Env.isSet("debug")) {
-			core.Assert.isType(array, "Array");
-		}
-
-		return Math.min.apply(Math, array);
-	},
-
-
-	/**
-	 * {Number} Returns the sum of all values in the array.
-	 */
-	sum : function(array) 
-	{
-		if (jasy.Env.isSet("debug")) {
-			core.Assert.isType(array, "Array");
-		}
-
-		for (var i=0, l=array.length, sum=0; i<l; i++) 
-		{
-			if (i in array) {
-				sum += array[i];
-			}
-		}
-		
-		return sum;
-	},
-
-	
-	/**
-	 * {any} Inserts and returns the given @value {any} at the given @position {Integer?-1}. 
-	 * Supports negative position values, too. Appends to the end if no position is defined.
-	 */
-	insertAt : function(array, value, position) 
+	at : function(array, position) 
 	{
 		if (jasy.Env.isSet("debug")) 
 		{
 			core.Assert.isType(array, "Array");
-			core.Assert.isNotUndefined(value);
-
-			if (position != null) {
-				core.Assert.isType(position, "Integer");
-			}
+			core.Assert.isType(position, "Integer");
 		}
 
-		if (position == null) {
-			array.push(value)
-		} 
-		else 
-		{
-			if (position < 0) {
-				position = array.length + position;
-			}
-
-			array.splice(position, 0, value);
-		}
-
-		return value;
+		return array[position < 0 ? array.length + position : position];
 	},
-	
-	
-	/**
-	 * {Boolean} Whether the array contains the given @value {any}.
-	 */
-	contains : function(array, value) 
-	{
-		if (jasy.Env.isSet("debug")) 
-		{
-			core.Assert.isType(array, "Array");
-			core.Assert.isNotUndefined(value);
-		}
 
-		return array.indexOf(value) > -1;
-	},
-	
 	
 	/**
 	 * {Array} Clones the whole array and returns it.
@@ -175,6 +65,21 @@ core.Module("core.Array",
 	
 	
 	/**
+	 * {Boolean} Whether the array contains the given @value {any}.
+	 */
+	contains : function(array, value) 
+	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isNotUndefined(value);
+		}
+
+		return array.indexOf(value) > -1;
+	},	
+	
+
+	/**
 	 * {Array} Returns a flattened, one-dimensional copy of the array.
 	 */
 	flatten: function(array) 
@@ -200,6 +105,91 @@ core.Module("core.Array",
 		
 		return result;
 	},
+
+
+	/**
+	 * {Array} Converts the given @args {arguments} into an array.
+	 */
+	fromArguments : function(args) 
+	{
+		// See also: http://jsperf.com/arrayifying-arguments/7
+		return args.length === 1 ? [ args[0] ] : Array.apply(null, args);
+	},
+
+
+
+	
+	/**
+	 * {any} Inserts and returns the given @value {any} at the given @position {Integer?-1}. 
+	 * Supports negative position values, too. Appends to the end if no position is defined.
+	 */
+	insertAt : function(array, value, position) 
+	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isNotUndefined(value);
+
+			if (position != null) {
+				core.Assert.isType(position, "Integer");
+			}
+		}
+
+		if (position == null) {
+			array.push(value)
+		} 
+		else 
+		{
+			if (position < 0) {
+				position = array.length + position;
+			}
+
+			array.splice(position, 0, value);
+		}
+
+		return value;
+	},	
+
+
+	/**
+	 * {any} Returns the last item in the array.
+	 */
+	last: function(array) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
+		return array[array.length-1];
+	},
+
+
+	/**
+	 * {Number} Returns the maximum number in the array.
+	 */
+	max : function(array) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
+		return Math.max.apply(Math, array);
+	},
+	
+
+	/**
+	 * {Number} Returns the minimum number in the array.
+	 */
+	min : function(array) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
+		return Math.min.apply(Math, array);
+	},
+	
+
 	
 
 	/**
@@ -233,58 +223,7 @@ core.Module("core.Array",
 			return value;
 		}
 	},
-	
-	
-	/**
-	 * {Array} Returns a new array with all elements that are unique. 
-	 * 
-	 * Comparison happens based on the toString() value! So numbers
-	 * and booleans might be unified with strings with the same "value".
-	 * This is mainly because of performance reasons.
-	 */
-	unique : function(array) 
-	{
-		if (jasy.Env.isSet("debug")) {
-			core.Assert.isType(array, "Array");
-		}
 
-		var strings = {};
-		return array.filter(function(value) 
-		{
-			if (!strings.hasOwnProperty(value)) {
-				return strings[value] = true;
-			}
-		});
-	},
-	
-	
-	/**
-	 * {any} Returns the value at the given @position {Integer}. Supports negative indexes, too.
-	 */
-	at : function(array, position) 
-	{
-		if (jasy.Env.isSet("debug")) 
-		{
-			core.Assert.isType(array, "Array");
-			core.Assert.isType(position, "Integer");
-		}
-
-		return array[position < 0 ? array.length + position : position];
-	},
-	
-	
-	/**
-	 * {any} Returns the last item in the array.
-	 */
-	last: function(array) 
-	{
-		if (jasy.Env.isSet("debug")) {
-			core.Assert.isType(array, "Array");
-		}
-
-		return array[array.length-1];
-	},
-	
 
 	/** 
 	 * {any} Removes and returns the value at the given @position {Integer}.
@@ -336,6 +275,71 @@ core.Module("core.Array",
 		array.push.apply(array, rest);
 
 		return array;
+	},
+
+
+	/**
+	 * {Number} Returns the sum of all values in the array.
+	 */
+	sum : function(array) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
+		for (var i=0, l=array.length, sum=0; i<l; i++) 
+		{
+			if (i in array) {
+				sum += array[i];
+			}
+		}
+		
+		return sum;
+	},
+
+	
+	/**
+	 * {Array} Returns a new array with all elements that are unique. 
+	 * 
+	 * Comparison happens based on the toString() value! So numbers
+	 * and booleans might be unified with strings with the same "value".
+	 * This is mainly because of performance reasons.
+	 */
+	unique : function(array) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(array, "Array");
+		}
+
+		var strings = {};
+		return array.filter(function(value) 
+		{
+			if (!strings.hasOwnProperty(value)) {
+				return strings[value] = true;
+			}
+		});
+	},
+	
+
+	/**
+	 * Merges both given arrays into an object where values of @array {Array} are used
+	 * as keys and values of @values {Array} are used as values.
+	 */
+	zip : function(array, values) 
+	{
+		if (jasy.Env.isSet("debug"))
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isType(values, "Array");
+			core.Assert.equal(array.length, values.length);
+		}
+
+		var result = {};
+		for (var i=0, l=array.length; i<l; i++) {
+			result[array[i]] = values[i];
+		}
+
+		return result;
 	}
 });
 

@@ -108,37 +108,30 @@ suite.test("remove", function()
   this.isEqual(arr.join(","), "1,2,1,2,3");
 });
 
-suite.test("removeAt", function() 
+suite.test("compact", function() 
 {
-  var arr = [1,2,3,4,5,6];
-  this.isEqual(core.Array.removeAt(arr, 2), 3);
-  this.isEqual(core.Array.removeAt(arr, 12));
-  this.isEqual(arr.join(","), "1,2,4,5,6");
+  var sparse = [1,2,3,,5,,,8];
+  this.isEqual(core.Array.compact(sparse).length, 5);
+
+  var undef;
+  var sparse = [1,2,3,null,5,,undef,8];
+  this.isEqual(core.Array.compact(sparse).length, 7);
 });
 
-suite.test("removeRange", function() 
+suite.test("flatten", function() 
 {
-  var arr = [1,2,3,4,5,6,7,8,9];
-  core.Array.removeRange(arr, 1, 1);
-  this.isEqual(arr.join(","), "1,3,4,5,6,7,8,9");
-
-  var arr = [1,2,3,4,5,6,7,8,9];
-  core.Array.removeRange(arr, 1, 3);
-  this.isEqual(arr.join(","), "1,5,6,7,8,9");
-
-  var arr = [1,2,3,4,5,6,7,8,9];
-  core.Array.removeRange(arr, 1, -3);
-  this.isEqual(arr.join(","), "1,8,9");
-
-  var arr = [1,2,3,4,5,6,7,8,9];
-  core.Array.removeRange(arr, -5, -1);
-  this.isEqual(arr.join(","), "1,2,3,4");
+  this.isEqual(core.Array.flatten([[1], 2, [3]]).toString(), [1,2,3].toString());
+  this.isEqual(core.Array.flatten([["a"],[],"b","c"]).toString(), ["a","b","c"].toString());
 
   // Sparse array
-  var arr = [1,,3,4,5,6,7,8,9];
-  core.Array.removeRange(arr, -5, -1);
-  this.isEqual(arr.join(","), "1,,3,4");
+  this.isEqual(core.Array.flatten([["a",],[],,,"b","c"]).toString(), ["a","b","c"].toString());
 });
+
+
+
+
+
+
 
 suite.test("unique", function() 
 {
@@ -186,21 +179,40 @@ suite.test("at", function()
   this.isEqual(core.Array.at(arr, -20));
 });
 
-suite.test("compact", function() 
+suite.test("last", function() 
 {
-  var sparse = [1,2,3,,5,,,8];
-  this.isEqual(core.Array.compact(sparse).length, 5);
-
-  var undef;
-  var sparse = [1,2,3,null,5,,undef,8];
-  this.isEqual(core.Array.compact(sparse).length, 7);
+  var arr = [1,2,3,4,5];
+  this.isEqual(core.Array.last(arr), 5);
 });
 
-suite.test("flatten", function() 
+suite.test("removeAt", function() 
 {
-  this.isEqual(core.Array.flatten([[1], 2, [3]]).toString(), [1,2,3].toString());
-  this.isEqual(core.Array.flatten([["a"],[],"b","c"]).toString(), ["a","b","c"].toString());
+  var arr = [1,2,3,4,5,6];
+  this.isEqual(core.Array.removeAt(arr, 2), 3);
+  this.isEqual(core.Array.removeAt(arr, 12));
+  this.isEqual(arr.join(","), "1,2,4,5,6");
+});
+
+suite.test("removeRange", function() 
+{
+  var arr = [1,2,3,4,5,6,7,8,9];
+  core.Array.removeRange(arr, 1, 1);
+  this.isEqual(arr.join(","), "1,3,4,5,6,7,8,9");
+
+  var arr = [1,2,3,4,5,6,7,8,9];
+  core.Array.removeRange(arr, 1, 3);
+  this.isEqual(arr.join(","), "1,5,6,7,8,9");
+
+  var arr = [1,2,3,4,5,6,7,8,9];
+  core.Array.removeRange(arr, 1, -3);
+  this.isEqual(arr.join(","), "1,8,9");
+
+  var arr = [1,2,3,4,5,6,7,8,9];
+  core.Array.removeRange(arr, -5, -1);
+  this.isEqual(arr.join(","), "1,2,3,4");
 
   // Sparse array
-  this.isEqual(core.Array.flatten([["a",],[],,,"b","c"]).toString(), ["a","b","c"].toString());
+  var arr = [1,,3,4,5,6,7,8,9];
+  core.Array.removeRange(arr, -5, -1);
+  this.isEqual(arr.join(","), "1,,3,4");
 });

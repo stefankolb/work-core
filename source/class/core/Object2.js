@@ -39,11 +39,18 @@
 
     if (config.has && nativeKeys && !config.nokeys)
     {
-      code += 'for(var i=0,keys=Object.keys(object),l=keys.length,key;i<l;i++)'
-      code += '{';
-      code +=   'key=keys[i];';
-      code +=    config.iter || '';
-      code += '}';
+      if (config.iter)
+      {
+        code += 'for(var i=0,keys=Object.keys(object),l=keys.length,key;i<l;i++)'
+        code += '{';
+        code +=   'key=keys[i];';
+        code +=    config.iter;
+        code += '}';
+      }
+      else
+      {
+        code += 'var keys=Object.keys(object);';
+      }
     }
     else
     {
@@ -136,6 +143,41 @@
       iter : "length++;", 
       exit : "return length;",
       nokeys : true
+    }),
+
+    /**
+     * {Array} Returns all the keys of the given @object {Object}.
+     */
+    keys : createIterator(
+    {
+      has : true, 
+      stable : true, // otherwise we might not have "keys"
+      exit : "return keys;"
+    }),
+
+    /**
+     * {Array} Returns all the values of the given @object {Object}.
+     */
+    values : createIterator(
+    {
+      has : true, 
+      stable : false,
+      init : "var values=[];",
+      iter : "values.push(object[key]);",
+      exit : "return values;"
+    }),
+
+    /**
+     * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
+     * objects or arrays will be copied by reference, not duplicated.
+     */
+    clone : createIterator(
+    {
+      has : true, 
+      stable : false,
+      init : "var clone={};", 
+      iter : "clone[key]=object[key];", 
+      exit : "return clone;"
     }),
 
     forEach : createIterator(

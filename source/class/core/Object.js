@@ -13,82 +13,8 @@
  */
 (function() 
 {	
-	var hasOwnProperty = Object.hasOwnProperty;
-
-  // Used to fix the JScript [[DontEnum]] bug 
-  var shadowed = 
-  [
-    'constructor', 
-    'hasOwnProperty', 
-    'isPrototypeOf', 
-    'propertyIsEnumerable',
-    'toLocaleString', 
-    'toString', 
-    'valueOf'
-  ];
-  var shadowedLength = shadowed.length;
-
-	// Fix for IE bug with enumerables
-	var hasDontEnumBug = true;
-	for (var key in {"toString": null}) {
-		hasDontEnumBug = false;	
-	}
-
-	var keys = Object.keys;
-	if (!keys)
-	{
-		var keys = function(object) 
-		{
-			var result = [];
-			for (var key in object) {
-				result.push(key);
-			}
-
-			if (hasDontEnumBug) 
-			{
-				for (var i=0; i<shadowedLength; i++) 
-				{
-					var key = shadowed[i];
-					if (hasOwnProperty.call(object, key)) {
-						result.push(key);
-					}
-				}
-			}
-
-			return result;
-		};
-	}
-	
 	core.Module("core.Object", 
 	{
-		/**
-		 * {Integer} Returns the number of keys the given @object {Object} has.
-		 */
-		getLength : function(object) 
-		{
-			var count = 0;
-
-			if (hasDontEnumBug) 
-			{
-				for (var i=0; i<shadowedLength; i++) 
-				{
-					if (hasOwnProperty.call(object, shadowed[i])) {
-						count++;
-					}
-				}
-			}
-
-			for (var key in object) 
-			{
-				if (hasOwnProperty.call(object, key)) {
-					count++;	
-				}
-			}
-
-			return count;
-		},
-		
-		
 		/**
 		 * {Map} Creates a new object with prefilled content from the @keys {Array} list.
 		 * The @value {var ? true} is always the same, defaults to true, but is also configurable.
@@ -105,61 +31,6 @@
 			}
 
 			return obj;
-		},
-
-
-		/**
-		 * {Boolean} Tests whether the given @object {Object} is empty.
-		 */
-		isEmpty: function(object) 
-		{
-			for (var key in object) 
-			{
-				if (hasOwnProperty.call(object, key)) {
-					return false;
-				}
-			}
-			
-			if (hasDontEnumBug) 
-			{
-				for (var i=0; i<shadowedLength; i++) 
-				{
-					if (hasOwnProperty.call(object, shadowed[i])) {
-						return false;
-					}
-				}
-			}
-
-			return true;
-		},
-
-
-		keys : keys,
-
-
-		/**
-		 * {Array} Returns all the values of the given @object {Map}.
-		 */
-		values : function(object) 
-		{
-			return keys(object).map(function(key) {
-				return object[key];
-			});
-		},
-
-
-		/**
-		 * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
-		 * objects or arrays will be copied by reference, not duplicated.
-		 */
-		clone : function(object) 
-		{
-			var result = {};
-			for (var key in object) {
-				result[key] = object[key];
-			}
-
-			return result;
 		},
 
 

@@ -18,7 +18,8 @@
 core.Module("core.Array", 
 {
 	/**
-	 * {any} Returns the value at the given @position {Integer}. Supports negative indexes, too.
+	 * {any} Returns the value of the @array {Array} at the given 
+	 * @position {Integer}. Supports negative indexes, too.
 	 */
 	at : function(array, position) 
 	{
@@ -33,7 +34,7 @@ core.Module("core.Array",
 
 	
 	/**
-	 * {Array} Clones the whole array and returns it.
+	 * {Array} Clones the whole @array {Array} and returns the clone.
 	 */
 	clone : function(array) 
 	{
@@ -46,7 +47,8 @@ core.Module("core.Array",
 	
 	
 	/**
-	 * {Array} Filters out sparse fields and returns a new compacted array.
+	 * {Array} Filters out sparse fields from the given @array {Array} and 
+	 * returns a new compacted array.
 	 */
 	compact : function(array) 
 	{
@@ -67,7 +69,7 @@ core.Module("core.Array",
 	
 	
 	/**
-	 * {Boolean} Whether the array contains the given @value {any}.
+	 * {Boolean} Whether the @array {Array} contains the given @value {any}.
 	 */
 	contains : function(array, value) 
 	{
@@ -82,7 +84,7 @@ core.Module("core.Array",
 	
 
 	/**
-	 * {Array} Returns a flattened, one-dimensional copy of the array.
+	 * {Array} Returns a flattened, one-dimensional copy of the @array {Array}.
 	 */
 	flatten: function(array) 
 	{
@@ -116,10 +118,9 @@ core.Module("core.Array",
 	},
 
 
-
-	
 	/**
-	 * {any} Inserts and returns the given @value {any} at the given @position {Integer?-1}. 
+	 * {any} Inserts and returns the given @value {any} at the given @position {Integer?-1}
+	 * into the given @array {Array}. 
 	 * Supports negative position values, too. Appends to the end if no position is defined.
 	 */
 	insertAt : function(array, value, position) 
@@ -151,7 +152,7 @@ core.Module("core.Array",
 
 
 	/**
-	 * {any} Returns the last item in the array.
+	 * {any} Returns the last item in the @array {Array}.
 	 */
 	last: function(array) 
 	{
@@ -164,7 +165,7 @@ core.Module("core.Array",
 
 
 	/**
-	 * {Number} Returns the maximum number in the array.
+	 * {Number} Returns the maximum number in the @array {Array}.
 	 */
 	max : function(array) 
 	{
@@ -177,7 +178,7 @@ core.Module("core.Array",
 	
 
 	/**
-	 * {Number} Returns the minimum number in the array.
+	 * {Number} Returns the minimum number in the @array {Array}.
 	 */
 	min : function(array) 
 	{
@@ -190,7 +191,7 @@ core.Module("core.Array",
 	
 
 	/**
-	 * Randomizes the array via Fisher-Yates algorithm.
+	 * Randomizes the @array {Array} via Fisher-Yates algorithm.
 	 */
 	randomize : function(array) 
 	{
@@ -203,7 +204,7 @@ core.Module("core.Array",
 	
 	
 	/** 
-	 * {any} Removes the given @value {any} (first occourence only) from the array and returns it.
+	 * {any} Removes the given @value {any} (first occourence only) from the @array {Array} and returns it.
 	 */
 	remove : function(array, value) 
 	{
@@ -223,7 +224,7 @@ core.Module("core.Array",
 
 
 	/** 
-	 * {any} Removes and returns the value at the given @position {Integer}.
+	 * {any} Removes and returns the value at the given @position {Integer} in the @array {Array}.
 	 */
 	removeAt : function(array, position) 
 	{
@@ -276,7 +277,7 @@ core.Module("core.Array",
 
 
 	/**
-	 * {Number} Returns the sum of all values in the array.
+	 * {Number} Returns the sum of all values in the @array {Array}.
 	 */
 	sum : function(array) 
 	{
@@ -317,7 +318,7 @@ core.Module("core.Array",
 
 	
 	/**
-	 * {Array} Returns a new array with all elements that are unique. 
+	 * {Array} Returns a new array with all elements that are unique in @array {Array}. 
 	 * 
 	 * Comparison happens based on the toString() value! So numbers
 	 * and booleans might be unified with strings with the same "value".

@@ -257,6 +257,7 @@
 
 		/**
 		 * Add @statics {Map} to the object found under the given @name {String}.
+		 * Supports overriding the existing key via @override {Boolean?false}.
 		 */
 		addStatics : function(name, statics, override) 
 		{
@@ -279,6 +280,7 @@
 
 		/**
 		 * Add @members {Map} to the prototype of the object found under the given @name {String}.
+		 * Supports overriding the existing key via @override {Boolean?false}.
 		 */
 		addMembers : function(name, members, override) 
 		{

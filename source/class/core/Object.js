@@ -94,6 +94,7 @@
       if (config.stable)
       {
         code += "for(var i=0,l=keys.length;i<l;i++){";
+        code += "key=keys[i];";
         code += config.iter || "";
         code += "}";
       }

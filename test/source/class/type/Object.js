@@ -2,7 +2,7 @@ var suite = new core.testrunner.Suite("Type/Object");
 
 suite.test("clone", function() 
 {
-  var orig = {x:1,y:2,z:3,a:true,b:false};
+  var orig = {x:1,y:2,z:3,a:true,b:false,toString:123};
   var clone = core.Object.clone(orig);
   this.isNotIdentical(orig, clone);
 
@@ -13,7 +13,7 @@ suite.test("clone", function()
 suite.test("forAll", function() 
 {
   var test = this;
-  var basic = {x:1,y:2,z:3,a:true,b:false};
+  var basic = {x:1,y:2,z:3,a:true,b:false,toString:123};
   var keys = [];
   var values = [];
 
@@ -27,15 +27,86 @@ suite.test("forAll", function()
 
   }, this);
 
-  alert(keys)
-  alert(values)
+  this.isEqual(values.join(","), "1,2,3,true,false,123");
+  this.isEqual(keys.join(","), "x,y,z,a,b,toString");
+});
 
+suite.test("forAll - extended", function() 
+{
+  var test = this;
+
+  var construct = Function();
+  construct.prototype = {x:1,y:2,z:3,a:true,b:false,toString:123};
+
+  var extended = new construct();
+  extended.local1 = 42;
+  extended.local2 = "hello";
+
+  var keys = [];
+  var values = [];
+
+  core.Object.forAll(extended, function(value, key, object) {
+    
+    this.isIdentical(this, test);
+    this.isIdentical(object, extended);
+
+    values.push(value);
+    keys.push(key);
+
+  }, this);
+
+  this.isEqual(values.join(","), "42,hello,1,2,3,true,false,123");
+  this.isEqual(keys.join(","), "local1,local2,x,y,z,a,b,toString");  
 });  
 
 suite.test("forEach", function() 
 {
+  var test = this;
+  var basic = {x:1,y:2,z:3,a:true,b:false,toString:123};
+  var keys = [];
+  var values = [];
 
+  core.Object.forEach(basic, function(value, key, object) {
+    
+    this.isIdentical(this, test);
+    this.isIdentical(object, basic);
+
+    values.push(value);
+    keys.push(key);
+
+  }, this);
+
+  this.isEqual(values.join(","), "1,2,3,true,false,123");
+  this.isEqual(keys.join(","), "x,y,z,a,b,toString");
 });
+
+suite.test("forEach - extended", function() 
+{
+  var test = this;
+
+  var construct = Function();
+  construct.prototype = {x:1,y:2,z:3,a:true,b:false,toString:123};
+
+  var extended = new construct();
+  extended.local1 = 42;
+  extended.local2 = "hello";
+
+  var keys = [];
+  var values = [];
+
+  core.Object.forEach(extended, function(value, key, object) {
+    
+    this.isIdentical(this, test);
+    this.isIdentical(object, extended);
+
+    values.push(value);
+    keys.push(key);
+
+  }, this);
+
+  this.isEqual(values.join(","), "42,hello");
+  this.isEqual(keys.join(","), "local1,local2");  
+});  
 
 suite.test("getKeys", function() 
 {

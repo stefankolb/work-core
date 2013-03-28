@@ -17,14 +17,19 @@ core.Class("core.property.Event",
 
   /**
    * Creates a new event object with the given @type {String}. It stores the current @value {var}, 
-   * the @old {var?} value and the @name {String?} of the property which was modified.
+   * the @old {var?} value, the @name {String?} of the property which was modified and 
+   * the @target {var?} it belongs to.
    */
-  construct : function(type, value, old, name) 
+  construct : function(type, value, old, name, target) 
   {
     this.__type = type;
     this.__value = value;
     this.__old = old;
     this.__name = name;
+    
+    if (target !== undefined) {
+    	this.setTarget(target);
+    }
   },
 
   members : 

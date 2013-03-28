@@ -172,7 +172,7 @@
 				// Fire event
 				if (propertyFire) 
 				{
-					var eventObject = core.property.Event.obtain(propertyFire, childNewValue, childOldValue, propertyName);
+					var eventObject = core.property.Event.obtain(propertyFire, childNewValue, childOldValue, propertyName, child);
 					context.dispatchEvent(eventObject);
 					eventObject.release();					
 				}
@@ -326,7 +326,7 @@
 							// Fire event
 							if (propertyFire) 
 							{
-								var eventObject = core.property.Event.obtain(propertyFire, newValue, oldValue, propertyName);
+								var eventObject = core.property.Event.obtain(propertyFire, newValue, oldValue, propertyName, context);
 								context.dispatchEvent(eventObject);
 								eventObject.release();					
 							}
@@ -425,7 +425,7 @@
 						// Fire event
 						if (propertyFire) 
 						{
-							var eventObject = core.property.Event.obtain(propertyFire, newValue, oldValue, propertyName);
+							var eventObject = core.property.Event.obtain(propertyFire, newValue, oldValue, propertyName, context);
 							context.dispatchEvent(eventObject);
 							eventObject.release();
 						}
@@ -542,7 +542,7 @@
 					// Fire event
 					if (propertyFire) 
 					{
-						var eventObject = core.property.Event.obtain(propertyFire, propertyInit, Undefined, config.name);
+						var eventObject = core.property.Event.obtain(propertyFire, propertyInit, Undefined, config.name, context);
 						context.dispatchEvent(eventObject);
 						eventObject.release();					
 					}
@@ -718,7 +718,7 @@
 					// Fire event
 					if (config.fire) 
 					{
-						var eventObject = core.property.Event.obtain(config.fire, newValue, oldValue, config.name);
+						var eventObject = core.property.Event.obtain(config.fire, newValue, oldValue, config.name, obj);
 						obj.dispatchEvent(eventObject);
 						eventObject.release();	
 					}
@@ -913,7 +913,7 @@
 					// Fire event
 					if (propertyConfig.fire) 
 					{
-						var eventObject = core.property.Event.obtain(propertyConfig.fire, newValue, oldValue, propertyName);
+						var eventObject = core.property.Event.obtain(propertyConfig.fire, newValue, oldValue, propertyName, obj);
 						context.dispatchEvent(eventObject);
 						eventObject.release();	
 					}

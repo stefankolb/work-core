@@ -183,7 +183,7 @@
 						// Fire event
 						if (propertyFire) 
 						{
-							var eventObject = core.property.Event.obtain(propertyFire, propertyInit, undef, propertyName);
+							var eventObject = core.property.Event.obtain(propertyFire, propertyInit, undef, propertyName, context);
 							context.dispatchEvent(eventObject);
 							eventObject.release();
 						}
@@ -245,7 +245,7 @@
 
 					if (propertyFire) 
 					{
-						var eventObject = core.property.Event.obtain(propertyFire, value, old, propertyName);
+						var eventObject = core.property.Event.obtain(propertyFire, value, old, propertyName, context);
 						context.dispatchEvent(eventObject);
 						eventObject.release();
 					}
@@ -300,7 +300,7 @@
 
 					if (propertyFire) 
 					{
-						var eventObject = core.property.Event.obtain(propertyFire, value, old, propertyName);
+						var eventObject = core.property.Event.obtain(propertyFire, value, old, propertyName, context);
 						context.dispatchEvent(eventObject);
 						eventObject.release();
 					}

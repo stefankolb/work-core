@@ -13,14 +13,6 @@
  */
 core.Module("core.Number",
 {
-	/** 
-	 * {Integer} Converts the @number {Number} to integer 
-	 */
-	toInteger : function(number) {
-    return number < 0 ? Math.ceil(number) : Math.floor(number);
-  },
-
-
 	/**
 	 * {String} Pads the @number {Number} to reach the given @length {Integer}.
 	 */
@@ -46,5 +38,13 @@ core.Module("core.Number",
 	 */
 	toHex : function(number) {
 		return number.toString(16);
-	}
+	},
+
+
+	/** 
+	 * {Integer} Converts the @number {Number} to integer 
+	 */
+	toInteger : function(number) {
+    return number < 0 ? Math.ceil(number) : Math.floor(number);
+  }	
 });

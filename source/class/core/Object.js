@@ -202,7 +202,7 @@
 
 
     /**
-     * {Integer} Returns whether the given @object {Object} is empty.
+     * {Boolean} Returns whether the given @object {Object} is empty.
      */
     isEmpty : createIterator(
     {

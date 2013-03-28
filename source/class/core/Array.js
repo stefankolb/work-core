@@ -3,8 +3,6 @@
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
   Copyright 2012-2013 Sebastian Werner
---------------------------------------------------------------------------------------------------
-  Inspired by Sugar.js, Copyright 2011 Andrew Plummer
 ==================================================================================================
 */
 
@@ -12,6 +10,10 @@
 
 /**
  * A collection of utility methods for native JavaScript arrays.
+ *
+ * Note: Does not include specific support to deal with sparse arrays
+ * as this makes things dramatically slower. See also:
+ * http://jsperf.com/cost-of-sparse-array-support
  */
 core.Module("core.Array", 
 {
@@ -53,10 +55,10 @@ core.Module("core.Array",
 		}
 
 		var compacted = [];
-		for (var i=0, l=array.length; i<l; i++)
+		for (var i=0, l=array.length; i<l; i++) 
 		{
 			if (i in array) {
-				compacted.push(array[i]);
+				compacted.push(array[i]);	
 			}
 		}
 
@@ -92,15 +94,12 @@ core.Module("core.Array",
 
 		for (var i=0, l=array.length; i<l; i++)
 		{
-			if (i in array)
-			{
-				var value = array[i];
-				if (value instanceof Array) {
-					result.push.apply(result, this.flatten(value));
-				} else {
-					result.push(value);
-				}
-			}			
+			var value = array[i];
+			if (value instanceof Array) {
+				result.push.apply(result, this.flatten(value));
+			} else {
+				result.push(value);
+			}
 		}
 		
 		return result;
@@ -287,8 +286,9 @@ core.Module("core.Array",
 
 		for (var i=0, l=array.length, sum=0; i<l; i++) 
 		{
-			if (i in array) {
-				sum += array[i];
+			var value = array[i];
+			if (value != null) {
+				sum += array[i];	
 			}
 		}
 		
@@ -329,32 +329,42 @@ core.Module("core.Array",
 			core.Assert.isType(array, "Array");
 		}
 
+		var hasOwnProperty = Object.hasOwnProperty;
 		var strings = {};
-		return array.filter(function(value) 
+		var result = [];
+
+		for (var i=0, l=array.length; i<l; i++)
 		{
-			if (!strings.hasOwnProperty(value)) {
-				return strings[value] = true;
+			var value = array[i];
+			var asString = "" + value;
+			
+			if (!hasOwnProperty.call(strings, asString)) 
+			{
+				strings[asString] = true;
+				result.push(value);
 			}
-		});
+		}
+
+		return result;
 	},
 	
 
 	/**
-	 * {Map} Merges both given arrays into an object where values of @array {Array} are used
-	 * as keys and values of @values {Array} are used as values.
+	 * {Map} Merges both given arrays into an object where entries of @keys {Array} are used
+	 * as keys and entries of @values {Array} are used as values.
 	 */
-	zip : function(array, values) 
+	zip : function(keys, values) 
 	{
 		if (jasy.Env.isSet("debug"))
 		{
-			core.Assert.isType(array, "Array");
+			core.Assert.isType(keys, "Array");
 			core.Assert.isType(values, "Array");
-			core.Assert.equal(array.length, values.length);
+			core.Assert.equal(keys.length, values.length);
 		}
 
 		var result = {};
-		for (var i=0, l=array.length; i<l; i++) {
-			result[array[i]] = values[i];
+		for (var i=0, l=keys.length; i<l; i++) {
+			result[keys[i]] = values[i];
 		}
 
 		return result;

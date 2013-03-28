@@ -55,9 +55,6 @@ suite.test("flatten", function()
 {
   this.isEqual(core.Array.flatten([[1], 2, [3]]).toString(), [1,2,3].toString());
   this.isEqual(core.Array.flatten([["a"],[],"b","c"]).toString(), ["a","b","c"].toString());
-
-  // Sparse array
-  this.isEqual(core.Array.flatten([["a",],[],,,"b","c"]).toString(), ["a","b","c"].toString());
 });
 
 suite.test("fromArguments", function() 
@@ -183,10 +180,6 @@ suite.test("toKeys", function()
 suite.test("unique", function() 
 {
   var arr = [1,2,3,1,2,3];
-  this.isEqual(core.Array.unique(arr).join(","), "1,2,3");
-
-  // sparse arrays supported
-  var arr = [1,2,,,2,3];
   this.isEqual(core.Array.unique(arr).join(","), "1,2,3");
 
   // null values are treated special

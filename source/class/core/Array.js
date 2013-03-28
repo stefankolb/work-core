@@ -359,7 +359,7 @@ core.Module("core.Array",
 		{
 			core.Assert.isType(keys, "Array");
 			core.Assert.isType(values, "Array");
-			core.Assert.equal(keys.length, values.length);
+			core.Assert.isEqual(keys.length, values.length);
 		}
 
 		var result = {};

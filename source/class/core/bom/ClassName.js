@@ -22,7 +22,7 @@
 	{
 		var validate = function(args) 
 		{
-			core.Assert.equal(args.length, 2);
+			core.Assert.isEqual(args.length, 2);
 			core.dom.Node.assertIsNode(args[0]);
 			if (!isValid(args[1])) {
 				throw new Error("Invalid CSS class name!");

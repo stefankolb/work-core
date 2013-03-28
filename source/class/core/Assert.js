@@ -25,7 +25,7 @@
 		 * Raises an exception when the two values @a {var} and @b {var} are not equal (`!=`)
 		 * Customizable with a custom @message {String?} for the exception text.
 		 */
-		equal: function(a, b, message) 
+		isEqual: function(a, b, message) 
 		{
 			if (a != b) {
 				raise(message || "Values must be equal: " + a + " and " + b + "!");
@@ -37,7 +37,7 @@
 		 * Raises an exception when the two values @a {var} and @b {var} are equal (`==`). 
 		 * Customizable with a custom @message {String?} for the exception text.
 		 */
-		notEqual: function(a, b, message) 
+		isNotEqual: function(a, b, message) 
 		{
 			if (a == b) {
 				raise(message || "Values must not be equal: " + a + " and " + b + "!");
@@ -49,7 +49,7 @@
 		 * Raises an exception when the two values @a {var} and @b {var} are not identical (`!==`)
 		 * Customizable with a custom @message {String?} for the exception text.
 		 */
-		identical: function(a, b, message) 
+		isIdentical: function(a, b, message) 
 		{
 			if (a !== b) {
 				raise(message || "Values must be identical: " + a + " and " + b + "!");
@@ -61,7 +61,7 @@
 		 * Raises an exception when the two values @a {var} and @b {var} are identical (`===`). 
 		 * Customizable with a custom @message {String?} for the exception text.
 		 */
-		notIdentical: function(a, b, message) 
+		isNotIdentical: function(a, b, message) 
 		{
 			if (a === b) {
 				raise(message || "Values must not be identical: " + a + " and " + b + "!");

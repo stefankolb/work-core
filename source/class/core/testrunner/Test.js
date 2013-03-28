@@ -111,7 +111,7 @@ core.Class("core.testrunner.Test",
     isEqual : function(a, b, message) 
     {
       try{
-        core.Assert.equal(a, b);  
+        core.Assert.isEqual(a, b);  
       } catch(ex) {
         return this.__failed(message, ex);
       }
@@ -128,7 +128,7 @@ core.Class("core.testrunner.Test",
     isNotEqual : function(a, b, message) 
     {
       try{
-        core.Assert.notEqual(a, b);  
+        core.Assert.isNotEqual(a, b);  
       } catch(ex) {
         return this.__failed(message, ex);
       }
@@ -145,13 +145,30 @@ core.Class("core.testrunner.Test",
     isIdentical : function(a, b, message) 
     {
       try{
-        core.Assert.identical(a, b);  
+        core.Assert.isIdentical(a, b);  
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
     },      
+
+
+    /**
+     * Test whether @a {var} and @b {var} are not identical and register
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    isNotIdentical : function(a, b, message) 
+    {
+      try{
+        core.Assert.isNotIdentical(a, b);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    },         
 
 
     /**

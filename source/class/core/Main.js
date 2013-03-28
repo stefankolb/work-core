@@ -78,7 +78,7 @@
 	// Temporary hack to make next statement workable
 	declareNamespace("core.Main.declareNamespace", declareNamespace);
 
-	// By Lowdash 1.0.1
+	// By Lodash
 	var objectRef = {};
 	var isNativeRepExp = RegExp('^' +
     (objectRef.valueOf + '')
@@ -111,7 +111,6 @@
 		isHostType : function(object, property) 
 		{
 			var type = object != null ? typeof object[property] : 'number';
-
 			return !/^(?:boolean|number|string|undefined)$/.test(type) && (type == 'object' ? !!object[property] : true);
 		},
 

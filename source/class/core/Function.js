@@ -9,13 +9,6 @@
 
 (function(global, slice) 
 {
-  /**
-   * {Function} Binds the given function @func {Function} to the given @object {Object} and returns 
-   * the resulting function. 
-   * 
-   * - Only one connection is made to allow proper disconnecting without access to the bound function. 
-   * - Uses ES5 bind() to connect functions to objects internally.
-   */
   var bind = function(func, context) 
   {
     // Inspired by: http://webreflection.blogspot.de/2012/11/my-name-is-bound-method-bound.html
@@ -102,6 +95,13 @@
    */
   core.Module("core.Function", 
   {
+    /**
+     * {Function} Binds the given function @func {Function} to the given @object {Object} and returns 
+     * the resulting function. 
+     * 
+     * - Only one connection is made to allow proper disconnecting without access to the bound function. 
+     * - Uses ES5 bind() to connect functions to objects internally.
+     */    
     bind : bind,
 
 

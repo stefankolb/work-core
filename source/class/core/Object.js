@@ -120,15 +120,56 @@
   core.Module("core.Object",
   {
     /**
-     * {Integer} Returns whether the given @object is empty.
+     * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
+     * objects or arrays will be copied by reference, not duplicated.
      */
-    isEmpty : createIterator(
+    clone : createIterator(
+    {
+      has : true, 
+      stable : false,
+      init : "var clone={};", 
+      iter : "clone[key]=object[key];", 
+      exit : "return clone;"
+    }),
+
+
+    /**
+     * Loops trough all entries - even inherited ones - of the given @object {Object} and executes the
+     * given @callback {Function} in the given @context {Object} on each entry.
+     * The @callback is called with these arguments: `value`, `key`, `object`.
+     */
+    forAll : createIterator(
+    {
+      stable : true,
+      args : callbackArgs,
+      init : contextFix,
+      iter : executeCallback
+    }),
+
+    
+    /**
+     * Loops trough the entries of the given @object {Object} and executes the
+     * given @callback {Function} in the given @context {Object} on each entry.
+     * The @callback is called with these arguments: `value`, `key`, `object`.
+     */
+    forEach : createIterator(
     {
       has : true,
-      stable : false,
-      iter : "return false;",
-      exit : "return true;",
-      nokeys : true
+      stable : true,
+      args : callbackArgs,
+      init : contextFix,
+      iter : executeCallback
+    }),
+
+
+    /**
+     * {Array} Returns all the keys of the given @object {Object}.
+     */
+    getKeys : createIterator(
+    {
+      has : true, 
+      stable : true, // otherwise we might not have "keys"
+      exit : "return keys;"
     }),
 
 
@@ -147,20 +188,9 @@
 
 
     /**
-     * {Array} Returns all the keys of the given @object {Object}.
-     */
-    keys : createIterator(
-    {
-      has : true, 
-      stable : true, // otherwise we might not have "keys"
-      exit : "return keys;"
-    }),
-
-
-    /**
      * {Array} Returns all the values of the given @object {Object}.
      */
-    values : createIterator(
+    getValues : createIterator(
     {
       has : true, 
       stable : false,
@@ -171,60 +201,15 @@
 
 
     /**
-     * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
-     * objects or arrays will be copied by reference, not duplicated.
+     * {Integer} Returns whether the given @object is empty.
      */
-    clone : createIterator(
-    {
-      has : true, 
-      stable : false,
-      init : "var clone={};", 
-      iter : "clone[key]=object[key];", 
-      exit : "return clone;"
-    }),
-
-
-    /**
-     * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
-     * objects or arrays will be copied by reference, not duplicated.
-     */
-    translate : createIterator(
-    {
-      has : true, 
-      stable : false,
-      args : "table",
-      init : "var result={};", 
-      iter : "result[table[key]||key]=object[key];", 
-      exit : "return result;"
-    }),    
-
-
-    /**
-     * Loops trough the entries of the given @object {Object} and executes the
-     * given @callback {Function} in the given @context {Object} on each entry.
-     * The @callback is called with these arguments: `value`, `key`, `object`.
-     */
-    forEach : createIterator(
+    isEmpty : createIterator(
     {
       has : true,
-      stable : true,
-      args : callbackArgs,
-      init : contextFix,
-      iter : executeCallback
-    }),
-
-
-    /**
-     * Loops trough all entries - even inherited ones - of the given @object {Object} and executes the
-     * given @callback {Function} in the given @context {Object} on each entry.
-     * The @callback is called with these arguments: `value`, `key`, `object`.
-     */
-    forAll : createIterator(
-    {
-      stable : true,
-      args : callbackArgs,
-      init : contextFix,
-      iter : executeCallback
+      stable : false,
+      iter : "return false;",
+      exit : "return true;",
+      nokeys : true
     }),
 
 
@@ -243,8 +228,22 @@
       }
 
       return result;
-    }
+    },
 
+
+    /**
+     * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
+     * objects or arrays will be copied by reference, not duplicated.
+     */
+    translate : createIterator(
+    {
+      has : true, 
+      stable : false,
+      args : "table",
+      init : "var result={};", 
+      iter : "result[table[key]||key]=object[key];", 
+      exit : "return result;"
+    })
   });
 
 })(core.Main.getGlobal());

@@ -16,7 +16,14 @@ core.Module("core.Number",
 	/**
 	 * {String} Pads the @number {Number} to reach the given @length {Integer}.
 	 */
-	pad : function(number, length) {
+	pad : function(number, length) 
+	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(number, "Number");
+			core.Assert.isType(length, "Integer");
+		}
+
 		return (core.String.repeat("0", length) + number).slice(-length);
 	},
 
@@ -27,6 +34,17 @@ core.Module("core.Number",
 	 */
 	times : function(func, context, number) 
 	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(func, "Function");
+
+			if (context != null) {
+				core.Assert.isType(context, "Object");	
+			}
+			
+			core.Assert.isType(number, "Number");
+		}
+
 		for (var i=0; i<number; i++) {
 			context ? func.call(context) : func();
 		}
@@ -36,7 +54,12 @@ core.Module("core.Number",
 	/**
 	 * {String} Converts the @number {Number} to a hex string.
 	 */
-	toHex : function(number) {
+	toHex : function(number) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(number, "Number");
+		}
+
 		return number.toString(16);
 	},
 
@@ -44,7 +67,12 @@ core.Module("core.Number",
 	/** 
 	 * {Integer} Converts the @number {Number} to integer 
 	 */
-	toInteger : function(number) {
+	toInteger : function(number) 
+	{
+		if (jasy.Env.isSet("debug")) {
+			core.Assert.isType(number, "Number");
+		}
+
     return number < 0 ? Math.ceil(number) : Math.floor(number);
   }	
 });

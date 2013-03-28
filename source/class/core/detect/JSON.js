@@ -1,5 +1,11 @@
 "use strict";
 
+/*
+ * Based on JSON v3.2.4
+ * http://bestiejs.github.com/json3
+ * Copyright 2012, Kit Cambridge
+ * http://kit.mit-license.org
+ */
 (function(global, Date)
 {
   var JSON = global.JSON;
@@ -142,6 +148,9 @@
     })();
   }
 
+  /**
+   * This module checks whether JSON is available and implemented correctly.
+   */
   core.Module("core.detect.JSON", 
   {
     VALID_PARSE : parseSupported,

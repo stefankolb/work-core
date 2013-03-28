@@ -31,9 +31,9 @@ core.Module("core.detect.Engine",
 				engine = "trident"; // Old Internet Explorer
 			} else if (global.opera && toString.call(global.opera) == "[object Opera]") {
 				engine = "presto"; // Opera
-			} else if (core.Main.isNative(global.WebKitPoint)) {
+			} else if (global.WebKitCSSMatrix && (core.Main.isNative(WebKitCSSMatrix) || toString.call(WebKitCSSMatrix) == "[object WebKitCSSMatrixConstructor]")) {
 				engine = "webkit"; // Chrome, Safari, ...
-			} else if (global.controllers && toString.call(global.controllers) == "[object XULControllers]") {
+			} else if (global.controllers && toString.call(controllers) == "[object XULControllers]") {
 				engine = "gecko"; // Firefox, Camino, ...
 			} else if (nav && typeof nav.cpuClass === "string") {
 				engine = "trident"; // Internet Explorer

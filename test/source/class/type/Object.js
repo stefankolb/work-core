@@ -119,7 +119,15 @@ suite.test("getKeys", function()
 
 suite.test("getLength", function() 
 {
+  var plain = {x:1, y:2, z:3};
+  this.isEqual(core.Object.getLength(plain), 3);
 
+  var construct = Function();
+  construct.prototype = {x:1,y:2,z:3,a:true,b:false,toString:123};
+  var extended = new construct();  
+  extended.localKey = 42;
+  extended.toString = 3;
+  this.isEqual(core.Object.getLength(extended), 2);
 });
 
 suite.test("getValues", function() 

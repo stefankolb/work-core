@@ -33,7 +33,8 @@ core.Module("core.Number",
 	 * Executes the given @func {Function} @number {Number} of times.
 	 * Support an optional @context {Object?} for execution.
 	 */
-	times : function(number, func, context) {
+	times : function(func, context, number) 
+	{
 		for (var i=0; i<number; i++) {
 			context ? func.call(context) : func();
 		}

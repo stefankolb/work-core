@@ -10,31 +10,11 @@
 
 (function() 
 {
-	var hexTable = "0123456789abcdef".split("");
-
 	/**
 	 * Utility collection used by the different checksum/hashing implementations.
 	 */
 	core.Module("core.crypt.Util", 
 	{
-	  /**
-	   * {String} Converts the string into a hex string
-	   */
-	  toHex : function(str) 
-	  {
-	    var output = "";
-	    var code;
-
-	    for (var i = 0, l = str.length; i < l; i++)
-	    {
-	      code = str.charCodeAt(i);
-	      output += hexTable[(code >>> 4) & 0x0F] + hexTable[code & 0x0F];
-	    }
-
-	    return output;
-	  },
-
-
 		/**
 		 * {Array} Convert @input {String} to an array of little-endian words.
 		 * 

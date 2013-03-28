@@ -8,7 +8,7 @@
   var Escapes, toPaddedString, quote, serialize;
   var fromCharCode, Unescapes, abort, lex, get, walk, update, Index, Source;
 
-
+  return;
 
   if (!core.detect.JSON.VALUE) 
   {

@@ -135,7 +135,7 @@
 
 
     /**
-     * Loops trough all entries - even inherited ones - of the given @object {Object} and executes the
+     * Loops trough all entries - including inherited ones - of the given @object {Object} and executes the
      * given @callback {Function} in the given @context {Object} on each entry.
      * The @callback is called with these arguments: `value`, `key`, `object`.
      */
@@ -175,7 +175,7 @@
 
 
     /**
-     * {Integer} Returns the length of the given @object.
+     * {Integer} Returns the length of the given @object {Object}.
      */
     getLength : createIterator(
     {
@@ -202,7 +202,7 @@
 
 
     /**
-     * {Integer} Returns whether the given @object is empty.
+     * {Integer} Returns whether the given @object {Object} is empty.
      */
     isEmpty : createIterator(
     {
@@ -215,7 +215,8 @@
 
 
     /**
-     * {Map} Returns a copy of the @object {Map}, filtered to only have values for the whitelisted @keys {String...}.
+     * {Map} Returns a copy of the @object {Object}, 
+     * filtered to only have values for the whitelisted @keys {String...}.
      */
     pick : function(object, keys) 
     {
@@ -233,8 +234,10 @@
 
 
     /**
-     * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
-     * objects or arrays will be copied by reference, not duplicated.
+     * {Map} Create a shallow-copied clone of the @object {Object} where all the
+     * keys of @table {Map} will be translated to the value of that mapping.
+     * It uses the original key when no translation is available.
+     * Any nested objects or arrays will be copied by reference, not duplicated.
      */
     translate : createIterator(
     {

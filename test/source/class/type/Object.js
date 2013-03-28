@@ -8,10 +8,22 @@ suite.test("isEmpty", function()
   this.isTrue(!core.Object.isEmpty({toString:null, hello:null, foo:1}));
 });
 
-suite.test("values", function() 
+suite.test("getKeys", function() 
 {
-  var values = core.Object.values({x:1, y:2, z:3}).sort().join(",");
+  var keys = core.Object.getKeys({x:1, y:2, z:3}).join(",");
+  this.isEqual(keys, "x,y,z");
+
+  var keys = core.Object.getKeys({x:1, y:2, z:3, toString:4}).join(",");
+  this.isEqual(keys, "x,y,z,toString");  
+});
+
+suite.test("getValues", function() 
+{
+  var values = core.Object.getValues({x:1, y:2, z:3}).sort().join(",");
   this.isEqual(values, "1,2,3");
+
+  var values = core.Object.getValues({x:1, y:2, z:3, toString:4}).join(",");
+  this.isEqual(values, "1,2,3,4");
 });
 
 

@@ -1,5 +1,16 @@
 var suite = new core.testrunner.Suite("Type/Object");
 
+suite.test("clone", function() 
+{
+  var orig = {x:1,y:2,z:3,a:true,b:false};
+  var clone = core.Object.clone(orig);
+  this.isNotIdentical(orig, clone);
+
+  this.isEqual(core.Object.getKeys(orig).join(","), core.Object.getKeys(clone).join(","))
+  this.isEqual(core.Object.getValues(orig).join(","), core.Object.getValues(clone).join(","))
+
+});
+
 suite.test("isEmpty", function() 
 {
   // toString etc. are special in IE because these are built-in keys

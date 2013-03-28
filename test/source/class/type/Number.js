@@ -32,9 +32,9 @@ suite.test("times", function()
 });
 
 
-suite.test("hex", function() 
+suite.test("toHex", function() 
 {
-  this.isIdentical(core.Number.hex(15), "f");
-  this.isIdentical(core.Number.hex(252), "fc");
-  this.isIdentical(core.Number.hex(99), "63");
+  this.isIdentical(core.Number.toHex(15), "f");
+  this.isIdentical(core.Number.toHex(252), "fc");
+  this.isIdentical(core.Number.toHex(99), "63");
 });

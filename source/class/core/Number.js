@@ -44,7 +44,7 @@ core.Module("core.Number",
 	/**
 	 * {String} Converts the @number {Number} to a hex string.
 	 */
-	hex : function(number) {
+	toHex : function(number) {
 		return number.toString(16);
 	}
 });

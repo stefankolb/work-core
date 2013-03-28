@@ -149,10 +149,35 @@ suite.test("isEmpty", function()
 
 suite.test("pick", function() 
 {
+  var res = core.Object.pick({x:1,y:2,z:3}, "y");
+  this.isEqual(core.Object.getLength(res), 1);
+  this.isEqual(core.Object.getKeys(res).toString(), "y");
+  this.isEqual(core.Object.getValues(res).toString(), "2");
 
+  var res = core.Object.pick({x:1,y:2,z:3}, "y", "z");
+  this.isEqual(core.Object.getLength(res), 2);
+  this.isEqual(core.Object.getKeys(res).toString(), "y,z");
+  this.isEqual(core.Object.getValues(res).toString(), "2,3");
 });
 
 suite.test("translate", function() 
 {
+  var source = {x:1,y:2,z:3};
+  var translated = core.Object.translate(source, {
+    y:"foo"
+  });
 
+  this.isEqual(core.Object.getLength(translated), 3);
+  this.isEqual(core.Object.getKeys(translated).toString(), "x,foo,z");
+  this.isEqual(core.Object.getValues(translated).toString(), "1,2,3");
+
+  var source = {x:1,y:2,z:3};
+  var translated = core.Object.translate(source, {
+    x:"y",
+    y:"x"
+  });
+
+  this.isEqual(core.Object.getLength(translated), 3);
+  this.isEqual(core.Object.getKeys(translated).toString(), "y,x,z");
+  this.isEqual(core.Object.getValues(translated).toString(), "1,2,3");
 });

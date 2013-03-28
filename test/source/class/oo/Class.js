@@ -4,7 +4,7 @@
 ---------------------------------------------------------------------------
 */
 
-var suite = new core.testrunner.Suite("Classes/Basics", null, function() {
+var suite = new core.testrunner.Suite("OO/Classes/Basics", null, function() {
   core.Main.clearNamespace("abc.Class1");
   core.Main.clearNamespace("abc.Class2");
   core.Main.clearNamespace("abc.Class3");
@@ -46,7 +46,7 @@ suite.test("Class false validation", function() {
 ---------------------------------------------------------------------------
 */  
 
-var suite = new core.testrunner.Suite("Classes/Members", null, function() {
+var suite = new core.testrunner.Suite("OO/Classes/Members", null, function() {
   core.Main.clearNamespace("members.Class1");
   core.Main.clearNamespace("members.Include1");
   core.Main.clearNamespace("members.Include2");
@@ -210,7 +210,7 @@ suite.test("Conflicting member functions with failed private merge", function() 
 ---------------------------------------------------------------------------
 */
 
-var suite = new core.testrunner.Suite("Classes/Events", null, function() {
+var suite = new core.testrunner.Suite("OO/Classes/Events", null, function() {
   core.Main.clearNamespace("events.Keyboard");
   core.Main.clearNamespace("events.Mouse");
   core.Main.clearNamespace("events.Widget");
@@ -355,7 +355,7 @@ suite.test("Event Interfaces", function()
 ---------------------------------------------------------------------------
 */
 
-var suite = new core.testrunner.Suite("Classes/Properties", null, function() {
+var suite = new core.testrunner.Suite("OO/Classes/Properties", null, function() {
   core.Main.clearNamespace("properties.Text");
   core.Main.clearNamespace("properties.Dimension");
   core.Main.clearNamespace("properties.Label");

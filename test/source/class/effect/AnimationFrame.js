@@ -1,4 +1,4 @@
-var suite = new core.testrunner.Suite("Effect :: AnimationFrame");
+var suite = new core.testrunner.Suite("Effect/AnimationFrame");
 
 if (jasy.Env.isSet("runtime", "browser"))
 {

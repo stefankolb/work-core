@@ -1,6 +1,6 @@
 (function(global) 
 {
-  var suite = new core.testrunner.Suite("Modules", null, function() {
+  var suite = new core.testrunner.Suite("OO/Modules", null, function() {
     delete global.abc;
     delete global.x;
   });

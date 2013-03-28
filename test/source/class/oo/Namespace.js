@@ -1,6 +1,6 @@
 (function(global) 
 {
-  var suite = new core.testrunner.Suite("Namespaces", null, function() {
+  var suite = new core.testrunner.Suite("OO/Namespaces", null, function() {
     delete global.foo;
     delete global.abc;
     delete global.a;

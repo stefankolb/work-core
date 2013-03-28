@@ -1,4 +1,4 @@
-var suite = new core.testrunner.Suite("IO :: Asset");
+var suite = new core.testrunner.Suite("IO/Asset");
 
 suite.test("Image Sizes", function() {
 

@@ -17,7 +17,7 @@
   core.Module("core.String",
   {
     /**
-     * {String} Converts the string into a hex string
+     * {String} Converts the @str {String} into a hex string
      */
     toHex : function(str) 
     {
@@ -35,7 +35,7 @@
 
     
     /**
-     * {String} Encodes the string as UTF-8.
+     * {String} Encodes the @str {String} as UTF-8.
      *
      * Via: http://ecmanaut.blogspot.com/2006/07/encoding-decoding-utf8-in-javascript.html
      */
@@ -45,7 +45,7 @@
     
     
     /**
-     * {String} Decodes the string from UTF-8.
+     * {String} Decodes the @str {String} from UTF-8.
      *
      * Via: http://ecmanaut.blogspot.com/2006/07/encoding-decoding-utf8-in-javascript.html
      */
@@ -55,15 +55,15 @@
 
 
     /**
-     * Whether the string contains the given @substring {String}.
+     * Whether the @str {String} contains the given @substring {String}.
      */
-    contains : function(fullstring, substring) {
-      return fullstring.indexOf(substring) != -1;
+    contains : function(str, substring) {
+      return str.indexOf(substring) != -1;
     },
 
 
     /**
-     * {Boolean} Returns true if the string has a length of 0 or contains only whitespace.
+     * {Boolean} Returns true if the @str {String} has a length of 0 or contains only whitespace.
      */
     isBlank : function(str) {
       return str.trim().length == 0;
@@ -71,7 +71,7 @@
 
 
     /**
-     * {String} Reverses the string
+     * {String} Reverses the @str {String}.
      */
     reverse : function(str) {
       return str.split("").reverse().join("");
@@ -79,7 +79,7 @@
 
 
     /**
-     * {String} Removes double spaces and line breaks.
+     * {String} Removes double spaces and line breaks from the @str {String}.
      */
     compact : function(str) {
       return str.replace(/[\r\n]/g, " ").trim().replace(/([\s　])+/g, '$1');
@@ -87,10 +87,10 @@
 
 
     /**
-     * {String} Returns a hyphenated copy of the original string e.g.
+     * {String} Hyphenates the @str {String} like:
      *
-     * - camelCase => camel-case
-     * - HelloWorld => -hello-world
+     * - `camelCase` => `camel-case`
+     * - `HelloWorld` => `-hello-world`
      */
     hyphenate : function(str) {
       return str.replace(/[A-Z]/g,'-$&').toLowerCase();
@@ -98,7 +98,10 @@
 
 
     /**
-     * {String} Camelizes this string.
+     * {String} Camelizes this @str {String} like:
+     *
+     * - `camel-case => camelCase`
+     * - `-hello-world => HelloWorld`
      */
     camelize : function(str)
     {
@@ -109,7 +112,7 @@
 
 
     /**
-     * {String} Returns a new string which is a @nr {Integer} repeated copy of the original one.
+     * {String} Returns a new @str {String} which is a @nr {Integer} repeated copy of the original one.
      */
     repeat : function(str, nr)
     {
@@ -135,7 +138,7 @@
 
 
     /**
-     * {Boolean} Returns `true` if this string starts with the given substring @begin {String}
+     * {Boolean} Returns `true` if the @str {String} starts with the given substring @begin {String}
      */
     startsWith : function(str, begin) {
       return begin == str.slice(0, begin.length);
@@ -143,7 +146,7 @@
 
 
     /**
-     * {Boolean} Returns `true` if this string ends with the given substring @end {String}
+     * {Boolean} Returns `true` if the @str {String} ends with the given substring @end {String}
      */
     endsWith : function(str, end) {
       return end == str.slice(-end.length);

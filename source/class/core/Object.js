@@ -105,10 +105,17 @@
     // Wrap code to allow injection of scope variables and
     // for being able to support given arguments list.
     var wrapperCode = 'return function(object' + (config.args ? "," + config.args : "") + '){' + code + '};'
-    var compiledWrapper = Function("global", "hasOwnProperty", "shadowed", "shadowedLength", wrapperCode);
-    
-    // Execute compiled wrapper to return generated method
-    return compiledWrapper(global, hasOwnProperty, shadowed, shadowedLength);
+
+    if (jasy.Env.isSet("engine", "trident"))
+    {
+      var compiledWrapper = Function("global", "hasOwnProperty", "shadowed", "shadowedLength", wrapperCode);
+      return compiledWrapper(global, hasOwnProperty, shadowed, shadowedLength);
+    }
+    else
+    {
+      var compiledWrapper = Function("global", "hasOwnProperty", wrapperCode);
+      return compiledWrapper(global, hasOwnProperty);
+    }
   };
 
   var callbackArgs = "callback,context";

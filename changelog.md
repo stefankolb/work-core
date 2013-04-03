@@ -1,5 +1,5 @@
-0.9-alpha2
-==========
+0.9-beta2
+=========
 
 New/Better
 ----------
@@ -28,7 +28,7 @@ Changes
 - Removed inline `requestAnimationFrame`-fix in `core.effect.Animate` using new `core.effect.AnimationFrame` instead.
 
 
-0.9-alpha1
+0.9-beta1
 ==========
 
 This is the first follow up release of the Core project by Sebastian Software. Updated Copyright headers for new owner (of this fork).

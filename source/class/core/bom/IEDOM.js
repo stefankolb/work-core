@@ -19,8 +19,6 @@
  * * insertAdjacentElement(where, elem)
  * * insertAdjacentHTML(where, html)
  * * insertAdjacentText(where, text)
- *
- * #custom(HTMLElement)
  */
 if (jasy.Env.isSet("runtime", "browser"))
 {

@@ -16,7 +16,7 @@
  */
 (function(global, slice)
 {
-	var methods = "log,debug,error,warn,info".split(",");
+	var methods = "log,debug,error,warn,info,timeStamp".split(",");
 	var console = global.console || (global.console = {});
 	var log = console.log || new Function;
 

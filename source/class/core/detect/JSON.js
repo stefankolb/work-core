@@ -44,7 +44,7 @@
         if (JSON[PARSE]("0") === 0 && !JSON[PARSE](false)) 
         {
           // Simple parsing test.
-          var value = JSON[PARSE](stringifyd);
+          var value = JSON[PARSE](serialized);
 
           if ((parseSupported = value.A.length == 5 && value.A[0] == 1)) 
           {

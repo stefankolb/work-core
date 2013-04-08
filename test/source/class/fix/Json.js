@@ -76,10 +76,8 @@ suite.test("Stringify", function()
   // string, array, object, Boolean, or `null` literal. This applies to
   // objects with custom `toJSON` methods as well, unless they are nested
   // inside object or array literals.
-  console.log("ERROR START", value)
   this.isIdentical(JSON.stringify(value), "1");
   this.isEqual(JSON.stringify([value]), "[1]");
-  console.log("ERROR END")
 
   // FF 3.1b1, 2 halts serialization if an array contains a function:
   // `[1, true, getClass, 1]` serializes as "[1,true,],". These versions
@@ -87,6 +85,9 @@ suite.test("Stringify", function()
   // FF 3.1b3 elides non-JSON values from objects and arrays, unless they
   // define custom `toJSON` methods.
   this.isEqual(JSON.stringify([undef, getClass, null]), "[null,null,null]");
+
+  // Simple test
+  this.isEqual(JSON.stringify({a:1,b:2}), '{"a":1,"b":2}');
 
   // Simple serialization test. FF 3.1b1 uses Unicode escape sequences
   // where character escape codes are expected (e.g., `\b` => `\u0008`).

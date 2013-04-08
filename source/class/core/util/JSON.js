@@ -161,8 +161,7 @@
             // Recursively serialize object members. Members are selected from
             // either a user-specified list of property names, or the object
             // itself.
-            console.log("PROPERTIES: ", properties||value)
-            core.Object.forEach(properties || value, function (property) {
+            core.Object.forEach(properties || value, function (propvalue, property) {
               var element = serialize(property, value, callback, properties, whitespace, indentation, stack);
               if (element !== undef) {
                 // According to ES 5.1 section 15.12.3: "If `gap` {whitespace}
@@ -489,7 +488,7 @@
             // `forEach` can't be used to traverse an array in Opera <= 8.54,
             // as `Object#hasOwnProperty` returns `false` for array indices
             // (e.g., `![1, 2, 3].hasOwnProperty("0")`).
-            core.Object.forEach(value, function (property) {
+            core.Object.forEach(value, function (propvalue, property) {
               update(value, property, callback);
             });
           }

@@ -14,43 +14,19 @@
 
 (function(global) 
 {
-  // Convenience aliases.
-  var getClass = {}.toString;
-  var undef;
+  var stringify = function(source, filter, width) {
+    return global.JSON.stringify(source, filter, width);
+  };
 
-  // Export for web browsers and JavaScript engines.
-  global.JSON3 = {};
+  var parse = function(source, callback) {
+    return global.JSON.parse(source, callback);
+  };  
 
-  if (!jasy.Env.isSet("json") || true) 
+  if (!jasy.Env.isSet("json")) 
   {
-    // Test the `Date#getUTC*` methods. Based on work by @Yaffle.
-    var isExtended = new Date(-3509827334573292), floor, Months, getDay;
-
-    try 
-    {
-      // The `getUTCFullYear`, `Month`, and `Date` methods return nonsensical
-      // results for certain dates in Opera >= 10.53.
-      isExtended = isExtended.getUTCFullYear() == -109252 && isExtended.getUTCMonth() === 0 && isExtended.getUTCDate() == 1 &&
-        // Safari < 2.0.2 stores the internal millisecond time value correctly,
-        // but clips the values returned by the date methods to the range of
-        // signed 32-bit integers ([-2 ** 31, 2 ** 31 - 1]).
-        isExtended.getUTCHours() == 10 && isExtended.getUTCMinutes() == 37 && isExtended.getUTCSeconds() == 6 && isExtended.getUTCMilliseconds() == 708;
-    } 
-    catch (exception) {}
-
-    // Define additional utility methods if the `Date` methods are buggy.
-    if (!isExtended) 
-    {
-      var floor = Math.floor;
-      // A mapping between the months of the year and the number of days between
-      // January 1st and the first of the respective month.
-      var Months = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-      // Internal: Calculates the number of days between the Unix epoch and the
-      // first day of the given month.
-      var getDay = function(year, month) {
-        return Months[month] + 365 * (year - 1970) + floor((year - 1969 + (month = +(month > 1))) / 4) - floor((year - 1901 + month) / 100) + floor((year - 1601 + month) / 400);
-      };
-    }
+    // Convenience aliases.
+    var getClass = {}.toString;
+    var undef;
 
     // Public: Serializes a JavaScript `value` as a JSON string. The optional
     // `filter` argument may specify either a function that alters how object and
@@ -58,7 +34,7 @@
     // indicates which properties should be serialized. The optional `width`
     // argument may be either a string or number that specifies the indentation
     // level of the output.
-    if (!core.detect.JSON.VALID_STRINGIFY || true) 
+    if (!core.detect.JSON.VALID_STRINGIFY) 
     {
       // Internal: A map of control characters and their escaped equivalents.
       var Escapes = {
@@ -183,7 +159,7 @@
       };
 
       // Public: `JSON.stringify`. See ES 5.1 section 15.12.3.
-      JSON3.stringify = function (source, filter, width) {
+      var stringify = function (source, filter, width) {
         var whitespace, callback, properties, index, length, value;
         if (typeof filter == "function" || typeof filter == "object" && filter) {
           if (getClass.call(filter) == "[object Function]") {
@@ -213,7 +189,7 @@
     }
 
     // Public: Parses a JSON source string.
-    if (!core.detect.JSON.VALID_PARSE || true) 
+    if (!core.detect.JSON.VALID_PARSE) 
     {
       var Index, Source;
       var fromCharCode = String.fromCharCode;
@@ -497,7 +473,7 @@
       };
 
       // Public: `JSON.parse`. See ES 5.1 section 15.12.2.
-      JSON3.parse = function (source, callback) {
+      var parse = function (source, callback) {
         var result, value;
         Index = 0;
         Source = source;
@@ -511,8 +487,16 @@
         return callback && getClass.call(callback) == "[object Function]" ? walk((value = {}, value[""] = result, value), "", callback) : result;
       };
     }
-
-    global.JSON.parse = JSON3.parse;
-    global.JSON.stringify = JSON3.stringify;
   }
+
+
+  /**
+   * Wrapped API for native or custom JSON API (ES 5.1). Prefers native methods where available.
+   */
+  core.Module("core.JSON",
+  {
+    parse : parse,
+    stringify : stringify
+  });
+
 })(core.Main.getGlobal());

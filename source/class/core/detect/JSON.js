@@ -9,12 +9,10 @@
 (function(global, Date)
 {
   var JSON = global.JSON;
-  var parseSupported = JSON && typeof JSON.parse == "function";
-  var stringifySupported = JSON && typeof JSON.stringify == "function";
-
   var serialized = '{"A":[1,true,false,null,"\\u0000\\b\\n\\f\\r\\t"]}';
 
-
+  var parseSupported = JSON && typeof JSON.parse == "function";
+  var stringifySupported = JSON && typeof JSON.stringify == "function";
 
   var PARSE = "parse";
   var STRINGIFY = "stringify";
@@ -121,22 +119,24 @@
           
           // FF 3.1b1 and b2 ignore the `filter` and `width` arguments.
           JSON[STRINGIFY](null, value) === "1" &&
-          JSON[STRINGIFY]([1, 2], null, 1) == "[\n 1,\n 2\n]" &&
+          JSON[STRINGIFY]([1, 2], null, 1) == "[\n 1,\n 2\n]"; 
+
+          // These are already fixed by `fix.DateIso`
           
           // JSON 2, Prototype <= 1.7, and older WebKit builds incorrectly
           // serialize extended years.
-          JSON[STRINGIFY](new Date(-8.64e15)) == '"-271821-04-20T00:00:00.000Z"' &&
+          // JSON[STRINGIFY](new Date(-8.64e15)) == '"-271821-04-20T00:00:00.000Z"' &&
           
           // The milliseconds are optional in ES 5, but required in 5.1.
-          JSON[STRINGIFY](new Date(8.64e15)) == '"+275760-09-13T00:00:00.000Z"' &&
+          // JSON[STRINGIFY](new Date(8.64e15)) == '"+275760-09-13T00:00:00.000Z"' &&
           
           // Firefox <= 11.0 incorrectly serializes years prior to 0 as negative
           // four-digit years instead of six-digit years. Credits: @Yaffle.
-          JSON[STRINGIFY](new Date(-621987552e5)) == '"-000001-01-01T00:00:00.000Z"' &&
+          // JSON[STRINGIFY](new Date(-621987552e5)) == '"-000001-01-01T00:00:00.000Z"' &&
           
           // Safari <= 5.1.5 and Opera >= 10.53 incorrectly serialize millisecond
           // values less than 1000. Credits: @Yaffle.
-          JSON[STRINGIFY](new Date(-1)) == '"1969-12-31T23:59:59.999Z"';
+          // JSON[STRINGIFY](new Date(-1)) == '"1969-12-31T23:59:59.999Z"';
       } 
       catch (exception) {
         stringifySupported = false;

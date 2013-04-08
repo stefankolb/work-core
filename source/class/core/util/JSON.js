@@ -1,138 +1,56 @@
-/*! JSON v3.2.4 | http://bestiejs.github.com/json3 | Copyright 2012, Kit Cambridge | http://kit.mit-license.org */
-;(function () {
+/* 
+==================================================================================================
+  Core - JavaScript Foundation 
+  Copyright 2010-2012 Zynga Inc.
+  Copyright 2012-2013 Sebastian Werner
+--------------------------------------------------------------------------------------------------
+  Based on JSON v3.2.4
+  http://bestiejs.github.com/json3
+  Copyright 2012, Kit Cambridge
+==================================================================================================
+*/
+
+"use strict";
+
+(function(global) 
+{
   // Convenience aliases.
-  var getClass = {}.toString, isProperty, forEach, undef;
-  var JSON3 = this.JSON || (this.JSON = {});
+  var getClass = {}.toString;
+  var undef;
 
-  // Local variables.
-  var Escapes, toPaddedString, quote, serialize;
-  var fromCharCode, Unescapes, abort, lex, get, walk, update, Index, Source;
+  // Export for web browsers and JavaScript engines.
+  global.JSON3 = {};
 
-  return;
-
-  if (!core.detect.JSON.VALUE) 
+  if (!jasy.Env.isSet("json") || true) 
   {
+    // Test the `Date#getUTC*` methods. Based on work by @Yaffle.
+    var isExtended = new Date(-3509827334573292), floor, Months, getDay;
+
+    try 
+    {
+      // The `getUTCFullYear`, `Month`, and `Date` methods return nonsensical
+      // results for certain dates in Opera >= 10.53.
+      isExtended = isExtended.getUTCFullYear() == -109252 && isExtended.getUTCMonth() === 0 && isExtended.getUTCDate() == 1 &&
+        // Safari < 2.0.2 stores the internal millisecond time value correctly,
+        // but clips the values returned by the date methods to the range of
+        // signed 32-bit integers ([-2 ** 31, 2 ** 31 - 1]).
+        isExtended.getUTCHours() == 10 && isExtended.getUTCMinutes() == 37 && isExtended.getUTCSeconds() == 6 && isExtended.getUTCMilliseconds() == 708;
+    } 
+    catch (exception) {}
+
     // Define additional utility methods if the `Date` methods are buggy.
-    if (!isExtended) {
-      floor = Math.floor;
+    if (!isExtended) 
+    {
+      var floor = Math.floor;
       // A mapping between the months of the year and the number of days between
       // January 1st and the first of the respective month.
-      Months = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+      var Months = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
       // Internal: Calculates the number of days between the Unix epoch and the
       // first day of the given month.
-      getDay = function (year, month) {
+      var getDay = function(year, month) {
         return Months[month] + 365 * (year - 1970) + floor((year - 1969 + (month = +(month > 1))) / 4) - floor((year - 1901 + month) / 100) + floor((year - 1601 + month) / 400);
       };
     }
-    
-    // Internal: Determines if a property is a direct property of the given
-    // object. Delegates to the native `Object#hasOwnProperty` method.
-    if (!(isProperty = {}.hasOwnProperty)) {
-      isProperty = function (property) {
-        var members = {}, constructor;
-        if ((members.__proto__ = null, members.__proto__ = {
-          // The *proto* property cannot be set multiple times in recent
-          // versions of Firefox and SeaMonkey.
-          "toString": 1
-        }, members).toString != getClass) {
-          // Safari <= 2.0.3 doesn't implement `Object#hasOwnProperty`, but
-          // supports the mutable *proto* property.
-          isProperty = function (property) {
-            // Capture and break the object's prototype chain (see section 8.6.2
-            // of the ES 5.1 spec). The parenthesized expression prevents an
-            // unsafe transformation by the Closure Compiler.
-            var original = this.__proto__, result = property in (this.__proto__ = null, this);
-            // Restore the original prototype chain.
-            this.__proto__ = original;
-            return result;
-          };
-        } else {
-          // Capture a reference to the top-level `Object` constructor.
-          constructor = members.constructor;
-          // Use the `constructor` property to simulate `Object#hasOwnProperty` in
-          // other environments.
-          isProperty = function (property) {
-            var parent = (this.constructor || constructor).prototype;
-            return property in this && !(property in parent && this[property] === parent[property]);
-          };
-        }
-        members = null;
-        return isProperty.call(this, property);
-      };
-    }
-
-    // Internal: Normalizes the `for...in` iteration algorithm across
-    // environments. Each enumerated key is yielded to a `callback` function.
-    forEach = function (object, callback) {
-      var size = 0, Properties, members, property, forEach;
-
-      // Tests for bugs in the current environment's `for...in` algorithm. The
-      // `valueOf` property inherits the non-enumerable flag from
-      // `Object.prototype` in older versions of IE, Netscape, and Mozilla.
-      (Properties = function () {
-        this.valueOf = 0;
-      }).prototype.valueOf = 0;
-
-      // Iterate over a new instance of the `Properties` class.
-      members = new Properties();
-      for (property in members) {
-        // Ignore all properties inherited from `Object.prototype`.
-        if (isProperty.call(members, property)) {
-          size++;
-        }
-      }
-      Properties = members = null;
-
-      // Normalize the iteration algorithm.
-      if (!size) {
-        // A list of non-enumerable properties inherited from `Object.prototype`.
-        members = ["valueOf", "toString", "toLocaleString", "propertyIsEnumerable", "isPrototypeOf", "hasOwnProperty", "constructor"];
-        // IE <= 8, Mozilla 1.0, and Netscape 6.2 ignore shadowed non-enumerable
-        // properties.
-        forEach = function (object, callback) {
-          var isFunction = getClass.call(object) == "[object Function]", property, length;
-          for (property in object) {
-            // Gecko <= 1.0 enumerates the `prototype` property of functions under
-            // certain conditions; IE does not.
-            if (!(isFunction && property == "prototype") && isProperty.call(object, property)) {
-              callback(property);
-            }
-          }
-          // Manually invoke the callback for each non-enumerable property.
-          for (length = members.length; property = members[--length]; isProperty.call(object, property) && callback(property));
-        };
-      } else if (size == 2) {
-        // Safari <= 2.0.4 enumerates shadowed properties twice.
-        forEach = function (object, callback) {
-          // Create a set of iterated properties.
-          var members = {}, isFunction = getClass.call(object) == "[object Function]", property;
-          for (property in object) {
-            // Store each property name to prevent double enumeration. The
-            // `prototype` property of functions is not enumerated due to cross-
-            // environment inconsistencies.
-            if (!(isFunction && property == "prototype") && !isProperty.call(members, property) && (members[property] = 1) && isProperty.call(object, property)) {
-              callback(property);
-            }
-          }
-        };
-      } else {
-        // No bugs detected; use the standard `for...in` algorithm.
-        forEach = function (object, callback) {
-          var isFunction = getClass.call(object) == "[object Function]", property, isConstructor;
-          for (property in object) {
-            if (!(isFunction && property == "prototype") && isProperty.call(object, property) && !(isConstructor = property === "constructor")) {
-              callback(property);
-            }
-          }
-          // Manually invoke the callback for the `constructor` property due to
-          // cross-environment inconsistencies.
-          if (isConstructor || isProperty.call(object, (property = "constructor"))) {
-            callback(property);
-          }
-        };
-      }
-      return forEach(object, callback);
-    };
 
     // Public: Serializes a JavaScript `value` as a JSON string. The optional
     // `filter` argument may specify either a function that alters how object and
@@ -140,9 +58,10 @@
     // indicates which properties should be serialized. The optional `width`
     // argument may be either a string or number that specifies the indentation
     // level of the output.
-    if (!has("json-stringify")) {
+    if (!core.detect.JSON.VALID_STRINGIFY || true) 
+    {
       // Internal: A map of control characters and their escaped equivalents.
-      Escapes = {
+      var Escapes = {
         "\\": "\\\\",
         '"': '\\"',
         "\b": "\\b",
@@ -154,7 +73,7 @@
 
       // Internal: Converts `value` into a zero-padded string such that its
       // length is at least equal to `width`. The `width` must be <= 6.
-      toPaddedString = function (width, value) {
+      var toPaddedString = function (width, value) {
         // The `|| 0` expression is necessary to work around a bug in
         // Opera <= 7.54u2 where `0 == -0`, but `String(-0) !== "0"`.
         return ("000000" + (value || 0)).slice(-width);
@@ -164,7 +83,7 @@
       // characters (characters with code unit values between 0 and 31) with
       // their escaped equivalents. This is an implementation of the
       // `Quote(value)` operation defined in ES 5.1 section 15.12.3.
-      quote = function (value) {
+      var quote = function (value) {
         var result = '"', index = 0, symbol;
         for (; symbol = value.charAt(index); index++) {
           // Escape the reverse solidus, double quote, backspace, form feed, line
@@ -179,71 +98,31 @@
 
       // Internal: Recursively serializes an object. Implements the
       // `Str(key, holder)`, `JO(value)`, and `JA(value)` operations.
-      serialize = function (property, object, callback, properties, whitespace, indentation, stack) {
+      var serialize = function (property, object, callback, properties, whitespace, indentation, stack) 
+      {
         var value = object[property], className, year, month, date, time, hours, minutes, seconds, milliseconds, results, element, index, length, prefix, any, result;
-        if (typeof value == "object" && value) {
-          className = getClass.call(value);
-          if (className == "[object Date]" && !isProperty.call(value, "toJSON")) {
-            if (value > -1 / 0 && value < 1 / 0) {
-              // Dates are serialized according to the `Date#toJSON` method
-              // specified in ES 5.1 section 15.9.5.44. See section 15.9.1.15
-              // for the ISO 8601 date time string format.
-              if (getDay) {
-                // Manually compute the year, month, date, hours, minutes,
-                // seconds, and milliseconds if the `getUTC*` methods are
-                // buggy. Adapted from @Yaffle's `date-shim` project.
-                date = floor(value / 864e5);
-                for (year = floor(date / 365.2425) + 1970 - 1; getDay(year + 1, 0) <= date; year++);
-                for (month = floor((date - getDay(year, 0)) / 30.42); getDay(year, month + 1) <= date; month++);
-                date = 1 + date - getDay(year, month);
-                // The `time` value specifies the time within the day (see ES
-                // 5.1 section 15.9.1.2). The formula `(A % B + B) % B` is used
-                // to compute `A modulo B`, as the `%` operator does not
-                // correspond to the `modulo` operation for negative numbers.
-                time = (value % 864e5 + 864e5) % 864e5;
-                // The hours, minutes, seconds, and milliseconds are obtained by
-                // decomposing the time within the day. See section 15.9.1.10.
-                hours = floor(time / 36e5) % 24;
-                minutes = floor(time / 6e4) % 60;
-                seconds = floor(time / 1e3) % 60;
-                milliseconds = time % 1e3;
-              } else {
-                year = value.getUTCFullYear();
-                month = value.getUTCMonth();
-                date = value.getUTCDate();
-                hours = value.getUTCHours();
-                minutes = value.getUTCMinutes();
-                seconds = value.getUTCSeconds();
-                milliseconds = value.getUTCMilliseconds();
-              }
-              // Serialize extended years correctly.
-              value = (year <= 0 || year >= 1e4 ? (year < 0 ? "-" : "+") + toPaddedString(6, year < 0 ? -year : year) : toPaddedString(4, year)) +
-                "-" + toPaddedString(2, month + 1) + "-" + toPaddedString(2, date) +
-                // Months, dates, hours, minutes, and seconds should have two
-                // digits; milliseconds should have three.
-                "T" + toPaddedString(2, hours) + ":" + toPaddedString(2, minutes) + ":" + toPaddedString(2, seconds) +
-                // Milliseconds are optional in ES 5.0, but required in 5.1.
-                "." + toPaddedString(3, milliseconds) + "Z";
-            } else {
-              value = null;
-            }
-          } else if (typeof value.toJSON == "function" && ((className != "[object Number]" && className != "[object String]" && className != "[object Array]") || isProperty.call(value, "toJSON"))) {
-            // Prototype <= 1.6.1 adds non-standard `toJSON` methods to the
-            // `Number`, `String`, `Date`, and `Array` prototypes. JSON 3
-            // ignores all `toJSON` methods on these objects unless they are
-            // defined directly on an instance.
-            value = value.toJSON(property);
+        if ((typeof value == "object" || typeof value == "function") && value) 
+        {
+          if (typeof value.toJSON == "function") {
+            value = value.toJSON();
+          } else if (getClass.call(value) == "[object Date]" && value.toISOString) {
+            value = value.toISOString();
           }
         }
-        if (callback) {
+
+        if (callback) 
+        {
           // If a replacement function was provided, call it to obtain the value
           // for serialization.
           value = callback.call(object, property, value);
         }
+
         if (value === null) {
           return "null";
         }
+
         className = getClass.call(value);
+        
         if (className == "[object Boolean]") {
           // Booleans are represented literally.
           return "" + value;
@@ -282,7 +161,8 @@
             // Recursively serialize object members. Members are selected from
             // either a user-specified list of property names, or the object
             // itself.
-            forEach(properties || value, function (property) {
+            console.log("PROPERTIES: ", properties||value)
+            core.Object.forEach(properties || value, function (property) {
               var element = serialize(property, value, callback, properties, whitespace, indentation, stack);
               if (element !== undef) {
                 // According to ES 5.1 section 15.12.3: "If `gap` {whitespace}
@@ -334,11 +214,14 @@
     }
 
     // Public: Parses a JSON source string.
-    if (!has("json-parse")) {
-      fromCharCode = String.fromCharCode;
+    if (!core.detect.JSON.VALID_PARSE || true) 
+    {
+      var Index, Source;
+      var fromCharCode = String.fromCharCode;
+
       // Internal: A map of escaped control characters and their unescaped
       // equivalents.
-      Unescapes = {
+      var Unescapes = {
         "\\": "\\",
         '"': '"',
         "/": "/",
@@ -350,7 +233,7 @@
       };
 
       // Internal: Resets the parser state and throws a `SyntaxError`.
-      abort = function() {
+      var abort = function() {
         Index = Source = null;
         throw SyntaxError();
       };
@@ -358,7 +241,7 @@
       // Internal: Returns the next token, or `"$"` if the parser has reached
       // the end of the source string. A token may be a string, number, `null`
       // literal, or Boolean literal.
-      lex = function () {
+      var lex = function () {
         var source = Source, length = source.length, symbol, value, begin, position, sign;
         while (Index < length) {
           symbol = source.charAt(Index);
@@ -500,7 +383,7 @@
       };
 
       // Internal: Parses a JSON `value` token.
-      get = function (value) {
+      var get = function (value) {
         var results, any, key;
         if (value == "$") {
           // Unexpected end of input.
@@ -583,7 +466,7 @@
       };
 
       // Internal: Updates a traversed object member.
-      update = function(source, property, callback) {
+      var update = function(source, property, callback) {
         var element = walk(source, property, callback);
         if (element === undef) {
           delete source[property];
@@ -595,7 +478,7 @@
       // Internal: Recursively traverses a parsed JSON object, invoking the
       // `callback` function for each value. This is an implementation of the
       // `Walk(holder, name)` operation defined in ES 5.1 section 15.12.2.
-      walk = function (source, property, callback) {
+      var walk = function (source, property, callback) {
         var value = source[property], length;
         if (typeof value == "object" && value) {
           if (getClass.call(value) == "[object Array]") {
@@ -606,7 +489,7 @@
             // `forEach` can't be used to traverse an array in Opera <= 8.54,
             // as `Object#hasOwnProperty` returns `false` for array indices
             // (e.g., `![1, 2, 3].hasOwnProperty("0")`).
-            forEach(value, function (property) {
+            core.Object.forEach(value, function (property) {
               update(value, property, callback);
             });
           }
@@ -629,12 +512,8 @@
         return callback && getClass.call(callback) == "[object Function]" ? walk((value = {}, value[""] = result, value), "", callback) : result;
       };
     }
-  }
 
-  // Export for asynchronous module loaders.
-  if (isLoader) {
-    define(function () {
-      return JSON3;
-    });
+    global.JSON.parse = JSON3.parse;
+    global.JSON.stringify = JSON3.stringify;
   }
-}).call(this);
+})(core.Main.getGlobal());

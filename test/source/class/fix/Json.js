@@ -1,3 +1,5 @@
+
+/** #require(core.util.JSON) */
 var suite = new core.testrunner.Suite("Fix/JSON");
 
 suite.test("Parse", function() 
@@ -73,13 +75,11 @@ suite.test("Stringify", function()
   // FF 3.1b1, 2 throw an error if the given value is not a number,
   // string, array, object, Boolean, or `null` literal. This applies to
   // objects with custom `toJSON` methods as well, unless they are nested
-  // inside object or array literals. YUI 3.0.0b1 ignores custom `toJSON`
-  // methods entirely.
+  // inside object or array literals.
+  console.log("ERROR START", value)
   this.isIdentical(JSON.stringify(value), "1");
   this.isEqual(JSON.stringify([value]), "[1]");
-
-  // YUI 3.0.0b1 fails to serialize `null` literals.
-  this.isEqual(JSON.stringify(null), "null");
+  console.log("ERROR END")
 
   // FF 3.1b1, 2 halts serialization if an array contains a function:
   // `[1, true, getClass, 1]` serializes as "[1,true,],". These versions

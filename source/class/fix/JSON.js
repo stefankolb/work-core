@@ -1,3 +1,7 @@
+
+
+"use strict";
+
 (function(global, undef) 
 {
   var json = global.JSON;
@@ -17,4 +21,5 @@
       return value === undef ? value : stringifyOrig.apply(json, arguments);
     };
   }
+
 })(core.Main.getGlobal());

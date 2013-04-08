@@ -16,6 +16,10 @@ fields:
     check: Boolean
     default: false
     detect: core.detect.ES5
+  json:
+    check: Boolean
+    default: false
+    detect: core.detect.JSON    
   locale:
     check: String
     default: en

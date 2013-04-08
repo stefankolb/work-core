@@ -66,7 +66,7 @@ suite.test("Stringify", function()
   // FF 3.1b3 pass this test.
   this.isIdentical(JSON.stringify(undef), undef);
 
-  // Safari <= 5.1.7 and FF 3.1b3 throw `Error`s and `TypeError`s,
+  // Safari < 7? and FF 3.1b3 throw `Error`s and `TypeError`s,
   // respectively, if the value is omitted entirely.
   this.isIdentical(JSON.stringify(), undef);
 

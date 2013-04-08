@@ -91,6 +91,7 @@ def test_source(main="test.Main"):
 
     session.setField("debug", True)
     session.permutateField("es5")
+    session.permutateField("json")
     session.permutateField("engine")
     session.permutateField("runtime")
 
@@ -117,6 +118,7 @@ def test_build(main="test.Main"):
 
     session.setField("debug", True)
     session.permutateField("es5")
+    session.permutateField("json")
     session.permutateField("engine")
     session.permutateField("runtime")
 

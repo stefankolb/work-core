@@ -78,10 +78,6 @@ suite.test("Stringify", function()
   this.isIdentical(JSON.stringify(value), "1");
   this.isEqual(JSON.stringify([value]), "[1]");
 
-  // Prototype <= 1.6.1 serializes `[undefined]` as `"[]"` instead of
-  // `"[null]"`.
-  this.isEqual(JSON.stringify([undef]), "[null]");
-
   // YUI 3.0.0b1 fails to serialize `null` literals.
   this.isEqual(JSON.stringify(null), "null");
 

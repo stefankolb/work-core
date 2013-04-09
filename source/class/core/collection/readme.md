@@ -1,0 +1,1 @@
+Non standard collection types for JavaScript.

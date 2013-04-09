@@ -16,47 +16,50 @@
 
   if (!Date.prototype.toISOString || (new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1)) 
   {
-    Date.prototype.toISOString = function() 
+    core.Main.addMembers("Date",
     {
-      var self = this;
-      var result, length, value, year, month;
-      if (!isFinite(self)) {
-        throw new RangeError("Date.prototype.toISOString called on non-finite value.");
-      }
-
-      year = self.getUTCFullYear();
-      month = self.getUTCMonth();
-
-      // see https://github.com/kriskowal/es5-shim/issues/111
-      year += Math.floor(month / 12);
-      month = (month % 12 + 12) % 12;
-
-      // the date time string format is specified in 15.9.1.15.
-      result = [month + 1, self.getUTCDate(), self.getUTCHours(), self.getUTCMinutes(), self.getUTCSeconds()];
-      
-      year = (
-        (year < 0 ? "-" : (year > 9999 ? "+" : "")) +
-        ("00000" + Math.abs(year))
-        .slice(0 <= year && year <= 9999 ? -4 : -6)
-      );
-
-      length = result.length;
-      while (length--) 
+      toISOString : function() 
       {
-        value = result[length];
-        // pad months, days, hours, minutes, and seconds to have two
-        // digits.
-        if (value < 10) {
-          result[length] = "0" + value;
+        var self = this;
+        var result, length, value, year, month;
+        if (!isFinite(self)) {
+          throw new RangeError("Date.prototype.toISOString called on non-finite value.");
         }
-      }
 
-      // pad milliseconds to have three digits.
-      return (
-        year + "-" + result.slice(0, 2).join("-") +
-        "T" + result.slice(2).join(":") + "." +
-        ("000" + self.getUTCMilliseconds()).slice(-3) + "Z"
-      );
-    };
+        year = self.getUTCFullYear();
+        month = self.getUTCMonth();
+
+        // see https://github.com/kriskowal/es5-shim/issues/111
+        year += Math.floor(month / 12);
+        month = (month % 12 + 12) % 12;
+
+        // the date time string format is specified in 15.9.1.15.
+        result = [month + 1, self.getUTCDate(), self.getUTCHours(), self.getUTCMinutes(), self.getUTCSeconds()];
+        
+        year = (
+          (year < 0 ? "-" : (year > 9999 ? "+" : "")) +
+          ("00000" + Math.abs(year))
+          .slice(0 <= year && year <= 9999 ? -4 : -6)
+        );
+
+        length = result.length;
+        while (length--) 
+        {
+          value = result[length];
+          // pad months, days, hours, minutes, and seconds to have two
+          // digits.
+          if (value < 10) {
+            result[length] = "0" + value;
+          }
+        }
+
+        // pad milliseconds to have three digits.
+        return (
+          year + "-" + result.slice(0, 2).join("-") +
+          "T" + result.slice(2).join(":") + "." +
+          ("000" + self.getUTCMilliseconds()).slice(-3) + "Z"
+        );
+      }
+    }, true);
   }
 })();

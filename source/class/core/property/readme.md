@@ -1,1 +1,1 @@
-Internal class for handling of dynamic properties of {core.Class}.
+Internal classes for handling of dynamic properties of {core.Class}.

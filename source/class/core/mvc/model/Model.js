@@ -21,7 +21,8 @@
     implement : [core.mvc.model.IModel],
 
     /**
-     * Initial data structure is imported from @data {var}.
+     * Initial data structure is imported from @data {any}.
+     * Initial @parent {Object} can also be passed in.
      */
     construct: function(data, parent) 
     {
@@ -54,7 +55,7 @@
 
     properties :
     {
-      // Model Interface implementation
+      /** Unique ID of the model instance */
       id : 
       {
         type : "String",

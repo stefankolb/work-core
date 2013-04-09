@@ -1,4 +1,13 @@
-// By: https://github.com/kriskowal/es5-shim
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2013 Sebastian Werner
+--------------------------------------------------------------------------------------------------
+  Based on ES5-Shim
+  https://github.com/kriskowal/es5-shim
+  Copyright 2009-2012 by contributors, MIT License
+==================================================================================================
+*/
 
 "use strict";
 
@@ -46,8 +55,8 @@
         while (length--) 
         {
           value = result[length];
-          // pad months, days, hours, minutes, and seconds to have two
-          // digits.
+          
+          // pad months, days, hours, minutes, and seconds to have two digits.
           if (value < 10) {
             result[length] = "0" + value;
           }

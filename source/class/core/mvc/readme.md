@@ -1,0 +1,1 @@
+A built-in event-based *MVP* layer for all *Core*-based applications.

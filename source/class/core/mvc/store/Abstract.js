@@ -40,28 +40,28 @@ core.Class("core.mvc.store.Abstract",
   events :
   {
     /** Fired when the process of loading something was started. */
-    loading : core.mvc.event.Storage,
+    loading : core.mvc.event.Store,
 
     /** Fired when the process of loading something was completed. */
-    loaded : core.mvc.event.Storage,
+    loaded : core.mvc.event.Store,
 
     /** Fired when the process of saving something was started. */
-    saving : core.mvc.event.Storage,
+    saving : core.mvc.event.Store,
 
     /** Fired when the process of saving something was completed. */
-    saved : core.mvc.event.Storage,
+    saved : core.mvc.event.Store,
 
     /** Fired when the process of creating something was started. */
-    creating : core.mvc.event.Storage,
+    creating : core.mvc.event.Store,
 
     /** Fired when the process of creating something was completed. */
-    created : core.mvc.event.Storage,
+    created : core.mvc.event.Store,
 
     /** Fired when the process of removing something was started. */
-    removing : core.mvc.event.Storage,
+    removing : core.mvc.event.Store,
 
     /** Fired when the process of removing something was completed. */
-    removed : core.mvc.event.Storage,
+    removed : core.mvc.event.Store,
 
     /** 
      * Fired whenever the activity state was changed 

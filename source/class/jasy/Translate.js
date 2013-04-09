@@ -29,6 +29,10 @@
 
 		/**
 		 * {String|Map} Returns translation data for the given message ID data.
+		 *
+		 * - @basic {String} Identifier string
+		 * - @plural {String?} Identifier string for plural
+		 * - @context {String?} Identifier extension for context information
 		 */
 		getEntry : function(basic, plural, context) 
 		{

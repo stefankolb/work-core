@@ -31,7 +31,7 @@
 		 *
 		 * See also: https://developer.mozilla.org/en/DOM/window.btoa
 		 */
-		btoa = function(string) 
+		var btoa = function(string) 
 		{
 			var i = 0;
 			var len = string.length;
@@ -66,7 +66,7 @@
 		 *
 		 * See also: https://developer.mozilla.org/en/DOM/window.atob
 		 */
-		atob = function(string) 
+		var atob = function(string) 
 		{
 			string = string.replace(/=+$/, "");
 

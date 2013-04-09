@@ -8,9 +8,6 @@
 
 "use strict";
 
-/**
- * #load(fix.*)
- */
 (function(toString, undef) 
 {
 	var global = (function(){ return this || (1,eval)('this') })();
@@ -87,10 +84,12 @@
   );
 	
 	/**
-	 * Useful root methods to add members to objects
+	 * Useful root methods to add members to objects.
 	 *
 	 * Loading this class also adds a few essential fixes for different engines.
-	 */
+	 *
+	 * #load(fix.*)
+ 	 */
 	core.Main.declareNamespace("core.Main", 
 	{
 		declareNamespace : declareNamespace,

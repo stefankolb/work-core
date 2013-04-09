@@ -26,19 +26,33 @@
     }
   };
 
+  /**
+   * Integrate logging support into {core.Class} based classes.
+   */
   core.Class("core.util.MLogging",
   {
     members :
     {
-      log : function() {
+      /**
+       * Logs the given log @message {any...}.
+       */
+      log : function(message) {
         print(this, "log", arguments);
       },
 
-      warn : function() {
+
+      /**
+       * Prints out the given warning @message {any...}.
+       */
+      warn : function(message) {
         print(this, "warn", arguments);
       },
 
-      error : function() {
+
+      /**
+       * Print the given error @message {any...}.
+       */
+      error : function(message) {
         print(this, "error", arguments);
       }
     }

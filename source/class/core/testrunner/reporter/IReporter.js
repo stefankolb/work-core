@@ -13,7 +13,7 @@
 core.Interface("core.testrunner.reporter.IReporter",
 {
   /**
-   * @suites {core.testrunner.Suite[]} Collection of suites to report for
+   * @suites {core.testrunner.Suite[]} Array of suites to report for
    */
   // construct : function(suites) {},
 

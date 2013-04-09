@@ -55,8 +55,9 @@
     {
       /**
        * {Boolean} Registers a listener of the given @type {String} of event to 
-       * execute the @callback {Function} in the given @context {Object?}. Returns
-       * whether adding the listener was successful.
+       * execute the @callback {Function} in the given @context {Object?}. Supports
+       * executing the listener during the @capture {Boolean?false} phase when `true`
+       * is passed in. Returns whether adding the listener was successful.
        */
       addListener : function(type, callback, context, capture) 
       {
@@ -90,8 +91,9 @@
       /** 
        * {Boolean} Like {#addListener} but executes the @callback {Function} for the event @type {String}
        * only on the first event and then unregisters the @callback automatically. 
-       * Supports @context {Object?} for defining the execution context as well. Returns
-       * whether adding the listener was successful.
+       * Supports @context {Object?} for defining the execution context as well. Supports
+       * executing the listener during the @capture {Boolean?false} phase when `true`
+       * is passed in. Returns whether adding the listener was successful.
        */
       addListenerOnce : function(type, callback, context, capture) 
       {
@@ -124,8 +126,9 @@
 
       /**
        * {Boolean} Removes a listener of the given @type {String} of event to 
-       * execute the @callback {Function} in the given @context {Object?}. Returns
-       * whether removing the listener was successful.
+       * execute the @callback {Function} in the given @context {Object?}. Supports
+       * executing the listener during the @capture {Boolean?false} phase when `true`
+       * is passed in. Returns whether removing the listener was successful.
        */
       removeListener : function(type, callback, context, capture) 
       {
@@ -163,6 +166,8 @@
       /**
        * Removes all listeners from this object with optional
        * support for only removing events of the given @type {String?}.
+       * Is able to filter capture/bubble phase via @capture {Boolean?null}.
+       * By default it removes both groups of events.
        */
       removeAllListeners : function(type, capture) 
       {
@@ -207,7 +212,8 @@
        * {Boolean} Returns whether the given event @type {String} has any listeners.
        * The method could optionally figure out whether a specific
        * @callback {Function?} (with optional @context {Object?}) is 
-       * registered already.
+       * registered already. The @capture {Boolean} flag defines whether
+       * events for the capture or bubble phase should be queried.
        */
       hasListener : function(type, callback, context, capture) 
       {

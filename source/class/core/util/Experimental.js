@@ -34,6 +34,9 @@
     return null;
   }
 
+  /**
+   * Utility for figuring out the given name of a experimental property / API.
+   */
   core.Module("core.util.Experimental", 
   {
     /**

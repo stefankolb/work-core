@@ -14,6 +14,9 @@ core.Class("core.testrunner.reporter.Html",
 {
   implement: [core.testrunner.reporter.IReporter],
 
+  /**
+   * @suites {core.testrunner.Suite[]} Array of suites to report for
+   */
   construct : function(suites) 
   {
     var root = document.getElementById("reporter");

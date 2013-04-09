@@ -8,7 +8,7 @@
 "use strict";
 
 /**
- * Interface for models for fulfilling needs of typical external users.
+ * Interface which needs to be implemented by every model.
  */
 core.Interface("core.mvc.model.IModel",
 {

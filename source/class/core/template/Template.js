@@ -103,8 +103,8 @@
 		members: 
 		{
 			/**
-			 * {String} Public render method which transforms the stored template text using the @data {Map}
-			 * and runtime specific @partials {Map?null}.
+			 * {String} Public render method which transforms the stored template text using the @data {Map},
+			 * runtime specific @partials {Map?null} and @labels {Map?null}.
 			 */
 			render: function(data, partials, labels) 
 			{

@@ -17,7 +17,7 @@
 core.Module("core.property.Debug",
 {
 	/**
-	 * Checks whether the given property type definition is valid.
+	 * Checks whether the given property @type {String} definition is valid.
 	 */
 	isValidType : function(type)
 	{

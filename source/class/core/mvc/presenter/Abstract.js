@@ -7,6 +7,13 @@
 
 "use strict";
 
+/**
+ * Abstract presenter class with support for managing:
+ *
+ * - Children (Child Presenters)
+ * - Models (Models and Collections)
+ * - Views (Views for Output)
+ */
 core.Class("core.mvc.presenter.Abstract",
 {
   include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],

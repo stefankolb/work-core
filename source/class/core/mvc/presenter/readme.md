@@ -1,0 +1,1 @@
+Presenters connect the models/collections with the views and stores. They are used as glue code between the different areas of the application code. The {Abstract} presenter offers a good set of infrastructure for managing connected views, stores and models.

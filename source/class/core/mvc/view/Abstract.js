@@ -9,19 +9,6 @@
 
 (function() 
 {
-  /**
-   * Views are almost more convention than they are code — they don't 
-   * determine anything about the visual part of your application. The general idea is to 
-   * organize your interface into logical views, backed by models, each of 
-   * which can be updated independently when the model changes, without 
-   * having to redraw the entire page. 
-   * 
-   * Instead of digging into a JSON object or class instance, 
-   * looking up an element in the DOM, and updating the HTML by hand, 
-   * you can bind your view's render function to the model's "change" event — 
-   * and now everywhere that model data is displayed in the UI, it is 
-   * always immediately up to date.
-   */
   core.Class("core.mvc.view.Abstract", 
   {
     include : [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging, core.locale.MTranslate],

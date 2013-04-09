@@ -54,7 +54,7 @@ core.Class("core.mvc.presenter.Abstract",
 
 
     /**
-     * {core.mvc.presenter.Abstract} Returns the parent presenter.
+     * Sets the @parent {core.mvc.presenter.Abstract} presenter.
      */
     setParent : function(parent) {
       this.__parent = parent;
@@ -90,7 +90,7 @@ core.Class("core.mvc.presenter.Abstract",
 
 
     /**
-     * {This} Adds a @model {Object} by its @name {String}.
+     * {this} Adds a @model {Object} by its @name {String}.
      */
     addModel : function(name, model) 
     {
@@ -148,7 +148,7 @@ core.Class("core.mvc.presenter.Abstract",
     /**
      * {Object} Creates and registers a model under the given @name {String}
      * using the given model @construct {Class}. Supports optional arguments
-     * using @varargs {var...} which are passed to the constructor. Returns the
+     * using @varargs {any...} which are passed to the constructor. Returns the
      * model instance which was created.
      */
     createModel : function(name, construct, varargs) 
@@ -199,7 +199,7 @@ core.Class("core.mvc.presenter.Abstract",
 
 
     /**
-     * {This} Adds a @view {Object} by its @name {String}.
+     * Adds a @view {Object} by its @name {String}.
      */
     addView : function(name, view) 
     {
@@ -215,7 +215,7 @@ core.Class("core.mvc.presenter.Abstract",
       }
 
       db[name] = view;
-      return this;
+      return view;
     },
 
 
@@ -257,7 +257,7 @@ core.Class("core.mvc.presenter.Abstract",
     /**
      * {Object} Creates and registers a view under the given @name {String}
      * using the given view @construct {Class}. Supports optional arguments
-     * using @varargs {var...} which are passed to the constructor. Returns the
+     * using @varargs {any...} which are passed to the constructor. Returns the
      * view instance which was created.
      */
     createView : function(name, construct, varargs) 

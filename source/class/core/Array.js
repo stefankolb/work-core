@@ -109,6 +109,32 @@ core.Module("core.Array",
 
 
 	/**
+	 * Executes the @callback {Function} in the given @context {Object?global} for
+	 * every entry in the given @array {Array}.
+	 */
+	forEach : function(array, callback, context)
+	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isType(callback, "Function");
+
+			if (context) {
+				core.Assert.isType(context, "Object");	
+			}
+		}
+
+		if (!context) {
+			context = core.Main.getGlobal();
+		}
+
+		for (var i=0, length=array.length; i<length; i++) {
+			callback.call(context, array[i], i, array);
+		}
+	},
+
+
+	/**
 	 * {Array} Converts the given @args {arguments} into an array.
 	 */
 	fromArguments : function(args) 

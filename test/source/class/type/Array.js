@@ -57,6 +57,27 @@ suite.test("flatten", function()
   this.isEqual(core.Array.flatten([["a"],[],"b","c"]).toString(), ["a","b","c"].toString());
 });
 
+suite.test("forEach", function()
+{
+  var counter = 0;
+  core.Array.forEach([1,2,3], function() {
+    counter++;
+  });
+  this.isEqual(counter, 3);
+
+  var counter = 0;
+  var array = [1,2,3];
+  var context = {};
+  var test = this;
+
+  core.Array.forEach(array, function(value, index, arrayref) {
+    test.isIdentical(this, context);
+    test.isIdentical(array, arrayref);
+    test.isIdentical(index, counter++);
+  }, context);
+  this.isEqual(counter, 3);  
+});
+
 suite.test("fromArguments", function() 
 {
   var test = this;

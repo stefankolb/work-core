@@ -240,6 +240,19 @@ suite.test("removeRange", function()
   this.isEqual(arr.join(","), "1,,3,4");
 });
 
+suite.test("some", function() 
+{
+  this.isFalse(core.Array.some([], function() {}));
+
+  this.isTrue(core.Array.some([1,2,3], function(value) {
+    return value % 2 == 0;
+  }));
+
+  this.isFalse(core.Array.some([1,3,5], function(value) {
+    return value % 2 == 0;
+  }));
+});
+
 suite.test("sum", function() 
 {
   this.isEqual(core.Array.sum([1,4,23,3]), 31);

@@ -165,6 +165,38 @@ core.Module("core.Array",
 
 
 	/**
+	 * {Array} Maps the values of the given @array {Array} to new values
+	 * based on the results of the given @callback {Function}. The
+	 * callback is called in optional @context {Object?global}.
+	 */
+	map : function(array, callback, context)
+	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isType(array, "Array");
+			core.Assert.isType(callback, "Function");
+
+			if (context) {
+				core.Assert.isType(context, "Object");	
+			}
+		}
+
+		var length = array.length;
+		var result = Array(length);
+
+		if (!context) {
+			context = core.Main.getGlobal();
+		}
+
+		for (var i=0; i<length; i++) {
+			result[i] = callback.call(context, array[i], i, array);
+		}
+
+		return result;
+	},
+
+
+	/**
 	 * {Number} Returns the maximum number in the @array {Array}.
 	 */
 	max : function(array) 
@@ -199,7 +231,7 @@ core.Module("core.Array",
 			core.Assert.isType(array, "Array");
 		}
 
-		for(var j, x, self=array, i=self.length; i; j = parseInt(Math.random() * i), x = self[--i], self[i] = self[j], self[j] = x);
+		for (var j, x, self=array, i=self.length; i; j = parseInt(Math.random() * i), x = self[--i], self[i] = self[j], self[j] = x);
 	},
 	
 	

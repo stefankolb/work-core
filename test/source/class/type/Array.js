@@ -99,6 +99,31 @@ suite.test("last", function()
   this.isEqual(core.Array.last(arr), 5);
 });
 
+suite.test("map", function() 
+{
+  this.isEqual(core.Array.map([1,2,3], function(value) {
+    return value * 2;
+  }).join(","), [2,4,6].join(","));
+
+  this.isEqual(core.Array.map([1,2,3], function(value, index) {
+    return value * index;
+  }).join(","), [0,2,6].join(","));
+
+  this.isEqual(core.Array.map([1,2,3], function(value, index, array) {
+    return value + array[array.length-1-index];
+  }).join(","), [4,4,4].join(","));
+
+  var obj = 
+  {
+    data : [20,30,40],
+    mapper : function(value, index) {
+      return value + this.data[index];
+    }
+  };
+
+  this.isEqual(core.Array.map([2,3,4], obj.mapper, obj).join(","), "22,33,44");
+});
+
 suite.test("max", function() 
 {
   this.isEqual(core.Array.max([1,4,23,3]), 23);

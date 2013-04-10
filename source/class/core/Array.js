@@ -111,6 +111,40 @@
 
 
 		/**
+		 * {Array} Returns a new array which only contains the entries of
+		 * the original @array {Array} where the @callback {Function} returns `true`.
+		 * The callback is executed in global context by default, but might also be 
+		 * executed in the given @context {Object?global}.
+		 */
+		filter : function(array, callback, context)
+		{
+			if (jasy.Env.isSet("debug")) 
+			{
+				core.Assert.isType(array, "Array");
+				core.Assert.isType(callback, "Function");
+
+				if (context) {
+					core.Assert.isType(context, "Object");	
+				}
+			}
+
+			if (!context) {
+				context = global;
+			}
+
+			var result = [];
+			for (var i=0, length=array.length; i<length; i++) 
+			{
+				var value = array[i];
+				if (callback.call(context, value, i, array)) {
+					result.push(value);
+				}
+			}
+
+			return result;
+		},
+
+		/**
 		 * Executes the @callback {Function} in the given @context {Object?global} for
 		 * every entry in the given @array {Array}.
 		 */

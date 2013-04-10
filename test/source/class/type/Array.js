@@ -57,6 +57,23 @@ suite.test("flatten", function()
   this.isEqual(core.Array.flatten([["a"],[],"b","c"]).toString(), ["a","b","c"].toString());
 });
 
+suite.test("filter", function()
+{
+  this.isEqual(core.Array.filter([0,1,2,3,4,5,6], function(value) {
+    return value%2 == 0;
+  }).join(","), "0,2,4,6");
+
+  var input = [0,1,2,3,4,5,6];
+  var test = this;
+  var output = core.Array.filter(input, function(value, index) {
+    test.isEqual(value, index);
+    return value == index;
+  });
+
+  this.isEqual(input.join(","), "0,1,2,3,4,5,6");  
+  this.isNotIdentical(input, output);
+});
+
 suite.test("forEach", function()
 {
   var counter = 0;

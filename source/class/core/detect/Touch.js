@@ -22,7 +22,7 @@
   }
 
   /**
-   * Detects whether the device is a touch device
+   * Detects whether the device supports touch events
    */
   core.Module("core.detect.Touch", 
   {

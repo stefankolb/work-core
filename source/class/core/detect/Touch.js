@@ -17,7 +17,7 @@
     if (!value)
     {
       var property = core.util.Experimental.get(navigator, "maxTouchPoints");
-      value = navigator[property] > 0;
+      value = !!property && navigator[property] > 0;
     }
   }
 

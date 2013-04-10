@@ -24,6 +24,10 @@ fields:
     check: String
     default: en
     detect: core.detect.Locale
+  touch:
+    check: Boolean
+    default: false
+    detect: core.detect.Touch
   platform:
     check:
     - win

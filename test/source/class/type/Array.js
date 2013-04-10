@@ -53,6 +53,8 @@ suite.test("contains", function()
 
 suite.test("every", function() 
 {
+  this.isTrue(core.Array.every([], function() {}));
+
   this.isTrue(core.Array.every([2,4,6,8,10,12,14], function(value) {
     return value % 2 == 0;
   }));

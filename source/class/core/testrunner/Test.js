@@ -189,6 +189,23 @@ core.Class("core.testrunner.Test",
 
 
     /**
+     * Test whether @a {var} is falsy and registers
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    isFalse : function(a, message) 
+    {
+      try{
+        core.Assert.isFalse(a);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    },    
+
+
+    /**
      * Test whether @a {var} is null and registers
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.

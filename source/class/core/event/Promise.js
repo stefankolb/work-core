@@ -90,7 +90,7 @@ core.Class("core.event.Promise",
 	
 		/**
 		 * Executes a single fulfillment or rejection queue @entry {Array} 
-		 * with the give @valueOrReason {any} and state {String}.
+		 * with the give @valueOrReason {any} and @state {String}.
 		 */	
 		__executeEntry : function(entry, valueOrReason, state) 
 		{
@@ -182,8 +182,8 @@ core.Class("core.event.Promise",
 		
 
 		/**
-		 * {core.event.Promise} Register fulfillment handler {function} @onFulfilled 
-		 * and rejection handler {function} @onRejected returning new child promise.
+		 * {core.event.Promise} Register fulfillment handler @onFulfilled {Function}
+		 * and rejection handler @onRejected {Function} returning new child promise.
 		 */
 		then : function(onFulfilled, onRejected, context) 
 		{

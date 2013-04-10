@@ -34,7 +34,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 			 * {var} Tells the browser that you wish to perform an animation; this requests that the browser schedule a 
 			 * repaint of the window for the next animation frame. The method takes as an argument a @callback {Function} to 
 			 * be invoked before the repaint and a @root {Element?} to specifying the element that visually bounds the entire animation.
-			 * Returns a handle to cancel the request using {#cancelRequestAnimationFrame}.
+			 * Returns a handle to cancel the request using {#cancel}.
 			 *
 			 * See also: https://developer.mozilla.org/en/DOM/window.requestAnimationFrame
 			 */
@@ -86,6 +86,12 @@ if (jasy.Env.isSet("runtime", "browser"))
 			};			
 		}
 
+		/**
+		 * Module to request a function call for the next render loop.
+		 *
+		 * Used native methods where possible but includes a fallback to 
+		 * a custom timeout based logic.
+		 */
 		core.Module("core.effect.AnimationFrame", 
 		{
 			request : request,

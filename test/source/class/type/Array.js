@@ -51,6 +51,17 @@ suite.test("contains", function()
   this.isTrue(core.Array.contains(arr2, false));
 });
 
+suite.test("every", function() 
+{
+  this.isTrue(core.Array.every([2,4,6,8,10,12,14], function(value) {
+    return value % 2 == 0;
+  }));
+
+  this.isFalse(core.Array.every([2,4,6,9,10,12,14], function(value) {
+    return value % 2 == 0;
+  }));
+});
+
 suite.test("flatten", function() 
 {
   this.isEqual(core.Array.flatten([[1], 2, [3]]).toString(), [1,2,3].toString());

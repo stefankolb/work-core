@@ -83,6 +83,39 @@
 
 			return array.indexOf(value) > -1;
 		},	
+
+
+		/**
+		 * {Array} Returns whether every entry in @array {Array} passes the test implemented 
+		 * by the provided @callback {Function}. The @callback is executed in global context 
+		 * by default, but might also be executed in the given @context {Object?global}.
+		 */
+		every : function(array, callback, context)
+		{
+			if (jasy.Env.isSet("debug")) 
+			{
+				core.Assert.isType(array, "Array");
+				core.Assert.isType(callback, "Function");
+
+				if (context) {
+					core.Assert.isType(context, "Object");	
+				}
+			}
+
+			if (!context) {
+				context = global;
+			}
+
+			for (var i=0, length=array.length; i<length; i++) 
+			{
+				var value = array[i];
+				if (!callback.call(context, value, i, array)) {
+					return false;
+				}
+			}
+
+			return true;
+		},		
 		
 
 		/**

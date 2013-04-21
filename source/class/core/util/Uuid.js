@@ -33,10 +33,13 @@
 		return uuid;
 	};
 	
+	/**
+	 * RFC4122 UUID version 4 generator (http://www.ietf.org/rfc/rfc4122.txt)
+	 */
 	core.Module("core.util.Uuid", {
 		/**
-		 * {String} Returns an universally unique ID generated using version 4 algorithm
-		 * of http://www.ietf.org/rfc/rfc4122.txt
+		 * {String} Returns a 36 characters long standard conform 
+		 * UUID string containing dashes.
 		 */
 		get : function() {
 			var uuidBytes = getArrayOfBytes();
@@ -65,9 +68,8 @@
 		},
 		
 		/**
-		 * {String} Returns a plain string of hexadecimal values representing an 
-		 * universally unique ID generated using version 4 algorithm
-		 * of http://www.ietf.org/rfc/rfc4122.txt
+		 * {String} Returns a 32 characters long plain string 
+		 * representing hexadecimal value of UUID.
 		 */
 		getHex : function() {
 			var uuidBytes = getArrayOfBytes();
@@ -79,8 +81,8 @@
 		},
 	
 		/**
-		 * {Array} Returns an array of bytes representing an universally unique ID generated 
-		 * using version 4 algorithm of http://www.ietf.org/rfc/rfc4122.txt.
+		 * {Array} Returns a 16 elements long array of bytes 
+		 * representing an universally unique ID.
 		 */
 		getArrayOfBytes : getArrayOfBytes
 	});

@@ -13,6 +13,10 @@
  *
  * Emulates just the basic logging methods with an empty function. Maps missing functions
  * to `console.log` automatically.
+ *
+ * If inside of web worker redirects console logging output to a message to main thread. 
+ * The message itself is an object containing both fields type="core/debug/(method)" and
+ * msg=[..], e.g. { type: "core/debug/warn", msg: ["my warning"] }
  */
 (function(global, slice)
 {
@@ -20,24 +24,28 @@
 	var console = global.console || (global.console = {});
 	
 	if (jasy.Env.isSet("runtime", "worker")) {
+		var workerConsoleGenerator = function(method) {
+			return function() {
+				self.postMessage({
+					type: "core/debug/" + method,
+					msg: Array.protottype.slice.call(arguments, 0);
+				});
+			};
+		};
+
 		for (var i=0, l=methods.length; i<l; i++) {
 			var method = methods[i];
-			console[method] = function() {
-				self.postMessage({
-					type: "core/debug/" + this, 
-					msg: Array.prototype.slice.call(arguments, 0) // Must convert to instance of array
-				});
-			}.bind(method);
+			console[method] = workerConsoleGenerator(method);
 		}
-	}
-	
-	var log = console.log || new Function;
+	} else {
+		var log = console.log || new Function;
 
-	for (var i=0, l=methods.length; i<l; i++)
-	{
-		var name = methods[i];
-		if (!console[name]) {
-			console[name] = log;
+		for (var i=0, l=methods.length; i<l; i++)
+		{
+			var name = methods[i];
+			if (!console[name]) {
+				console[name] = log;
+			}
 		}
 	}
 	

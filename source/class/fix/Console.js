@@ -19,7 +19,7 @@
 	var methods = "log,debug,error,warn,info,timeStamp".split(",");
 	var console = global.console || (global.console = {});
 	
-	if (jasy.Env.isSet("runtime", "webworker")) {
+	if (jasy.Env.isSet("runtime", "worker")) {
 		for (var i=0, l=methods.length; i<l; i++) {
 			var method = methods[i];
 			console[method] = function() {

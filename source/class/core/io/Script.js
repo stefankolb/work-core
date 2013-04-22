@@ -33,6 +33,9 @@
 	{
 		/** Whether the loader supports parallel requests */
 		SUPPORTS_PARALLEL : supportsScriptAsync || jasy.Env.isSet("engine", "gecko") || jasy.Env.isSet("engine", "opera"),
+		
+		/** {String|null} URL prefix to prepend to given relative URL. Used by worker script loading */
+		URL_PREFIX : null,
 
 
 		/**
@@ -73,12 +76,16 @@
 				return;
 			}
 			else
-			if (jasy.Env.isSet("runtime", "webworker"))
+			if (jasy.Env.isSet("runtime", "worker"))
 			{
+				if (core.io.Script.URL_PREFIX !== null && uri[0] != "/" && uri.indexOf(":/") < 0) {
+					uri = core.io.Script.URL_PREFIX + uri;
+				}
 				try {
-					importScripts(jasy.Env.getValue("webworker.prefixurl") + uri);
+					
+					importScripts(uri);
 				} catch (e) {
-					e.fileName = jasy.Env.getValue("webworker.prefixurl") + uri;
+					e.fileName = uri;
 					throw e;
 				}
 				if (callback) {

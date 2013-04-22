@@ -5,6 +5,11 @@
 ==================================================================================================
 */
 
+"use strict";
+
+/**
+ * Interface which needs to be implemented by every collection.
+ */
 core.Interface("core.mvc.model.ICollection",
 {
   events :

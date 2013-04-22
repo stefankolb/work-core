@@ -5,6 +5,11 @@
 ==================================================================================================
 */
 
+"use strict";
+
+/**
+ * Generic MVC related event class.
+ */
 core.Class("core.mvc.Event",
 {
   pooling : true,

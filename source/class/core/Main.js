@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(toString, undef) 
 {
 	var global = (function(){ return this || (1,eval)('this') })();
@@ -73,7 +75,7 @@
 	// Temporary hack to make next statement workable
 	declareNamespace("core.Main.declareNamespace", declareNamespace);
 
-	// By Lowdash 1.0.1
+	// By Lodash
 	var objectRef = {};
 	var isNativeRepExp = RegExp('^' +
     (objectRef.valueOf + '')
@@ -82,10 +84,12 @@
   );
 	
 	/**
-	 * Useful root methods to add members to objects
+	 * Useful root methods to add members to objects.
 	 *
 	 * Loading this class also adds a few essential fixes for different engines.
-	 */
+	 *
+	 * #load(fix.*)
+ 	 */
 	core.Main.declareNamespace("core.Main", 
 	{
 		declareNamespace : declareNamespace,
@@ -106,11 +110,14 @@
 		isHostType : function(object, property) 
 		{
 			var type = object != null ? typeof object[property] : 'number';
-
 			return !/^(?:boolean|number|string|undefined)$/.test(type) && (type == 'object' ? !!object[property] : true);
 		},
 
 
+		/**
+		 * {Boolean} Whether the given @func {Function} is a natively implemented method
+		 * inside the runtime environment aka browser, NodeJS.
+		 */
 		isNative : function(func) {
 			return isNativeRepExp.test(func);
 		},
@@ -249,15 +256,15 @@
 
 		/**
 		 * Add @statics {Map} to the object found under the given @name {String}.
-		 * It is possible to control whether to @keep {Boolean?false} existing statics.
+		 * Supports overriding the existing key via @override {Boolean?false}.
 		 */
-		addStatics : function(name, statics, keep) 
+		addStatics : function(name, statics, override) 
 		{
 			var object = global[name] || cache[name];
 			var prefix = name + ".";
 			for (var staticName in statics) 
 			{
-				if (!keep || object[staticName] === undef) 
+				if (override || object[staticName] === undef) 
 				{
 					var item = statics[staticName];
 					if (item instanceof Function) {
@@ -272,16 +279,16 @@
 
 		/**
 		 * Add @members {Map} to the prototype of the object found under the given @name {String}.
-		 * It is possible to control whether to @keep {Boolean?false} existing members.
+		 * Supports overriding the existing key via @override {Boolean?false}.
 		 */
-		addMembers : function(name, members, keep) 
+		addMembers : function(name, members, override) 
 		{
 			var object = global[name] || cache[name];
 			var proto = object.prototype;
 			var prefix = name + ".prototype.";
 			for (var memberName in members) 
 			{
-				if (!keep || proto[memberName] === undef) 
+				if (override || proto[memberName] === undef) 
 				{
 					var item = members[memberName];
 					if (item instanceof Function) {

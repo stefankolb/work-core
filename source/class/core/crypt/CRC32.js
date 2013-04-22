@@ -10,6 +10,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Implements the CRC32 checksum
  * 
@@ -26,7 +28,7 @@ core.Module("core.crypt.CRC32",
 		 */
 		return function(str)
 		{
-			str = core.util.String.encodeUtf8(str);
+			str = core.String.encodeUtf8(str);
 			
 			var crc = -1;
 			for(var i=0, l=str.length; i<l; i++) {

@@ -134,7 +134,7 @@
 			}			
 
 			var sha1 = core.crypt.SHA1.checksum(list.join(";"));
-			return checksum = core.crypt.Util.toHex(sha1);
+			return checksum = core.String.toHex(sha1);
 		},
 
 

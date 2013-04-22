@@ -1,5 +1,34 @@
+0.9-beta2
+=========
 
-0.9-alpha1
+New/Better
+----------
+
+- Added new MVP feature: Stores - an abstract solution for dealing with incoming/outcoming data. A combination of a adapter pattern plus optional communication layer.
+- Added label support to template infrastructure. Supporting both, static and dynamic labels (first mentioned are compiled into the template logic for optional performance).
+- Removed `ext` namespace. Replaced with `fix` and individual static modules which offer utility methods like Base64, String utils, Object traversing, etc.
+- Added advanced JSON detection as `core.detect.JSON`.
+- Include all fixes from `fix.*` directly after `core.Main` being loaded. This fixes the most common issues and bugs in todays JS engines.
+- Added new features for unit tests: `isNotEqual()`, `isNotIdentical()`, `isType()`
+- Some test suite reorganizations and cleanups.
+
+Changes
+-------
+
+- Moved native utilities for Strings, Numbers, Arrays, Objects into modules and converted all of them into static methods. 
+- Removed old JSON / ES5 polyfills - new solutions are on the way.
+- Renamed some assertion methods to start with leading "is": `equal` to `isEqual`, `notEqual` to `isNotEqual` etc.
+- Added assertion method `isNotUndefined`, `doesOnlyHaveKeys`.
+- Changed valid key validation (properties, modules, classes) from old Object extension to new assertion method.
+- Reworked parameters support for setTimeout/setInterval using custom methods instead of overriding native methods (old IE support fix). Use new `core.Function.timeout()/interval()` instead.
+- Reworked override support in `core.Main.addMembers()/addStatics()` and changed default to `false`.
+- Crypt API now uses `core.String.toHex()` instead of custom implementation.
+- Merged `core.util.String` methods into `core.String`.
+- Fixed Safari detection for being WebKit in `core.detect.Engine`.
+- Removed inline `requestAnimationFrame`-fix in `core.effect.Animate` using new `core.effect.AnimationFrame` instead.
+
+
+0.9-beta1
 ==========
 
 This is the first follow up release of the Core project by Sebastian Software. Updated Copyright headers for new owner (of this fork).

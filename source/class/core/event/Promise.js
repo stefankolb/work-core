@@ -5,157 +5,206 @@
 ==================================================================================================
 */
 
-(function() {
+"use strict";
 
-})();
 /**
  * Promises implementation of A+ specification passing Promises/A+ test suite.
  * Very efficient due to object pooling.
  * http://promises-aplus.github.com/promises-spec/
  */
-core.Class("core.event.Promise", {
+core.Class("core.event.Promise", 
+{
 	pooling : true,
 	
-	construct : function() {
-		// Clean up onFulfilled handlers
-		var onFulfilled = this.__onFulfilled = this.__onFulfilled || [];
-		onFulfilled.length = 0;
-
-		// Clean up onRejected handlers
-		var onRejected = this.__onRejected = this.__onRejected || [];
-		onRejected.length = 0;
-
-		// Reset value/reason to default
-		this.resetValue();
-
-		// Reset state to pending
-		this.resetState();
-	},
-	
-	properties : {
-		/** {String} State of promise (pending, fulfilled, rejected) */
-		state : {
-			type : ["pending", "fulfilled", "rejected"],
-			init : "pending",
-			apply : function(value) {
-				this.__locked = (value != "pending");
-			}
-		},
-		
-		/** Value (state == fulfilled) or reason (state == rejected) of promise */
-		value : {
-			nullable: true,
-			init: null
+	construct : function() 
+	{
+		// Initialize lists on new Promises
+		if (this.__onFulfilledQueue == null)
+		{
+			this.__onFulfilledQueue = [];
+			this.__onRejectedQueue = [];
 		}
 	},
 	
-	members : {
-		/**
-		 * Fulfill promise with @value
+	members : 
+	{
+		/** {=String} Current state */
+		__state : "pending",
+
+
+		/** {=Boolean} Whether the promise is locked */
+		__locked : false,
+
+
+		/** {=any} Any value */
+		__valueOrReason : null,
+
+
+		/** 
+		 * {any} Returns the value of the promise
 		 */
-		fulfill : function(value) {
-			if (this.__locked) {
-				return;
+		getValue : function() {
+			return this.__valueOrReason;
+		},
+
+
+		/**
+		 * {String} Returns the current state. One of pending, fulfilled or rejected.
+		 */
+		getState : function() {
+			return this.__state;
+		},
+
+
+		/**
+		 * Fulfill promise with @value {any?}.
+		 */
+		fulfill : function(value) 
+		{
+			if (!this.__locked) 
+			{
+				this.__locked = true;
+				this.__state = "fulfilled";
+				this.__valueOrReason = value;
+
+				core.Function.immediate(this.__execute, this);
 			}
-			core.util.Function.immediate(this.__handler.bind(this, "fulfilled", value));
 		},
 		
+
 		/**
-		 * Reject promise with @reason
+		 * Reject promise with @reason {String|any?}.
 		 */
-		reject : function(reason) {
-			if (this.__locked) {
-				return;
+		reject : function(reason) 
+		{
+			if (!this.__locked) 
+			{
+				this.__locked = true;
+				this.__state = "rejected";
+				this.__valueOrReason = reason;
+
+				core.Function.immediate(this.__execute, this);
 			}
-			core.util.Function.immediate(this.__handler.bind(this, "rejected", reason));
 		},
+
 	
 		/**
-		 * Handle single fulfillment or rejection handler @fnt with correct subsequent promise {core.event.Promise} @myPromise.
+		 * Executes a single fulfillment or rejection queue @entry {Array} 
+		 * with the give @valueOrReason {any} and @state {String}.
 		 */	
-		__handleFnt : function(fnt, myPromise, value, state) {
-			if (fnt === null) {
+		__executeEntry : function(entry, valueOrReason, state) 
+		{
+			var child = entry[0];
+			var callback = entry[1];
+
+			if (callback == null) 
+			{
 				if (state == "rejected") {
-					myPromise.reject(value);
+					child.reject(valueOrReason);
 				} else {
-					myPromise.fulfill(value);
+					child.fulfill(valueOrReason);
 				}
-				return;
 			}
-
-			var fulFnt = function(value) {
-				myPromise.fulfill(value);
-			};
-			var rejFnt = function(reason) {
-				myPromise.reject(reason);
-			};				
-
-			try {
-				var retval = fnt(value);
-				if (retval && retval.then && typeof retval.then == "function") { //instanceof core.event.Promise) {
-					var retstate = retval.getState ? retval.getState() : "pending";
-
-					if (retstate == "pending") {
-						retval.then(fulFnt, rejFnt);
-					} else if (retstate == "fulfilled") {
-						myPromise.fulfill(retval.getValue());
-					} else if (retstate == "rejected") {
-						myPromise.reject(retval.getValue());
+			else
+			{
+				try 
+				{
+					var context = entry[2];
+					var retval = context ? callback.call(context, valueOrReason) : callback(valueOrReason);
+					if (retval && retval.then && typeof retval.then == "function") 
+					{ 
+						var retstate = retval.getState ? retval.getState() : "pending";
+						if (retstate == "pending") 
+						{
+							retval.then(function(value) {
+								child.fulfill(value);
+							}, function(reason) {
+								child.reject(reason);
+							});
+						}
+						else if (retstate == "fulfilled") 
+					  {
+							child.fulfill(retval.getValue());
+						}
+						else if (retstate == "rejected") 
+						{
+							child.reject(retval.getValue());
+						}
+					} 
+					else 
+					{
+						child.fulfill(retval);
 					}
-				} else {
-					myPromise.fulfill(retval);
+				} 
+				catch (ex) {
+					child.reject(ex);
 				}
-			} catch (e) {
-				myPromise.reject(e);
 			}
-			
 		},
+
 
 		/**
 		 * Handle fulfillment or rejection of promise
 		 * Runs all registered then handlers
 		 */
-		__handler : function(state, value) {
-			if (this.__locked) {
-				return;
+		__execute : function() 
+		{
+			// Shorthands
+			var state = this.__state;
+			var queue = state == "rejected" ? this.__onRejectedQueue : this.__onFulfilledQueue;
+			var valueOrReason = this.__valueOrReason;
+
+			// Always repeat queue length check as queue could be changed within handler
+			for (var i=0; i<queue.length; i++) {
+				this.__executeEntry(queue[i], valueOrReason, state);
 			}
 
-			var fntList;
-			if (state == "rejected") {
-				fntList = this.__onRejected;
-			} else {
-				fntList = this.__onFulfilled;
-			}
-			this.setState(state);
-			this.setValue(value);
-			
-			for (var i=0; i<fntList.length; i++) {
-				var fntarr = fntList[i];
-				this.__handleFnt(fntarr[0], fntarr[1], value, state);
-			}
+			// Auto release promise after fulfill/reject and all handlers being processed
+			core.Function.immediate(this.release, this);
+		},
 
-			this.release();
+
+		/**
+		 * Releases the promise instance to the pool for reusage.
+		 */
+		release : function()
+		{
+			// Cleanup lists for next usage
+			this.__onRejectedQueue.length = this.__onFulfilledQueue.length = 0;
+
+			// Cleanup internal state
+			this.__state = "pending";
+			this.__locked = false;
+
+			// Release for next usage
+			core.event.Promise.release(this);
 		},
 		
+
 		/**
-		 * {core.event.Promise} Register fulfillment handler {function} @onFulfilled and rejection handler {function} @onRejected
-		 * returning new subsequent promise.
+		 * {core.event.Promise} Register fulfillment handler @onFulfilled {Function}
+		 * and rejection handler @onRejected {Function} returning new child promise.
 		 */
-		then : function(onFulfilled, onRejected) {
-			var promise = core.event.Promise.obtain();
-			
-			if (onFulfilled && (typeof onFulfilled == "function")) {
-				this.__onFulfilled.push([onFulfilled, promise]);
+		then : function(onFulfilled, onRejected, context) 
+		{
+			var child = core.event.Promise.obtain();
+
+			var fullfilledQueue = this.__onFulfilledQueue;
+			var rejectedQueue = this.__onRejectedQueue;
+
+			if (onFulfilled && typeof onFulfilled == "function") {
+				fullfilledQueue.push([child, onFulfilled, context]);
 			} else {
-				this.__onFulfilled.push([null, promise]);
+				fullfilledQueue.push([child]);
 			}
-			if (onRejected && (typeof onRejected == "function")) {
-				this.__onRejected.push([onRejected, promise]);
+
+			if (onRejected && typeof onRejected == "function") {
+				rejectedQueue.push([child, onRejected, context]);
 			} else {
-				this.__onRejected.push([null, promise]);
+				rejectedQueue.push([child]);
 			}
 			
-			return promise;
+			return child;
 		}
 	}
 });

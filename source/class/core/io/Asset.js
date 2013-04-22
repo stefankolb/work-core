@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(global, Object)
 {
 	/** {Map} Internal cache for holding preloaded data */
@@ -93,9 +95,6 @@
 	 *
 	 * Works with data delivered by {jasy.Asset} and extends it with useful
 	 * tools to make features like animations and sprites easier to use.
-	 *
-	 * #require(ext.sugar.Array) 
-	 * #require(ext.sugar.Object)
 	 */
 	core.Module("core.io.Asset",
 	{
@@ -117,7 +116,7 @@
 					throw new Error("Invalid section: " + section);
 				}
 				
-				if (section.endsWith("/")) {
+				if (core.String.endsWith(section, "/")) {
 					throw new Error("Sections must not end with a slash!")
 				}
 
@@ -188,7 +187,7 @@
 			{
 				// Execute user defined callback method
 				if (callback) {
-					callback.call(context||global, Object.keys(entries));
+					callback.call(context||global, core.Object.keys(entries));
 				}
 			}
 			else
@@ -207,7 +206,7 @@
 
 					// Execute user defined callback method
 					if (callback) {
-						callback.call(context||global, Object.keys(entries));
+						callback.call(context||global, core.Object.keys(entries));
 					}
 
 				}, this, random);
@@ -243,7 +242,7 @@
 			var urisToIds = uris.zip(ids);
 
 			var helper = callback ? function(data) {
-				callback.call(context||global, Object.translate(data, urisToIds));
+				callback.call(context||global, core.Object.translate(data, urisToIds));
 			} : callback;
 			
 			core.io.Queue.load(uris, helper, this, random);

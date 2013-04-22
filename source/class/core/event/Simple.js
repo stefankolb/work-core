@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Event class for simple notifications style events with support
  * for a notification message and some data attached to it.

@@ -5,6 +5,12 @@
 ==================================================================================================
 */
 
+"use strict";
+
+/**
+ * Base class for a DOM based view. Uses debounced rendering using RequestAnimationFrame
+ * for optimal performance. Supports easy DOM event managment for view content.
+ */
 core.Class("core.mvc.view.Dom",
 {
   include : [core.mvc.view.Abstract],
@@ -13,8 +19,6 @@ core.Class("core.mvc.view.Dom",
   construct: function(presenter, root)
   {
     core.mvc.view.Abstract.call(this, presenter);
-
-    this.__subViews = {};
 
     if (root != null) 
     {
@@ -51,12 +55,36 @@ core.Class("core.mvc.view.Dom",
 
   events :
   {
+    /** Fired whenever the view has been rendered */
     render : core.event.Simple
 
   },
 
   members : 
   {
+    /*
+    ======================================================
+      DOM EVENT HANDLING
+    ======================================================
+    */
+
+    addDomListener : function(selector, type, callback) {
+      $(this.getRoot()).on(type, selector, core.Function.bind(callback, this));
+    },
+
+    removeDomListener : function(selector, type, callback) {
+      $(this.getRoot()).on(type, selector, core.Function.bind(callback, this));
+    },
+
+
+
+
+    /*
+    ======================================================
+      DEBOUNCED RENDER LOGIC
+    ======================================================
+    */
+
     // Interface implementation
     render : function()
     {
@@ -64,26 +92,8 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      /** #require(ext.RequestAnimationFrame) */
-      this.__renderScheduled = requestAnimationFrame(core.util.Function.bind(this.__renderRequest, this));
-    },
-
-
-
-    addSubView : function(name, view) 
-    {
-      this.__subViews[name] = view;
-      this.__partials = null;
-
-      this.render();
-    },
-
-    removeSubView : function(name) 
-    {
-      delete this.__subViews[name];
-      this.__partials = null;
-
-      this.render();
+      /**  */
+      this.__renderScheduled = core.effect.AnimationFrame.request(core.Function.bind(this.__renderRequest, this));
     },
 
 
@@ -96,7 +106,7 @@ core.Class("core.mvc.view.Dom",
       }
       else
       {
-        this.__renderScheduled = requestAnimationFrame(core.util.Function.bind(this.__renderRequest, this));
+        this.__renderScheduled = core.effect.AnimationFrame.request(core.Function.bind(this.__renderRequest, this));
       }
     },
 
@@ -122,19 +132,11 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      var partials = this.__partials;
-      if (partials == null)
-      {
-        this.__partials = partials = {};
-
-        var subViews = this.__subViews;
-        for (var name in subViews) {
-          partials[name] = subViews[name].getTemplate();
-        }
-      }
+      var partials = null;
+      var labels = this.getLabels();
 
       this._beforeRender();
-      elem.innerHTML = template.render(presenter, partials);
+      elem.innerHTML = template.render(presenter, partials, labels);
       this._afterRender();
 
       // Let others know
@@ -143,7 +145,7 @@ core.Class("core.mvc.view.Dom",
 
 
     _shouldRender : function() {
-      return this.__isLoading == 0;
+      return this.__assetLoadCounter == 0;
     },
 
 
@@ -156,6 +158,13 @@ core.Class("core.mvc.view.Dom",
       // placeholder
     },
 
+
+
+    /*
+    ======================================================
+      PUBLIC API
+    ======================================================
+    */
 
     // Interface implementation
     show : function()
@@ -183,7 +192,23 @@ core.Class("core.mvc.view.Dom",
     },
 
 
-    __isLoading : 0,
+    /**
+     * {Object} Returns the event parent which is used to bubble view events, to
+     */
+    getEventParent : function() {
+      return this.getPresenter();
+    },
+
+
+
+    /*
+    ======================================================
+      REMOTE ASSET LOADING
+    ======================================================
+    */
+
+    /** {=Integer} Number of assets currently being loaded */
+    __assetLoadCounter : 0,
 
 
     /**
@@ -192,32 +217,32 @@ core.Class("core.mvc.view.Dom",
      */
     loadTemplate : function(tmpl, nocache)
     {
-      this.__isLoading++;
+      this.__assetLoadCounter++;
       core.io.Text.load(jasy.Asset.toUri(tmpl), this.__loadTemplateCallback, this, nocache);      
     },
 
 
     __loadTemplateCallback : function(uri, errornous, data) 
     {
-      this.__isLoading--;
+      this.__assetLoadCounter--;
 
       if (errornous) {
         throw new Error("Could not load template: " + uri + "!");
       }
 
       // Enable stripping (to remove white spaces from formatting)
-      this.setTemplate(core.template.Compiler.compile(data.text, true));  
+      this.setTemplate(core.template.Compiler.compile(data.text, this.getLabels()));  
     },
 
     loadStyleSheet : function(sheet, nocache)
     {
-      this.__isLoading++;
+      this.__assetLoadCounter++;
       core.io.StyleSheet.load(jasy.Asset.toUri(sheet), this.__loadStyleSheetCallback, this, nocache);
     },
 
     __loadStyleSheetCallback : function(uri, errornous) 
     {
-      this.__isLoading--;
+      this.__assetLoadCounter--;
 
       if (errornous) {
         throw new Error("Could not load style sheet: " + uri + "!");

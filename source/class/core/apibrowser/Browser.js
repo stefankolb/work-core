@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * The main class of the API Browser.
  *
@@ -143,7 +145,7 @@ core.Class('core.apibrowser.Browser',
 		 */
 		callback: function(data, id) {
 
-			if (id.endsWith(".mustache")) {
+			if (core.String.endsWith(id, ".mustache")) {
 
 				var templateName = id.substring(0, id.indexOf(".mustache"));
 				this.__tmpl[templateName] = core.template.Compiler.compile(data.template, true);

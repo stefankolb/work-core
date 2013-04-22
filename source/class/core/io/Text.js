@@ -6,9 +6,10 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Loads all kinds of text content like text, HTML and JSON.
- *
  */
 (function(global) 
 {
@@ -41,6 +42,11 @@
 			
 			var timeoutHandle = null;
 			var request = XHR ? new XHR : new ActiveXObject("Microsoft.XMLHTTP");
+
+			// Auto enable nocache handling when in debug mode
+			if (nocache == null) {
+				nocache = jasy.Env.isSet("debug");
+			}
 			
 			// Open request, we always use async GET here
 			request.open("GET", uri + (nocache ? dynamicExtension : ""), true);
@@ -71,8 +77,9 @@
 					
 					// Finally call the user defined callback (succeed with data)
 					var status = request.status;
-					callback.call(context, uri, !(status >= 200 && status < 300 || status == 304 || status == 1223), { 
-						text : request.responseText || ""
+					var okay = status >= 200 && status < 300 || status == 304 || status == 1223;
+					callback.call(context, uri, !okay, { 
+						text : request.response || request.responseText || ""
 					});
 				}
 			};

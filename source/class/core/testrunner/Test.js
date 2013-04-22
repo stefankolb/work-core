@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Wraps a function to test so that it can report back
  * to a whole suite of tests and is protected regarding
@@ -109,13 +111,30 @@ core.Class("core.testrunner.Test",
     isEqual : function(a, b, message) 
     {
       try{
-        core.Assert.equal(a, b);  
+        core.Assert.isEqual(a, b);  
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
     },
+
+
+    /**
+     * Test whether @a {var} and @b {var} are not equal and register
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    isNotEqual : function(a, b, message) 
+    {
+      try{
+        core.Assert.isNotEqual(a, b);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    },    
 
 
     /**
@@ -126,13 +145,30 @@ core.Class("core.testrunner.Test",
     isIdentical : function(a, b, message) 
     {
       try{
-        core.Assert.identical(a, b);  
+        core.Assert.isIdentical(a, b);  
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
     },      
+
+
+    /**
+     * Test whether @a {var} and @b {var} are not identical and register
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    isNotIdentical : function(a, b, message) 
+    {
+      try{
+        core.Assert.isNotIdentical(a, b);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    },         
 
 
     /**
@@ -150,6 +186,23 @@ core.Class("core.testrunner.Test",
 
       this.__passed(message);
     },
+
+
+    /**
+     * Test whether @a {var} is falsy and registers
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    isFalse : function(a, message) 
+    {
+      try{
+        core.Assert.isFalse(a);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    },    
 
 
     /**
@@ -185,6 +238,23 @@ core.Class("core.testrunner.Test",
       this.__passed(message);
     },    
     
+
+    /**
+     * Test whether @a {var} is type of @b {var} and registers
+     * the result to the internal storage. Optional @message {String?""}
+     * for more details to understand the context of the assertion.
+     */
+    isType : function(a, b, message) 
+    {
+      try{
+        core.Assert.isType(a, b);  
+      } catch(ex) {
+        return this.__failed(message, ex);
+      }
+
+      this.__passed(message);
+    }, 
+
 
     /**
      * Test whether @func {Function} raises an exception (which it should) 
@@ -234,7 +304,7 @@ core.Class("core.testrunner.Test",
 
       this.__updateOnFatalError();
 
-      this.__suite.failure(this);
+      this.__suite.testFailed(this);
     },
 
 
@@ -296,8 +366,6 @@ core.Class("core.testrunner.Test",
 
     /**
      * {String} Returns a useful one liner of the status of the test
-     *
-     * #require(ext.sugar.Number)
      */
     getSummary : function() 
     {
@@ -305,7 +373,7 @@ core.Class("core.testrunner.Test",
       var message = this.__failureMessage;
 
       var prefix = reason == null ? "Success" : "Failure"
-      var base = ": " + this.__title + " [" + this.__passedCount.pad(2) + "/" + this.getTotalCount().pad(2) + "]";
+      var base = ": " + this.__title + " [" + core.Number.pad(this.__passedCount, 2) + "/" + core.Number.pad(this.getTotalCount(), 2) + "]";
       var postfix = message == null ? reason == null ? "" : ": " + reason : ": " + message;
 
       return prefix + base + postfix;

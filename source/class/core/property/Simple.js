@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(undef)
 {
 	/** {Map} Maps simple property names to global property IDs */
@@ -65,12 +67,7 @@
 			// Validation
 			if (jasy.Env.isSet("debug"))
 			{
-				/** #require(ext.sugar.Object) */
-				var invalidKeys = Object.validateKeys(config, "name,nullable,init,type,fire,apply,cast,validate".split(","));
-				if (invalidKeys.length > 0) {
-					throw new Error("Property declaration of " + propertyName + " contains invalid configuration keys: " + invalidKeys.join(", ") + "!");
-				}
-				
+				core.Assert.doesOnlyHaveKeys(config, "name,nullable,init,type,fire,apply,cast,validate", "Unallowed keys in property: " + propertyName + "!");
 				core.Assert.isType(propertyName, "String");
 
 				if (propertyNullable !== undef) {
@@ -209,8 +206,17 @@
 				// Wrap plain types to match property type
 				// Modifying `value` should also modify the arguments object which
 				// is required for value tests happening via checkSetter
-				if (config.cast && core.Main.isTypeOf(value, "Plain")) {
+				if (config.cast && core.Main.isTypeOf(value, "Plain")) 
+				{
 					value = new config.type(value);
+
+					if (jasy.Env.isSet("debug")) 
+					{
+						// arguments object is not updated in strict mode anymore, fix this
+						if (arguments[0] !== value) {
+							arguments[0] = value;	
+						}
+					}
 				}
 
 				// Check types

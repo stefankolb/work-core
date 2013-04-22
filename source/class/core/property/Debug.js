@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * This helper class is only included into debug builds and do the
  * generic property checks defined using the property configuration.
@@ -15,7 +17,7 @@
 core.Module("core.property.Debug",
 {
 	/**
-	 * Checks whether the given property type definition is valid.
+	 * Checks whether the given property @type {String} definition is valid.
 	 */
 	isValidType : function(type)
 	{

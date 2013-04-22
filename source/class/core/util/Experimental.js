@@ -8,6 +8,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function() 
 {
   var cache = {};
@@ -32,19 +34,21 @@
     return null;
   }
 
+  /**
+   * Utility for figuring out the given name of a experimental property / API.
+   */
   core.Module("core.util.Experimental", 
   {
-    get : function(object, what, assign) 
+    /**
+     * {String} Returns the name of @what {String} on the given @object {Object}.
+     */
+    get : function(object, what) 
     {
       var result = cache[what];
       if (result !== null) {
         result = cache[what] = find(object, what)
       }
         
-      if (assign && result && !hasOwnProperty.call(object, what)) {
-        object[what] = object[result];
-      }
-
       return result;
     }
   });

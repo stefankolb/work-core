@@ -1,6 +1,4 @@
-This is the integrated unit testing framework for Core-based applications and frameworks.
-
-It supports a wide-array of other infrastructure out of the box:
+This is the integrated unit testing framework for any Core-based projects. It supports a wide-array of other infrastructure out of the box:
 
 - Any modern web browser
 - [NodeJS](http://nodejs.org) (Plain JavaScript Environment)

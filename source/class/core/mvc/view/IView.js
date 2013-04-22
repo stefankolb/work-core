@@ -5,6 +5,11 @@
 ==================================================================================================
 */
 
+"use strict";
+
+/**
+ * Generic interface which should be fulfilled by all view classes.
+ */
 core.Interface("core.mvc.view.IView",
 {
   /**

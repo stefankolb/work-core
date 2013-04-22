@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(global) 
 {
 	// Dynamic URI can be shared because we do not support reloading files

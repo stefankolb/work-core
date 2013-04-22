@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * A reporter for the `console` interface which is available in 
  * web browsers, NodeJS, PhantomJS, etc.
@@ -13,6 +15,9 @@ core.Class("core.testrunner.reporter.Console",
 {
   implement: [core.testrunner.reporter.IReporter],
 
+  /**
+   * @suites {core.testrunner.Suite[]} Array of suites to report for
+   */
   construct : function(suites) {
     console.info("Suites: " + suites.length);
   },

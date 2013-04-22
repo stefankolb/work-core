@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Offers a cross browser solution for `scrollIntoView` with good support
  * for doing a minimum effort scrolling which is not supported by native

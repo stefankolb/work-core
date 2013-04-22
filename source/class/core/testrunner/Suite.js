@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Wrapper around a group of {core.testrunner.Test}s. All tests in a suite are 
  * processed in arbitrary order.
@@ -160,7 +162,8 @@ core.Class("core.testrunner.Suite",
 
     /**
      * {Boolean} Runs the test suite. Executes the given @allDoneCallback {Function?} when 
-     * all tests have been completed. Executes the @testFinishedCallback {Function?} callback
+     * all tests have been completed. Executes the @testStartedCallback {Function?} every
+     * single time a test was started. Executes the @testFinishedCallback {Function?} callback
      * every time a single test is completed. Returns `false` when
      * there are no tests registered. 
      * 

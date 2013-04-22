@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(global)
 {
 	var doc = global.document;
@@ -85,9 +87,6 @@
 			}
 			else
 			{
-				/**
-				 * #require(ext.DocumentHead)
-				 */
 				var head = doc.head;
 				var elem = doc.createElement("script");
 

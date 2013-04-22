@@ -5,6 +5,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Event class which is fired whenever a model is removed from a collection.
  */

@@ -1,0 +1,1 @@
+APIs for offering localization for *Core* based applications and libraries. The translation API is based on Gettext offering the same API methods like `tr`, `trc` and `trn` like the Gettext known from typical OpenSource and/or Unix applications.

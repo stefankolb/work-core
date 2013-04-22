@@ -6,8 +6,10 @@
 ==================================================================================================
 */
 
-(function() {
-	
+"use strict";
+
+(function(undef) 
+{	
 	function raise(message) {
 		throw new Error(message);
 	}
@@ -23,45 +25,49 @@
 		 * Raises an exception when the two values @a {var} and @b {var} are not equal (`!=`)
 		 * Customizable with a custom @message {String?} for the exception text.
 		 */
-		equal: function(a, b, message) 
+		isEqual: function(a, b, message) 
 		{
 			if (a != b) {
 				raise(message || "Values must be equal: " + a + " and " + b + "!");
 			}
 		},
 
+
 		/**
 		 * Raises an exception when the two values @a {var} and @b {var} are equal (`==`). 
 		 * Customizable with a custom @message {String?} for the exception text.
 		 */
-		notEqual: function(a, b, message) 
+		isNotEqual: function(a, b, message) 
 		{
 			if (a == b) {
 				raise(message || "Values must not be equal: " + a + " and " + b + "!");
 			}
 		},
 		
+
 		/**
 		 * Raises an exception when the two values @a {var} and @b {var} are not identical (`!==`)
 		 * Customizable with a custom @message {String?} for the exception text.
 		 */
-		identical: function(a, b, message) 
+		isIdentical: function(a, b, message) 
 		{
 			if (a !== b) {
 				raise(message || "Values must be identical: " + a + " and " + b + "!");
 			}
 		},
 
+
 		/**
 		 * Raises an exception when the two values @a {var} and @b {var} are identical (`===`). 
 		 * Customizable with a custom @message {String?} for the exception text.
 		 */
-		notIdentical: function(a, b, message) 
+		isNotIdentical: function(a, b, message) 
 		{
 			if (a === b) {
 				raise(message || "Values must not be identical: " + a + " and " + b + "!");
 			}
 		},
+
 		
 		/**
 		 * Raises an exception when the value @a {var} is not trueish (`!= true`). 
@@ -74,6 +80,7 @@
 			}
 		},
 
+
 		/**
 		 * Raises an exception when the value @a {var} is not falsy (`!= false`). 
 		 * Customizable with a custom @message {String?} for the exception text.
@@ -85,6 +92,19 @@
 			}
 		},
 
+
+		/**
+		 * Raises an exception when the value @a {var} is `undefined`.
+		 * Customizable with a custom @message {String?} for the exception text.
+		 */
+		isNotUndefined : function(a, message) 
+		{
+			if (a === undef) {
+				raise(message || "Value " + a + " must not be undefined!");
+			}
+		},
+
+
 		/**
 		 * Raises an exception when the value @a {var} is not `null`.
 		 * Customizable with a custom @message {String?} for the exception text.
@@ -95,6 +115,7 @@
 				raise(message || "Value " + a + " must be null!");
 			}
 		},
+
 		
 		/**
 		 * Raises an exception when the value @a {var} is `null`.
@@ -107,6 +128,7 @@
 			}
 		},
 
+
 		/**
 		 * Raises an exception when the value @a {var} is not in @object {Object|Array|String}. 
 		 * Customizable with a custom @message {String?} for the exception text.
@@ -117,6 +139,7 @@
 				raise(message || "Value " + a + " is not in given object!");
 			}
 		},
+
 
 		/**
 		 * Raises an exception when the value @a {var} is in @object {Object|Array|String}. 
@@ -129,6 +152,7 @@
 			}
 		},
 		
+
 		/**
 		 * Raises an exception when the value @a {var} does not match the regular expression @regexp {RegExp}.
 		 * Customizable with a custom @message {String?} for the exception text.
@@ -139,6 +163,7 @@
 				raise(message || "Value " + a + " must match " + regexp);
 			}
 		},
+
 		
 		/**
 		 * Raises an exception when the value @a {var} matches the regular expression @regexp {RegExp}.
@@ -151,6 +176,7 @@
 			}
 		},
 
+
 		/**
 		 * Raises an exception when the value @a {var} is not an instance of @clazz {String}
 		 * Customizable with a custom @message {String?} for the exception text.
@@ -161,6 +187,7 @@
 				raise(message || "Value " + a + " must be instance of: " + clazz);
 			}
 		},		
+
 		
 		/**
 		 * Raises an exception when the value @a {var} is not of @type {String} (checked via {core.Main#isTypeOf})
@@ -173,6 +200,7 @@
 			}
 		},
 
+
 		/**
 		 * Raises an exception when the value @a {var} is of @type {String} (checked via {core.Main#isTypeOf})
 		 * Customizable with a custom @message {String?} for the exception text.
@@ -183,6 +211,26 @@
 				raise(message || "Value " + a + " must not match type: " + type);
 			}
 		},
+
+
+		/**
+		 * {String} Validates the @object {Map} to don't hold other keys than the ones defined by @allowed {Array|String}. 
+		 * Returns first non matching key which was found or `undefined` if all keys are valid.
+		 */
+		doesOnlyHaveKeys : function(object, allowed, message) 
+		{
+			if (typeof allowed == "string") {
+				allowed = allowed.split(/,| /);
+			}
+
+			core.Object.forEach(object, function(value, key) 
+			{
+				if (allowed.indexOf(key) == -1) {
+					raise(message || "Unallowed key found: " + key);
+				}
+			});
+		},
+
 
 		/**
 		 * Raises an exception when the given value @a {var} is not empty.
@@ -199,14 +247,11 @@
 			}
 			else if (core.Main.isTypeOf(a, "Map")) 
 			{
-				for (var key in a) {
-					return;
+				if (!core.Object.isEmpty(a)) {
+					raise(message || "Value " + a + " must not be empty: " + type);	
 				}
-
-				raise(message || "Value " + a + " must not be empty: " + type);
 			}
 		}
-		
 	});
 	
 })();

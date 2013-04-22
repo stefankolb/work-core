@@ -5,17 +5,15 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function() 
 {
   var globalId = 0;
 
   /**
-   * Models are the heart of any JavaScript application, 
-   * containing the interactive data as well as a large 
-   * part of the logic surrounding it: conversions, validations, 
-   * computed properties, and access control. You extend `core.mvc.model.Model`
-   * with your domain-specific methods, and `Model` provides a basic 
-   * set of functionality for managing changes.
+   * Models hold the current state of the application. This basic models provides
+   * a simple key/value store and event based notifications.
    */
   core.Class("core.mvc.model.Model", 
   {
@@ -23,7 +21,8 @@
     implement : [core.mvc.model.IModel],
 
     /**
-     * Initial data structure is imported from @data {var}.
+     * Initial data structure is imported from @data {any}.
+     * Initial @parent {Object} can also be passed in.
      */
     construct: function(data, parent) 
     {
@@ -56,7 +55,7 @@
 
     properties :
     {
-      // Model Interface implementation
+      /** Unique ID of the model instance */
       id : 
       {
         type : "String",

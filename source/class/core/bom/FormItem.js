@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * Collection of serialization methods for form items
  */
@@ -18,7 +20,7 @@ core.Module("core.bom.FormItem",
 	{
 		if (jasy.Env.isSet("debug")) 
 		{
-			core.Assert.equal(args.length, 1);
+			core.Assert.isEqual(args.length, 1);
 			core.dom.Node.assertIsNode(item);
 		}
 		
@@ -52,7 +54,7 @@ core.Module("core.bom.FormItem",
 	{
 		if (jasy.Env.isSet("debug")) 
 		{
-			core.Assert.equal(args.length, 1);
+			core.Assert.isEqual(args.length, 1);
 			core.dom.Node.assertIsNode(item);
 			core.Assert.isType(item.name, "String");
 		}

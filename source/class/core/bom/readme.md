@@ -1,0 +1,1 @@
+Modules for interacting with the Browser Object Model (BOM). These modules are typically used to modify browser related things like DOM nodes, CSS Styles or to compute values like the exact offsets of elements or viewport dimensions.

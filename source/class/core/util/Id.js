@@ -6,8 +6,10 @@
 ==================================================================================================
 */
 
-(function() {
-	
+"use strict";
+
+(function() 
+{	
 	var count = 1;
 	
 	/**
@@ -28,8 +30,8 @@
 		 * To improve performance one could also use:
 		 * `var uniqueId = obj.$$id || core.util.Id.get(obj);`
 		 */
-		get: function(object) {
-			
+		get: function(object) 
+		{	
 			if (jasy.Env.isSet("debug")) 
 			{
 				var type = typeof object;

@@ -12,6 +12,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function(Util, StringUtil) 
 {
 	/**
@@ -205,4 +207,4 @@
 		return (num << cnt) | (num >>> (32 - cnt));
 	};
 	
-})(core.crypt.Util, core.util.String);
+})(core.crypt.Util, core.String);

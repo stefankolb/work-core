@@ -12,6 +12,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function () 
 {
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -101,10 +103,10 @@
 		members: 
 		{
 			/**
-			 * {String} Public render method which transforms the stored template text using the @data {Map}
-			 * and runtime specific @partials {Map?null}.
+			 * {String} Public render method which transforms the stored template text using the @data {Map},
+			 * runtime specific @partials {Map?null} and @labels {Map?null}.
 			 */
-			render: function(data, partials) 
+			render: function(data, partials, labels) 
 			{
 				if (jasy.Env.isSet("debug")) 
 				{
@@ -112,44 +114,85 @@
 						throw new Error("Data needs to be type of Object, Map or Array: " + data);
 					}
 										
-					if (arguments.length > 1) {
+					if (arguments.length > 1 && partials != null) {
 						core.Assert.isType(partials, "Map", "Invalid partials");
 					}
+
+					if (arguments.length > 2 && labels != null) {
+						core.Assert.isType(labels, "Map", "Invalid labels");
+					}					
 				}
 				
-				return this.__render(data, partials);
+				return this.__render(data, partials, labels);
 			},
+
 
 			/** 
 			 * {String} Outputs the @key {String} of @data {Map} 
-			 * using the given accessor @method {Integer} as pure data or
-			 * via enabling @escape {Boolean?false} as HTML escaped.
-			 */
-			_data: function(key, method, data, escape) 
+			 * using the given accessor @method {Integer} as HTML escaped variable.
+			 */			 
+			_variable: function(key, method, data) 
 			{
 				var value = accessor[method](key, data);
 				var str = value == null ? "" : "" + value;
 				
-				return escape ? str.replace(htmlChars, htmlEscape) : str;
+				return str.replace(htmlChars, htmlEscape);
 			},
+
+
+			/** 
+			 * {String} Outputs the @key {String} of @data {Map} 
+			 * using the given accessor @method {Integer} as raw data.
+			 */
+			_data : function(key, method, data, escape) 
+			{
+				var value = accessor[method](key, data);
+				return value == null ? "" : "" + value;
+			},
+
 
 			/** 
 			 * {String} Tries to find a partial in the current scope and render it 
 			 */
-			_partial: function(name, data, partials) 
+			_partial: function(name, data, partials, labels) 
 			{
 				if (partials && hasOwnProperty.call(partials, name)) {
-					return partials[name].__render(data, partials);
+					return partials[name].__render(data, partials, labels);
 				} else {
 					return "";
 				}
 			},
 
+
+			/** 
+			 * {String} Tries to find a dynamic label by its @name {String} and renders 
+			 * the resulting label text like a partial template with the current
+			 * @data {var}, defined @partials {Map} and other @labels {Map}.
+			 *
+			 * #break(core.template.Compiler)
+			 */
+			_label: function(name, data, partials, labels) 
+			{
+				var text = labels && labels[name];
+				if (text == null) {
+					return "";
+				}
+
+				// Automatically execute dynamic labels e.g. trn() with plural strings
+				if (typeof text == "function") {
+					text = text();
+				}
+
+				var compiledLabel = core.template.Compiler.compile(text);	
+				return compiledLabel.__render(data, partials, labels);
+			},
+
+
 			/** 
 			 * Renders a section using the given @data {var}, user
-			 * defined @partials {Map} and a @section {Function} specific renderer.
+			 * defined @partials {Map} and @labels {Map} and a @section {Function} specific renderer.
 			 */
-			_section: function(key, method, data, partials, section) 
+			_section: function(key, method, data, partials, labels, section) 
 			{
 				var value = accessor[method](key, data);
 				if (value !== undef)
@@ -162,15 +205,16 @@
 					if (value instanceof Array) 
 					{
 						for (var i=0, l=value.length; i<l; i++) {
-							section.call(this, value[i], partials);
+							section.call(this, value[i], partials, labels);
 						}
 					}
 					else
 					{
-						section.call(this, value, partials);
+						section.call(this, value, partials, labels);
 					}					
 				}
 			},
+
 
 			/** 
 			 * {Boolean} Whether the given @key {String} has valid content inside @data {Map} 

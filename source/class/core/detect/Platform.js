@@ -6,6 +6,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 /**
  * This class comes with all relevant information regarding
  * the client's platform.
@@ -16,7 +18,7 @@
  */
 core.Module("core.detect.Platform", 
 {
-	VALUE: (function() 
+	VALUE: jasy.Env.isSet("runtime", "browser") ? (function() 
 	{
 		var input = navigator.platform || navigator.userAgent;
 		var name;
@@ -27,14 +29,12 @@ core.Module("core.detect.Platform",
 			name = "mac";
 		} else if (/X11|Linux|BSD|Sun OS|Maemo|Android|webOS/.exec(input)) {
 			name = "unix";
-		} else if (/RIM Tablet OS|SymbianOS/.exec(input)) {
-			name = "other";
 		}
 
 		/** 
-		 * {=String} One of `win`, `mac`, `unix` or `other`
+		 * {=String} One of `win`, `mac` or `unix`
 		 */
 		return name;
-	})()
+	})() : "server"
 });
 

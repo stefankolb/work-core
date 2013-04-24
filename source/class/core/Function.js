@@ -224,6 +224,16 @@
       }
 
       immediate(func);
+    },
+
+    /**
+     * {Function} Returns a new function that curries all given arguments to the given @func {Function}.
+     */
+    curry : function(func) {
+      var args = core.Array.fromArguments(arguments).splice(0, 1);
+      return function() {
+        return func.apply(this, args.concat(core.Array.fromArguments(arguments)));
+      };
     }
   });  
 })(core.Main.getGlobal(), Array.prototype.slice);

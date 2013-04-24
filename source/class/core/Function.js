@@ -229,7 +229,8 @@
     /**
      * {Function} Returns a new function that curries all given arguments to the given @func {Function}.
      */
-    curry : function(func) {
+    curry : function(func)
+    {
       if (jasy.Env.isSet("debug"))
       {
         core.Assert.isType(func, "Function");

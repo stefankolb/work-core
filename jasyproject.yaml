@@ -37,6 +37,7 @@ fields:
   runtime:
     check:
     - browser
+    - worker
     - native
     default: browser
     detect: core.detect.Runtime

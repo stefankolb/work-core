@@ -16,7 +16,7 @@
 	 * Holds basic informations about the environment the script is running in.
 	 */
 	core.Module("core.detect.Runtime", {
-		VALUE :	core.Main.isHostType(global, 'document') && core.Main.isHostType(global, 'navigator') ? "browser" : "native"
+		VALUE :	core.Main.isHostType(global, 'navigator') ? (core.Main.isHostType(global, 'document') ? "browser" : "worker") : "native"
 	});
 
 })();

@@ -147,7 +147,7 @@ suite.test("curry", function()
   // Curry 3 parameters to function
   var curryFunc1 = core.Function.curry(func1, param1, param2, param3);
 
-  // Curry 3 parameters to function and test if context if not touched
+  // Curry 3 parameters to function and test if context is not touched
   var curryFunc2 = core.Function.bind(core.Function.curry(func2, param1, param2, param3), obj);
 
   this.isType(curryFunc1, "Function");

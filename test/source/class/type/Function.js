@@ -120,3 +120,38 @@ suite.test("bind", function()
   bound2();
 });
 
+suite.test("curry", function()
+{
+  var test = this;
+  var obj = new (new Function);
+
+  var param1 = "test";
+  var param2 = 42;
+  var param3 = null;
+  var param4 = "own parameter";
+
+  var func1 = function(a, b, c, d) {
+    test.isIdentical(a, param1);
+    test.isIdentical(b, param2);
+    test.isIdentical(c, param3);
+    test.isIdentical(d, param4);
+  };
+  var func2 = function(a, b, c, d) {
+    test.isIdentical(this, obj);
+    test.isIdentical(a, param1);
+    test.isIdentical(b, param2);
+    test.isIdentical(c, param3);
+    test.isIdentical(d, param4);
+  };
+
+  // Curry 3 parameters to function
+  var curryFunc1 = core.Function.curry(func1, param1, param2, param3);
+
+  // Curry 3 parameters to function and test if context is not touched
+  var curryFunc2 = core.Function.bind(core.Function.curry(func2, param1, param2, param3), obj);
+
+  this.isType(curryFunc1, "Function");
+
+  curryFunc1(param4);
+  curryFunc2(param4);
+});

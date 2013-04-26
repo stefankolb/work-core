@@ -224,6 +224,23 @@
       }
 
       immediate(func);
+    },
+
+    /**
+     * {Function} Returns a new function that curries all given arguments to the given @func {Function}.
+     */
+    curry : function(func)
+    {
+      if (jasy.Env.isSet("debug"))
+      {
+        core.Assert.isType(func, "Function");
+      }
+
+      var args = core.Array.fromArguments(arguments);
+      args.splice(0, 1);
+      return function() {
+        return func.apply(this, args.concat(core.Array.fromArguments(arguments)));
+      };
     }
   });  
 })(core.Main.getGlobal(), Array.prototype.slice);

@@ -58,7 +58,7 @@ core.Main.addMembers("Array",
    * - http://es5.github.com/#x15.4.4.15
    * - https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
    */
-  lastIndexOf = function(sought /*, fromIndex */) 
+  lastIndexOf : function(sought /*, fromIndex */) 
   {
     var self = splitString && _toString(this) == "[object String]" ?
         this.split("") :

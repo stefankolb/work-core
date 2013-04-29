@@ -27,12 +27,15 @@
 	// If native, try to use importScripts; if not available shim importScripts via use of eval and readFileSync.
 	if (jasy.Env.isSet("runtime", "native"))
 	{
-		if (!importScripts) {
+		var importScripts = global.importScripts ? global.importScripts : (function() {
 			var Fs = require("fs");
-			var importScripts = function(uri) {
-				eval("//@ sourceURL=" + uri + "\n" + Fs.readFileSync(uri, "utf-8"));
+			return function() {
+				for (var i=0,ii=arguments.length; i<ii; i++) {
+					var uri = arguments[i];
+					eval("//@ sourceURL=" + uri + "\n" + Fs.readFileSync(uri, "utf-8"));
+				}
 			}
-		}
+		})();
 	}
 
 	/**

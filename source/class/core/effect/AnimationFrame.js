@@ -52,7 +52,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 					{
 						var time = Date.now();
 						var currentRequests = requests;
-						var keys = core.Object.keys(currentRequests);
+						var keys = core.Object.getKeys(currentRequests);
 
 						// Reset data structure before executing callbacks
 						requests = {};

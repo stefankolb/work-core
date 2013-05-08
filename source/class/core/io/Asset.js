@@ -187,7 +187,7 @@
 			{
 				// Execute user defined callback method
 				if (callback) {
-					callback.call(context||global, core.Object.keys(entries));
+					callback.call(context||global, core.Object.getKeys(entries));
 				}
 			}
 			else
@@ -206,7 +206,7 @@
 
 					// Execute user defined callback method
 					if (callback) {
-						callback.call(context||global, core.Object.keys(entries));
+						callback.call(context||global, core.Object.getKeys(entries));
 					}
 
 				}, this, random);

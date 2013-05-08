@@ -10,6 +10,8 @@
 
 (function(undef) 
 {
+	var supportsSeal = !!Object.seal;
+
 	var genericToString = function() {
 		return "[class " + this.className + "]";
 	};
@@ -55,7 +57,7 @@
 			for (var i=0, l=include.length; i<l; i++) 
 			{
 				var includedClass = include[i];
-				var includedMembers = Object.keys(includedClass.prototype);
+				var includedMembers = core.Object.getKeys(includedClass.prototype);
 
 				for(var j=0, jl=includedMembers.length; j<jl; j++) 
 				{
@@ -457,6 +459,11 @@
 		
 		// Attach to namespace
 		core.Main.declareNamespace(name, construct);
+
+		// Prevent changes in prototype
+		if (jasy.Env.isSet("debug") && supportsSeal) {
+			Object.seal(construct.prototype);
+		}
 	});
 
 	

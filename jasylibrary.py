@@ -57,6 +57,7 @@ def api():
     # Write API data
     ApiWriter(session).write("$prefix/data")
 
+
 @share
 def clean():
     """Deletes generated JavaScript files, the build folder and clears all caches."""
@@ -67,6 +68,7 @@ def clean():
 
     fm.removeDir("build")
     fm.removeDir("source/script")
+
 
 @share
 def distclean():

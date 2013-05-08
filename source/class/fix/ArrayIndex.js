@@ -5,7 +5,7 @@
 --------------------------------------------------------------------------------------------------
   Based on ES5-Shim
   https://github.com/kriskowal/es5-shim
-  Copyright 2009-2012 by contributors, MIT License  
+  Copyright 2009-2013 by contributors, MIT License  
 ==================================================================================================
 */
 
@@ -23,7 +23,7 @@
     if (o == null) { // this matches both null and undefined
       throw new TypeError("can't convert "+o+" to object");
     }
-    
+
     return Object(o);
   };  
 

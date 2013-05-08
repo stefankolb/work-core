@@ -89,7 +89,7 @@ core.Class("core.testrunner.Test",
       this.__items.push({
         passed : false,
         message : combined,
-        stacktrace : ex.stack || null
+        stacktrace : ex && ex.stack || null
       });
 
       this.__failedCount++;

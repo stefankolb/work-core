@@ -9,7 +9,7 @@
 ==================================================================================================
 */
 
-(function()
+(function(undef)
 {
   var ArrayProto = Array.prototype;
 
@@ -30,8 +30,8 @@
       else
       {
         return array_splice.apply(this, [
-          start === void 0 ? 0 : start,
-          deleteCount === void 0 ? (this.length - start) : deleteCount
+          start === undef ? 0 : start,
+          deleteCount === undef ? (this.length - start) : deleteCount
         ].concat(slice.call(arguments, 2)));
       }
     };

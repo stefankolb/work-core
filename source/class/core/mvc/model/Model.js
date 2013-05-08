@@ -101,7 +101,7 @@
         // Typically uses all existing properties
         // Override the method if you need to include other fields
 
-        var values = this.get(Object.keys(core.Class.getProperties(this.constructor)));
+        var values = this.get(core.Object.getKeys(core.Class.getProperties(this.constructor)));
 
         for (var name in values) 
         {

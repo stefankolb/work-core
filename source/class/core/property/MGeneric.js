@@ -159,7 +159,7 @@
 				{
 					if (!property) 
 					{
-						property = Object.keys(core.Class.getProperties(this.constructor));
+						property = core.Object.getKeys(core.Class.getProperties(this.constructor));
 						var all = true;
 					}
 

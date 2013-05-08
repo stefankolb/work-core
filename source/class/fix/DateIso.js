@@ -11,6 +11,11 @@
 
 "use strict";
 
+/**
+ * Adds or fixes `Date.prototype.toISOString`.
+ *
+ * See also: http://kangax.github.io/es5-compat-table/
+ */
 (function()
 {
   // ES5 15.9.5.43

@@ -124,6 +124,16 @@
 
 
 		/**
+		 * {Object} Returns an empty dictionary like object
+		 */
+		createDict : Object.create ? function() {	
+			return Object.create(null);
+		} : function() {
+			return {};
+		},
+
+
+		/**
 		 * {String} Gets the internal [[Class]] of a @value {var}.
 		 */
 		getClassOf : function(value) {

@@ -17,6 +17,32 @@ Other Fixes/Extensions:
 - Adds `document.head` (HTML5)
 - Defines `global.execScript()` (IE)
 
+Not included:
+
+- JSON (full implementation): Alternative {core.JSON}
+
+- `Array.prototype.every`: Alternative {core.Array#every}
+- `Array.prototype.some`: Alternative {core.Array#some}
+- `Array.prototype.forEach`: Alternative {core.Array#forEach}
+- `Array.prototype.map`: Alternative {core.Array#map}
+- `Array.prototype.filter`: Alternative {core.Array#filter}
+- `Array.prototype.reduce`
+- `Array.prototype.reduceRight`
+
+- `Object.create`
+- `Object.defineProperty`
+- `Object.defineProperties`
+- `Object.getPrototypeOf`
+- `Object.keys`: Alternative {core.Object#keys}
+- `Object.seal`
+- `Object.freeze`
+- `Object.preventExtensions`
+- `Object.isSealed`
+- `Object.isFrozen`
+- `Object.isExtensible`
+- `Object.getOwnPropertyDescriptor`
+- `Object.getOwnPropertyNames`
+
 See also:
 
 - [ES5 Compat Table](http://kangax.github.io/es5-compat-table/)

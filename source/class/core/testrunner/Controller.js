@@ -85,6 +85,8 @@ core.Module("core.testrunner.Controller",
   },
 
 
+  __reporter : null,
+
   __initReporter : function()
   {
     if (this.__reporter) {

@@ -71,6 +71,7 @@
 			// 1: name, 1, test, [val1, val2]
 			// 2: name, 2, value
 			// 3: name, 3, test, default (not permutated)
+			// 4: name, 4, value (not permutated)
 
 			var name = field[0];
 			var type = field[1];
@@ -100,7 +101,7 @@
 			selected[name] = value;
 
 			// Only add permutated fields to the permutated map.
-			if (type != 3) 
+			if (type == 1 || type == 2) 
 			{
 				permutated[name] = value;
 				checksum = null;
@@ -134,7 +135,11 @@
 			}			
 
 			var sha1 = core.crypt.SHA1.checksum(list.join(";"));
-			return checksum = core.String.toHex(sha1);
+			checksum = core.String.toHex(sha1);
+			
+			// var chk2 = core.util.Base62.encode(sha1);
+			// console.log("COMPARE: ", checksum, chk2);
+			return checksum;
 		},
 
 

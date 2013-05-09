@@ -83,6 +83,8 @@
 		var delegate = delegates[profile.name];
 		if (delegate) {
 			var url = delegate(profile, id, entry);
+		} else if (entry.h) {
+			var url = (profile.root || "") + entry.h + id.slice(id.lastIndexOf("."));
 		} else {
 			var url = (profile.root || "") + (entry.u || id);
 		}

@@ -134,7 +134,14 @@
 				list.push(name + ":" + permutated[name]);
 			}			
 
-			var sha1 = core.crypt.SHA1.checksum(list.join(";"));
+
+			var key = list.join(";");
+			var buildtime = selected["jasy.build.time"];
+			if (buildtime) {
+				key += "|" + buildtime;
+			}
+
+			var sha1 = core.crypt.SHA1.checksum(key);
 			checksum = core.String.toHex(sha1);
 			
 			// var chk2 = core.util.Base62.encode(sha1);

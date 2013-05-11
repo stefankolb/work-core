@@ -14,7 +14,7 @@
 	var getRandomRes53;
 	var getRandomInt32;
 
-	if (jasy.Env.isSet("runtime", "native") {
+	if (jasy.Env.isSet("runtime", "native")) {
 	
 		var Crypto = require("crypto");
 		getRandomByte = function() {
@@ -88,7 +88,7 @@
 		getRandomInt32 = jasy.Env.isSet("engine", "presto") ? function() {
 			return getRandomByte() * 0xFFFFFFFF;
 		} : mtGetRandomInt32;
-		getRandomRes53 = jasy.Env.isSet("engine", "presto") = Math.random : mtGetRes53;
+		getRandomRes53 = jasy.Env.isSet("engine", "presto") ? Math.random : mtGetRes53;
 		
 	}
 

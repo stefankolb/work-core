@@ -9,7 +9,9 @@
 
 
 (function() {
-	var rand = Math.random;
+	var Random = core.util.Random;
+	var ArrayType = "Uint8Array" in window ? Uint8Array : Array;
+	
 	var hexTable = new Array(256);
 	for (var i=0; i<256; i++) {
 		if (i < 16) {
@@ -20,14 +22,14 @@
 	}
 	
 	var getArrayOfBytes = function() {
-		var uuid = new Array(16);
+		var uuid = new ArrayType(16);
 		for (var i=0; i<16; i++) {
 			if (i==6) {
-				uuid[i] = 64 + (rand()*16|0); // 4 << 4 + RANDOM : First 4 bits representing version number (=4)
+				uuid[i] = 64 + (Random.getByte() & 0x0F); // 4 << 4 + RANDOM : First 4 bits representing version number (=4)
 			} else if (i==8) {
-				uuid[i] = (((rand()*16|0)&0x3|0x8) << 4) + (rand()*16|0); // Random byte with first two bits set to 10
+				uuid[i] = (((Random.getByte() & 0x0F)&0x3|0x8) << 4) + (Random.getByte() & 0x0F); // Random byte with first two bits set to 10
 			} else {
-				uuid[i] = (rand()*256|0);
+				uuid[i] = Random.getByte();
 			}
 		}
 		return uuid;
@@ -81,7 +83,7 @@
 		},
 	
 		/**
-		 * {Array} Returns a 16 elements long array of bytes 
+		 * {Uint8Array|Array} Returns a 16 elements long array of bytes 
 		 * representing an universally unique ID.
 		 */
 		getArrayOfBytes : getArrayOfBytes

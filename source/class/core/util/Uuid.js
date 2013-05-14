@@ -10,7 +10,7 @@
 
 (function() {
 	var Random = core.util.Random;
-	var ArrayType = "Uint8Array" in window ? Uint8Array : Array;
+	var ArrayType = typeof(Uint8Array) == "function" ? Uint8Array : Array;
 	
 	var hexTable = new Array(256);
 	for (var i=0; i<256; i++) {

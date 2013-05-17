@@ -49,10 +49,10 @@
 			}
 		
 			if ((extractedBits & 62) == 60) {
-				extractedBits = 61;
+				extractedBits = 60;
 				bitPos -= 1;
 			} else if ((extractedBits & 62) == 62) {
-				extractedBits = 62;
+				extractedBits = 61;
 				bitPos -= 1;
 			}
 			result.push(extractedBits);
@@ -74,8 +74,8 @@
 			var char = arr[charOffset];
 		
 			var bitsNeeded = 8 - bitOffset;
-			if (char == 61 || char == 62) {
-				var correctBits = (char == 61) ? 30 : 31;
+			if (char == 60 || char == 61) {
+				var correctBits = (char == 60) ? 30 : 31;
 				if (bitsNeeded <= 5) {
 					current = ((current << bitsNeeded) + (correctBits >> (5-bitsNeeded))) & 255;
 					result.push(current);
@@ -150,6 +150,7 @@
 		 * {String} Encodes @str {String} to base62 encoded string
 		 */
 		encode : function(str) {
+			str = core.String.encodeUtf8(str);
 			var len = str.length;
 			var byteArray = new Array(len);
 			for (var i=0; i<len; i++) {
@@ -178,7 +179,7 @@
 				result[i] = String.fromCharCode(result[i]);
 			}
 			
-			return result.join("");
+			return core.String.decodeUtf8(result.join(""));
 		},
 		
 		/**

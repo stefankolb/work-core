@@ -110,11 +110,10 @@
 
 
 		/**
-		 * {String} Returns the SHA1 checksum of the current permutated field set.
-		 * This checksum computition is compatatible with the Jasy approach for
-		 * computing it.
+		 * {String} Returns the SHA1/Base62 checksum of the current permutated field set and build revision.
+		 * This checksum is compatatible with the Jasy approach for computing it.
 		 */
-		getChecksum : function()
+		getId : function()
 		{
 			if (checksum != null) {
 				return checksum;
@@ -135,9 +134,9 @@
 			}			
 
 			var key = list.join(";");
-			var buildtime = selected["jasy.build.time"];
-			if (buildtime) {
-				key += "@" + buildtime;
+			var rev = selected["jasy.build.rev"];
+			if (rev) {
+				key += "@" + rev;
 			}
 
 			return core.util.Base62.encodeArrayToString(core.crypt.SHA1.checksumAsByteArray(key));

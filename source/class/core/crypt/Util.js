@@ -16,6 +16,22 @@
 	core.Module("core.crypt.Util", 
 	{
 		/**
+		 * {Array} Converts a raw @input {String} into an byte array.
+		 */
+		rawStringToByteArray : function(input)
+		{
+			var length = input.length;
+			var result = new Array(length);
+
+			for (var i=0; i<length; i++) {
+				result[i] = input.charCodeAt(i);
+			}
+
+			return result;
+		},
+
+
+		/**
 		 * {Array} Convert @input {String} to an array of little-endian words.
 		 * 
 		 * Note: Characters >255 have their high-byte silently ignored.
@@ -43,12 +59,28 @@
 		{
 			var output = "";
 			
-			for(var i = 0; i < input.length * 32; i += 8) {
+			for (var i = 0; i < input.length * 32; i += 8) {
 				output += String.fromCharCode((input[i>>5] >>> (i % 32)) & 0xFF);
 			}
 				
 			return output;
 		},
+
+
+		/**
+		 * {Array} Converts @input {Array} of little-endian words to a byte array.
+		 */
+		littleEndianToByteArray : function(input)
+		{
+			var length = input.length * 32;
+			var output = new Array(length / 8);
+			
+			for (var i=0; i<length; i+=8) {
+				output[i/8] = (input[i>>5] >>> (i % 32)) & 0xFF;
+			}
+				
+			return output;
+		},		
 		
 		
 		/**
@@ -79,12 +111,28 @@
 		{
 			var output = "";
 			
-			for(var i = 0; i < input.length * 32; i += 8) {
+			for (var i = 0; i < input.length * 32; i += 8) {
 				output += String.fromCharCode((input[i>>5] >>> (24 - i % 32)) & 0xFF);
 			}
 			
 			return output;
-		}
+		},
+
+
+		/**
+		 * {Array} Converts @input {Array} of big-endian words to a byte array.
+		 */
+		bigEndianToByteArray : function(input)
+		{
+			var length = input.length * 32;
+			var output = new Array(length / 8);
+			
+			for (var i=0; i<length; i+=8) {
+				output[i/8] = (input[i>>5] >>> (24 - i % 32)) & 0xFF;
+			}
+			
+			return output;
+		}		
 	});
 
 })();

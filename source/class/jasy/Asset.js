@@ -39,7 +39,15 @@
 		if (jasy.Env.isSet("debug")) {
 			core.Assert.isType(id, "String");
 		}
-		
+
+		// Support placeholders for environment variables
+		if (id.indexOf("{{") !== -1)
+		{
+			id = id.replace(/{{([a-zA-Z0-9]+)}}/g, function(match, field) {
+				return jasy.Env.getValue(field);
+			});
+		}
+
 		var splits = id.split("/");
 		var current = assets;
 		for (var i=0, l=splits.length; current && i<l; i++) {
@@ -64,9 +72,19 @@
 		
 		var profile = profiles[entry.p];
 
+		// Support placeholders for environment variables
+		if (id.indexOf("{{") !== -1)
+		{
+			id = id.replace(/{{([a-zA-Z0-9]+)}}/g, function(match, field) {
+				return jasy.Env.getValue(field);
+			});
+		}		
+
 		var delegate = delegates[profile.name];
 		if (delegate) {
 			var url = delegate(profile, id, entry);
+		} else if (entry.h) {
+			var url = (profile.root || "") + entry.h + id.slice(id.lastIndexOf("."));
 		} else {
 			var url = (profile.root || "") + (entry.u || id);
 		}

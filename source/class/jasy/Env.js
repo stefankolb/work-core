@@ -71,6 +71,7 @@
 			// 1: name, 1, test, [val1, val2]
 			// 2: name, 2, value
 			// 3: name, 3, test, default (not permutated)
+			// 4: name, 4, value (not permutated)
 
 			var name = field[0];
 			var type = field[1];
@@ -100,7 +101,7 @@
 			selected[name] = value;
 
 			// Only add permutated fields to the permutated map.
-			if (type != 3) 
+			if (type == 1 || type == 2) 
 			{
 				permutated[name] = value;
 				checksum = null;
@@ -133,8 +134,13 @@
 				list.push(name + ":" + permutated[name]);
 			}			
 
-			var sha1 = core.crypt.SHA1.checksum(list.join(";"));
-			return checksum = core.String.toHex(sha1);
+			var key = list.join(";");
+			var buildtime = selected["jasy.build.time"];
+			if (buildtime) {
+				key += "@" + buildtime;
+			}
+
+			return core.util.Base62.encodeArrayToString(core.crypt.SHA1.checksumAsByteArray(key));
 		},
 
 

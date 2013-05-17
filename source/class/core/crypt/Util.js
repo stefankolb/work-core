@@ -32,6 +32,14 @@
 
 
 		/**
+		 * {String} Convers a @input {ByteArray} to a raw string.
+		 */
+		byteArrayToRawString : function(input) {
+			return String.fromCharCode.apply(String, input);
+		},
+
+
+		/**
 		 * {Array} Convert @input {String} to an array of little-endian words.
 		 * 
 		 * Note: Characters >255 have their high-byte silently ignored.
@@ -55,15 +63,8 @@
 		/**
 		 * {String} Converts @input {Array} of little-endian words to a string.
 		 */
-		littleEndianToRawString : function(input)
-		{
-			var output = "";
-			
-			for (var i = 0; i < input.length * 32; i += 8) {
-				output += String.fromCharCode((input[i>>5] >>> (i % 32)) & 0xFF);
-			}
-				
-			return output;
+		littleEndianToRawString : function(input) {
+			return this.byteArrayToRawString(this.littleEndianToByteArray(input));
 		},
 
 
@@ -107,15 +108,8 @@
 		/**
 		 * {String} Converts @input {Array} of big-endian words to a string.
 		 */
-		bigEndianToRawString : function(input)
-		{
-			var output = "";
-			
-			for (var i = 0; i < input.length * 32; i += 8) {
-				output += String.fromCharCode((input[i>>5] >>> (24 - i % 32)) & 0xFF);
-			}
-			
-			return output;
+		bigEndianToRawString : function(input) {
+			return this.byteArrayToRawString(this.bigEndianToByteArray(input));
 		},
 
 

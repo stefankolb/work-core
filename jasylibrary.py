@@ -35,15 +35,15 @@ def api():
     outputManager.deployAssets(["core.apibrowser.Browser"])
 
     # Write kernel script
-    outputManager.storeKernel("$prefix/script/kernel.js", bootCode="core.apibrowser.Kernel.init();")
+    outputManager.storeKernel("{{prefix}}/script/kernel.js", bootCode="core.apibrowser.Kernel.init();")
 
     # Copy files from source
-    fileManager.updateFile(sourceFolder + "/apibrowser.html", "$prefix/index.html")
+    fileManager.updateFile(sourceFolder + "/apibrowser.html", "{{prefix}}/index.html")
     
     # Rewrite template as jsonp
     for tmpl in ["main", "error", "entry", "type", "params", "info", "origin", "tags"]:
         jsonTemplate = json.dumps({ "template" : open(sourceFolder + "/tmpl/apibrowser/%s.mustache" % tmpl).read() })
-        fileManager.writeFile("$prefix/tmpl/%s.js" % tmpl, "apiload(%s, '%s.mustache')" % (jsonTemplate, tmpl))
+        fileManager.writeFile("{{prefix}}/tmpl/%s.js" % tmpl, "apiload(%s, '%s.mustache')" % (jsonTemplate, tmpl))
         
     # Process every possible permutation
     for permutation in session.permutate():
@@ -52,10 +52,10 @@ def api():
         resolver = Resolver(session).addClassName("core.apibrowser.Browser")
 
         # Compressing classes
-        outputManager.storeCompressed(resolver.getSortedClasses(), "$prefix/script/apibrowser-$permutation.js", "new core.apibrowser.Browser;")
+        outputManager.storeCompressed(resolver.getSortedClasses(), "{{prefix}}/script/apibrowser-{{hash}}.js", "new core.apibrowser.Browser;")
 
     # Write API data
-    ApiWriter(session).write("$prefix/data")
+    ApiWriter(session).write("{{prefix}}/data")
 
 
 @share
@@ -103,7 +103,7 @@ def test_source(main="test.Main"):
     fileManager = FileManager(session)
     
     # Store kernel script
-    outputManager.storeKernel("$prefix/script/kernel.js", bootCode="test.Kernel.init();")
+    outputManager.storeKernel("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
     
     for permutation in session.permutate():
 
@@ -111,7 +111,7 @@ def test_source(main="test.Main"):
         classes = Resolver(session).addClassName(main).getSortedClasses()
 
         # Writing source loader
-        outputManager.storeLoader(classes, "$prefix/script/test-$permutation.js")
+        outputManager.storeLoader(classes, "{{prefix}}/script/test-{{hash}}.js")
 
 
 @share
@@ -133,11 +133,11 @@ def test_build(main="test.Main"):
     outputManager.deployAssets([main])
 
     # Store kernel script
-    outputManager.storeKernel("$prefix/script/kernel.js", bootCode="test.Kernel.init();")
+    outputManager.storeKernel("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
 
     # Copy files from source
     for name in ["index.html", "phantom.js", "node.js"]:
-        fileManager.updateFile("source/%s" % fileName, "$prefix/%s" % fileName)
+        fileManager.updateFile("source/%s" % fileName, "{{prefix}}/%s" % fileName)
 
     for permutation in session.permutate():
 
@@ -145,7 +145,7 @@ def test_build(main="test.Main"):
         classes = Resolver(session).addClassName(main).getSortedClasses()
 
         # Compressing classes
-        outputManager.storeCompressed(classes, "$prefix/script/test-$permutation.js")
+        outputManager.storeCompressed(classes, "{{prefix}}/script/test-{{hash}}.js")
 
     
 def test_phantom():

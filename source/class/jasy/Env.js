@@ -134,19 +134,13 @@
 				list.push(name + ":" + permutated[name]);
 			}			
 
-
 			var key = list.join(";");
 			var buildtime = selected["jasy.build.time"];
 			if (buildtime) {
-				key += "|" + buildtime;
+				key += "@" + buildtime;
 			}
 
-			var sha1 = core.crypt.SHA1.checksum(key);
-			checksum = core.String.toHex(sha1);
-			
-			// var chk2 = core.util.Base62.encode(sha1);
-			// console.log("COMPARE: ", checksum, chk2);
-			return checksum;
+			return core.util.Base62.encodeArrayToString(core.crypt.SHA1.checksumAsByteArray(key));
 		},
 
 

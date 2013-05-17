@@ -8,7 +8,7 @@
 
 "use strict";
 
-(function() 
+(function(String) 
 {
 	/**
 	 * Utility collection used by the different checksum/hashing implementations.
@@ -129,5 +129,5 @@
 		}		
 	});
 
-})();
+})(String);
 

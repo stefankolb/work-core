@@ -31,6 +31,13 @@
 		},
 
 
+		checksumAsByteArray : function(str) 
+		{
+			str = StringUtil.encodeUtf8(str);
+			return Util.bigEndianToByteArray(binb_sha1(Util.rawStringToBigEndian(str), str.length * 8));
+		},
+
+
 		/**
 		 * {String} Returns a HMAC (Hash-based Message Authentication Code) using the SHA1 hash function as a raw string.
 		 *

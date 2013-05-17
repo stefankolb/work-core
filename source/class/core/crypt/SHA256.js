@@ -25,12 +25,20 @@
 		/**
 		 * {String} Returns the SHA256 checksum of the given @str {String} as a raw string.
 		 */
-		checksum : function(str) 
-		{ 
-			str = StringUtil.encodeUtf8(str);
-			return Util.bigEndianToRawString(binb_sha256(Util.rawStringToBigEndian(str), str.length * 8));
+		checksum : function(str) { 
+			return Util.byteArrayToRawString(this.checksumAsByteArray(str));
 		},
 		
+
+		/**
+		 * {Array} Returns the SHA256 checksum of the given @str {String} as an byte array.
+		 */
+		checksumAsByteArray : function(str) 
+		{
+			str = StringUtil.encodeUtf8(str);
+			return Util.bigEndianToByteArray(binb_sha256(Util.rawStringToBigEndian(str), str.length * 8));
+		},
+
 
 		/**
 		 * {String} Returns a HMAC (Hash-based Message Authentication Code) using the SHA256 hash function as a raw string.

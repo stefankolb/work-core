@@ -24,13 +24,14 @@
 		/**
 		 * {String} Returns the SHA1 checksum of the given @str {String} as a raw string.
 		 */
-		checksum : function(str) 
-		{ 
-			str = StringUtil.encodeUtf8(str);
-			return Util.bigEndianToRawString(binb_sha1(Util.rawStringToBigEndian(str), str.length * 8));
+		checksum : function(str) { 
+			return Util.byteArrayToRawString(this.checksumAsByteArray(str));
 		},
 
 
+		/**
+		 * {Array} Returns the SHA1 checksum of the given @str {String} as an byte array.
+		 */
 		checksumAsByteArray : function(str) 
 		{
 			str = StringUtil.encodeUtf8(str);

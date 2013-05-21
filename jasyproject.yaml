@@ -41,3 +41,16 @@ fields:
     - native
     default: browser
     detect: core.detect.Runtime
+  device:
+    check:
+    - desktop
+    - tablet
+    - phone
+    - other
+    default: other
+    detect: core.detect.Device
+  highres:
+    check: Boolean
+    default: false
+    detect: core.detect.HighRes
+

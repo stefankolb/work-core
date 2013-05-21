@@ -78,6 +78,10 @@
 			if (type == 1 || type == 3)
 			{
 				var test = field[2];
+				if (!test) {
+					throw new Error("[jasy.Env]: Detection class for field " + name + " is not available!");
+				}
+
 				var value = "VALUE" in test ? test.VALUE : test.get(name);
 				var third = field[3];
 

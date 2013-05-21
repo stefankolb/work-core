@@ -7,6 +7,9 @@
 
 "use strict";
 
+// TODO: For more compat support we might have a look at qooxdoo's XML classes:
+// https://github.com/qooxdoo/qooxdoo/blob/master/framework/source/class/qx/xml/Document.js
+
 /**
  * Utilities and wrappers for parsing typical web related documents.
  */

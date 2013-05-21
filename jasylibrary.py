@@ -92,7 +92,6 @@ def test_source(main="test.Main"):
     """Generates source (development) version of test runner"""
 
     session.setField("debug", True)
-    session.permutateField("es5")
     session.permutateField("json")
     session.permutateField("engine")
     session.permutateField("runtime")
@@ -119,7 +118,6 @@ def test_build(main="test.Main"):
     """Generates build (deployment) version of test runner"""
 
     session.setField("debug", True)
-    session.permutateField("es5")
     session.permutateField("json")
     session.permutateField("engine")
     session.permutateField("runtime")

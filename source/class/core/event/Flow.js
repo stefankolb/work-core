@@ -30,10 +30,12 @@ var map = function(promiseOrValues, mapFunction, context) {
         if (result.length == len) {
           promise.fulfill(result);
         }
+      }, function(reason) {
+      	promise.reject(reason);
       });
     }
   } else {
-    return mapFunction.call(context, promiseOrValues); // map([promiseOrValues], mapFunction, context);
+    return mapFunction.call(context, promiseOrValues);
   }
 
   return promise;

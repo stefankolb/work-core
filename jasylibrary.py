@@ -52,7 +52,7 @@ def api():
         resolver = Resolver(session).addClassName("core.apibrowser.Browser")
 
         # Compressing classes
-        outputManager.storeCompressed(resolver.getSortedClasses(), "{{prefix}}/script/apibrowser-{{hash}}.js", "new core.apibrowser.Browser;")
+        outputManager.storeCompressed(resolver.getSortedClasses(), "{{prefix}}/script/apibrowser-{{id}}.js", "new core.apibrowser.Browser;")
 
     # Write API data
     ApiWriter(session).write("{{prefix}}/data")
@@ -111,7 +111,7 @@ def test_source(main="test.Main"):
         classes = Resolver(session).addClassName(main).getSortedClasses()
 
         # Writing source loader
-        outputManager.storeLoader(classes, "{{prefix}}/script/test-{{hash}}.js")
+        outputManager.storeLoader(classes, "{{prefix}}/script/test-{{id}}.js")
 
 
 @share
@@ -145,7 +145,7 @@ def test_build(main="test.Main"):
         classes = Resolver(session).addClassName(main).getSortedClasses()
 
         # Compressing classes
-        outputManager.storeCompressed(classes, "{{prefix}}/script/test-{{hash}}.js")
+        outputManager.storeCompressed(classes, "{{prefix}}/script/test-{{id}}.js")
 
     
 def test_phantom():

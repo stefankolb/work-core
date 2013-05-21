@@ -1,5 +1,20 @@
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2013 Sebastian Werner
+==================================================================================================
+*/
+
+"use strict";
+
+/**
+ * Utilities and wrappers for parsing typical web related documents.
+ */
 core.Module("core.dom.Parser",
 {
+  /**
+   * {Document} Parses the given @content {String} as HTML and returns the generated document object.
+   */
   parseHtml : function(content)
   {
     var doc = document.implementation.createHTMLDocument("");
@@ -10,5 +25,15 @@ core.Module("core.dom.Parser",
     }
 
     return doc;
+  },
+
+
+  /**
+   * {Document} Parses the given @content {String} as XML and returns the generated document object.
+   */
+  parseXml : function(content)
+  {
+    var parser = new DOMParser();
+    return parser.parseFromString(content, "application/xml");    
   }
 });

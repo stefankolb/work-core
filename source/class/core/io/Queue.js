@@ -148,6 +148,10 @@
 			{
 				var currentUri = uris[i];
 				
+				if (jasy.Env.isSet("debug") && (currentUri == "" || currentUri == null)) {
+					throw new Error("Invalid URI to load: " + currentUri);
+				}
+				
 				if (autoType) 
 				{
 					type = extractExtension(currentUri);

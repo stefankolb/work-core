@@ -1,193 +1,173 @@
-core.Class("core.component.Scroller",
+(function(undef) 
 {
-  construct : function(content, options) 
-  {  
-    this.content = content;
-    this.container = content.parentNode;
-    this.options = options || {};
+  var transformOriginProperty = core.bom.Style.property("transformOrigin");
+  var perspectiveProperty = core.bom.Style.property("perspective");
+  var transformProperty = core.bom.Style.property("transform");
 
-    // create Scroller instance
-    var that = this;
-    this.scroller = new Scroller(function(left, top, zoom) {
-      that.render(left, top, zoom);
-    }, options);
-
-    // bind events
-    this.bindEvents();
-
-    // the content element needs a correct transform origin for zooming
-    this.content.style[EasyScroller.vendorPrefix + 'TransformOrigin'] = "left top";
-
-    // reflow for the first time
-    this.reflow();
-  },
-
-  members :
+  if (perspectiveProperty) 
   {
-    /**
-     *
-     */
-    render : (function() 
+    var render = function(left, top, zoom) {
+      this.content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
+    };   
+  } 
+  else if (transformProperty) 
+  {  
+    var render = function(left, top, zoom) {
+      this.content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px) scale(' + zoom + ')';
+    }; 
+  } 
+  else 
+  {  
+    var render = function(left, top, zoom) 
     {
-      var docStyle = document.documentElement.style;
-      
-      var engine;
-      if (window.opera && Object.prototype.toString.call(opera) === '[object Opera]') {
-        engine = 'presto';
-      } else if ('MozAppearance' in docStyle) {
-        engine = 'gecko';
-      } else if ('WebkitAppearance' in docStyle) {
-        engine = 'webkit';
-      } else if (typeof navigator.cpuClass === 'string') {
-        engine = 'trident';
-      }
-      
-      var vendorPrefix = EasyScroller.vendorPrefix = {
-        trident: 'ms',
-        gecko: 'Moz',
-        webkit: 'Webkit',
-        presto: 'O'
-      }[engine];
-      
-      var helperElem = document.createElement("div");
-      var undef;
-      
-      var perspectiveProperty = vendorPrefix + "Perspective";
-      var transformProperty = vendorPrefix + "Transform";
-      
-      if (helperElem.style[perspectiveProperty] !== undef) {
-        
-        return function(left, top, zoom) {
-          this.content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
-        };  
-        
-      } else if (helperElem.style[transformProperty] !== undef) {
-        
-        return function(left, top, zoom) {
-          this.content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px) scale(' + zoom + ')';
-        };
-        
-      } else {
-        
-        return function(left, top, zoom) {
-          this.content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
-          this.content.style.marginTop = top ? (-top/zoom) + 'px' : '';
-          this.content.style.zoom = zoom || '';
-        };
-        
-      }
-    })();
-
-
-    /**
-     *
-     */
-    reflow : function() 
-    {
-      // set the right scroller dimensions
-      this.scroller.setDimensions(this.container.clientWidth, this.container.clientHeight, this.content.offsetWidth, this.content.offsetHeight);
-
-      // refresh the position for zooming purposes
-      var rect = this.container.getBoundingClientRect();
-      this.scroller.setPosition(rect.left + this.container.clientLeft, rect.top + this.container.clientTop);
-      
+      this.content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
+      this.content.style.marginTop = top ? (-top/zoom) + 'px' : '';
+      this.content.style.zoom = zoom || '';
     };
+  }  
 
+  core.Class("core.component.Scroller",
+  {
+    construct : function(content, options) 
+    {  
+      this.content = content;
+      this.container = content.parentNode;
+      this.options = options || {};
 
-    /**
-     *
-     */
-    bindEvents : function() 
-    {
+      // create Scroller instance
       var that = this;
+      this.scroller = new core.ui.Scroller(function(left, top, zoom) {
+        that.render(left, top, zoom);
+      }, options);
 
-      // reflow handling
-      window.addEventListener("resize", function() {
-        that.reflow();
-      }, false);
+      // bind events
+      this.bindEvents();
 
-      // touch devices bind touch events
-      if ('ontouchstart' in window) {
+      // the content element needs a correct transform origin for zooming
+      this.content.style[transformOriginProperty] = "left top";
 
-        this.container.addEventListener("touchstart", function(e) {
+      // reflow for the first time
+      this.reflow();
+    },
 
-          // Don't react if initial down happens on a form element
-          if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
-            return;
-          }
+    members :
+    {
+      /**
+       *
+       */
+      render : render,
 
-          that.scroller.doTouchStart(e.touches, e.timeStamp);
-          e.preventDefault();
 
-        }, false);
+      /**
+       *
+       */
+      reflow : function() 
+      {
+        // set the right scroller dimensions
+        this.scroller.setDimensions(this.container.clientWidth, this.container.clientHeight, this.content.offsetWidth, this.content.offsetHeight);
 
-        document.addEventListener("touchmove", function(e) {
-          that.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
-        }, false);
-
-        document.addEventListener("touchend", function(e) {
-          that.scroller.doTouchEnd(e.timeStamp);
-        }, false);
-
-        document.addEventListener("touchcancel", function(e) {
-          that.scroller.doTouchEnd(e.timeStamp);
-        }, false);
-
-      // non-touch bind mouse events
-      } else {
+        // refresh the position for zooming purposes
+        var rect = this.container.getBoundingClientRect();
+        this.scroller.setPosition(rect.left + this.container.clientLeft, rect.top + this.container.clientTop);
         
-        var mousedown = false;
+      },
 
-        this.container.addEventListener("mousedown", function(e) {
 
-          if (e.target.tagName.match(/input|textarea|select/i)) {
-            return;
-          }
-        
-          that.scroller.doTouchStart([{
-            pageX: e.pageX,
-            pageY: e.pageY
-          }], e.timeStamp);
+      /**
+       *
+       */
+      bindEvents : function() 
+      {
+        var that = this;
 
-          mousedown = true;
-          e.preventDefault();
-
+        // reflow handling
+        window.addEventListener("resize", function() {
+          that.reflow();
         }, false);
 
-        document.addEventListener("mousemove", function(e) {
+        // touch devices bind touch events
+        if ('ontouchstart' in window) {
 
-          if (!mousedown) {
-            return;
-          }
-          
-          that.scroller.doTouchMove([{
-            pageX: e.pageX,
-            pageY: e.pageY
-          }], e.timeStamp);
+          this.container.addEventListener("touchstart", function(e) {
 
-          mousedown = true;
+            // Don't react if initial down happens on a form element
+            if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
+              return;
+            }
 
-        }, false);
-
-        document.addEventListener("mouseup", function(e) {
-
-          if (!mousedown) {
-            return;
-          }
-          
-          that.scroller.doTouchEnd(e.timeStamp);
-
-          mousedown = false;
-
-        }, false);
-
-        this.container.addEventListener("mousewheel", function(e) {
-          if(that.options.zooming) {
-            that.scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);  
+            that.scroller.doTouchStart(e.touches, e.timeStamp);
             e.preventDefault();
-          }
-        }, false);
+
+          }, false);
+
+          document.addEventListener("touchmove", function(e) {
+            that.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
+          }, false);
+
+          document.addEventListener("touchend", function(e) {
+            that.scroller.doTouchEnd(e.timeStamp);
+          }, false);
+
+          document.addEventListener("touchcancel", function(e) {
+            that.scroller.doTouchEnd(e.timeStamp);
+          }, false);
+
+        // non-touch bind mouse events
+        } else {
+          
+          var mousedown = false;
+
+          this.container.addEventListener("mousedown", function(e) {
+
+            if (e.target.tagName.match(/input|textarea|select/i)) {
+              return;
+            }
+          
+            that.scroller.doTouchStart([{
+              pageX: e.pageX,
+              pageY: e.pageY
+            }], e.timeStamp);
+
+            mousedown = true;
+            e.preventDefault();
+
+          }, false);
+
+          document.addEventListener("mousemove", function(e) {
+
+            if (!mousedown) {
+              return;
+            }
+            
+            that.scroller.doTouchMove([{
+              pageX: e.pageX,
+              pageY: e.pageY
+            }], e.timeStamp);
+
+            mousedown = true;
+
+          }, false);
+
+          document.addEventListener("mouseup", function(e) {
+
+            if (!mousedown) {
+              return;
+            }
+            
+            that.scroller.doTouchEnd(e.timeStamp);
+
+            mousedown = false;
+
+          }, false);
+
+          this.container.addEventListener("mousewheel", function(e) {
+            if(that.options.zooming) {
+              that.scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);  
+              e.preventDefault();
+            }
+          }, false);
+        }
       }
     }
-  }
-});
+  });
+})();

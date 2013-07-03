@@ -174,7 +174,7 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      elem.style.display = "";
+      elem.style.display = "block";
       this.fireEvent("show");
     },
 

@@ -6,52 +6,59 @@
 
   if (perspectiveProperty) 
   {
-    var render = function(left, top, zoom) {
-      this.content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
+    var render = function(left, top, zoom) 
+    {
+      var content = this.__container.firstElementChild;
+      content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
     };   
   } 
   else if (transformProperty) 
   {  
-    var render = function(left, top, zoom) {
-      this.content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px) scale(' + zoom + ')';
+    var render = function(left, top, zoom) 
+    {
+      var content = this.__container.firstElementChild;
+      content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px) scale(' + zoom + ')';
     }; 
   } 
   else 
   {  
     var render = function(left, top, zoom) 
     {
-      this.content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
-      this.content.style.marginTop = top ? (-top/zoom) + 'px' : '';
-      this.content.style.zoom = zoom || '';
+      var content = this.__container.firstElementChild;
+      content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
+      content.style.marginTop = top ? (-top/zoom) + 'px' : '';
+      content.style.zoom = zoom || '';
     };
   }  
 
   core.Class("core.component.Scroller",
   {
-    construct : function(content, options) 
+    construct : function(container, options) 
     {  
-      this.content = content;
-      this.container = content.parentNode;
-      this.options = options || {};
+      this.__container = container;
+      this.__options = options || {};
 
       // create Scroller instance
       var that = this;
-      this.scroller = new core.ui.Scroller(function(left, top, zoom) {
+      this.__scroller = new core.ui.Scroller(function(left, top, zoom) {
         that.render(left, top, zoom);
       }, options);
 
       // bind events
-      this.bindEvents();
-
-      // the content element needs a correct transform origin for zooming
-      this.content.style[transformOriginProperty] = "left top";
-
-      // reflow for the first time
-      this.reflow();
+      this.__bindEvents();
     },
 
     members :
     {
+      init : function() 
+      {
+        var content = this.__container.firstElementChild;
+        content.style[transformOriginProperty] = "left top";
+
+        this.reflow();
+      },
+
+
       /**
        *
        */
@@ -63,12 +70,15 @@
        */
       reflow : function() 
       {
+        var container = this.__container;
+        var content = container.firstElementChild;
+
         // set the right scroller dimensions
-        this.scroller.setDimensions(this.container.clientWidth, this.container.clientHeight, this.content.offsetWidth, this.content.offsetHeight);
+        this.__scroller.setDimensions(container.clientWidth, container.clientHeight, content.offsetWidth, content.offsetHeight);
 
         // refresh the position for zooming purposes
-        var rect = this.container.getBoundingClientRect();
-        this.scroller.setPosition(rect.left + this.container.clientLeft, rect.top + this.container.clientTop);
+        var rect = container.getBoundingClientRect();
+        this.__scroller.setPosition(rect.left + container.clientLeft, rect.top + container.clientTop);
         
       },
 
@@ -76,7 +86,7 @@
       /**
        *
        */
-      bindEvents : function() 
+      __bindEvents : function() 
       {
         var that = this;
 
@@ -88,28 +98,28 @@
         // touch devices bind touch events
         if ('ontouchstart' in window) {
 
-          this.container.addEventListener("touchstart", function(e) {
+          this.__container.addEventListener("touchstart", function(e) {
 
             // Don't react if initial down happens on a form element
             if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
               return;
             }
 
-            that.scroller.doTouchStart(e.touches, e.timeStamp);
+            that.__scroller.doTouchStart(e.touches, e.timeStamp);
             e.preventDefault();
 
           }, false);
 
           document.addEventListener("touchmove", function(e) {
-            that.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
+            that.__scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
           }, false);
 
           document.addEventListener("touchend", function(e) {
-            that.scroller.doTouchEnd(e.timeStamp);
+            that.__scroller.doTouchEnd(e.timeStamp);
           }, false);
 
           document.addEventListener("touchcancel", function(e) {
-            that.scroller.doTouchEnd(e.timeStamp);
+            that.__scroller.doTouchEnd(e.timeStamp);
           }, false);
 
         // non-touch bind mouse events
@@ -117,13 +127,13 @@
           
           var mousedown = false;
 
-          this.container.addEventListener("mousedown", function(e) {
+          this.__container.addEventListener("mousedown", function(e) {
 
             if (e.target.tagName.match(/input|textarea|select/i)) {
               return;
             }
           
-            that.scroller.doTouchStart([{
+            that.__scroller.doTouchStart([{
               pageX: e.pageX,
               pageY: e.pageY
             }], e.timeStamp);
@@ -139,7 +149,7 @@
               return;
             }
             
-            that.scroller.doTouchMove([{
+            that.__scroller.doTouchMove([{
               pageX: e.pageX,
               pageY: e.pageY
             }], e.timeStamp);
@@ -154,15 +164,15 @@
               return;
             }
             
-            that.scroller.doTouchEnd(e.timeStamp);
+            that.__scroller.doTouchEnd(e.timeStamp);
 
             mousedown = false;
 
           }, false);
 
-          this.container.addEventListener("mousewheel", function(e) {
-            if(that.options.zooming) {
-              that.scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);  
+          this.__container.addEventListener("mousewheel", function(e) {
+            if(that.__options.zooming) {
+              that.__scroller.doMouseZoom(e.wheelDelta, e.timeStamp, e.pageX, e.pageY);  
               e.preventDefault();
             }
           }, false);

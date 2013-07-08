@@ -36,7 +36,9 @@
       if (jasy.Env.isSet("debug"))
       {
         core.Assert.isType(callback, "Function");
-        core.Assert.isType(context, "Object");
+        if (context) {
+          core.Assert.isType(context, "Object");
+        }
         core.Assert.isType(delay, "Integer");
       }
 

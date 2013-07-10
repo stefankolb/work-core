@@ -122,6 +122,89 @@
   var contextFix = "if(!context)context=global;";
   var executeCallback = "callback.call(context,object[key],key,object);";
 
+  var EmptyConstructor = new Function;
+
+  if (Object.create)
+  {
+    /**
+     * {Object} Returns an completely empty object instance
+     */
+    var createEmpty = function() {
+      return Object.create(null);
+    };
+
+    /**
+     * {Object} Returns an object instance from the given @clazz {Class}
+     * without executing its constructor method.
+     */
+    var createFrom = function(clazz) {
+      return Object.create(clazz);
+    };
+  }
+  else if (Object.prototype.__proto__ === null)
+  {
+    var createEmpty = function () {
+      return { "__proto__": null };
+    };
+
+    var createFrom = function(clazz) 
+    {
+      EmptyConstructor.prototype = clazz;
+      var object = new EmptyConstructor;
+      object.__proto__ = clazz;
+      return object;
+    };
+  }
+  else
+  {
+    // In old IE __proto__ can't be used to manually set `null`, nor does
+    // any other method exist to make an object that inherits from nothing,
+    // aside from Object.prototype itself. Instead, create a new global
+    // object and *steal* its Object.prototype and strip it bare. This is
+    // used as the prototype to create nullary objects.
+    var EmptyClass = (function () 
+    {
+      var iframe = document.createElement('iframe');
+      var parent = document.body || document.documentElement;
+
+      iframe.style.display = 'none';
+      parent.appendChild(iframe);
+      iframe.src = 'javascript:';
+      
+      var empty = iframe.contentWindow.Object.prototype;
+      
+      parent.removeChild(iframe);
+      iframe = null;
+      
+      delete empty.constructor;
+      delete empty.hasOwnProperty;
+      delete empty.propertyIsEnumerable;
+      delete empty.isPrototypeOf;
+      delete empty.toLocaleString;
+      delete empty.toString;
+      delete empty.valueOf;
+      
+      empty.__proto__ = null;
+
+      function Empty() {}
+      Empty.prototype = empty;
+      return Empty;
+    })();
+
+    var createEmpty = function() {
+      return new EmptyClass;
+    };
+
+    var createFrom = function(clazz) 
+    {
+      EmptyConstructor.prototype = clazz;
+      return new EmptyConstructor;
+    };    
+  }
+
+
+
+
   /**
    * A collection of utility methods for native JavaScript objects.
    */
@@ -254,7 +337,10 @@
       init : "var result={};", 
       iter : "result[table[key]||key]=object[key];", 
       exit : "return result;"
-    })
+    }),
+
+    createEmpty : createEmpty,
+    createFrom : createFrom
   });
 
 })(core.Main.getGlobal());

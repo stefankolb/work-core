@@ -19,6 +19,7 @@ core.Class("core.mvc.view.DomLayer",
 
   members :
   {
+
     // Interface implementation
     show : function(approach)
     {
@@ -38,36 +39,20 @@ core.Class("core.mvc.view.DomLayer",
 
         if (approach == "in")
         {
-          var fromTransform = "translateX(100%)";
-          var toTransform = "";
+          var from = { transform : "translateX(100%)" };
+          var to = { transform : "" };
         }
         else if (approach == "out")
         {
-          var fromTransform = "translateX(-100%)";
-          var toTransform = "";
+          var from = { transform : "translateX(-100%)" };
+          var to = { transform : "" };
         }
 
-        // Show element and render off screen
-        core.bom.Style.set(elem, "transitionDuration", "0ms");
-        core.bom.Style.set(elem, "transform", fromTransform);
-        core.bom.Style.set(elem, "display", "block");
-
-        // Enforce rendering
-        elem.offsetWidth;
-
-        // Post-pone visible animation to next render frame
-        core.effect.AnimationFrame.request(function()
-        {
-          core.bom.Style.set(elem, "transitionDuration", "");
-          core.bom.Style.set(elem, "transform", toTransform);
-        });
-
-        // Connect to end event
-        core.bom.Transition.addListener(elem, this.__onTransitionEndShow, this);
+        core.bom.Transition.fadeIn(elem, from, to, function() {
+          this.fireEvent("show");
+        }, this);
       }
-
     },
-
 
 
     // Interface implementation
@@ -89,49 +74,19 @@ core.Class("core.mvc.view.DomLayer",
 
         if (approach == "in")
         {
-          var fromTransform = "";
-          var toTransform = "translateX(-100%)";
+          var from = { transform: "" };
+          var to = { transform: "translateX(-100%)" };
         }
         else if (approach == "out")
         {
-          var fromTransform = "";
-          var toTransform = "translateX(100%)";
+          var from = { transform: "" };
+          var to = { transform: "translateX(100%)" };
         }
 
-        // Move element to origin position
-        core.bom.Style.set(elem, "transitionDuration", "0ms");
-        core.bom.Style.set(elem, "transform", fromTransform);
-
-        // Post-pone visible animation to next render frame
-        core.effect.AnimationFrame.request(function()
-        {
-          core.bom.Style.set(elem, "transitionDuration", "");
-          core.bom.Style.set(elem, "transform", toTransform);
-        });
-
-        // Connect to end event
-        core.bom.Transition.addListener(elem, this.__onTransitionEndHide, this);
+        core.bom.Transition.fadeOut(elem, from, to, function() {
+          this.fireEvent("hide");
+        }, this);
       }
-    },
-
-
-
-    __onTransitionEndShow : function() 
-    {
-      this.fireEvent("show");
-
-      core.bom.Transition.removeListener(this.getRoot(), this.__onTransitionEndShow, this);
-    },
-
-    __onTransitionEndHide : function() 
-    {
-      this.getRoot().style.display = "none";
-      this.fireEvent("hide");
-
-      core.bom.Transition.removeListener(this.getRoot(), this.__onTransitionEndHide, this);
     }
-
-
   }
-
 })

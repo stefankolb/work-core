@@ -6,24 +6,85 @@
     name = "webkitTransitionEnd";
   }
 
+  var addListener = function(elem, callback, context)
+  {
+    if (context) {
+      callback = core.Function.bind(callback, context);
+    }
+
+    elem.addEventListener(name, callback, false);
+  };
+
+  var removeListener = function(elem, callback, context)
+  {
+    if (context) {
+      callback = core.Function.bind(callback, context);
+    }
+
+    elem.removeEventListener(name, callback, false);      
+  };
+
   core.Module("core.bom.Transition",
   {
-    addListener : function(elem, callback, context)
+    addListener : addListener,
+    removeListener : removeListener,
+
+    fadeIn : function(elem, from, to, callback, context)
     {
-      if (context) {
-        callback = core.Function.bind(callback, context);
+      if (from != null)
+      {
+        // Show element and render off screen
+        core.bom.Style.set(elem, "transitionDuration", "0ms");
+        core.bom.Style.set(elem, from);
       }
 
-      elem.addEventListener(name, callback, false);
+      // Show element and enforce rendering
+      elem.style.display = "block";
+      elem.offsetWidth;
+
+      // Post-pone visible animation to next render frame
+      core.effect.AnimationFrame.request(function()
+      {
+        core.bom.Style.set(elem, "transitionDuration", "");
+        core.bom.Style.set(elem, to);
+      });
+
+      // Connect to transition end event
+      var helper = function() 
+      {
+        removeListener(elem, helper);
+        context ? callback.call(context) : callback();
+      };
+
+      addListener(elem, helper);
     },
 
-    removeListener : function(elem, callback, context)
+    fadeOut : function(elem, from, to, callback, context)
     {
-      if (context) {
-        callback = core.Function.bind(callback, context);
+      if (from != null)
+      {
+        // Move element to origin position
+        core.bom.Style.set(elem, "transitionDuration", "0ms");
+        core.bom.Style.set(elem, from);
       }
 
-      elem.removeEventListener(name, callback, false);      
+      // Post-pone visible animation to next render frame
+      core.effect.AnimationFrame.request(function()
+      {
+        core.bom.Style.set(elem, "transitionDuration", "");
+        core.bom.Style.set(elem, to);
+      });
+
+      // Connect to transition end event
+      var helper = function() 
+      {
+        removeListener(elem, helper);
+        elem.style.display = "none";
+
+        context ? callback.call(context) : callback();
+      };
+
+      addListener(elem, helper);     
     }
   });
 })();

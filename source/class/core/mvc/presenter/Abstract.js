@@ -262,26 +262,78 @@ core.Class("core.mvc.presenter.Abstract",
      */
     createView : function(name, construct, varargs) 
     {
-      var args = arguments;
+      var db = this.__views;
 
-      if (args.length > 2)
+      if (jasy.Env.isSet("debug")) 
       {
-        if (args.length == 3) {
-          var view = new construct(this, args[2]);
-        } else if (args.length == 4) {
-          var view = new construct(this, args[2], args[3]);
-        } else if (args.length == 5) {
-          var view = new construct(this, args[2], args[3], args[4]);
-        } else if (jasy.Env.isSet("debug")) {
-          throw new Error("Too many arguments!");
+        if (name in db) {
+          throw new Error("View name " + name + " is already in use!");  
         }
+
+        core.Assert.isType(view, "Object", "Invalid view instance!");
+      }
+
+      if (construct == null)
+      {
+        var config = db[name];
+
+        if (jasy.Env.isSet("debug")) 
+        {
+          if (!config) {
+            throw new Error("Missing constructor or registration for creating the view " + name + "!");
+          }
+
+          if (!config.__placeholder) {
+            throw new Error("Could not create view " + name + " from invalid registration!");
+          }
+        }
+
+        var construct = config.construct;
+        var args = config.args;
+      }
+      else
+      {
+        var args = arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : null;
+      }
+
+      if (args)
+      {
+        var view = core.Object.createFrom(construct);
+        construct.apply(view, args.slice(2));
       }
       else
       {
         var view = new construct(this);
       }
       
-      return this.addView(name, view);
+      db[name] = view;
+      return view;
+    },
+
+
+    /**
+     * Registers the given view @construct {Function} under @name {String} for lazy instantiation. All given
+     * optional @varargs {arguments?...} are passed to the construct method.
+     */
+    registerView : function(name, construct, varargs)
+    {
+      var db = this.__views;
+
+      if (jasy.Env.isSet("debug")) 
+      {
+        if (name in db) {
+          throw new Error("View name " + name + " is already in use!");  
+        }
+
+        core.Assert.isType(construct, "Function", "Invalid view constructor!");
+      }
+
+      db[name] = 
+      {
+        __placeholder : true,
+        construct : construct,
+        args : arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : null
+      };
     },
 
 

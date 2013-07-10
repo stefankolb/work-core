@@ -40,13 +40,13 @@ core.Interface("core.mvc.view.IView",
     render : function() {},
 
     /**
-     * Hides the view.
+     * Hides the view using the given @approach {String?}.
      */
-    hide : function() {},
+    hide : function(approach) {},
 
     /**
-     * Shows the view.
+     * Shows the view using the given @approach {String?}.
      */
-    show : function() {}
+    show : function(approach) {}
   }
 });

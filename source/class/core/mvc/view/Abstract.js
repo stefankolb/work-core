@@ -16,13 +16,8 @@
     // Interface implementation
     construct: function(presenter) 
     {
-      if (jasy.Env.isSet("debug"))
-      {
+      if (jasy.Env.isSet("debug")) {
         core.Assert.isType(presenter, "Object", "Invalid presenter instance!");
-
-        //if (!core.Class.includesClass(presenter.constructor, core.mvc.presenter.Abstract)) {
-        //  throw new Error("Presenter classes should include the abstract class 'core.mvc.presenter.Abstract': " + presenter.constructor.className + "!");
-        //}
       }
 
       this.__presenter = presenter;

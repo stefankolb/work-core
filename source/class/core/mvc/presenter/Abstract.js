@@ -186,7 +186,9 @@ core.Class("core.mvc.presenter.Abstract",
     */
 
     /** 
-     * {Object} Returns a view by its @name {String}. 
+     * {Object} Returns a view by its @name {String}. If the view was only
+     * registered for lazy creation this method will dynamically create it with
+     * the parameters given at registration.
      */
     getView : function(name) 
     {
@@ -194,7 +196,8 @@ core.Class("core.mvc.presenter.Abstract",
         core.Assert.isType(name, "String", "Invalid view name!");
       }
 
-      return this.__views[name];
+      var entry = this.__views[name];
+      return entry.__placeholder ? this.createView(name) : entry;
     },
 
 
@@ -273,6 +276,8 @@ core.Class("core.mvc.presenter.Abstract",
         core.Assert.isType(view, "Object", "Invalid view instance!");
       }
 
+      var args = arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : null;
+
       if (construct == null)
       {
         var config = db[name];
@@ -289,11 +294,7 @@ core.Class("core.mvc.presenter.Abstract",
         }
 
         var construct = config.construct;
-        var args = config.args;
-      }
-      else
-      {
-        var args = arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : null;
+        var args = args || config.args;
       }
 
       if (args)

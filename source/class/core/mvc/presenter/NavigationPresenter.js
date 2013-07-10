@@ -6,7 +6,7 @@ core.Class("core.mvc.presenter.NavigationPresenter",
   {
     core.mvc.presenter.Abstract.call(this);
 
-    
+
   },
 
   members :
@@ -28,7 +28,9 @@ core.Class("core.mvc.presenter.NavigationPresenter",
 
     getSegment : function() {
       return this.__segment;
-    }
+    },
+
+    
 
 
 

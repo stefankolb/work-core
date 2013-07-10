@@ -13,7 +13,7 @@
     {
       if (win.matchMedia('(-webkit-min-device-pixel-ratio: 2)').matches) {
         value = true;
-      } else if (win.matchMedia('(-o-min-device-pixel-ratio: 1/1)').matches) {
+      } else if (win.matchMedia('(-o-min-device-pixel-ratio: 2/1)').matches) {
         value = true;
       } else if (window.matchMedia('(min-resolution: 96dpi)').matches) {
         value = true;
@@ -21,6 +21,9 @@
     }
   }
   
+  /**
+   * Figures out whether the current device supports 
+   */
   core.Module("core.detect.HighRes", 
   {
     VALUE : value

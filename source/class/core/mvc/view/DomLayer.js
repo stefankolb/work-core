@@ -15,16 +15,12 @@ core.Class("core.mvc.view.DomLayer",
 {
   include : [core.mvc.view.Dom],
 
-  construct : function(presenter, root)
-  {
+  construct : function(presenter, root) {
     core.mvc.view.Dom.call(this, presenter, root);
-
-
   },
 
   members :
   {
-
     // Interface implementation
     show : function(approach)
     {

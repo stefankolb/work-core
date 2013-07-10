@@ -44,6 +44,9 @@
     elem.removeEventListener(name, callback, false);      
   };
 
+  /**
+   * Helper functions for simplifying work with CSS transitions
+   */
   core.Module("core.bom.Transition",
   {
     addListener : addListener,

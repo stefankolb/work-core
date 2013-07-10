@@ -271,7 +271,7 @@ core.Class("core.mvc.presenter.Abstract",
 
       if (jasy.Env.isSet("debug")) 
       {
-        if (name in db) {
+        if (name in db && !db[name].__placeholder) {
           throw new Error("View name " + name + " is already in use!");  
         }
 

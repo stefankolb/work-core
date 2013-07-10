@@ -265,6 +265,8 @@ core.Class("core.mvc.presenter.Abstract",
      */
     createView : function(name, construct, varargs) 
     {
+      this.log("Creating view: " + name);
+
       var db = this.__views;
 
       if (jasy.Env.isSet("debug")) 
@@ -273,7 +275,9 @@ core.Class("core.mvc.presenter.Abstract",
           throw new Error("View name " + name + " is already in use!");  
         }
 
-        core.Assert.isType(view, "Object", "Invalid view instance!");
+        if (construct) {
+          core.Assert.isType(construct, "Function", "Invalid view constructor!");  
+        }
       }
 
       var args = arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : null;

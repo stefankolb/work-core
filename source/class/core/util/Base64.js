@@ -92,6 +92,11 @@
 			return chars.join("");
 		};
 	}
+	else
+	{
+		btoa = btoa.bind(global);
+		atob = atob.bind(global);
+	}
 
 	/**
 	 * Polyfill for Base64 support which is natively implemented in most recent browsers.

@@ -180,7 +180,10 @@ core.Module("core.testrunner.Controller",
       var testStarted = core.Function.bind(this.__testStarted, this);
       var testFinished = core.Function.bind(this.__testFinished, this);
 
-      currentSuite.run(allComplete, testStarted, testFinished, true);
+      var hasTests = currentSuite.run(allComplete, testStarted, testFinished, true);
+      if (!hasTests) {
+        this.__runNextSuite();
+      }
     }
     else if (this.__isRunning)
     {

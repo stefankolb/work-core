@@ -185,6 +185,14 @@ core.Class("core.mvc.presenter.Abstract",
     ======================================================
     */
 
+    /**
+     * {Array} Returns an array of all view names.
+     */
+    getAllViewNames : function() {
+      return core.Object.getKeys(this.__views);
+    },
+
+
     /** 
      * {Object} Returns a view by its @name {String}. If the view was only
      * registered for lazy creation this method will dynamically create it with

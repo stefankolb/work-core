@@ -30,9 +30,24 @@ core.Class("core.mvc.presenter.NavigationPresenter",
       return this.__segment;
     },
 
-    
+    enable : function(approach)
+    {
+      var names = this.getAllViewNames();
+      for (var i=0, l=names.length; i<l; i++)
+      {
+        var view = this.getView(names[i]);
+        view.show(approach);
+      }
+    },
 
-
-
+    disable : function(approach)
+    {
+      var names = this.getAllViewNames();
+      for (var i=0, l=names.length; i<l; i++)
+      {
+        var view = this.getView(names[i]);
+        view.hide(approach);
+      }
+    }
   }
 });

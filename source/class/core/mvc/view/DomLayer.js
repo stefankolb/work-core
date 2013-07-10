@@ -1,3 +1,12 @@
+/* 
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2013 Sebastian Werner
+==================================================================================================
+*/
+
+"use strict";
+
 /**
  * Animatable DOM Layer View
  *
@@ -11,10 +20,6 @@ core.Class("core.mvc.view.DomLayer",
     core.mvc.view.Dom.call(this, presenter, root);
 
 
-
-    
-
-    
   },
 
   members :
@@ -35,8 +40,6 @@ core.Class("core.mvc.view.DomLayer",
       }
       else
       {
-        this.log("Show: Approach: " + approach)
-
         if (approach == "in")
         {
           var from = { transform : "translateX(100%)" };
@@ -46,6 +49,10 @@ core.Class("core.mvc.view.DomLayer",
         {
           var from = { transform : "translateX(-100%)" };
           var to = { transform : "" };
+        }
+        else if (jasy.Env.isSet("debug"))
+        {
+          throw new Error("Unsupported approach to show layer: " + approach + "!");
         }
 
         core.bom.Transition.fadeIn(elem, from, to, function() {
@@ -66,12 +73,10 @@ core.Class("core.mvc.view.DomLayer",
       if (approach == null || approach == "jump")
       {
         elem.style.display = "none";
-        this.fireEvent("show");
+        this.fireEvent("hide");
       }
       else
       {
-        this.log("Hide: Approach: " + approach)
-
         if (approach == "in")
         {
           var from = { transform: "" };
@@ -81,6 +86,10 @@ core.Class("core.mvc.view.DomLayer",
         {
           var from = { transform: "" };
           var to = { transform: "translateX(100%)" };
+        }
+        else if (jasy.Env.isSet("debug"))
+        {
+          throw new Error("Unsupported approach to show layer: " + approach + "!");
         }
 
         core.bom.Transition.fadeOut(elem, from, to, function() {

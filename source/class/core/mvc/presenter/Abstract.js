@@ -193,6 +193,32 @@ core.Class("core.mvc.presenter.Abstract",
     },
 
 
+    /**
+     * Executes @callback {Function} in @context {Object?} for every created view.
+     * Optionally also creates the views which have not been created 
+     * yet dynamically when @all {Boolean} is set to `true`.
+     */
+    forEachView : function(callback, context, all) 
+    {
+      var db = this.__views;
+      var view;
+
+      for (var name in db) 
+      {
+        var entry = db[name];
+        if (!entry.__placeholder) {
+          view = entry;
+        } else if (all) {
+          view = this.getView(name);
+        } else {
+          continue;
+        }
+
+        context ? callback.call(context, view) : callback(view);
+      }
+    },
+
+
     /** 
      * {Object} Returns a view by its @name {String}. If the view was only
      * registered for lazy creation this method will dynamically create it with

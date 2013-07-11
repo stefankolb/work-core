@@ -94,4 +94,5 @@ core.Class("core.mvc.view.DomLayer",
       }
     }
   }
-})
+});
+

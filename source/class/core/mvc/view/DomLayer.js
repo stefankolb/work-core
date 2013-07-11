@@ -7,92 +7,123 @@
 
 "use strict";
 
-/**
- * Animatable DOM Layer View
- *
- */
-core.Class("core.mvc.view.DomLayer",
+(function() 
 {
-  include : [core.mvc.view.Dom],
+  var hasPerspective = !!core.bom.Style.property("perspective");
 
-  construct : function(presenter, root) {
-    core.mvc.view.Dom.call(this, presenter, root);
-  },
-
-  members :
+  var buildTranslate = function(x, y, z)
   {
-    // Interface implementation
-    show : function(approach)
-    {
-      var elem = this.getRoot();
-      if (!elem) {
-        return;
-      }
+    if (x == null) {
+      x = 0;
+    }
 
-      if (approach == null || approach == "jump")
-      {
-        elem.style.display = "block";
-        this.fireEvent("show");
-      }
-      else
-      {
-        if (approach == "in")
-        {
-          var from = { transform : "translateX(100%)" };
-          var to = { transform : "" };
-        }
-        else if (approach == "out")
-        {
-          var from = { transform : "translateX(-100%)" };
-          var to = { transform : "" };
-        }
-        else if (jasy.Env.isSet("debug"))
-        {
-          throw new Error("Unsupported approach to show layer: " + approach + "!");
-        }
+    if (y == null) {
+      y = 0;
+    }
 
-        core.bom.Transition.fadeIn(elem, from, to, function() {
-          this.fireEvent("show");
-        }, this);
-      }
+    if (z == null) {
+      z = 0;
+    }
+
+    if (hasPerspective) {
+      return "translate3d(" + x + "," + y + "," + z + ")";
+    } else {
+      return "translateX(" + x + ") translateY(" + y + ")";
+    }
+  };
+
+  var outLeft = buildTranslate("-100%");
+  var outRight = buildTranslate("100%");
+  
+
+  /**
+   * Animatable DOM Layer View
+   *
+   */
+  core.Class("core.mvc.view.DomLayer",
+  {
+    include : [core.mvc.view.Dom],
+
+    construct : function(presenter, root) {
+      core.mvc.view.Dom.call(this, presenter, root);
     },
 
-
-    // Interface implementation
-    hide : function(approach)
+    members :
     {
-      var elem = this.getRoot();
-      if (!elem) {
-        return;
-      }
-
-      if (approach == null || approach == "jump")
+      // Interface implementation
+      show : function(approach)
       {
-        elem.style.display = "none";
-        this.fireEvent("hide");
-      }
-      else
-      {
-        if (approach == "in")
-        {
-          var to = { transform: "translateX(-100%)" };
-          var reset = { transform: "" };
-        }
-        else if (approach == "out")
-        {
-          var to = { transform: "translateX(100%)" };
-          var reset = { transform: "" };
-        }
-        else if (jasy.Env.isSet("debug"))
-        {
-          throw new Error("Unsupported approach to show layer: " + approach + "!");
+        var elem = this.getRoot();
+        if (!elem) {
+          return;
         }
 
-        core.bom.Transition.fadeOut(elem, to, reset, function() {
+        if (approach == null || approach == "jump")
+        {
+          elem.style.display = "block";
+          this.fireEvent("show");
+        }
+        else
+        {
+          if (approach == "in")
+          {
+            var from = { transform : outRight };
+            var to = { transform : "" };
+          }
+          else if (approach == "out")
+          {
+            var from = { transform : outLeft };
+            var to = { transform : "" };
+          }
+          else if (jasy.Env.isSet("debug"))
+          {
+            throw new Error("Unsupported approach to show layer: " + approach + "!");
+          }
+
+          core.bom.Transition.fadeIn(elem, from, to, function() {
+            this.fireEvent("show");
+          }, this);
+        }
+      },
+
+
+      // Interface implementation
+      hide : function(approach)
+      {
+        var elem = this.getRoot();
+        if (!elem) {
+          return;
+        }
+
+        if (approach == null || approach == "jump")
+        {
+          elem.style.display = "none";
           this.fireEvent("hide");
-        }, this);
+        }
+        else
+        {
+          if (approach == "in")
+          {
+            var to = { transform: outLeft };
+            var reset = { transform: "" };
+          }
+          else if (approach == "out")
+          {
+            var to = { transform: outRight };
+            var reset = { transform: "" };
+          }
+          else if (jasy.Env.isSet("debug"))
+          {
+            throw new Error("Unsupported approach to show layer: " + approach + "!");
+          }
+
+          core.bom.Transition.fadeOut(elem, to, reset, function() {
+            this.fireEvent("hide");
+          }, this);
+        }
       }
     }
-  }
-});
+  });
 
+})();
+  

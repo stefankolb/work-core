@@ -75,20 +75,20 @@ core.Class("core.mvc.view.DomLayer",
       {
         if (approach == "in")
         {
-          var from = { transform: "" };
           var to = { transform: "translateX(-100%)" };
+          var reset = { transform: "" };
         }
         else if (approach == "out")
         {
-          var from = { transform: "" };
           var to = { transform: "translateX(100%)" };
+          var reset = { transform: "" };
         }
         else if (jasy.Env.isSet("debug"))
         {
           throw new Error("Unsupported approach to show layer: " + approach + "!");
         }
 
-        core.bom.Transition.fadeOut(elem, from, to, function() {
+        core.bom.Transition.fadeOut(elem, to, reset, function() {
           this.fireEvent("hide");
         }, this);
       }

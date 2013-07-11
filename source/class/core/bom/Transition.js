@@ -59,14 +59,14 @@
      */
     fadeIn : function(elem, from, to, callback, context)
     {
+      // Move element to initial position
       if (from != null)
       {
-        // Show element and render off screen
         Style.set(elem, "transitionDuration", "0ms");
         Style.set(elem, from);
       }
 
-      // Show element and enforce rendering
+      // Show element and enforce rendering via access to offsetWidth
       elem.style.display = "block";
       elem.offsetWidth;
 
@@ -96,15 +96,8 @@
      * to @to {Map} styles. Executes the @callback {Function?} in the
      * given @context {Object?} as soon as the fade in process was completed.
      */
-    fadeOut : function(elem, from, to, callback, context)
+    fadeOut : function(elem, to, reset, callback, context)
     {
-      if (from != null)
-      {
-        // Move element to origin position
-        Style.set(elem, "transitionDuration", "0ms");
-        Style.set(elem, from);
-      }
-
       // Post-pone visible animation to next render frame
       core.effect.AnimationFrame.request(function()
       {
@@ -115,9 +108,20 @@
       // Connect to transition end event
       var helper = function() 
       {
+        // Only execute this helper once
         removeListener(elem, helper);
+
+        // Hide element first
         elem.style.display = "none";
 
+        // Then apply reset rules
+        if (reset != null)
+        {
+          Style.set(elem, "transitionDuration", "0ms");
+          Style.set(elem, reset);
+        }        
+
+        // And when all is done execute the callback
         if (callback) {
           context ? callback.call(context) : callback();
         }

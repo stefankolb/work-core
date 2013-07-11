@@ -131,23 +131,81 @@
 
 
       /**
-       * Deep clones a Path instance.
-       *
-       * @return {core.util.HashPath} Returns the deeply cloned Path instance.
+       * {core.util.HashPath} Returns a new path based on this path with the given @fragment {String} and an
+       * optional @relation {String?}.
+       */
+      navigate : function(fragment, relation)
+      {
+        if (relation == "parent")
+        {
+          var destination = this.clone();
+          var data = destination.__data;
+          if (!data.pop()) 
+          {
+            destination.release();
+            throw new Error("Already on top!");
+          }
+
+          return destination;
+        }
+        else if (fragment == "" && jasy.Env.isSet("debug"))
+        {
+          throw new Error("Invalid link!");
+        }
+        else if (relation == "top") 
+        {
+          // Replace current structure path with top level page
+          var destination = core.util.HashPath.obtain(fragment);
+        }
+        else if (relation == "same") 
+        {
+          // New page replaces current page
+          var destination = this.clone();
+          var data = destination.__data;
+          data[data.length-1] = parseFragment(fragment);
+        }
+        else
+        {
+          // New page is child of current page
+          var destination = this.clone();
+          destination.__data.push(parseFragment(fragment));
+        }  
+        
+        return destination; 
+      },
+
+
+      /**
+       * {core.util.HashPath} Returns the deeply cloned Path instance.
        */
       clone : function()
       {
         var clone = core.util.HashPath.obtain();
-        clone.__data = this.__data.concat();
+
+        var thisData = this.__data;
+        var cloneData = clone.__data;
+
+        // Sync length
+        var length = cloneData.length = thisData.length;
+
+        // Copy over fragments
+        for (var i=0; i<length; i++)
+        {
+          var thisFragment = thisData[i];
+          cloneData[i] = 
+          {
+            presenter : thisFragment.presenter,
+            section : thisFragment.section,
+            param : thisFragment.param
+          };
+        }
+
         return clone;
       },
 
 
       /**
-       * Serializes a Path object into a location string. The result
-       * can be re-used for {@link core.util.HashPath.fromString}.
-       *
-       * @return {String} Location string
+       * {String} Serializes a Path object into a location string.
        */
       serialize : function()
       {
@@ -156,7 +214,7 @@
 
         for (var i=0, l=data.length; i<l; i++)
         {
-          var entry = this[i];
+          var entry = data[i];
           var temp = entry.presenter;
 
           if (entry.section) {

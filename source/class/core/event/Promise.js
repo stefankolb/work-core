@@ -159,8 +159,8 @@ core.Class("core.event.Promise",
 				this.__executeEntry(queue[i], valueOrReason, state);
 			}
 
-			// Auto release promise after fulfill/reject and all handlers being processed
-			core.Function.immediate(this.release, this);
+			// Cleanup lists for next usage
+			this.__onRejectedQueue.length = this.__onFulfilledQueue.length = 0;
 		},
 
 
@@ -169,9 +169,6 @@ core.Class("core.event.Promise",
 		 */
 		release : function()
 		{
-			// Cleanup lists for next usage
-			this.__onRejectedQueue.length = this.__onFulfilledQueue.length = 0;
-
 			// Cleanup internal state
 			this.__state = "pending";
 			this.__locked = false;
@@ -202,6 +199,10 @@ core.Class("core.event.Promise",
 				rejectedQueue.push([child, onRejected, context]);
 			} else {
 				rejectedQueue.push([child]);
+			}
+
+			if (this.__locked) {
+				core.Function.immediate(this.__execute, this);
 			}
 			
 			return child;

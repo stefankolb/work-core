@@ -28,7 +28,7 @@
 			return function() {
 				self.postMessage({
 					type: "core/debug/" + method,
-					msg: Array.protottype.slice.call(arguments, 0)
+					msg: Array.prototype.slice.call(arguments, 0)
 				});
 			};
 		};

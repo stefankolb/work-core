@@ -1,4 +1,4 @@
-core.Class("core.mvc.presenter.NavigationPresenter",
+core.Class("core.mvc.presenter.Navigation",
 {
   include : [core.mvc.presenter.Abstract],
 
@@ -14,16 +14,26 @@ core.Class("core.mvc.presenter.NavigationPresenter",
     __param : null,
     __segment : null,
 
-    setParam : function(param) {
+    setParam : function(param) 
+    {
       this.__param = param;
+
+      this.forEachView(function(view) {
+        view.render();
+      })
     },
 
     getParam : function() {
       return this.__param;
     },
 
-    setSegment : function(segment) {
+    setSegment : function(segment) 
+    {
       this.__segment = segment;
+
+      this.forEachView(function(view) {
+        view.render();
+      })
     },
 
     getSegment : function() {

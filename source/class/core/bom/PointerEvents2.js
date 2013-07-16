@@ -14,9 +14,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 {
 	(function()
 	{
-		var supportedEventsNames = 
-		[
-		  "PointerDown", "PointerUp", "PointerMove", "PointerOver", "PointerOut", "PointerCancel", "PointerEnter", "PointerLeave",
+		var supportedEventsNames = [
 			"pointerdown", "pointerup", "pointermove", "pointerover", "pointerout", "pointercancel", "pointerenter", "pointerleave"
 		];
 
@@ -61,7 +59,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 			{
 				for (var index = 0; index < target._handjs_registeredEvents.length; index++) 
 				{
-					if (target._handjs_registeredEvents[index].toLowerCase() === eventName) {
+					if (target._handjs_registeredEvents[index] === eventName) {
 						generateTouchEventProxy(target._handjs_registeredEvents[index], touchPoint, target, eventObject);
 					}
 				}
@@ -91,14 +89,14 @@ if (jasy.Env.isSet("runtime", "browser"))
 		};
 		
 		var getMouseEquivalentEventName = function(eventName) {
-			return eventName.toLowerCase().replace("pointer", "mouse");
+			return eventName.replace("pointer", "mouse");
 		};
 
 		var getPrefixEventName = function(item, prefix, eventName) 
 		{
 			var newEventName;
 
-			if (eventName == eventName.toLowerCase()) 
+			if (eventName == eventName) 
 			{
 				var indexOfUpperCase = supportedEventsNames.indexOf(eventName) - (supportedEventsNames.length / 2);
 				newEventName = prefix + supportedEventsNames[indexOfUpperCase];
@@ -109,12 +107,12 @@ if (jasy.Env.isSet("runtime", "browser"))
 			}
 
 			// Fallback to PointerOver if PointerEnter is not currently supported
-			if (newEventName === prefix + "PointerEnter" && item["on" + prefix.toLowerCase() + "pointerenter"] === undefined) {
+			if (newEventName === prefix + "PointerEnter" && item["on" + prefix + "pointerenter"] === undefined) {
 				newEventName = prefix + "PointerOver";
 			}
 
 			// Fallback to PointerOut if PointerLeave is not currently supported
-			if (newEventName === prefix + "PointerLeave" && item["on" + prefix.toLowerCase() + "pointerleave"] === undefined) {
+			if (newEventName === prefix + "PointerLeave" && item["on" + prefix + "pointerleave"] === undefined) {
 				newEventName = prefix + "PointerOut";
 			}
 
@@ -152,7 +150,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 			// Chrome, Firefox
 			if (item.ontouchstart !== undefined) 
 			{
-				switch (eventName.toLowerCase()) 
+				switch (eventName) 
 				{
 					case "pointermove":
 						registerOrUnregisterEvent(item, "touchmove", function(evt) { 
@@ -194,7 +192,7 @@ if (jasy.Env.isSet("runtime", "browser"))
 			}
 
 			// Fallback to mouse
-			switch (eventName.toLowerCase()) {
+			switch (eventName) {
 				case "pointerdown":
 					registerOrUnregisterEvent(item, "mousedown", function(evt) { 
 						generateMouseProxy(evt, eventName); 

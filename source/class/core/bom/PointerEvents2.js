@@ -490,13 +490,14 @@
 	interceptAddEventListener(HTMLUListElement);
 	interceptAddEventListener(HTMLAnchorElement);
 	interceptAddEventListener(HTMLLIElement);
+
 	if (window.HTMLCanvasElement) {
 		interceptAddEventListener(HTMLCanvasElement);
 	}
+	
 	if (window.SVGElement) {
 		interceptAddEventListener(SVGElement);
 	}
-
 
 	interceptRemoveEventListener(document);
 	interceptRemoveEventListener(HTMLBodyElement);
@@ -506,9 +507,11 @@
 	interceptRemoveEventListener(HTMLUListElement);
 	interceptRemoveEventListener(HTMLAnchorElement);
 	interceptRemoveEventListener(HTMLLIElement);
+
 	if (window.HTMLCanvasElement) {
 		interceptRemoveEventListener(HTMLCanvasElement);
 	}
+
 	if (window.SVGElement) {
 		interceptRemoveEventListener(SVGElement);
 	}
@@ -591,74 +594,6 @@
 		if (navigator.msPointerEnabled) {
 			navigator.maxTouchPoints = navigator.msMaxTouchPoints;
 		}
-	}
-
-	// Handling touch-action css rule
-	if (document.styleSheets && document.addEventListener) 
-	{
-		document.addEventListener("DOMContentLoaded", function() {
-
-			var trim = function(string) {
-				return string.replace(/^\s+|\s+$/, '');
-			};
-
-			var processStylesheet = function(unfilteredSheet) {
-				var globalRegex = new RegExp(".+?{.*?}", "m");
-				var selectorRegex = new RegExp(".+?{", "m");
-
-				while (unfilteredSheet != "") {
-					var block = globalRegex.exec(unfilteredSheet)[0];
-					unfilteredSheet = trim(unfilteredSheet.replace(block, ""));
-					var selectorText = trim(selectorRegex.exec(block)[0].replace("{", ""));
-
-					// Checking if the user wanted to deactivate the default behavior
-					if (block.replace(/\s/g, "").indexOf("touch-action:none") != -1) {
-						var elements = document.querySelectorAll(selectorText);
-
-						for (var elementIndex = 0; elementIndex < elements.length; elementIndex++) {
-							var element = elements[elementIndex];
-
-							if (element.style.msTouchAction !== undefined) {
-								element.style.msTouchAction = "none";
-							}
-							else {
-								element.handjs_forcePreventDefault = true;
-							}
-						}
-					}
-				}
-			}; // Looking for touch-action in referenced stylesheets
-			try {
-				for (var index = 0; index < document.styleSheets.length; index++) {
-					var sheet = document.styleSheets[index];
-
-					if (sheet.href == undefined) { // it is an inline style
-						continue;
-					}
-
-					// Loading the original stylesheet
-					var xhr = new XMLHttpRequest();
-					xhr.open("get", sheet.href, false);
-					xhr.send();
-
-					var unfilteredSheet = xhr.responseText.replace(/(\n|\r)/g, "");
-
-					processStylesheet(unfilteredSheet);
-				}
-			} catch (e) {
-				// Silently fail...
-			}
-
-			// Looking for touch-action in inline styles
-			var styles = document.getElementsByTagName("style");
-			for (var index = 0; index < styles.length; index++) {
-				var inlineSheet = styles[index];
-
-				var inlineUnfilteredSheet = trim(inlineSheet.innerHTML.replace(/(\n|\r)/g, ""));
-
-				processStylesheet(inlineUnfilteredSheet);
-			}
-		}, false);
 	}
 
 })();

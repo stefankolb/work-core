@@ -4,6 +4,7 @@
 	Copyright 2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
 	Based on the work of Microsoft Corporation
+	Hand.js v1.0.13, Wed Jul 10, 2013 at 9:00 AM
 	http://handjs.codeplex.com
 	Apache License 2.0
 ==================================================================================================

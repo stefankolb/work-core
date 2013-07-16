@@ -10,6 +10,8 @@
 
 
 
+
+
   core.Class("core.bom.event.Pointer",
   {
     pooling : true,
@@ -38,23 +40,62 @@
   });
 
 
+  var special = {
+    tap : core.bom.TapEvent
+  }
 
-  var eventCallback = function()
+
+  core.Module("core.bom.event.Util",
   {
+     getId : function(type, callback, capture) 
+    {  
+      var id = type + "-" + core.util.Id.get(callback);
+      if (capture == true) {
+        id += "-capture";
+      }
+      return id;
+    }
+  });
 
-
-
-
-  };
+  var getEventId = core.bom.event.Util.getId;
 
 
 
   core.Module("core.bom.PointerEventsNext",
   {
+    has : function(target, type, callback, context, capture)
+    {
+      // Hard-wire context to function, re-use existing bound functions
+      if (context) {
+        callback = core.Function.bind(callback, context);
+      }
+
+      if (useTouch)
+      {
+        var eventId = getEventId("touch", type, callback, capture);
+        return !!target[eventId];
+      }
+
+      if (useMouse)
+      {
+        var eventId = getEventId("mouse", type, callback, capture);
+        return !!target[eventId];
+      }
+
+      return false;
+    },
+
+
     add : function(target, type, callback, context, capture) 
     {
-      if (context != null) {
+      // Hard-wire context to function, re-use existing bound functions
+      if (context) {
         callback = core.Function.bind(callback, context);
+      }
+
+      var specialHandler = special[type];
+      if (specialHandler) {
+        return specialHandler.add(target, type, callback, capture);
       }
 
       var pointerType = "pointer" + type;
@@ -66,35 +107,28 @@
 
       if (useMouse)
       {
-        var mouseType = "mouse" + type;
-        if (hasMouseEnterLeave && (mouseType == "mouseenter" || mouseType == "mouseleave")) {
-          mouseType = (mouseType == "mouseenter") ? "mouseover" : "mouseout";
+        var eventId = "mouse-" + getEventId(type, callback, capture);
+
+        var nativeType = "mouse" + type;
+        if (hasMouseEnterLeave && (nativeType == "mouseenter" || nativeType == "mouseleave")) {
+          nativeType = nativeType == "mouseenter" ? "mouseover" : "mouseout";
         }
 
-        console.log("Register: " + mouseType + " to proxy event " + pointerType + "...");
+        var wrapper = target[eventId];
+        if (wrapper) {
+          return;
+        }
 
-
-
-
-
-
-        var localCallback = function(nativeEvent)
+        var wrapper = target[eventId] = function(nativeEvent)
         {
-          console.log("Executed: " + nativeEvent.type + " for " + pointerType)
-          
+          console.log("Execute wrapper for: " + eventId);
           var eventObj = core.bom.event.Pointer.obtain(nativeEvent, pointerType);
-
-
           callback(eventObj);
-
           eventObj.release();
-
         };
 
-        target.addEventListener(mouseType, localCallback, capture);
+        target.addEventListener(nativeType, wrapper, capture);
       }
-
-      
     },
 
     remove : function(target, type, callback, context, capture)
@@ -103,7 +137,36 @@
         callback = core.Function.bind(callback, context);
       }
 
-      //target.removeEventListener(type, callback, capture);
+      if (capture == null) {
+        capture = false;
+      }
+
+      var pointerType = "pointer" + type;
+      
+
+      if (useTouch)
+      {
+
+      }
+
+      if (useMouse)
+      {
+        var eventId = "mouse-" + getEventId(type, callback, capture);
+
+        var nativeType = "mouse" + type;
+        if (hasMouseEnterLeave && (nativeType == "mouseenter" || nativeType == "mouseleave")) {
+          nativeType = nativeType == "mouseenter" ? "mouseover" : "mouseout";
+        }
+
+        var wrapper = target[eventId];
+        if (wrapper) {
+          target.removeEventListener(nativeType, wrapper, capture);
+        }
+        
+      }      
+
+      
+
     }
   });
 

@@ -1,3 +1,15 @@
+/* 
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2013 Sebastian Werner
+--------------------------------------------------------------------------------------------------
+  Based on the work of Microsoft Corporation
+  Hand.js v1.0.13, Wed Jul 10, 2013 at 9:00 AM
+  http://handjs.codeplex.com
+  Apache License 2.0
+==================================================================================================
+*/
+
 (function()
 {
   var POINTER_TYPE_TOUCH = "touch";
@@ -174,11 +186,6 @@
         case 4:
           evObj.pointerType = evObj.POINTER_TYPE_MOUSE;
           break;
-      }
-
-      // If force preventDefault
-      if (sourceEvent.currentTarget && sourceEvent.currentTarget.handjs_forcePreventDefault === true) {
-        evObj.preventDefault();
       }
 
       // Fire event

@@ -107,10 +107,11 @@
 		}
 
 		// Timestamp
-		if (sourceEvent.hwTimestamp)
+		if (sourceEvent.hwTimestamp) {
 			evObj.hwTimestamp = sourceEvent.hwTimestamp;
-		else
+		} else {
 			evObj.hwTimestamp = 0;
+		}
 
 		// Tilts
 		if (sourceEvent.tiltX) {
@@ -332,11 +333,15 @@
 			switch (eventName.toLowerCase()) 
 			{
 				case "pointermove":
-					registerOrUnregisterEvent(item, "touchmove", function(evt) { handleOtherEvent(evt, eventName); }, enable);
+					registerOrUnregisterEvent(item, "touchmove", function(evt) { 
+						handleOtherEvent(evt, eventName); 
+					}, enable);
 					break;
 
 				case "pointercancel":
-					registerOrUnregisterEvent(item, "touchcancel", function(evt) { handleOtherEvent(evt, eventName); }, enable);
+					registerOrUnregisterEvent(item, "touchcancel", function(evt) { 
+						handleOtherEvent(evt, eventName); 
+					}, enable);
 					break;
 
 				case "pointerdown":
@@ -349,13 +354,17 @@
 					if (!item._handjs_registeredEvents) {
 						item._handjs_registeredEvents = [];
 					}
+
 					var index = item._handjs_registeredEvents.indexOf(eventName);
 					
-					if (enable) {
+					if (enable) 
+					{
 						if (index === -1) {
 							item._handjs_registeredEvents.push(eventName);
 						}
-					} else {
+					} 
+					else 
+					{
 						item._handjs_registeredEvents.splice(index, 1);
 					}
 					break;
@@ -494,7 +503,7 @@
 	if (window.HTMLCanvasElement) {
 		interceptAddEventListener(HTMLCanvasElement);
 	}
-	
+
 	if (window.SVGElement) {
 		interceptAddEventListener(SVGElement);
 	}
@@ -553,8 +562,9 @@
 				var newTarget = document.elementFromPoint(touchPoint.clientX, touchPoint.clientY);
 				var currentTarget = previousTargets[touchPoint.identifier];
 				
+				// We can skip this as the pointer is effectively over the current target
 				if (currentTarget === newTarget) {
-					continue; // We can skip this as the pointer is effectively over the current target
+					continue; 
 				}
 
 				if (currentTarget)

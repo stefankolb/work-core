@@ -177,14 +177,9 @@ if (jasy.Env.isSet("runtime", "browser"))
 
 						var index = item._handjs_registeredEvents.indexOf(eventName);
 						
-						if (enable) 
-						{
-							if (index === -1) {
-								item._handjs_registeredEvents.push(eventName);
-							}
-						} 
-						else 
-						{
+						if (enable && index === -1) {
+							item._handjs_registeredEvents.push(eventName);
+						}  else if (!enable && index != -1) {
 							item._handjs_registeredEvents.splice(index, 1);
 						}
 						break;
@@ -393,7 +388,9 @@ if (jasy.Env.isSet("runtime", "browser"))
 						generateTouchEventProxyIfRegistered("pointerout", touchPoint, currentTarget, eventObject);
 
 						// Raise leave
-						if (!currentTarget.contains(newTarget)) { // Leave must be called if the new target is not a child of the current
+						if (!currentTarget.contains(newTarget)) 
+						{
+							// Leave must be called if the new target is not a child of the current
 							generateTouchEventProxyIfRegistered("pointerleave", touchPoint, currentTarget, eventObject);
 						}
 					}
@@ -404,7 +401,9 @@ if (jasy.Env.isSet("runtime", "browser"))
 						generateTouchEventProxyIfRegistered("pointerover", touchPoint, newTarget, eventObject);
 
 						// Raise enter
-						if (!newTarget.contains(currentTarget)) { // Leave must be called if the new target is not the parent of the current
+						if (!newTarget.contains(currentTarget)) 
+						{
+							// Enter must be called if the new target is not the parent of the current
 							generateTouchEventProxyIfRegistered("pointerenter", touchPoint, newTarget, eventObject);
 						}
 					}

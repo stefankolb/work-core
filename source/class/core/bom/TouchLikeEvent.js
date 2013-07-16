@@ -10,7 +10,7 @@
 ==================================================================================================
 */
 
-(function()
+(function(document, Object, undefined)
 {
   var POINTER_TYPE_TOUCH = "touch";
   var POINTER_TYPE_PEN = "pen";
@@ -62,6 +62,7 @@
             Object.defineProperty(evObj, "offsetX", {
               writable: true
             });
+
             Object.defineProperty(evObj, "offsetY", {
               writable: true
             });
@@ -78,7 +79,6 @@
       }
 
       // adding missing properties
-
       if (sourceEvent.isPrimary !== undefined) {
         evObj.isPrimary = sourceEvent.isPrimary;
       } else {
@@ -97,10 +97,11 @@
         else if (sourceEvent.button !== undefined) {
           button = sourceEvent.button;
         }
+
         evObj.pressure = (button == 0) ? 0 : 0.5;
       }
 
-
+      // Rotation
       if (sourceEvent.rotation) {
         evObj.rotation = sourceEvent.rotation;
       } else {
@@ -201,5 +202,5 @@
     }
   });
 
-})();
+})(document, Object);
 

@@ -1,37 +1,20 @@
-(function () {
-	// Polyfilling indexOf for old browsers
-	if (!Array.prototype.indexOf) {
-		Array.prototype.indexOf = function(searchElement) {
-			var t = Object(this);
-			var len = t.length >>> 0;
-			if (len === 0) {
-				return -1;
-			}
-			var n = 0;
-			if (arguments.length > 0) {
-				n = Number(arguments[1]);
-				if (n != n) { // shortcut for verifying if it's NaN
-					n = 0;
-				} else if (n != 0 && n != Infinity && n != -Infinity) {
-					n = (n > 0 || -1) * Math.floor(Math.abs(n));
-				}
-			}
-			if (n >= len) {
-				return -1;
-			}
-			var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
-			for (; k < len; k++) {
-				if (k in t && t[k] === searchElement) {
-					return k;
-				}
-			}
-			return -1;
-		};
-	}
+/* 
+==================================================================================================
+	Core - JavaScript Foundation
+	Copyright 2013 Sebastian Werner
+--------------------------------------------------------------------------------------------------
+	Based on the work of Microsoft Corporation
+	http://handjs.codeplex.com
+	Apache License 2.0
+==================================================================================================
+*/
 
-	// Installing Hand.js
-	var supportedEventsNames = ["PointerDown", "PointerUp", "PointerMove", "PointerOver", "PointerOut", "PointerCancel", "PointerEnter", "PointerLeave",
-								"pointerdown", "pointerup", "pointermove", "pointerover", "pointerout", "pointercancel", "pointerenter", "pointerleave"
+(function() 
+{
+	var supportedEventsNames = 
+	[
+	  "PointerDown", "PointerUp", "PointerMove", "PointerOver", "PointerOut", "PointerCancel", "PointerEnter", "PointerLeave",
+		"pointerdown", "pointerup", "pointermove", "pointerover", "pointerout", "pointercancel", "pointerenter", "pointerleave"
 	];
 
 	var POINTER_TYPE_TOUCH = "touch";
@@ -41,17 +24,20 @@
 	var previousTargets = {};
 
 	// Touch events
-	var generateTouchClonedEvent = function (sourceEvent, newName) {
+	var generateTouchClonedEvent = function(sourceEvent, newName) 
+	{
 		// Considering touch events are almost like super mouse events
 		var evObj;
 
-		if (document.createEvent) {
+		if (document.createEvent) 
+		{
 			evObj = document.createEvent('MouseEvents');
 			evObj.initMouseEvent(newName, true, true, window, 1, sourceEvent.screenX, sourceEvent.screenY,
 				sourceEvent.clientX, sourceEvent.clientY, sourceEvent.ctrlKey, sourceEvent.altKey,
 				sourceEvent.shiftKey, sourceEvent.metaKey, sourceEvent.button, null);
 		}
-		else {
+		else 
+		{
 			evObj = document.createEventObject();
 			evObj.screenX = sourceEvent.screenX;
 			evObj.screenY = sourceEvent.screenY;
@@ -63,12 +49,15 @@
 			evObj.metaKey = sourceEvent.metaKey;
 			evObj.button = sourceEvent.button;
 		}
-		// offsets
-		if (evObj.offsetX === undefined) {
-			if (sourceEvent.offsetX !== undefined) {
 
+		// offsets
+		if (evObj.offsetX === undefined) 
+		{
+			if (sourceEvent.offsetX !== undefined) 
+			{
 				// For Opera which creates readonly properties
-				if (Object && Object.defineProperty !== undefined) {
+				if (Object && Object.defineProperty !== undefined) 
+				{
 					Object.defineProperty(evObj, "offsetX", {
 						writable: true
 					});
@@ -80,7 +69,8 @@
 				evObj.offsetX = sourceEvent.offsetX;
 				evObj.offsetY = sourceEvent.offsetY;
 			}
-			else if (sourceEvent.layerX !== undefined) {
+			else if (sourceEvent.layerX !== undefined) 
+			{
 				evObj.offsetX = sourceEvent.layerX - sourceEvent.currentTarget.offsetLeft;
 				evObj.offsetY = sourceEvent.layerY - sourceEvent.currentTarget.offsetTop;
 			}
@@ -88,14 +78,17 @@
 
 		// adding missing properties
 
-		if (sourceEvent.isPrimary !== undefined)
+		if (sourceEvent.isPrimary !== undefined) {
 			evObj.isPrimary = sourceEvent.isPrimary;
-		else
+		} else {
 			evObj.isPrimary = true;
-
-		if (sourceEvent.pressure)
+		}
+		
+		if (sourceEvent.pressure) {
 			evObj.pressure = sourceEvent.pressure;
-		else {
+		} 
+		else 
+		{
 			var button = 0;
 
 			if (sourceEvent.which !== undefined)
@@ -107,10 +100,11 @@
 		}
 
 
-		if (sourceEvent.rotation)
+		if (sourceEvent.rotation) {
 			evObj.rotation = sourceEvent.rotation;
-		else
+		} else {
 			evObj.rotation = 0;
+		}
 
 		// Timestamp
 		if (sourceEvent.hwTimestamp)
@@ -119,39 +113,50 @@
 			evObj.hwTimestamp = 0;
 
 		// Tilts
-		if (sourceEvent.tiltX)
+		if (sourceEvent.tiltX) {
 			evObj.tiltX = sourceEvent.tiltX;
-		else
+		} else {
 			evObj.tiltX = 0;
+		}
 
-		if (sourceEvent.tiltY)
+		if (sourceEvent.tiltY) {
 			evObj.tiltY = sourceEvent.tiltY;
-		else
+		} else {
 			evObj.tiltY = 0;
+		}
 
 		// Width and Height
-		if (sourceEvent.height)
+		if (sourceEvent.height) {
 			evObj.height = sourceEvent.height;
-		else
+		} else {
 			evObj.height = 0;
-
-		if (sourceEvent.width)
+		}
+			
+		if (sourceEvent.width) {
 			evObj.width = sourceEvent.width;
-		else
+		} else {
 			evObj.width = 0;
-
+		}
+			
 		// preventDefault
-		evObj.preventDefault = function () {
-			if (sourceEvent.preventDefault !== undefined)
+		evObj.preventDefault = function() 
+		{
+			if (sourceEvent.preventDefault !== undefined) {
 				sourceEvent.preventDefault();
+			}
 		};
 
 		// stopPropagation
-		if (evObj.stopPropagation !== undefined) {
+		if (evObj.stopPropagation !== undefined) 
+		{
 			var current = evObj.stopPropagation;
-			evObj.stopPropagation = function () {
-				if (sourceEvent.stopPropagation !== undefined)
+
+			evObj.stopPropagation = function() 
+			{
+				if (sourceEvent.stopPropagation !== undefined) {
 					sourceEvent.stopPropagation();
+				}
+					
 				current.call(this);
 			};
 		}
@@ -165,46 +170,60 @@
 		evObj.pointerId = sourceEvent.pointerId;
 		evObj.pointerType = sourceEvent.pointerType;
 
-		switch (evObj.pointerType) {// Old spec version check
+		// Old spec version check
+		switch (evObj.pointerType) 
+		{
 			case 2:
 				evObj.pointerType = evObj.POINTER_TYPE_TOUCH;
 				break;
+		
 			case 3:
 				evObj.pointerType = evObj.POINTER_TYPE_PEN;
 				break;
+		
 			case 4:
 				evObj.pointerType = evObj.POINTER_TYPE_MOUSE;
 				break;
 		}
 
 		// If force preventDefault
-		if (sourceEvent.currentTarget && sourceEvent.currentTarget.handjs_forcePreventDefault === true)
+		if (sourceEvent.currentTarget && sourceEvent.currentTarget.handjs_forcePreventDefault === true) {
 			evObj.preventDefault();
+		}
 
 		// Fire event
-		if (sourceEvent.target) {
+		if (sourceEvent.target) 
+		{
 			sourceEvent.target.dispatchEvent(evObj);
-		} else {
-			sourceEvent.srcElement.fireEvent("on" + getMouseEquivalentEventName(newName), evObj); // We must fallback to mouse event for very old browsers
+		}
+		else
+		{
+			// We must fallback to mouse event for very old browsers
+			sourceEvent.srcElement.fireEvent("on" + getMouseEquivalentEventName(newName), evObj);
 		}
 	};
 
-	var generateMouseProxy = function (evt, eventName) {
+	var generateMouseProxy = function(evt, eventName) 
+	{
 		evt.pointerId = 1;
 		evt.pointerType = POINTER_TYPE_MOUSE;
+
 		generateTouchClonedEvent(evt, eventName);
 	};
 
-	var generateTouchEventProxy = function (name, touchPoint, target, eventObject) {
-		var touchPointId = touchPoint.identifier + 2; // Just to not override mouse id
+	var generateTouchEventProxy = function(name, touchPoint, target, eventObject) 
+	{
+		// Just to not override mouse id
+		var touchPointId = touchPoint.identifier + 2; 
 
 		touchPoint.pointerId = touchPointId;
 		touchPoint.pointerType = POINTER_TYPE_TOUCH;
 		touchPoint.currentTarget = target;
 		touchPoint.target = target;
 
-		if (eventObject.preventDefault !== undefined) {
-			touchPoint.preventDefault = function () {
+		if (eventObject.preventDefault !== undefined) 
+		{
+			touchPoint.preventDefault = function() {
 				eventObject.preventDefault();
 			};
 		}
@@ -212,22 +231,28 @@
 		generateTouchClonedEvent(touchPoint, name);
 	};
 	
-	var generateTouchEventProxyIfRegistered = function (eventName, touchPoint, target, eventObject) { // Check if user registered this event
-		if (target._handjs_registeredEvents) {
-			for (var index = 0; index < target._handjs_registeredEvents.length; index++) {
+	// Check if user registered this event
+	var generateTouchEventProxyIfRegistered = function(eventName, touchPoint, target, eventObject) 
+	{
+		if (target._handjs_registeredEvents) 
+		{
+			for (var index = 0; index < target._handjs_registeredEvents.length; index++) 
+			{
 				if (target._handjs_registeredEvents[index].toLowerCase() === eventName) {
-
 					generateTouchEventProxy(target._handjs_registeredEvents[index], touchPoint, target, eventObject);
 				}
 			}
 		}
 	};
 
-	var handleOtherEvent = function (eventObject, name, useLocalTarget, checkRegistration) {
-		if (eventObject.preventManipulation)
+	var handleOtherEvent = function(eventObject, name, useLocalTarget, checkRegistration) 
+	{
+		if (eventObject.preventManipulation) {
 			eventObject.preventManipulation();
+		}
 
-		for (var i = 0; i < eventObject.changedTouches.length; ++i) {
+		for (var i = 0; i < eventObject.changedTouches.length; ++i) 
+		{
 			var touchPoint = eventObject.changedTouches[i];
 			
 			if (useLocalTarget) {
@@ -242,18 +267,21 @@
 		}
 	};
 	
-	var getMouseEquivalentEventName = function (eventName) {
+	var getMouseEquivalentEventName = function(eventName) {
 		return eventName.toLowerCase().replace("pointer", "mouse");
 	};
 
-	var getPrefixEventName = function (item, prefix, eventName) {
+	var getPrefixEventName = function(item, prefix, eventName) 
+	{
 		var newEventName;
 
-		if (eventName == eventName.toLowerCase()) {
+		if (eventName == eventName.toLowerCase()) 
+		{
 			var indexOfUpperCase = supportedEventsNames.indexOf(eventName) - (supportedEventsNames.length / 2);
 			newEventName = prefix + supportedEventsNames[indexOfUpperCase];
 		}
-		else {
+		else 
+		{
 			newEventName = prefix + eventName;
 		}
 
@@ -270,7 +298,8 @@
 		return newEventName;
 	};
 
-	var registerOrUnregisterEvent = function (item, name, func, enable) {
+	var registerOrUnregisterEvent = function(item, name, func, enable) 
+	{
 		if (enable) {
 			item.addEventListener(name, func, false);
 		} else {
@@ -278,31 +307,38 @@
 		}
 	};
 
-	var setTouchAware = function (item, eventName, enable) {
+	var setTouchAware = function(item, eventName, enable) 
+	{
 		// If item is already touch aware, do nothing
 		if (item.onpointerdown !== undefined) {
 			return;
 		}
 
 		// IE 10
-		if (item.onmspointerdown !== undefined) {
+		if (item.onmspointerdown !== undefined) 
+		{
 			var msEventName = getPrefixEventName(item, "MS", eventName);
-
-			registerOrUnregisterEvent(item, msEventName, function (evt) { generateTouchClonedEvent(evt, eventName); }, enable);
+			registerOrUnregisterEvent(item, msEventName, function(evt) { 
+				generateTouchClonedEvent(evt, eventName); 
+			}, enable);
 
 			// We can return because MSPointerXXX integrate mouse support
 			return;
 		}
 
 		// Chrome, Firefox
-		if (item.ontouchstart !== undefined) {
-			switch (eventName.toLowerCase()) {
+		if (item.ontouchstart !== undefined) 
+		{
+			switch (eventName.toLowerCase()) 
+			{
 				case "pointermove":
-					registerOrUnregisterEvent(item, "touchmove", function (evt) { handleOtherEvent(evt, eventName); }, enable);
+					registerOrUnregisterEvent(item, "touchmove", function(evt) { handleOtherEvent(evt, eventName); }, enable);
 					break;
+
 				case "pointercancel":
-					registerOrUnregisterEvent(item, "touchcancel", function (evt) { handleOtherEvent(evt, eventName); }, enable);
+					registerOrUnregisterEvent(item, "touchcancel", function(evt) { handleOtherEvent(evt, eventName); }, enable);
 					break;
+
 				case "pointerdown":
 				case "pointerup":
 				case "pointerout":
@@ -329,42 +365,77 @@
 		// Fallback to mouse
 		switch (eventName.toLowerCase()) {
 			case "pointerdown":
-				registerOrUnregisterEvent(item, "mousedown", function (evt) { generateMouseProxy(evt, eventName); }, enable);
+				registerOrUnregisterEvent(item, "mousedown", function(evt) { 
+					generateMouseProxy(evt, eventName); 
+				}, enable);
 				break;
+
 			case "pointermove":
-				registerOrUnregisterEvent(item, "mousemove", function (evt) { generateMouseProxy(evt, eventName); }, enable);
+				registerOrUnregisterEvent(item, "mousemove", function(evt) { 
+					generateMouseProxy(evt, eventName); 
+				}, enable);
 				break;
+
 			case "pointerup":
-				registerOrUnregisterEvent(item, "mouseup", function (evt) { generateMouseProxy(evt, eventName); }, enable);
+				registerOrUnregisterEvent(item, "mouseup", function(evt) { 
+					generateMouseProxy(evt, eventName); 
+				}, enable);
 				break;
+
 			case "pointerover":
-				registerOrUnregisterEvent(item, "mouseover", function (evt) { generateMouseProxy(evt, eventName); }, enable);
+				registerOrUnregisterEvent(item, "mouseover", function(evt) { 
+					generateMouseProxy(evt, eventName); 
+				}, enable);
 				break;
+
 			case "pointerout":
-				registerOrUnregisterEvent(item, "mouseout", function (evt) { generateMouseProxy(evt, eventName); }, enable);
+				registerOrUnregisterEvent(item, "mouseout", function(evt) { 
+					generateMouseProxy(evt, eventName); 
+				}, enable);
 				break;
+
 			case "pointerenter":
-				if (item.onmouseenter === undefined) { // Fallback to mouseover
-					registerOrUnregisterEvent(item, "mouseover", function (evt) { generateMouseProxy(evt, eventName); }, enable);
-				} else {
-					registerOrUnregisterEvent(item, "mouseenter", function (evt) { generateMouseProxy(evt, eventName); }, enable);
+				// Fallback to mouseover
+				if (item.onmouseenter === undefined) 
+				{
+					registerOrUnregisterEvent(item, "mouseover", function(evt) { 
+						generateMouseProxy(evt, eventName); 
+					}, enable);
+				}
+				else 
+				{
+					registerOrUnregisterEvent(item, "mouseenter", function(evt) { 
+						generateMouseProxy(evt, eventName); 
+					}, enable);
 				}
 				break;
+
 			case "pointerleave":
-				if (item.onmouseleave === undefined) { // Fallback to mouseout
-					registerOrUnregisterEvent(item, "mouseout", function (evt) { generateMouseProxy(evt, eventName); }, enable);
-				} else {
-					registerOrUnregisterEvent(item, "mouseleave", function (evt) { generateMouseProxy(evt, eventName); }, enable);
+				// Fallback to mouseout
+				if (item.onmouseleave === undefined) 
+				{ 
+					registerOrUnregisterEvent(item, "mouseout", function(evt) { 
+						generateMouseProxy(evt, eventName); 
+					}, enable);
+				} 
+				else
+				{
+					registerOrUnregisterEvent(item, "mouseleave", function(evt) { 
+						generateMouseProxy(evt, eventName); 
+					}, enable);
 				}
+
 				break;
 		}
 	};
 
 	// Intercept addEventListener calls by changing the prototype
-	var interceptAddEventListener = function (root) {
+	var interceptAddEventListener = function(root) 
+	{
 		var current = root.prototype ? root.prototype.addEventListener : root.addEventListener;
 
-		var customAddEventListener = function (name, func, capture) {
+		var customAddEventListener = function(name, func, capture) 
+		{
 			// Branch when a PointerXXX is used
 			if (supportedEventsNames.indexOf(name) != -1) {
 				setTouchAware(this, name, true);
@@ -385,10 +456,12 @@
 	};
 
 	// Intercept removeEventListener calls by changing the prototype
-	var interceptRemoveEventListener = function (root) {
+	var interceptRemoveEventListener = function(root) 
+	{
 		var current = root.prototype ? root.prototype.removeEventListener : root.removeEventListener;
 
-		var customRemoveEventListener = function (name, func, capture) {
+		var customRemoveEventListener = function(name, func, capture) 
+		{
 			// Release when a PointerXXX is used
 			if (supportedEventsNames.indexOf(name) != -1) {
 				setTouchAware(this, name, false);
@@ -400,6 +473,7 @@
 				current.call(this, name, func, capture);
 			}
 		};
+
 		if (root.prototype) {
 			root.prototype.removeEventListener = customRemoveEventListener;
 		} else {
@@ -440,9 +514,12 @@
 	}
 	
 	// Handling move on window to detect pointerleave/out/over
-	if (window.ontouchstart !== undefined) {       
-		window.addEventListener('touchstart', function (eventObject) {
-			for (var i = 0; i < eventObject.changedTouches.length; ++i) {
+	if (window.ontouchstart !== undefined) 
+	{       
+		window.addEventListener('touchstart', function(eventObject) 
+		{
+			for (var i = 0; i < eventObject.changedTouches.length; ++i) 
+			{
 				var touchPoint = eventObject.changedTouches[i];
 				previousTargets[touchPoint.identifier] = touchPoint.target;
 
@@ -452,8 +529,10 @@
 			}
 		});
 		
-		window.addEventListener('touchend', function (eventObject) {
-			for (var i = 0; i < eventObject.changedTouches.length; ++i) {
+		window.addEventListener('touchend', function(eventObject) 
+		{
+			for (var i = 0; i < eventObject.changedTouches.length; ++i) 
+			{
 				var touchPoint = eventObject.changedTouches[i];
 				var currentTarget = previousTargets[touchPoint.identifier];
 				
@@ -463,8 +542,10 @@
 			}
 		});
 
-		window.addEventListener('touchmove', function (eventObject) {
-			for (var i = 0; i < eventObject.changedTouches.length; ++i) {
+		window.addEventListener('touchmove', function(eventObject) 
+		{
+			for (var i = 0; i < eventObject.changedTouches.length; ++i) 
+			{
 				var touchPoint = eventObject.changedTouches[i];
 				var newTarget = document.elementFromPoint(touchPoint.clientX, touchPoint.clientY);
 				var currentTarget = previousTargets[touchPoint.identifier];
@@ -473,7 +554,8 @@
 					continue; // We can skip this as the pointer is effectively over the current target
 				}
 
-				if (currentTarget) {
+				if (currentTarget)
+				 {
 					// Raise out
 					generateTouchEventProxyIfRegistered("pointerout", touchPoint, currentTarget, eventObject);
 
@@ -483,7 +565,8 @@
 					}
 				}
 
-				if (newTarget) {
+				if (newTarget) 
+				{
 					// Raise over
 					generateTouchEventProxyIfRegistered("pointerover", touchPoint, newTarget, eventObject);
 
@@ -492,14 +575,15 @@
 						generateTouchEventProxyIfRegistered("pointerenter", touchPoint, newTarget, eventObject);
 					}
 				}
+
 				previousTargets[touchPoint.identifier] = newTarget;
 			}
 		});
 	}
 
 	// Extension to navigator
-	if (navigator.pointerEnabled === undefined) {
-
+	if (navigator.pointerEnabled === undefined) 
+	{
 		// Indicates if the browser will fire pointer events for pointing input
 		navigator.pointerEnabled = true;
 
@@ -510,14 +594,15 @@
 	}
 
 	// Handling touch-action css rule
-	if (document.styleSheets && document.addEventListener) {
-		document.addEventListener("DOMContentLoaded", function () {
+	if (document.styleSheets && document.addEventListener) 
+	{
+		document.addEventListener("DOMContentLoaded", function() {
 
-			var trim = function (string) {
+			var trim = function(string) {
 				return string.replace(/^\s+|\s+$/, '');
 			};
 
-			var processStylesheet = function (unfilteredSheet) {
+			var processStylesheet = function(unfilteredSheet) {
 				var globalRegex = new RegExp(".+?{.*?}", "m");
 				var selectorRegex = new RegExp(".+?{", "m");
 

@@ -30,13 +30,7 @@ if (jasy.Env.isSet("runtime", "browser"))
         return rel.replace.apply(rel, args(arguments));
       };
     }
-    else if (testnode.insertAdjacentElement)
-    {
-      // TODO
-
-      
-    }
-    else
+    else 
     {
       var mutate = function(args) 
       {
@@ -59,44 +53,68 @@ if (jasy.Env.isSet("runtime", "browser"))
         return fragment;
       };
 
-      var prepend = function(parent, child) 
+      if (testnode.insertAdjacentElement) 
       {
-        child = mutate(child);
-        var first = parent.firstChild;
-        if (first) {
-          parent.insertBefore(child, first);
-        } else {
-          parent.appendChild(child);
-        }
-      };
-
-      var append = function(parent, child) {
-        parent.appendChild(mutate(child));
-      };
-
-      var before = function(rel, child) 
-      {
-        var parent = rel.parentNode;
-        if (parent) {
-          parent.insertBefore(mutate(child), rel);
-        }
-      };
-
-      var after = function(rel, child) 
-      {
-        var parent = rel.parentNode;
-        var next = rel.nextSibling;
-
-        if (parent) 
+        var prepend = function(parent, child) 
         {
-          child = mutate(child);  
-          if (next) {
-            parent.insertBefore(child, next);
+          parent.insertAdjacentElement("afterbegin", mutate(child));
+        };
+
+        var append = function(parent, child) {
+          parent.insertAdjacentElement("beforeend", mutate(child));
+        };
+
+        var before = function(rel, child) 
+        {
+          parent.insertAdjacentElement("beforebegin", mutate(child));
+        };
+
+        var after = function(rel, child) 
+        {
+          parent.insertAdjacentElement("afterend", mutate(child));
+        };
+      }
+      else 
+      {
+        var prepend = function(parent, child) 
+        {
+          child = mutate(child);
+          var first = parent.firstChild;
+          if (first) {
+            parent.insertBefore(child, first);
           } else {
             parent.appendChild(child);
           }
-        }
-      };
+        };
+
+        var append = function(parent, child) {
+          parent.appendChild(mutate(child));
+        };
+
+        var before = function(rel, child) 
+        {
+          var parent = rel.parentNode;
+          if (parent) {
+            parent.insertBefore(mutate(child), rel);
+          }
+        };
+
+        var after = function(rel, child) 
+        {
+          var parent = rel.parentNode;
+          var next = rel.nextSibling;
+
+          if (parent) 
+          {
+            child = mutate(child);  
+            if (next) {
+              parent.insertBefore(child, next);
+            } else {
+              parent.appendChild(child);
+            }
+          }
+        };
+      }
 
       var replace = function(rel, child) 
       {

@@ -19,8 +19,6 @@ core.Module("core.bom.TapEvent",
       downOn = e.target;
       downX = e.offsetX;
       downY = e.offsetY;
-
-      console.log("Down on: " + downOn, downX, downY)
     }, true);
 
     document.addEventListener("pointerup", function(e) 
@@ -31,8 +29,7 @@ core.Module("core.bom.TapEvent",
 
       if (e.target == downOn && Math.abs(downX - e.offsetX) < maxClickMovement && Math.abs(downY - e.offsetY) < maxClickMovement) 
       {
-        
-
+        core.bom.TouchLikeEvent.create(e, "tap");
       }
     }, true);
   }

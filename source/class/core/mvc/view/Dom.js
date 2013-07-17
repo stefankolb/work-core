@@ -203,17 +203,24 @@ core.Class("core.mvc.view.Dom",
     ======================================================
     */
 
-    loadPartial : function(tmpl)
+    /**
+     * {core.event.Promise} Loads and registers the given partial from 
+     * a local @assetId {String}. Returns a promise for easy management.
+     * 
+     * The name of the partial is auto extracted as the file name part
+     * of the @assetId.
+     */
+    loadPartial : function(assetId)
     {
       var promise = core.event.Promise.obtain();
 
       // Auto extract partial name from file name
       // Convention over configuration FTW
-      var lastSlash = tmpl.lastIndexOf("/");
-      var lastDot = tmpl.lastIndexOf(".");
-      var name = tmpl.slice(lastSlash+1, lastDot);
+      var lastSlash = assetId.lastIndexOf("/");
+      var lastDot = assetId.lastIndexOf(".");
+      var name = assetId.slice(lastSlash+1, lastDot);
 
-      core.io.Text.load(jasy.Asset.toUri(tmpl), function(uri, errornous, data) 
+      core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {
         // Enable stripping (to remove white spaces from formatting)
         var template = core.template.Compiler.compile(data.text, this.getLabels());
@@ -226,11 +233,16 @@ core.Class("core.mvc.view.Dom",
       return promise;
     },
 
-    loadTemplate : function(tmpl)
+
+    /**
+     * {core.event.Promise} Loads and registers the given template from 
+     * a local @assetId {String}. Returns a promise for easy management.
+     */
+    loadTemplate : function(assetId)
     {
       var promise = core.event.Promise.obtain();
 
-      core.io.Text.load(jasy.Asset.toUri(tmpl), function(uri, errornous, data) 
+      core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {
         // Enable stripping (to remove white spaces from formatting)
         var template = core.template.Compiler.compile(data.text, this.getLabels());
@@ -243,11 +255,16 @@ core.Class("core.mvc.view.Dom",
       return promise;
     },
 
-    loadStyleSheet : function(tmpl)
+
+    /**
+     * {core.event.Promise} Loads and injects the given stylesheet from 
+     * a local @assetId {String}. Returns a promise for easy management.
+     */
+    loadStyleSheet : function(assetId)
     {
       var promise = core.event.Promise.obtain();
 
-      core.io.StyleSheet.load(jasy.Asset.toUri(tmpl), function(uri, errornous, data) 
+      core.io.StyleSheet.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {
         errornous ? promise.reject("io") : promise.fulfill(data);
         promise.release();

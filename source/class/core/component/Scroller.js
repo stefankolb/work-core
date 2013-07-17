@@ -50,15 +50,6 @@
 
     members :
     {
-      init : function() 
-      {
-        var content = this.__container.firstElementChild;
-        content.style[transformOriginProperty] = "left top";
-
-        this.reflow();
-      },
-
-
       /**
        *
        */

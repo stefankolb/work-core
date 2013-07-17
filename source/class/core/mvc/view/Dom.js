@@ -64,23 +64,6 @@ core.Class("core.mvc.view.Dom",
   {
     /*
     ======================================================
-      DOM EVENT HANDLING
-    ======================================================
-    */
-
-    addDomListener : function(selector, type, callback) {
-      $(this.getRoot()).on(type, selector, core.Function.bind(callback, this));
-    },
-
-    removeDomListener : function(selector, type, callback) {
-      $(this.getRoot()).on(type, selector, core.Function.bind(callback, this));
-    },
-
-
-
-
-    /*
-    ======================================================
       DEBOUNCED RENDER LOGIC
     ======================================================
     */

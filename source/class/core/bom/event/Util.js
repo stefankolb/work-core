@@ -10,7 +10,7 @@
 /**
  * Utilities for event management.
  *
- * #break(core.bom.PointerEventsNext)
+ * #break(core.bom.PointerEvent)
  */
 core.Module("core.bom.event.Util",
 {
@@ -103,7 +103,7 @@ core.Module("core.bom.event.Util",
     }
 
     for (var pointerType in listeners) {
-      core.bom.PointerEventsNext.add(target, pointerType, listeners[pointerType], null, capture);
+      core.bom.PointerEvent.add(target, pointerType, listeners[pointerType], null, capture);
     }
   },
 
@@ -123,7 +123,7 @@ core.Module("core.bom.event.Util",
     }
 
     for (var pointerType in listeners) {
-      core.bom.PointerEventsNext.remove(target, pointerType, listeners[pointerType], null, capture);
+      core.bom.PointerEvent.remove(target, pointerType, listeners[pointerType], null, capture);
     }
 
     // Cheap cleanup

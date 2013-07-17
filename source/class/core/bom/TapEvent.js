@@ -13,7 +13,7 @@
   var Util = core.bom.event.Util;
 
   /**
-   * #break(core.bom.PointerEventsNext)
+   * #break(core.bom.PointerEvent)
    */
   core.Module("core.bom.TapEvent",
   {

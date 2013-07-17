@@ -54,7 +54,7 @@
    *
    * Still work in progress.
    */
-  core.Module("core.bom.PointerEventsNext",
+  core.Module("core.bom.PointerEvent",
   {
     has : function(target, type, callback, context, capture)
     {

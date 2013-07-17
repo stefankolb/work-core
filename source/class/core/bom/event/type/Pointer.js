@@ -16,14 +16,20 @@ core.Class("core.bom.event.type.Pointer",
 
   construct : function(nativeEvent, eventType)
   {
+    // We use the touchpoint for touch events
+    var isMouse = nativeEvent.type != null ? true : false;
+
     this.__nativeEvent = nativeEvent;
+
     this.type = eventType;
-
     this.target = nativeEvent.target;
-    this.offsetX = nativeEvent.offsetX;
-    this.offsetY = nativeEvent.offsetY;
-    this.isPrimary = nativeEvent.type.slice(0, 5) == "mouse";
+    this.offsetX = isMouse ? nativeEvent.offsetX : nativeEvent.pageX;
+    this.offsetY = isMouse ? nativeEvent.offsetY : nativeEvent.pageY;
+    this.isPrimary = isMouse || true;
 
+    // Just to not override mouse id
+    this.pointerId = isMouse ? 1 : 2 + nativeEvent.identifier;
+    this.pointerType = isMouse ? "mouse" : "touch";
   },
 
   members :
@@ -32,7 +38,10 @@ core.Class("core.bom.event.type.Pointer",
     offsetX : 0,
     offsetY : 0,
     target : 0,
-    isPrimary : true
+    isPrimary : true,
+    pointerId : 0,
+    pointerType : "mouse",
+
 
   }
 });

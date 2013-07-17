@@ -118,6 +118,34 @@
         };
       }
 
+      if (useTouch)
+      {
+        if (type == "down") {
+          var nativeType = "touchstart";
+        } else if (type == "move") {
+          var nativeType = "touchmove";
+        } else if (type == "up") {
+          var nativeType = "touchend";
+        }
+
+        listeners[nativeType] = function(nativeEvent)
+        {
+          var changedTouches = nativeEvent.changedTouches;
+          for (var i=0, l=changedTouches.length; i<l; i++)
+          {
+            var touchPoint = changedTouches[i];
+            var eventObject = core.bom.event.type.Pointer.obtain(touchPoint, pointerType);
+            console.log("Firing: " + pointerType + " on " + target, eventObject, touchPoint);
+            callback(eventObject);
+            eventObject.release();
+          }
+        };        
+   
+
+
+
+      }
+
       // Registering all native listeners
       core.bom.event.Util.addNative(target, eventId, capture);
     },

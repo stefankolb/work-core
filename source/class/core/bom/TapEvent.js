@@ -1,12 +1,6 @@
 (function() 
 {
-  var downOn = null;
-  var downX = -1000;
-  var downY = -1000;
   var maxClickMovement = 5;
-
-
-
 
   /**
    * #break(core.bom.PointerEventsNext)
@@ -21,13 +15,13 @@
       }
 
       var eventId = core.bom.event.Util.getId(type, callback, capture);
-      if (target[eventId]) 
-      {
-        console.error("Could not add the same listener two times!");
-        return;
-      }
+      var listeners = core.bom.event.Util.create(target, eventId);
 
-      var down = function(e) 
+      var downOn = null;
+      var downX = -1000;
+      var downY = -1000;
+
+      listeners.down = function(e) 
       {
         if (!e.isPrimary) {
           return;
@@ -38,7 +32,7 @@
         downY = e.offsetY;
       };
 
-      var up = function(e) 
+      listeners.up = function(e) 
       {
         if (!e.isPrimary) {
           return;
@@ -50,12 +44,12 @@
           callback(eventObj);
           eventObj.release();
         }
+
+        // Garbage collection
+        downOn = null;
       };  
 
-      target[eventId] = [down, up];
-
-      core.bom.PointerEventsNext.add(target, "down", down);
-      core.bom.PointerEventsNext.add(target, "up", up);
+      core.bom.event.Util.addPointer(target, eventId, capture);
     },
 
     remove : function(target, type, callback, context, capture)
@@ -65,16 +59,7 @@
       }
 
       var eventId = core.bom.event.Util.getId(type, callback, capture);
-      var eventHandler = target[eventId];
-      if (!eventHandler) {
-        return;
-      }
-
-      core.bom.PointerEventsNext.remove(target, "down", eventHandler[0]);
-      core.bom.PointerEventsNext.remove(target, "up", eventHandler[1]);
-
-      // Cheap cleanup
-      target[eventId] = null;
+      core.bom.event.Util.removePointer(target, eventId, capture);
     }
   });
 

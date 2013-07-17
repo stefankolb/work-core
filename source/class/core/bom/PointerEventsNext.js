@@ -58,21 +58,33 @@
       return id;
     },
 
-    add : function(target, eventKey, capture)
+    create : function(target, eventId)
     {
-      var listeners = target[eventKey];
+      if (target[eventId]) {
+        throw new Error("Could not add the same listener two times!");
+      }
+
+      // Create listener database
+      var listeners = target[eventId] = {};
+      return listeners;
+    },
+
+    addNative : function(target, eventId, capture)
+    {
+      var listeners = target[eventId];
       if (!listeners) {
         return;
       }
 
       for (var nativeType in listeners) {
+        console.log("Add native: " + nativeType + " to " + target);
         target.addEventListener(nativeType, listeners[nativeType], capture);
       }
     },
 
-    remove : function(target, eventKey, capture)
+    removeNative : function(target, eventId, capture)
     {
-      var listeners = target[eventKey];
+      var listeners = target[eventId];
       if (!listeners) {
         return;
       }
@@ -82,8 +94,35 @@
       }
 
       // Cheap cleanup
-      target[eventKey] = null;
-    }
+      target[eventId] = null;
+    },
+
+    addPointer : function(target, eventId, capture)
+    {
+      var listeners = target[eventId];
+      if (!listeners) {
+        return;
+      }
+
+      for (var pointerType in listeners) {
+        core.bom.PointerEventsNext.add(target, pointerType, listeners[pointerType], null, capture);
+      }
+    },
+
+    removePointer : function(target, eventId, capture)
+    {
+      var listeners = target[eventId];
+      if (!listeners) {
+        return;
+      }
+
+      for (var pointerType in listeners) {
+        core.bom.PointerEventsNext.remove(target, pointerType, listeners[pointerType], null, capture);
+      }
+
+      // Cheap cleanup
+      target[eventId] = null;
+    }    
   });
 
 
@@ -92,7 +131,19 @@
   {
     has : function(target, type, callback, context, capture)
     {
+      var specialHandler = special[type];
+      if (specialHandler) {
+        return specialHandler.remove(target, type, callback, context, capture);
+      }
 
+      // Hard-wire context to function, re-use existing bound functions
+      if (context) {
+        callback = core.Function.bind(callback, context);
+      }
+
+      // Check for listener existance
+      var eventId = core.bom.event.Util.getId(type, callback, capture);
+      return !!target[eventId];
     },
 
 
@@ -108,22 +159,10 @@
         callback = core.Function.bind(callback, context);
       }
 
-      // Normalize capture flag
-      if (capture !== true) {
-        capture = false;
-      }
-
       // Lookup entry
-      var eventKey = core.bom.event.Util.getId(type, callback, capture);
-      var listeners = target[eventKey];
-      if (listeners) 
-      {
-        console.error("Could not add the same listener two times!");
-        return;
-      }
-
-      // Create listener database
-      listeners = target[eventKey] = {};
+      var eventId = core.bom.event.Util.getId(type, callback, capture);
+      console.log("ADD: " + eventId)
+      var listeners = core.bom.event.Util.create(target, eventId);
 
       // Full event name to fire
       var pointerType = "pointer" + type;
@@ -144,35 +183,25 @@
         };
       }
 
-
-      // Registering all events
-      core.bom.event.Util.add(target, eventKey, capture);
-
-      
+      // Registering all native listeners
+      core.bom.event.Util.addNative(target, eventId, capture);
     },
 
     remove : function(target, type, callback, context, capture)
     {
       var specialHandler = special[type];
       if (specialHandler) {
-        return specialHandler.add(target, type, callback, context, capture);
+        return specialHandler.remove(target, type, callback, context, capture);
       }
 
       // Hard-wire context to function, re-use existing bound functions
       if (context) {
         callback = core.Function.bind(callback, context);
       }
-
-      // Normalize capture flag
-      if (capture !== true) {
-        capture = false;
-      }
-
-      // Lookup entry
-      var eventKey = core.bom.event.Util.getId(type, callback, capture);
       
-      // Unregistering all events
-      core.bom.event.Util.remove(target, eventKey, capture);
+      // Unregistering all native listeners
+      var eventId = core.bom.event.Util.getId(type, callback, capture);
+      core.bom.event.Util.removeNative(target, eventId, capture);
     }
   });
 

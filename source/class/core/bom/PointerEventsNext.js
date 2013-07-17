@@ -125,7 +125,35 @@
     }    
   });
 
+  var supportedPointerEvents = core.Array.toKeys([
+    "down", "up", "move", "over", "out", "cancel", "enter", "leave"
+  ], true);
 
+  if (jasy.Env.isSet("debug"))
+  {
+    var checkSignature = function(target, type, callback, context, capture) 
+    {
+      if (target == null) {
+        throw new Error("Invalid targrt");
+      }
+
+      core.Assert.isType(type, "String");
+
+      if (!supportedPointerEvents[type]) {
+        throw new Error("Unsupported event: " + type);
+      }
+
+      core.Assert.isType(callback, "Function");
+
+      if (context != null) {
+        core.Assert.isType(context, "String");  
+      }
+
+      if (capture != null) {
+        core.Assert.isType(capture, "Boolean");  
+      }
+    };    
+  }
 
   core.Module("core.bom.PointerEventsNext",
   {
@@ -134,6 +162,11 @@
       var specialHandler = special[type];
       if (specialHandler) {
         return specialHandler.remove(target, type, callback, context, capture);
+      }
+
+      // Input parameter validation
+      if (jasy.Env.isSet("debug")) {
+        checkSignature(target, type, callback, context, capture);
       }
 
       // Hard-wire context to function, re-use existing bound functions
@@ -152,6 +185,11 @@
       var specialHandler = special[type];
       if (specialHandler) {
         return specialHandler.add(target, type, callback, context, capture);
+      }
+
+      // Input parameter validation
+      if (jasy.Env.isSet("debug")) {
+        checkSignature(target, type, callback, context, capture);
       }
 
       // Hard-wire context to function, re-use existing bound functions
@@ -192,6 +230,11 @@
       var specialHandler = special[type];
       if (specialHandler) {
         return specialHandler.remove(target, type, callback, context, capture);
+      }
+
+      // Input parameter validation
+      if (jasy.Env.isSet("debug")) {
+        checkSignature(target, type, callback, context, capture);
       }
 
       // Hard-wire context to function, re-use existing bound functions

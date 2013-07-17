@@ -1,3 +1,12 @@
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2013 Sebastian Werner
+==================================================================================================
+*/
+
+"use strict";
+
 (function() 
 {
   var maxClickMovement = 5;
@@ -40,7 +49,7 @@
 
         if (e.target == downOn && Math.abs(downX - e.offsetX) < maxClickMovement && Math.abs(downY - e.offsetY) < maxClickMovement) 
         {
-          var eventObj = core.bom.event.Pointer.obtain(e, "tap");
+          var eventObj = core.bom.event.type.Pointer.obtain(e, "tap");
           callback(eventObj);
           eventObj.release();
         }

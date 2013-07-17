@@ -1,3 +1,12 @@
+/*
+==================================================================================================
+  Core - JavaScript Foundation
+  Copyright 2013 Sebastian Werner
+==================================================================================================
+*/
+
+"use strict";
+
 (function(document, undefined)
 {
   var usePointer = document.onpointerdown !== undefined || document.onmspointerdown !== undefined;
@@ -9,121 +18,10 @@
   console.log("Has: ", "MouseEventLeave=" + hasMouseEnterLeave);
 
 
-
-
-
-  core.Class("core.bom.event.Pointer",
-  {
-    pooling : true,
-
-    construct : function(nativeEvent, eventType)
-    {
-      this.__nativeEvent = nativeEvent;
-      this.type = eventType;
-
-      this.target = nativeEvent.target;
-      this.offsetX = nativeEvent.offsetX;
-      this.offsetY = nativeEvent.offsetY;
-      this.isPrimary = nativeEvent.type.slice(0, 5) == "mouse";
-
-    },
-
-    members :
-    {
-      type : null,
-      offsetX : 0,
-      offsetY : 0,
-      target : 0,
-      isPrimary : true
-
-    }
-  });
-
-
   var special = {
     tap : core.bom.TapEvent
   }
 
-
-
-  core.Module("core.bom.event.Util",
-  {
-    getId : function(type, callback, capture) 
-    {  
-      var id = "$$ev-" + type + "-" + core.util.Id.get(callback);
-      if (capture === true) {
-        id += "-capture";
-      }
-
-      return id;
-    },
-
-    create : function(target, eventId)
-    {
-      if (target[eventId]) {
-        throw new Error("Could not add the same listener two times!");
-      }
-
-      // Create listener database
-      var listeners = target[eventId] = {};
-      return listeners;
-    },
-
-    addNative : function(target, eventId, capture)
-    {
-      var listeners = target[eventId];
-      if (!listeners) {
-        return;
-      }
-
-      for (var nativeType in listeners) {
-        console.log("Add native: " + nativeType + " to " + target);
-        target.addEventListener(nativeType, listeners[nativeType], capture);
-      }
-    },
-
-    removeNative : function(target, eventId, capture)
-    {
-      var listeners = target[eventId];
-      if (!listeners) {
-        return;
-      }
-
-      for (var nativeType in listeners) {
-        target.removeEventListener(nativeType, listeners[nativeType], capture);
-      }
-
-      // Cheap cleanup
-      target[eventId] = null;
-    },
-
-    addPointer : function(target, eventId, capture)
-    {
-      var listeners = target[eventId];
-      if (!listeners) {
-        return;
-      }
-
-      for (var pointerType in listeners) {
-        core.bom.PointerEventsNext.add(target, pointerType, listeners[pointerType], null, capture);
-      }
-    },
-
-    removePointer : function(target, eventId, capture)
-    {
-      var listeners = target[eventId];
-      if (!listeners) {
-        return;
-      }
-
-      for (var pointerType in listeners) {
-        core.bom.PointerEventsNext.remove(target, pointerType, listeners[pointerType], null, capture);
-      }
-
-      // Cheap cleanup
-      target[eventId] = null;
-    }    
-  });
 
   var supportedPointerEvents = core.Array.toKeys([
     "down", "up", "move", "over", "out", "cancel", "enter", "leave"
@@ -215,7 +113,7 @@
 
         listeners[nativeType] = function(nativeEvent)
         {
-          var eventObject = core.bom.event.Pointer.obtain(nativeEvent, pointerType);
+          var eventObject = core.bom.event.type.Pointer.obtain(nativeEvent, pointerType);
           callback(eventObject);
           eventObject.release();
         };

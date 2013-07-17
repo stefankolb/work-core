@@ -62,7 +62,6 @@
 
 
       addPartial : function(name, template) {
-        console.log("Add Partial: ", name, template);
         this.__partials[name] = template;
       },
 

@@ -101,17 +101,10 @@ core.Class("core.mvc.view.Dom",
     __render : function()
     {
       var presenter = this.getPresenter();
-      if (!presenter) {
-        return;
-      }
-
       var elem = this.getRoot();
-      if (!elem) {
-        return;
-      }
-
       var template = this.getTemplate();
-      if (!template) {
+
+      if (!presenter || !elem || !template) {
         return;
       }
 

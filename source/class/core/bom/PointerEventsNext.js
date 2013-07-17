@@ -50,11 +50,39 @@
   {
     getId : function(type, callback, capture) 
     {  
-      var id = type + "-" + core.util.Id.get(callback);
-      if (capture == true) {
+      var id = "$$ev-" + type + "-" + core.util.Id.get(callback);
+      if (capture === true) {
         id += "-capture";
       }
+
       return id;
+    },
+
+    add : function(target, eventKey, capture)
+    {
+      var listeners = target[eventKey];
+      if (!listeners) {
+        return;
+      }
+
+      for (var nativeType in listeners) {
+        target.addEventListener(nativeType, listeners[nativeType], capture);
+      }
+    },
+
+    remove : function(target, eventKey, capture)
+    {
+      var listeners = target[eventKey];
+      if (!listeners) {
+        return;
+      }
+
+      for (var nativeType in listeners) {
+        target.removeEventListener(nativeType, listeners[nativeType], capture);
+      }
+
+      // Cheap cleanup
+      target[eventKey] = null;
     }
   });
 
@@ -86,37 +114,39 @@
       }
 
       // Lookup entry
-      var eventKey = "$$ev-" + type + "-" + capture + "-" + core.util.Id.get(callback);
-      var db = target[eventKey];
-      if (db) 
+      var eventKey = core.bom.event.Util.getId(type, callback, capture);
+      var listeners = target[eventKey];
+      if (listeners) 
       {
-        console.error("Ooops, re-adding same callback in same context for same type on same target?");
+        console.error("Could not add the same listener two times!");
         return;
       }
 
-      db = target[eventKey] = {};
+      // Create listener database
+      listeners = target[eventKey] = {};
 
+      // Full event name to fire
+      var pointerType = "pointer" + type;
+
+      // Mouse support
       if (useMouse)
       {
-        var pointerType = "pointer" + type;
-
         var nativeType = "mouse" + type;
         if (hasMouseEnterLeave && (nativeType == "mouseenter" || nativeType == "mouseleave")) {
           nativeType = nativeType == "mouseenter" ? "mouseover" : "mouseout";
         }
 
-        var mouseHandler = function(nativeEvent)
+        listeners[nativeType] = function(nativeEvent)
         {
           var eventObject = core.bom.event.Pointer.obtain(nativeEvent, pointerType);
           callback(eventObject);
           eventObject.release();
         };
-
-        db[nativeType] = mouseHandler;
-        target.addEventListener(nativeType, mouseHandler, capture);
-
       }
 
+
+      // Registering all events
+      core.bom.event.Util.add(target, eventKey, capture);
 
       
     },
@@ -139,24 +169,10 @@
       }
 
       // Lookup entry
-      var eventKey = "$$ev-" + type + "-" + capture + "-" + core.util.Id.get(callback);
-      console.log("REMOVE-EVENT-KEY: " + eventKey)
-      var db = target[eventKey];
-      if (!db) 
-      {
-        console.error("No such listener: " + type + " on " + target);
-        return;
-      }
+      var eventKey = core.bom.event.Util.getId(type, callback, capture);
       
-      for (var nativeType in db) {
-        target.removeEventListener(nativeType, callback, capture);
-      }
-
-      // Cheap cleanup
-      target[eventKey] = null;
-
-      
-
+      // Unregistering all events
+      core.bom.event.Util.remove(target, eventKey, capture);
     }
   });
 

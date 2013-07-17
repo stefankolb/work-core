@@ -21,7 +21,9 @@
       }
 
       var eventId = core.bom.event.Util.getId(type, callback, capture);
-      if (target[eventId]) {
+      if (target[eventId]) 
+      {
+        console.error("Could not add the same listener two times!");
         return;
       }
 

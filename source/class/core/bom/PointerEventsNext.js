@@ -97,7 +97,6 @@
 
       // Lookup entry
       var eventId = core.bom.event.Util.getId(type, callback, capture);
-      console.log("ADD: " + eventId)
       var listeners = core.bom.event.Util.create(target, eventId);
 
       // Full event name to fire

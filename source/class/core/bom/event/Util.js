@@ -41,7 +41,6 @@ core.Module("core.bom.event.Util",
     }
 
     for (var nativeType in listeners) {
-      console.log("Add native: " + nativeType + " to " + target);
       target.addEventListener(nativeType, listeners[nativeType], capture);
     }
   },

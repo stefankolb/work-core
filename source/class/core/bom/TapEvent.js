@@ -5,12 +5,15 @@
   var downY = -1000;
   var maxClickMovement = 5;
 
+
+
+
   /**
    * #break(core.bom.PointerEventsNext)
    */
   core.Module("core.bom.TapEvent",
   {
-    add : function(target, type, callback, capture)
+    add : function(target, type, callback, context, capture)
     {
       var eventId = core.bom.event.Util.getId(type, callback, capture);
       if (target[eventId]) {
@@ -37,10 +40,10 @@
         if (e.target == downOn && Math.abs(downX - e.offsetX) < maxClickMovement && Math.abs(downY - e.offsetY) < maxClickMovement) 
         {
           var eventObj = core.bom.event.Pointer.obtain(e, "tap");
-          callback(eventObj);
+          context ? callback.call(context, eventObj) : callback(eventObj);
           eventObj.release();
         }
-      };
+      };  
 
       target[eventId] = [down, up];
 
@@ -48,8 +51,12 @@
       core.bom.PointerEventsNext.add(target, "up", up);
     },
 
-    remove : function(target, type, callback, capture)
+    remove : function(target, type, callback, context, capture)
     {
+      if (context != null) {
+        callback = core.Function.bind(callback, context);
+      }
+
       var eventId = core.bom.event.Util.getId(type, callback, capture);
       var eventHandler = target[eventId];
       if (!eventHandler) {

@@ -88,14 +88,14 @@
 
     add : function(target, type, callback, context, capture) 
     {
+      var specialHandler = special[type];
+      if (specialHandler) {
+        return specialHandler.add(target, type, callback, context, capture);
+      }
+
       // Hard-wire context to function, re-use existing bound functions
       if (context) {
         callback = core.Function.bind(callback, context);
-      }
-
-      var specialHandler = special[type];
-      if (specialHandler) {
-        return specialHandler.add(target, type, callback, capture);
       }
 
       var pointerType = "pointer" + type;
@@ -121,7 +121,6 @@
 
         var wrapper = target[eventId] = function(nativeEvent)
         {
-          console.log("Execute wrapper for: " + eventId);
           var eventObj = core.bom.event.Pointer.obtain(nativeEvent, pointerType);
           callback(eventObj);
           eventObj.release();
@@ -133,6 +132,11 @@
 
     remove : function(target, type, callback, context, capture)
     {
+      var specialHandler = special[type];
+      if (specialHandler) {
+        return specialHandler.remove(target, type, callback, context, capture);
+      }
+
       if (context != null) {
         callback = core.Function.bind(callback, context);
       }

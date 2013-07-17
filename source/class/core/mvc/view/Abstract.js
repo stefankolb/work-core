@@ -56,13 +56,30 @@
       ======================================================
       */
 
+      /**
+       * {Map} Returns a map of known partials.
+       */
       getPartials : function() {
         return this.__partials;
       },
 
 
+      /**
+       * Add the given @template {core.template.Template} as partial under with @name {String}.
+       */
       addPartial : function(name, template) {
         this.__partials[name] = template;
+      },
+
+
+      /**
+       * Registers the given @partials {Map} to the presenter.
+       */
+      addPartials : function(partials)
+      {
+        for (var name in partials) {
+          this.addPartial(name, partials[name]);
+        }
       },
 
 

@@ -123,6 +123,8 @@
         // Primary
         var primaryIdentifier = null;
 
+        var previousTargets = {};
+
         // Touch Identifier:
         // An identification number for each touch point. When a touch point becomes active, it must be assigned an 
         // identifier that is distinct from any other active touch point. While the touch point remains active, all 
@@ -140,11 +142,13 @@
           for (var i=0, il=changed.length; i<il; i++)
           {
             var point = changed[i];          
+            var currentTarget = previousTargets[point.identifier] = point.target;
 
             console.log("Fire pointerdown: primary=" + (point.identifier == primaryIdentifier));
 
             var eventObject = core.bom.event.type.Pointer.obtain(point, "pointerdown");
             eventObject.isPrimary = point.identifier == primaryIdentifier;
+            eventObject.currentTarget = currentTarget;
 
             for (var j=0, jl=db.length; j<jl; j++)
             {
@@ -169,6 +173,7 @@
 
             var eventObject = core.bom.event.type.Pointer.obtain(point, "pointermove");
             eventObject.isPrimary = point.identifier == primaryIdentifier;
+            eventObject.target = eventObject.currentTarget = previousTargets[point.identifier];
 
             for (var j=0, jl=db.length; j<jl; j++)
             {
@@ -193,6 +198,7 @@
 
             var eventObject = core.bom.event.type.Pointer.obtain(point, "pointerup");
             eventObject.isPrimary = point.identifier == primaryIdentifier;
+            eventObject.target = eventObject.currentTarget = previousTargets[point.identifier];
 
             for (var j=0, jl=db.length; j<jl; j++)
             {

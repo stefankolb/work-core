@@ -25,7 +25,7 @@ core.Class("core.bom.event.type.Pointer",
     this.target = nativeEvent.target;
     this.offsetX = isMouse ? nativeEvent.offsetX : nativeEvent.pageX;
     this.offsetY = isMouse ? nativeEvent.offsetY : nativeEvent.pageY;
-    this.isPrimary = isMouse || true;
+    this.isPrimary = isMouse;
 
     // Just to not override mouse id
     this.pointerId = isMouse ? 1 : 2 + nativeEvent.identifier;

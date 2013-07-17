@@ -130,20 +130,21 @@
 
         listeners[nativeType] = function(nativeEvent)
         {
+          var touches = nativeEvent.touches;
           var changedTouches = nativeEvent.changedTouches;
+
           for (var i=0, l=changedTouches.length; i<l; i++)
           {
             var touchPoint = changedTouches[i];
             var eventObject = core.bom.event.type.Pointer.obtain(touchPoint, pointerType);
-            console.log("Firing: " + pointerType + " on " + target, eventObject, touchPoint);
+
+            // Maybe that solution is too easy... let's see
+            eventObject.isPrimary = touches.length < 2;
+
             callback(eventObject);
             eventObject.release();
           }
-        };        
-   
-
-
-
+        };
       }
 
       // Registering all native listeners

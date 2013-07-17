@@ -20,6 +20,8 @@ core.Class("core.mvc.view.Dom",
   {
     core.mvc.view.Abstract.call(this, presenter);
 
+    this.__renderRequestBound = core.Function.bind(this.__renderRequest, this);
+
     if (root != null) 
     {
       if (jasy.Env.isSet("debug")) {
@@ -75,21 +77,25 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      /**  */
-      this.__renderScheduled = core.effect.AnimationFrame.request(core.Function.bind(this.__renderRequest, this));
+      this.__renderScheduled = core.effect.AnimationFrame.request(this.__renderRequestBound);
     },
 
 
+    /**
+     * This method checks for whether all required data is available and triggers
+     * the rendering as soon as this happens. Until than it regularly re-evaluates 
+     * whether this case happens.
+     */
     __renderRequest : function()
     {
-      if (this._shouldRender()) 
+      if (this.__loaded && this._shouldRender()) 
       {
         this.__render();
         this.__renderScheduled = null;
       }
       else
       {
-        this.__renderScheduled = core.effect.AnimationFrame.request(core.Function.bind(this.__renderRequest, this));
+        this.__renderScheduled = core.effect.AnimationFrame.request(this.__renderRequestBound);
       }
     },
 
@@ -120,11 +126,6 @@ core.Class("core.mvc.view.Dom",
     },
 
 
-    _shouldRender : function() {
-      return this.__assetLoadCounter == 0;
-    },
-
-
     _beforeRender : function() {
       // placeholder
     },
@@ -132,6 +133,25 @@ core.Class("core.mvc.view.Dom",
 
     _afterRender : function() {
       // placeholder
+    },
+
+
+    _shouldRender : function() {
+      return true;
+    },
+
+
+    __loaded : false,
+
+    markAsLoaded : function() 
+    {
+      this.log("All assets loaded!");
+      this.__loaded = true;
+      this.render();
+    },
+
+    markAsFailed : function() {
+      this.error("Unable to load required assets. Please retry!");
     },
 
 
@@ -183,9 +203,15 @@ core.Class("core.mvc.view.Dom",
     ======================================================
     */
 
-    loadPartial2 : function(name, tmpl)
+    loadPartial : function(tmpl)
     {
       var promise = core.event.Promise.obtain();
+
+      // Auto extract partial name from file name
+      // Convention over configuration FTW
+      var lastSlash = tmpl.lastIndexOf("/");
+      var lastDot = tmpl.lastIndexOf(".");
+      var name = tmpl.slice(lastSlash+1, lastDot);
 
       core.io.Text.load(jasy.Asset.toUri(tmpl), function(uri, errornous, data) 
       {
@@ -200,7 +226,7 @@ core.Class("core.mvc.view.Dom",
       return promise;
     },
 
-    loadTemplate2 : function(tmpl)
+    loadTemplate : function(tmpl)
     {
       var promise = core.event.Promise.obtain();
 
@@ -217,7 +243,7 @@ core.Class("core.mvc.view.Dom",
       return promise;
     },
 
-    loadStyleSheet2 : function(tmpl)
+    loadStyleSheet : function(tmpl)
     {
       var promise = core.event.Promise.obtain();
 
@@ -228,57 +254,6 @@ core.Class("core.mvc.view.Dom",
       }, this);
 
       return promise;
-    },
-
-
-    markAsLoaded : function() {
-      console.log("All assets loaded!");
-      this.render();
-    },
-
-
-
-
-    /** {=Integer} Number of assets currently being loaded */
-    __assetLoadCounter : 0,
-
-
-    /**
-     * Loads the given @tmpl {Uri} via the text loader (XHR) and creates
-     * a new template instance which is auto applied to the #text property afterwards.
-     */
-    loadTemplate : function(tmpl, nocache)
-    {
-      this.__assetLoadCounter++;
-      core.io.Text.load(jasy.Asset.toUri(tmpl), this.__loadTemplateCallback, this, nocache);      
-    },
-
-
-    __loadTemplateCallback : function(uri, errornous, data) 
-    {
-      this.__assetLoadCounter--;
-
-      if (errornous) {
-        throw new Error("Could not load template: " + uri + "!");
-      }
-
-      // Enable stripping (to remove white spaces from formatting)
-      this.setTemplate(core.template.Compiler.compile(data.text, this.getLabels()));  
-    },
-
-    loadStyleSheet : function(sheet, nocache)
-    {
-      this.__assetLoadCounter++;
-      core.io.StyleSheet.load(jasy.Asset.toUri(sheet), this.__loadStyleSheetCallback, this, nocache);
-    },
-
-    __loadStyleSheetCallback : function(uri, errornous) 
-    {
-      this.__assetLoadCounter--;
-
-      if (errornous) {
-        throw new Error("Could not load style sheet: " + uri + "!");
-      }
     }
   }
 });

@@ -144,7 +144,7 @@
             var point = changed[i];          
             var currentTarget = previousTargets[point.identifier] = point.target;
 
-            console.log("Fire pointerdown: primary=" + (point.identifier == primaryIdentifier));
+            console.log("Fire pointerdown: primary=" + (point.identifier == primaryIdentifier), point.target);
 
             var eventObject = core.bom.event.type.Pointer.obtain(point, "pointerdown");
             eventObject.isPrimary = point.identifier == primaryIdentifier;
@@ -169,7 +169,15 @@
           {
             var point = changed[i];
 
-            console.log("Fire pointermove: primary=" + (point.identifier == primaryIdentifier));
+            var moveTarget = document.elementFromPoint(point.clientX, point.clientY);
+            console.log("Fire pointermove: primary=" + (point.identifier == primaryIdentifier), point.target);
+
+
+            if (point.target != moveTarget) {
+              console.log("Moved to: " + moveTarget);
+            }
+
+
 
             var eventObject = core.bom.event.type.Pointer.obtain(point, "pointermove");
             eventObject.isPrimary = point.identifier == primaryIdentifier;
@@ -194,7 +202,7 @@
           {
             var point = changed[i];
 
-            console.log("Fire pointerup: primary=" + (point.identifier == primaryIdentifier));
+            console.log("Fire pointerup: primary=" + (point.identifier == primaryIdentifier), point.target);
 
             var eventObject = core.bom.event.type.Pointer.obtain(point, "pointerup");
             eventObject.isPrimary = point.identifier == primaryIdentifier;
@@ -224,7 +232,7 @@
           {
             var point = changed[i];
 
-            console.log("Fire pointercancel: primary=" + (point.identifier == primaryIdentifier));
+            console.log("Fire pointercancel: primary=" + (point.identifier == primaryIdentifier), point.target);
 
             var eventObject = core.bom.event.type.Pointer.obtain(point, "pointercancel");
             eventObject.isPrimary = point.identifier == primaryIdentifier;

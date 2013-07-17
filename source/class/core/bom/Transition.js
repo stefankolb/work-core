@@ -19,7 +19,7 @@
 
   /**
    * Adds a transition end event to the given @elem {Element}
-   * which executes @callback {Function} in @contect {Object?}
+   * which executes @callback {Function} in @context {Object?}
    * whenever a transition on the element was finished.
    */
   var addListener = function(elem, callback, context)

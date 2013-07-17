@@ -98,19 +98,24 @@
         // touch devices bind touch events
         if ('ontouchstart' in window) {
 
-          this.__container.addEventListener("touchstart", function(e) {
-
+          this.__container.addEventListener("touchstart", function(e) 
+          {
             // Don't react if initial down happens on a form element
             if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
-              return;
+
+            } else {
+              e.preventDefault();
             }
 
             that.__scroller.doTouchStart(e.touches, e.timeStamp);
-            e.preventDefault();
 
           }, false);
 
-          document.addEventListener("touchmove", function(e) {
+          document.addEventListener("touchmove", function(e) 
+          {
+            // Prevent from native scrolling
+            e.preventDefault();
+
             that.__scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
           }, false);
 

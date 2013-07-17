@@ -51,24 +51,16 @@
 				// - First enforce height on documentElement to make document larger and allow scrolling
 				// - Scroll to any location (will hide the menu bar)
 				// - Sync body height with actual window inner height (now without the top bar)
+				// - Undo change to documentElement to correctly support input field/keyboards
 				document.documentElement.style.height = "5000px";
 				window.scrollTo(0, 0);
 				document.body.style.height = window.innerHeight + "px";
+				document.documentElement.style.height = "";
 			};
 
-			// Execute on every orientation change
-			window.addEventListener('orientationchange', function() {
-				helper();
-			}, false);
-
-			// Prevent native touch start handling to disable native scrolling
-			window.addEventListener("touchstart", function(e) 
-			{
-				var target = e.target.tagName;
-				if (target != "INPUT" && target != "SELECT" && target != "TEXTAREA") {
-					e.preventDefault();	
-				}
-			}, true);
+			// Execute on every orientation/size change
+			window.addEventListener('orientationchange', helper, false);
+			window.addEventListener('resize', helper, false);			
 
 			// Directly execute for the first time
 			helper();

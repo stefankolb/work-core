@@ -39,6 +39,17 @@
 
     members :
     {
+      /** {=Object} Presenter instance connected to the view */
+      __presenter : null,
+
+      /** {=Map} All known labels */
+      __labels : null,
+
+      /** {=Map} All known partials */
+      __partials : null,
+
+
+
       /*
       ======================================================
         INTEGRATION

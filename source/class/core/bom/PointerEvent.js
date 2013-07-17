@@ -103,23 +103,151 @@
       // Full event name to fire
       var pointerType = "pointer" + type;
 
-      // Mouse support
-      if (hasMouseEvents && !hasTouchEvents)
-      {
-        var nativeType = "mouse" + type;
-        if (hasMouseEnterLeaveEvents && (nativeType == "mouseenter" || nativeType == "mouseleave")) {
-          nativeType = nativeType == "mouseenter" ? "mouseover" : "mouseout";
-        }
 
-        listeners[nativeType] = function(nativeEvent)
-        {
-          var eventObject = core.bom.event.type.Pointer.obtain(nativeEvent, pointerType);
-          callback(eventObject);
-          eventObject.release();
-        };
-      }
 
       if (hasTouchEvents)
+      {
+        var db = target["$$ev-touch"];
+        if (db)
+        {
+          console.log("Reuse existing event handlers...");
+          db.push({type : type, callback : callback});
+          return;
+        }
+
+        // Initialize
+        db = target["$$ev-touch"] = [
+          {type : type, callback : callback}
+        ];
+
+        // Primary
+        var primaryIdentifier = null;
+
+        // Touch Identifier:
+        // An identification number for each touch point. When a touch point becomes active, it must be assigned an 
+        // identifier that is distinct from any other active touch point. While the touch point remains active, all 
+        // events that refer to it must assign it the same identifier.
+
+        listeners.touchstart = function(nativeEvent)
+        {
+          var changed = nativeEvent.changedTouches;
+          var all = nativeEvent.touches;
+
+          if (changed.length == 1 && all.length == 1) {
+            primaryIdentifier = changed[0].identifier;
+          }
+
+          for (var i=0, il=changed.length; i<il; i++)
+          {
+            var point = changed[i];          
+
+            console.log("Fire pointerdown: primary=" + (point.identifier == primaryIdentifier));
+
+            var eventObject = core.bom.event.type.Pointer.obtain(point, "pointerdown");
+            eventObject.isPrimary = point.identifier == primaryIdentifier;
+
+            for (var j=0, jl=db.length; j<jl; j++)
+            {
+              var entry = db[j];
+              if (entry.type == "down") {
+                entry.callback(eventObject);
+              }
+            }
+
+            eventObject.release();
+          }
+        };
+
+        listeners.touchmove = function(nativeEvent)
+        {
+          var changed = nativeEvent.changedTouches;
+          for (var i=0, il=changed.length; i<il; i++)
+          {
+            var point = changed[i];
+
+            console.log("Fire pointermove: primary=" + (point.identifier == primaryIdentifier));
+
+            var eventObject = core.bom.event.type.Pointer.obtain(point, "pointermove");
+            eventObject.isPrimary = point.identifier == primaryIdentifier;
+
+            for (var j=0, jl=db.length; j<jl; j++)
+            {
+              var entry = db[j];
+              if (entry.type == "move") {
+                entry.callback(eventObject);
+              }
+            }
+
+            eventObject.release();
+          }
+        };
+
+        listeners.touchend = function(nativeEvent)
+        {
+          var changed = nativeEvent.changedTouches;
+          for (var i=0, il=changed.length; i<il; i++)
+          {
+            var point = changed[i];
+
+            console.log("Fire pointerup: primary=" + (point.identifier == primaryIdentifier));
+
+            var eventObject = core.bom.event.type.Pointer.obtain(point, "pointerup");
+            eventObject.isPrimary = point.identifier == primaryIdentifier;
+
+            for (var j=0, jl=db.length; j<jl; j++)
+            {
+              var entry = db[j];
+              if (entry.type == "up") {
+                entry.callback(eventObject);
+              }
+            }
+
+            eventObject.release();
+
+            // Reset primary
+            if (point.identifier == primaryIdentifier) {
+              primaryIdentifier = null;
+            }
+          }
+        };
+
+        listeners.touchcancel = function(nativeEvent)
+        {
+          var changed = nativeEvent.changedTouches;
+          for (var i=0, il=changed.length; i<il; i++)
+          {
+            var point = changed[i];
+
+            console.log("Fire pointercancel: primary=" + (point.identifier == primaryIdentifier));
+
+            var eventObject = core.bom.event.type.Pointer.obtain(point, "pointercancel");
+            eventObject.isPrimary = point.identifier == primaryIdentifier;
+
+            for (var j=0, jl=db.length; j<jl; j++)
+            {
+              var entry = db[j];
+              if (entry.type == "cancel") {
+                entry.callback(eventObject);
+              }
+            }
+
+            eventObject.release();
+
+            // Reset primary
+            if (point.identifier == primaryIdentifier) {
+              primaryIdentifier = null;
+            }
+          }
+        };
+
+
+
+
+      }
+
+
+      // Touch support
+      if (false && hasTouchEvents)
       {
         if (type == "down") {
           var nativeType = "touchstart";
@@ -147,6 +275,24 @@
           }
         };
       }
+
+      // Mouse support
+      else if (hasMouseEvents)
+      {
+        var nativeType = "mouse" + type;
+        if (hasMouseEnterLeaveEvents && (nativeType == "mouseenter" || nativeType == "mouseleave")) {
+          nativeType = nativeType == "mouseenter" ? "mouseover" : "mouseout";
+        }
+
+        listeners[nativeType] = function(nativeEvent)
+        {
+          var eventObject = core.bom.event.type.Pointer.obtain(nativeEvent, pointerType);
+          callback(eventObject);
+          eventObject.release();
+        };
+      }
+
+
 
       // Registering all native listeners
       core.bom.event.Util.addNative(target, eventId, capture);

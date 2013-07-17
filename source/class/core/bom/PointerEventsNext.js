@@ -11,7 +11,7 @@
 {
   var hasPointerEvents = document.onpointerdown !== undefined || document.onmspointerdown !== undefined;
   var hasTouchEvents = document.ontouchstart !== undefined;
-  var hasMouseEvents = document.documentElement.onmousedown !== undefined
+  var hasMouseEvents = !hasPointerEvents && !hasTouchEvents;
   var hasMouseEnterLeaveEvents = document.onmouseenter || document.onmouseleave;
 
   var special = {
@@ -104,7 +104,7 @@
       var pointerType = "pointer" + type;
 
       // Mouse support
-      if (hasMouseEvents)
+      if (hasMouseEvents && !hasTouchEvents)
       {
         var nativeType = "mouse" + type;
         if (hasMouseEnterLeaveEvents && (nativeType == "mouseenter" || nativeType == "mouseleave")) {

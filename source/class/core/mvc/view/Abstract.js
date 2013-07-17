@@ -20,7 +20,10 @@
         core.Assert.isType(presenter, "Object", "Invalid presenter instance!");
       }
 
+      // Keep presenter instance
       this.__presenter = presenter;
+
+      // Initialize data stores for labels and partials
       this.__labels = {};
       this.__partials = {};
     },
@@ -114,6 +117,7 @@
           }
         }
 
+        // Automatically bind execution of any given functions to the template instance
         if (typeof textOrFunction == "function") {
           textOrFunction = textOrFunction.bind(this);
         }

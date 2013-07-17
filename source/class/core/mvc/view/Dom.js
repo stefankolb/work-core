@@ -191,7 +191,7 @@ core.Class("core.mvc.view.Dom",
       {
         // Enable stripping (to remove white spaces from formatting)
         var template = core.template.Compiler.compile(data.text, this.getLabels());
-        this.addPartial(template, name);
+        this.addPartial(name, template);
 
         errornous ? promise.reject("io") : promise.fulfill(data);
         promise.release();

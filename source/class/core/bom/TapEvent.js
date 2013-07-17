@@ -15,6 +15,11 @@
   {
     add : function(target, type, callback, context, capture)
     {
+      // Hard-wire context to function, re-use existing bound functions
+      if (context) {
+        callback = core.Function.bind(callback, context);
+      }
+
       var eventId = core.bom.event.Util.getId(type, callback, capture);
       if (target[eventId]) {
         return;
@@ -40,7 +45,7 @@
         if (e.target == downOn && Math.abs(downX - e.offsetX) < maxClickMovement && Math.abs(downY - e.offsetY) < maxClickMovement) 
         {
           var eventObj = core.bom.event.Pointer.obtain(e, "tap");
-          context ? callback.call(context, eventObj) : callback(eventObj);
+          callback(eventObj);
           eventObj.release();
         }
       };  

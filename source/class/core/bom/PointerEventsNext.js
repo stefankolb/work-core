@@ -45,9 +45,10 @@
   }
 
 
+
   core.Module("core.bom.event.Util",
   {
-     getId : function(type, callback, capture) 
+    getId : function(type, callback, capture) 
     {  
       var id = type + "-" + core.util.Id.get(callback);
       if (capture == true) {
@@ -57,32 +58,13 @@
     }
   });
 
-  var getEventId = core.bom.event.Util.getId;
-
 
 
   core.Module("core.bom.PointerEventsNext",
   {
     has : function(target, type, callback, context, capture)
     {
-      // Hard-wire context to function, re-use existing bound functions
-      if (context) {
-        callback = core.Function.bind(callback, context);
-      }
 
-      if (useTouch)
-      {
-        var eventId = getEventId("touch", type, callback, capture);
-        return !!target[eventId];
-      }
-
-      if (useMouse)
-      {
-        var eventId = getEventId("mouse", type, callback, capture);
-        return !!target[eventId];
-      }
-
-      return false;
     },
 
 
@@ -98,76 +80,80 @@
         callback = core.Function.bind(callback, context);
       }
 
-      var pointerType = "pointer" + type;
-
-      if (useTouch)
-      {
-
+      // Normalize capture flag
+      if (capture !== true) {
+        capture = false;
       }
+
+      // Lookup entry
+      var eventKey = "$$ev-" + type + "-" + capture + "-" + core.util.Id.get(callback);
+      var db = target[eventKey];
+      if (db) 
+      {
+        console.error("Ooops, re-adding same callback in same context for same type on same target?");
+        return;
+      }
+
+      db = target[eventKey] = {};
 
       if (useMouse)
       {
-        var eventId = "mouse-" + getEventId(type, callback, capture);
+        var pointerType = "pointer" + type;
 
         var nativeType = "mouse" + type;
         if (hasMouseEnterLeave && (nativeType == "mouseenter" || nativeType == "mouseleave")) {
           nativeType = nativeType == "mouseenter" ? "mouseover" : "mouseout";
         }
 
-        var wrapper = target[eventId];
-        if (wrapper) {
-          return;
-        }
-
-        var wrapper = target[eventId] = function(nativeEvent)
+        var mouseHandler = function(nativeEvent)
         {
-          var eventObj = core.bom.event.Pointer.obtain(nativeEvent, pointerType);
-          callback(eventObj);
-          eventObj.release();
+          var eventObject = core.bom.event.Pointer.obtain(nativeEvent, pointerType);
+          callback(eventObject);
+          eventObject.release();
         };
 
-        target.addEventListener(nativeType, wrapper, capture);
+        db[nativeType] = mouseHandler;
+        target.addEventListener(nativeType, mouseHandler, capture);
+
       }
+
+
+      
     },
 
     remove : function(target, type, callback, context, capture)
     {
       var specialHandler = special[type];
       if (specialHandler) {
-        return specialHandler.remove(target, type, callback, context, capture);
+        return specialHandler.add(target, type, callback, context, capture);
       }
 
-      if (context != null) {
+      // Hard-wire context to function, re-use existing bound functions
+      if (context) {
         callback = core.Function.bind(callback, context);
       }
 
-      if (capture == null) {
+      // Normalize capture flag
+      if (capture !== true) {
         capture = false;
       }
 
-      var pointerType = "pointer" + type;
-      
-
-      if (useTouch)
+      // Lookup entry
+      var eventKey = "$$ev-" + type + "-" + capture + "-" + core.util.Id.get(callback);
+      console.log("REMOVE-EVENT-KEY: " + eventKey)
+      var db = target[eventKey];
+      if (!db) 
       {
-
+        console.error("No such listener: " + type + " on " + target);
+        return;
+      }
+      
+      for (var nativeType in db) {
+        target.removeEventListener(nativeType, callback, capture);
       }
 
-      if (useMouse)
-      {
-        var eventId = "mouse-" + getEventId(type, callback, capture);
-
-        var nativeType = "mouse" + type;
-        if (hasMouseEnterLeave && (nativeType == "mouseenter" || nativeType == "mouseleave")) {
-          nativeType = nativeType == "mouseenter" ? "mouseover" : "mouseout";
-        }
-
-        var wrapper = target[eventId];
-        if (wrapper) {
-          target.removeEventListener(nativeType, wrapper, capture);
-        }
-        
-      }      
+      // Cheap cleanup
+      target[eventKey] = null;
 
       
 

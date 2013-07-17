@@ -183,6 +183,59 @@ core.Class("core.mvc.view.Dom",
     ======================================================
     */
 
+    loadPartial2 : function(name, tmpl)
+    {
+      var promise = core.event.Promise.obtain();
+
+      core.io.Text.load(jasy.Asset.toUri(tmpl), function(uri, errornous, data) 
+      {
+        // Enable stripping (to remove white spaces from formatting)
+        var template = core.template.Compiler.compile(data.text, this.getLabels());
+        this.addPartial(template, name);
+
+        errornous ? promise.reject("io") : promise.fulfill(data);
+        promise.release();
+      }, this);
+
+      return promise;
+    },
+
+    loadTemplate2 : function(tmpl)
+    {
+      var promise = core.event.Promise.obtain();
+
+      core.io.Text.load(jasy.Asset.toUri(tmpl), function(uri, errornous, data) 
+      {
+        // Enable stripping (to remove white spaces from formatting)
+        var template = core.template.Compiler.compile(data.text, this.getLabels());
+        this.setTemplate(template);  
+
+        errornous ? promise.reject("io") : promise.fulfill(data);
+        promise.release();
+      }, this);
+
+      return promise;
+    },
+
+    loadStyleSheet2 : function(tmpl)
+    {
+      var promise = core.event.Promise.obtain();
+
+      core.io.StyleSheet.load(jasy.Asset.toUri(tmpl), function(uri, errornous, data) 
+      {
+        errornous ? promise.reject("io") : promise.fulfill(data);
+        promise.release();
+      }, this);
+
+      return promise;
+    },
+
+
+
+
+
+
+
     /** {=Integer} Number of assets currently being loaded */
     __assetLoadCounter : 0,
 

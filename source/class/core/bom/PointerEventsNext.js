@@ -9,20 +9,16 @@
 
 (function(document, undefined)
 {
-  var usePointer = document.onpointerdown !== undefined || document.onmspointerdown !== undefined;
-  var useTouch = document.ontouchstart !== undefined;
-  var useMouse = document.documentElement.onmousedown !== undefined
-  console.log("Use: ", "Pointer=" + usePointer, "Touch=" + useTouch, "Mouse=" + useMouse);
-
-  var hasMouseEnterLeave = document.onmouseenter || document.onmouseleave;
-  console.log("Has: ", "MouseEventLeave=" + hasMouseEnterLeave);
-
+  var hasPointerEvents = document.onpointerdown !== undefined || document.onmspointerdown !== undefined;
+  var hasTouchEvents = document.ontouchstart !== undefined;
+  var hasMouseEvents = document.documentElement.onmousedown !== undefined
+  var hasMouseEnterLeaveEvents = document.onmouseenter || document.onmouseleave;
 
   var special = {
     tap : core.bom.TapEvent
   }
 
-
+  /** {=Map} Map of all event types supported */
   var supportedPointerEvents = core.Array.toKeys([
     "down", "up", "move", "over", "out", "cancel", "enter", "leave"
   ], true);
@@ -53,6 +49,11 @@
     };    
   }
 
+  /**
+   * Pointer Events API for dealing with down/up/move events.
+   *
+   * Still work in progress.
+   */
   core.Module("core.bom.PointerEventsNext",
   {
     has : function(target, type, callback, context, capture)
@@ -103,10 +104,10 @@
       var pointerType = "pointer" + type;
 
       // Mouse support
-      if (useMouse)
+      if (hasMouseEvents)
       {
         var nativeType = "mouse" + type;
-        if (hasMouseEnterLeave && (nativeType == "mouseenter" || nativeType == "mouseleave")) {
+        if (hasMouseEnterLeaveEvents && (nativeType == "mouseenter" || nativeType == "mouseleave")) {
           nativeType = nativeType == "mouseenter" ? "mouseover" : "mouseout";
         }
 
@@ -118,7 +119,7 @@
         };
       }
 
-      if (useTouch)
+      if (hasTouchEvents)
       {
         if (type == "down") {
           var nativeType = "touchstart";

@@ -27,6 +27,41 @@ core.Class("core.bom.event.type.Pointer",
     this.offsetY = isMouse ? nativeEvent.offsetY : nativeEvent.pageY;
     this.isPrimary = isMouse;
 
+    this.screenX = nativeEvent.screenX;
+    this.screenY = nativeEvent.screenY;
+    this.clientX = nativeEvent.clientX;
+    this.clientY = nativeEvent.clientY;
+
+    if (isMouse)
+    {
+      this.ctrlKey = nativeEvent.ctrlKey;
+      this.altKey = nativeEvent.altKey;
+      this.shiftKey = nativeEvent.shiftKey;
+      this.metaKey = nativeEvent.metaKey;
+      this.button = nativeEvent.button;
+    }
+    else
+    {
+      this.ctrlKey = this.altKey = this.shiftKey = this.metaKey = this.button = null;
+    }
+
+    // Pressure
+    if (sourceEvent.pressure) 
+    {
+      this.pressure = sourceEvent.pressure;
+    }
+    else 
+    {
+      var button = 0;
+      if (sourceEvent.which != null) {
+        button = sourceEvent.which;
+      } else if (sourceEvent.button != null) {
+        button = sourceEvent.button;
+      }
+
+      this.pressure = button == 0 ? 0 : 0.5;
+    }
+
     // Just to not override mouse id
     this.pointerId = isMouse ? 1 : 2 + nativeEvent.identifier;
     this.pointerType = isMouse ? "mouse" : "touch";

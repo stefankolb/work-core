@@ -8,10 +8,19 @@
 "use strict";
 
 /**
+ * Utilities for event management.
+ *
  * #break(core.bom.PointerEventsNext)
  */
 core.Module("core.bom.event.Util",
 {
+  /**
+   * {String} Returns a unique event ID useful for storing native listeners on the target itself for
+   * easier management as the DOM do not offer any `hasEventListener` call or any useful
+   * access to the list of current event listeners. Just pass the event @type {String} 
+   * (of your own naming, not DOM), the @callback {Function} (already bound to context) and
+   * the @capture {Boolean?false} flag to control the event phase.
+   */
   getId : function(type, callback, capture) 
   {  
     var id = "$$ev-" + type + "-" + core.util.Id.get(callback);
@@ -22,6 +31,12 @@ core.Module("core.bom.event.Util",
     return id;
   },
 
+
+  /**
+   * {Map} Creates a event listener database on the given @target {Object} under
+   * the given @eventId {String} as created by {#getId}. Returns a map where
+   * the actual native event types are mapped with their individual listeners.
+   */
   create : function(target, eventId)
   {
     if (target[eventId]) {
@@ -33,6 +48,12 @@ core.Module("core.bom.event.Util",
     return listeners;
   },
 
+
+  /**
+   * Adds native event listeners to the given @target {Object} based on the
+   * listeners stored in the target's listener database under the given @eventId {String}.
+   * To enable listening in the capture phase set @capture {Boolean?false} to `true`.
+   */
   addNative : function(target, eventId, capture)
   {
     var listeners = target[eventId];
@@ -45,6 +66,14 @@ core.Module("core.bom.event.Util",
     }
   },
 
+
+  /**
+   * Removes native event listeners from the given @target {Object} based on the
+   * listeners stored in the target's listener database under the given @eventId {String}.
+   * To remove the listeners from the capture phase set @capture {Boolean?false} to `true`.
+   * Automatically cleans up the database entry so that memory bound by the listener 
+   * functions is made available on the next GC run.
+   */
   removeNative : function(target, eventId, capture)
   {
     var listeners = target[eventId];
@@ -60,6 +89,12 @@ core.Module("core.bom.event.Util",
     target[eventId] = null;
   },
 
+
+  /**
+   * Adds pointer event listeners to the given @target {Object} based on the
+   * listeners stored in the target's listener database under the given @eventId {String}.
+   * To enable listening in the capture phase set @capture {Boolean?false} to `true`.
+   */
   addPointer : function(target, eventId, capture)
   {
     var listeners = target[eventId];
@@ -72,6 +107,14 @@ core.Module("core.bom.event.Util",
     }
   },
 
+
+  /**
+   * Removes pointer event listeners from the given @target {Object} based on the
+   * listeners stored in the target's listener database under the given @eventId {String}.
+   * To remove the listeners from the capture phase set @capture {Boolean?false} to `true`.
+   * Automatically cleans up the database entry so that memory bound by the listener 
+   * functions is made available on the next GC run.
+   */
   removePointer : function(target, eventId, capture)
   {
     var listeners = target[eventId];

@@ -22,6 +22,7 @@
 
       this.__presenter = presenter;
       this.__labels = {};
+      this.__partials = {};
     },
 
     events :
@@ -45,6 +46,26 @@
       getPresenter : function() {
         return this.__presenter;
       },
+
+
+
+
+      /*
+      ======================================================
+        PARTIALS
+      ======================================================
+      */
+
+      getPartials : function() {
+        return this.__partials;
+      },
+
+
+      addPartial : function(name, template) {
+        console.log("Add Partial: ", name, template);
+        this.__partials[name] = template;
+      },
+
 
 
 

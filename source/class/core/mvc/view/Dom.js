@@ -115,7 +115,7 @@ core.Class("core.mvc.view.Dom",
         return;
       }
 
-      var partials = null;
+      var partials = this.getPartials();
       var labels = this.getLabels();
 
       this._beforeRender();

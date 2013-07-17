@@ -10,6 +10,7 @@
 (function() 
 {
   var maxClickMovement = 5;
+  var Util = core.bom.event.Util;
 
   /**
    * #break(core.bom.PointerEventsNext)
@@ -23,8 +24,8 @@
         callback = core.Function.bind(callback, context);
       }
 
-      var eventId = core.bom.event.Util.getId(type, callback, capture);
-      var listeners = core.bom.event.Util.create(target, eventId);
+      var eventId = Util.getId(type, callback, capture);
+      var listeners = Util.create(target, eventId);
 
       var downOn = null;
       var downX = -1000;
@@ -58,7 +59,7 @@
         downOn = null;
       };  
 
-      core.bom.event.Util.addPointer(target, eventId, capture);
+      Util.addPointer(target, eventId, capture);
     },
 
     remove : function(target, type, callback, context, capture)
@@ -67,8 +68,8 @@
         callback = core.Function.bind(callback, context);
       }
 
-      var eventId = core.bom.event.Util.getId(type, callback, capture);
-      core.bom.event.Util.removePointer(target, eventId, capture);
+      var eventId = Util.getId(type, callback, capture);
+      Util.removePointer(target, eventId, capture);
     }
   });
 

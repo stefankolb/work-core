@@ -15,6 +15,7 @@
 core.Class("core.event.Promise", 
 {
 	pooling : true,
+	include : [core.util.MLogging],
 	
 	construct : function() 
 	{

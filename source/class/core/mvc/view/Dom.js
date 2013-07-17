@@ -231,7 +231,10 @@ core.Class("core.mvc.view.Dom",
     },
 
 
-
+    markAsLoaded : function() {
+      console.log("All assets loaded!");
+      this.render();
+    },
 
 
 

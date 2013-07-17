@@ -87,6 +87,8 @@
 	 */
 	core.Class("core.template.Template",
 	{
+		include : [ core.util.MLogging ],
+
 		/**
 		 * Creates a template instance with the given @render {Function} method. Best way to work with
 		 * the template class is to create one using the {core.template.Compiler#compile} method.
@@ -156,9 +158,16 @@
 			 */
 			_partial: function(name, data, partials, labels) 
 			{
-				if (partials && hasOwnProperty.call(partials, name)) {
+				if (partials && hasOwnProperty.call(partials, name)) 
+				{
 					return partials[name].__render(data, partials, labels);
-				} else {
+				} 
+				else 
+				{
+					if (jasy.Env.isSet("debug")) {
+						this.warn("Could not find partial: " + name);
+					}
+
 					return "";
 				}
 			},

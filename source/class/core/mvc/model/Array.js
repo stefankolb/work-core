@@ -49,7 +49,15 @@
       // The parent is used for event bubbling for either 
       // the collection itself and the presenter items.
       // Model items refer to the collection as parent.
-      if (parent != null) {
+      if (parent != null) 
+      {
+        if (jasy.Env.isSet("debug")) 
+        {
+          if (parent == this) {
+            throw new Error("Parent must be another object than this!");
+          }
+        }
+
         this.__parent = parent;
       }
 

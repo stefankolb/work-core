@@ -98,6 +98,39 @@
      */
     fadeOut : function(elem, to, reset, callback, context)
     {
+      // Figure out whether there is an actual change which is transitioning.
+      // Otherwise the transitionEnd event will never fire which leads to unwanted effects.
+      var changed = false;
+      for (var property in to)
+      {
+        if (Style.get(elem, property) != to[property]) 
+        {
+          changed = true;
+          break;
+        }
+      }
+
+      // Fast path for cases where no changes for transitioning are detected
+      if (!changed) 
+      {
+        // Hide element first
+        elem.style.display = "none";
+
+        // Then apply reset rules
+        if (reset != null)
+        {
+          Style.set(elem, "transitionDuration", "0ms");
+          Style.set(elem, reset);
+        }        
+
+        // Finally let requester know
+        if (callback) {
+          context ? callback.call(context) : callback();
+        }
+
+        return;
+      }
+
       // Post-pone visible animation to next render frame
       core.effect.AnimationFrame.request(function()
       {

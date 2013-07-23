@@ -77,6 +77,14 @@
 
 
       /**
+       * Returns the length of the path.
+       */
+      getLength : function() {
+        return this.__data.length;
+      },      
+
+
+      /**
        * Compares this path to the given @other {core.util.HashPath}. Returns either:
        *
        * - jump: presenter change without detectable direction

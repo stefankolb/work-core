@@ -86,6 +86,9 @@ core.Class("core.mvc.presenter.Main",
 
       // Switch to that presenter
       this.setActive(presenter);
+
+      // Fire event
+      this.fireEvent("changePath", path);
     },
 
 

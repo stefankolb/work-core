@@ -96,6 +96,7 @@
 
             } else {
               e.preventDefault();
+              e.stopPropagation();
             }
 
             that.__scroller.doTouchStart(e.touches, e.timeStamp);
@@ -135,7 +136,9 @@
             }], e.timeStamp);
 
             mousedown = true;
+
             e.preventDefault();
+            e.stopPropagation();
 
           }, false);
 

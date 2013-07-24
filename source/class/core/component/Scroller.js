@@ -35,14 +35,20 @@
   {
     construct : function(container, options) 
     {  
+      if (jasy.Env.isSet("debug"))
+      {
+        core.Assert.isType(container, "Node");
+
+        if (options != null) {
+          core.Assert.isType(options, "Map");  
+        }
+      }
+
       this.__container = container;
       this.__options = options || {};
 
       // create Scroller instance
-      var that = this;
-      this.__scroller = new core.ui.Scroller(function(left, top, zoom) {
-        that.render(left, top, zoom);
-      }, options);
+      this.__scroller = new core.ui.Scroller(render.bind(this), options);
 
       // bind events
       this.__bindEvents();

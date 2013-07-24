@@ -28,7 +28,7 @@
     var checkSignature = function(target, type, callback, context, capture) 
     {
       if (target == null) {
-        throw new Error("Invalid targrt");
+        throw new Error("Invalid target: " + target);
       }
 
       core.Assert.isType(type, "String");

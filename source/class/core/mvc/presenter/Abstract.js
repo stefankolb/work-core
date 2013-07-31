@@ -236,6 +236,23 @@ core.Class("core.mvc.presenter.Abstract",
 
 
     /**
+     * Sends a render request to the view if it exists. Otherwise
+     * it will be automatically rendered when first becoming visible.
+     */
+    renderView : function(name)
+    {
+      if (jasy.Env.isSet("debug")) {
+        core.Assert.isType(name, "String", "Invalid view name!");
+      }
+
+      var entry = this.__views[name];
+      if (entry && !entry.__placeholder) {
+        entry.render();
+      }
+    },
+
+
+    /**
      * Adds a @view {Object} by its @name {String}.
      */
     addView : function(name, view) 

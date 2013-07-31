@@ -20,12 +20,24 @@ core.Module("core.bom.Form",
 	{
 		if (jasy.Env.isSet("debug")) 
 		{
-			core.Assert.isEqual(args.length, 1);
+			core.Assert.isEqual(arguments.length, 1);
 			core.dom.Node.assertIsNode(form);
 			core.Assert.isEqual(form.tagName, "FORM");
 		}
-		
-		return Array.prototype.filter.call(form.elements, core.bom.FormItem.isSuccessful).map(core.bom.FormItem.serialize).join("&");
+
+		var elems = form.elements;
+		var result = [];
+
+		for (var i=0, l=elems.length; i<l; i++)
+		{
+			var elem = elems[i];
+
+			if (core.bom.FormItem.isSuccessful(elem)) {
+				result.push(core.bom.FormItem.serialize(elem));
+			}
+		}
+
+		return result.join("&");
 	}
 });
 

@@ -48,6 +48,21 @@ core.Module("core.bom.FormItem",
 
 
 	/**
+	 * {String} Returns the value of the given form @item {Element}.
+	 */
+	getValue : function(item) 
+	{
+		if (jasy.Env.isSet("debug")) 
+		{
+			core.Assert.isEqual(arguments.length, 1);
+			core.dom.Node.assertIsNode(item);
+		}
+
+		return encodeURIComponent(item.value);
+	},
+
+
+	/**
 	 * {String} Returns the serialized representation of the given form @item {Element}.
 	 */
 	serialize: function(item) 
@@ -59,6 +74,6 @@ core.Module("core.bom.FormItem",
 			core.Assert.isType(item.name, "String");
 		}
 		
-		return item.name + "=" + encodeURIComponent(item.value);
+		return item.name + "=" + this.getValue(item);
 	}
 });

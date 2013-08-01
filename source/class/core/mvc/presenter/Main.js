@@ -6,14 +6,9 @@ core.Class("core.mvc.presenter.Main",
   {
     core.mvc.presenter.Abstract.call(this, parent);
 
-    // Debug
-    this.log("Version: " + jasy.Env.getValue("jasy.build.rev"));
-    this.log("Date: " + new Date(jasy.Env.getValue("jasy.build.time")));
-
     // Prepare history object   
     this.__history = unify.bom.History.getInstance();
     this.__history.addListener("change", this.__onHistoryChange, this);
-
   },
 
 
@@ -21,6 +16,7 @@ core.Class("core.mvc.presenter.Main",
   {
     active :
     {
+      type : core.mvc.presenter.Abstract,
       nullable : true,
       apply : function(value, old)
       {
@@ -119,7 +115,5 @@ core.Class("core.mvc.presenter.Main",
         location.hash = "#home";
       }
     }
-
-
   }
 });

@@ -68,7 +68,7 @@ core.Module("core.property.Debug",
 					}
 					else if (core.Class.isClass(type)) 
 					{
-						if (!(value instanceof type || core.Class.includesClass(value, type))) {
+						if (!(value instanceof type || core.Class.includesClass(value.constructor, type))) {
 							throw new Error("Value of property " + name + " must be instance of or include " + type + ". Invalid value: " + value);
 						}
 					}

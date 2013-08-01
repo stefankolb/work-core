@@ -313,6 +313,11 @@
 			for (var i=0, l=include.length; i<l; i++) 
 			{
 				var includedClass = include[i];
+
+				// Flatten includes of included classes to this class
+				if (includedClass.__includes) {
+					include.push.apply(include, includedClass.__includes);
+				}
 				
 				// Just remap members. Validation already happended in debug mode.
 				// Function name keeps to be the same after inclusion. Still refering to original class.
@@ -565,7 +570,7 @@
 		{
 			if (jasy.Env.isSet("debug")) 
 			{
-				core.Class.assertIsClass(cls, "Class to check for wether it includes class " + inc + " is itself not a class (" + cls + ")!");
+				core.Class.assertIsClass(cls, "Class to check for wether it includes class " + inc + " is itself not a class " + cls + "!");
 				core.Class.assertIsClass(inc, "Class to check for being included is not a class: " + inc + "!");
 			}
 

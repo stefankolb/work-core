@@ -1,4 +1,4 @@
-core.Class("core.mvc.presenter.Navigation",
+core.Class("core.mvc.presenter.Section",
 {
   include : [core.mvc.presenter.Abstract],
 

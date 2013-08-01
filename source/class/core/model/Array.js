@@ -18,10 +18,10 @@
   /**
    * Arrays are ordered sets of items.
    */
-  core.Class("core.mvc.model.Array", 
+  core.Class("core.model.Array", 
   {
     include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
-    implement : [core.mvc.model.IModel, core.mvc.model.ICollection],
+    implement : [core.model.IModel, core.model.ICollection],
 
     /**
      * Prefill the collection with @data {var}.
@@ -39,7 +39,7 @@
       // The item is used for auto casting given data into item objects
       if (item)
       {
-        if (core.Class.includesClass(item, core.mvc.model.Model)) {
+        if (core.Class.includesClass(item, core.model.Model)) {
           this.__itemModel = item;
         } else {
           this.__itemPresenter = item;

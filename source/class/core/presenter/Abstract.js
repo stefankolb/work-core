@@ -14,12 +14,12 @@
  * - Models (Models and Collections)
  * - Views (Views for Output)
  */
-core.Class("core.mvc.presenter.Abstract",
+core.Class("core.presenter.Abstract",
 {
   include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
 
   /**
-   * @parent {core.mvc.presenter.Abstract} Parent presenter to attach to this presenter
+   * @parent {core.presenter.Abstract} Parent presenter to attach to this presenter
    */
   construct : function(parent) 
   {
@@ -46,7 +46,7 @@ core.Class("core.mvc.presenter.Abstract",
     
 
     /**
-     * {core.mvc.presenter.Abstract} Returns the parent presenter.
+     * {core.presenter.Abstract} Returns the parent presenter.
      */
     getParent : function() {
       return this.__parent;
@@ -54,7 +54,7 @@ core.Class("core.mvc.presenter.Abstract",
 
 
     /**
-     * Sets the @parent {core.mvc.presenter.Abstract} presenter.
+     * Sets the @parent {core.presenter.Abstract} presenter.
      */
     setParent : function(parent) {
       this.__parent = parent;
@@ -62,7 +62,7 @@ core.Class("core.mvc.presenter.Abstract",
 
 
     /**
-     * {core.mvc.presenter.Abstract} Returns the event parent - which is our parent presenter.
+     * {core.presenter.Abstract} Returns the event parent - which is our parent presenter.
      */
     getEventParent : function() {
       return this.__parent;

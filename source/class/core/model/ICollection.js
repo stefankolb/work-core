@@ -10,7 +10,7 @@
 /**
  * Interface which needs to be implemented by every collection.
  */
-core.Interface("core.mvc.model.ICollection",
+core.Interface("core.model.ICollection",
 {
   events :
   {
@@ -24,17 +24,17 @@ core.Interface("core.mvc.model.ICollection",
   members : 
   {
     /** 
-     * Adds the given @model {core.mvc.model.IModel...} to the collection.
+     * Adds the given @model {core.model.IModel...} to the collection.
      */
     add : function(model) {},
 
     /** 
-     * Removes the given @model {core.mvc.model.IModel} from the collection.
+     * Removes the given @model {core.model.IModel} from the collection.
      */
     remove : function(model) {},
 
     /**
-     * {core.mvc.model.IModel} Returns the model with the given @id {String|Number}.
+     * {core.model.IModel} Returns the model with the given @id {String|Number}.
      */
     find : function(id) {},
 

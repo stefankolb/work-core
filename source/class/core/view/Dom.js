@@ -11,14 +11,14 @@
  * Base class for a DOM based view. Uses debounced rendering using RequestAnimationFrame
  * for optimal performance. Supports easy DOM event managment for view content.
  */
-core.Class("core.mvc.view.Dom",
+core.Class("core.view.Dom",
 {
-  include : [core.mvc.view.Abstract],
-  implement : [core.mvc.view.IView],
+  include : [core.view.Abstract],
+  implement : [core.view.IView],
 
   construct: function(presenter, root)
   {
-    core.mvc.view.Abstract.call(this, presenter);
+    core.view.Abstract.call(this, presenter);
 
     this.__renderRequestBound = core.Function.bind(this.__renderRequest, this);
 

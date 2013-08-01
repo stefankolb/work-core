@@ -10,7 +10,7 @@
 /**
  * Interface which needs to be implemented by every model.
  */
-core.Interface("core.mvc.model.IModel",
+core.Interface("core.model.IModel",
 {
   events :
   {

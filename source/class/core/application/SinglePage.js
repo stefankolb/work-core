@@ -1,10 +1,10 @@
 core.Class("core.application.SinglePage",
 {
-  include : [core.mvc.presenter.Abstract],
+  include : [core.presenter.Abstract],
 
   construct : function(parent)
   {
-    core.mvc.presenter.Abstract.call(this, parent);
+    core.presenter.Abstract.call(this, parent);
 
     // Prepare history object   
     this.__history = unify.bom.History.getInstance();
@@ -15,7 +15,7 @@ core.Class("core.application.SinglePage",
   {
     active :
     {
-      type : core.mvc.presenter.Abstract,
+      type : core.presenter.Abstract,
       nullable : true,
       apply : function(value, old)
       {

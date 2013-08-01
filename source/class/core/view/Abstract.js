@@ -9,7 +9,7 @@
 
 (function() 
 {
-  core.Class("core.mvc.view.Abstract", 
+  core.Class("core.view.Abstract", 
   {
     include : [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging, core.locale.MTranslate],
    

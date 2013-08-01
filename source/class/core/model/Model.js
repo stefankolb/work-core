@@ -15,10 +15,10 @@
    * Models hold the current state of the application. This basic models provides
    * a simple key/value store and event based notifications.
    */
-  core.Class("core.mvc.model.Model", 
+  core.Class("core.model.Model", 
   {
     include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
-    implement : [core.mvc.model.IModel],
+    implement : [core.model.IModel],
 
     /**
      * Initial data structure is imported from @data {any}.

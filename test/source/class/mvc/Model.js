@@ -2,10 +2,10 @@ var suite = new core.testrunner.Suite("MVC/Model");
 
 suite.test("Empty", function() 
 {
-  var empty = new core.mvc.model.Model();
+  var empty = new core.model.Model();
 
-  this.isInstance(empty, core.mvc.model.Model);
-  core.Interface.assert(empty, core.mvc.model.IModel);
+  this.isInstance(empty, core.model.Model);
+  core.Interface.assert(empty, core.model.IModel);
 
   this.isIdentical(typeof empty.getClientId(), "string");
   this.isIdentical(typeof empty.toJSON(), "object");
@@ -16,10 +16,10 @@ suite.test("Custom", function()
 {
   core.Class("my.test.Model",
   {
-    include : [core.mvc.model.Model],
+    include : [core.model.Model],
 
     construct : function(values) {
-      core.mvc.model.Model.call(this, values);
+      core.model.Model.call(this, values);
     },
 
     properties :

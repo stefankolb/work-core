@@ -40,12 +40,12 @@
    * Animatable DOM Layer View
    *
    */
-  core.Class("core.mvc.view.DomLayer",
+  core.Class("core.view.DomLayer",
   {
-    include : [core.mvc.view.Dom],
+    include : [core.view.Dom],
 
     construct : function(presenter, root) {
-      core.mvc.view.Dom.call(this, presenter, root);
+      core.view.Dom.call(this, presenter, root);
     },
 
     members :

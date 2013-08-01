@@ -10,10 +10,10 @@
 /**
  * Generic interface which should be fulfilled by all view classes.
  */
-core.Interface("core.mvc.view.IView",
+core.Interface("core.view.IView",
 {
   /**
-   * @presenter {core.mvc.presenter.Abstract} Presenter instance to connect to
+   * @presenter {core.presenter.Abstract} Presenter instance to connect to
    */
   // Not supported yet  
   // construct: function(presenter) {},
@@ -30,7 +30,7 @@ core.Interface("core.mvc.view.IView",
   members :
   {
     /**
-     * {core.mvc.presenter.Abstract} Returns the attached presenter instance
+     * {core.presenter.Abstract} Returns the attached presenter instance
      */
     getPresenter : function() {},
 

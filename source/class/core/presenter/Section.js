@@ -1,10 +1,10 @@
-core.Class("core.mvc.presenter.Section",
+core.Class("core.presenter.Section",
 {
-  include : [core.mvc.presenter.Abstract],
+  include : [core.presenter.Abstract],
 
   construct : function()
   {
-    core.mvc.presenter.Abstract.call(this);
+    core.presenter.Abstract.call(this);
 
 
   },

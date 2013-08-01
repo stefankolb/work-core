@@ -7,7 +7,7 @@ core.Class("core.application.SinglePage",
     core.presenter.Abstract.call(this, parent);
 
     // Prepare history object   
-    this.__history = unify.bom.History.getInstance();
+    this.__history = new core.bom.HashHistory;
     this.__history.addListener("change", this.__onHistoryChange, this);
   },
 

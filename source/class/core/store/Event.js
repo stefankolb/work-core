@@ -11,7 +11,7 @@
  * Event class for storage API. Like {core.event.Simple} but with support for 
  * a new `item` field to keep the item ID which was stored/removed.
  */
-core.Class("core.mvc.event.Store",
+core.Class("core.store.Event",
 {
   pooling : true,
   include : [core.event.MDispatchable],

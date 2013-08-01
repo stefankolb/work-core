@@ -12,7 +12,7 @@
  * betweeen storage/server and client) and a asynchronous storage API with 
  * activity reporting.
  */
-core.Class("core.mvc.store.Abstract",
+core.Class("core.store.Abstract",
 {
   include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
 
@@ -40,28 +40,28 @@ core.Class("core.mvc.store.Abstract",
   events :
   {
     /** Fired when the process of loading something was started. */
-    loading : core.mvc.event.Store,
+    loading : core.store.Event,
 
     /** Fired when the process of loading something was completed. */
-    loaded : core.mvc.event.Store,
+    loaded : core.store.Event,
 
     /** Fired when the process of saving something was started. */
-    saving : core.mvc.event.Store,
+    saving : core.store.Event,
 
     /** Fired when the process of saving something was completed. */
-    saved : core.mvc.event.Store,
+    saved : core.store.Event,
 
     /** Fired when the process of creating something was started. */
-    creating : core.mvc.event.Store,
+    creating : core.store.Event,
 
     /** Fired when the process of creating something was completed. */
-    created : core.mvc.event.Store,
+    created : core.store.Event,
 
     /** Fired when the process of removing something was started. */
-    removing : core.mvc.event.Store,
+    removing : core.store.Event,
 
     /** Fired when the process of removing something was completed. */
-    removed : core.mvc.event.Store,
+    removed : core.store.Event,
 
     /** 
      * Fired whenever the activity state was changed 
@@ -286,13 +286,13 @@ core.Class("core.mvc.store.Abstract",
     */
 
     /**
-     * {Boolean} Shorthand for firing automatically pooled instances of {core.mvc.event.Store}
+     * {Boolean} Shorthand for firing automatically pooled instances of {core.store.Event}
      * with the given @type {String}, @success {Boolean}, @item {var}, @data {var} and @message {String}.
      * The method returns whether any listers were processed.
      */
     fireStorageEvent : function(type, success, item, data, message) 
     {
-      var evt = core.mvc.event.Store.obtain(type, success, item, data, message);
+      var evt = core.store.Event.obtain(type, success, item, data, message);
       var retval = this.dispatchEvent(evt);
       evt.release();
 

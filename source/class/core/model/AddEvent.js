@@ -10,7 +10,7 @@
 /**
  * Event class which is fired whenever a model is added to a collection.
  */
-core.Class("core.mvc.event.Add", 
+core.Class("core.model.AddEvent", 
 {
   pooling: true,
   include : [core.event.MDispatchable],

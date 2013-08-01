@@ -235,14 +235,14 @@
 
       __fireRemove : function(item)
       {
-        var removeEvent = core.mvc.event.Remove.obtain(item);
+        var removeEvent = core.model.RemoveEvent.obtain(item);
         this.dispatchEvent(removeEvent);
         removeEvent.release();        
       },
 
       __fireAdd : function(item)
       {
-        var addEvent = core.mvc.event.Add.obtain(item);
+        var addEvent = core.model.AddEvent.obtain(item);
         this.dispatchEvent(addEvent);
         addEvent.release();        
       },   

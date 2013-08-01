@@ -11,7 +11,6 @@ core.Class("core.mvc.presenter.Main",
     this.__history.addListener("change", this.__onHistoryChange, this);
   },
 
-
   properties :
   {
     active :

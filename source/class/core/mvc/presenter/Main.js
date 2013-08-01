@@ -97,23 +97,14 @@ core.Class("core.mvc.presenter.Main",
      */
     navigate : function(fragment, relation)
     {
-      // View specific features and/or global navigation processing
-      if (relation == "menu")
-      {
-        var view = this.getView("root");
-        view.setMenuOpen(!view.getMenuOpen());
-      }
-      else
-      {
-        // Use current path to create a new mutated one
-        var path = this.__navigationPath.navigate(fragment, relation);
+      // Use current path to create a new mutated one
+      var path = this.__navigationPath.navigate(fragment, relation);
 
-        // Apply that path to the browser's native location hash
-        location.hash = "#" + path.serialize();
+      // Apply that path to the browser's native location hash
+      location.hash = "#" + path.serialize();
 
-        // Make path instance available to next user
-        path.release();
-      }
+      // Make path instance available to next user
+      path.release();
     },
 
 

@@ -1,4 +1,4 @@
-core.Class("core.mvc.presenter.Main",
+core.Class("core.application.SinglePage",
 {
   include : [core.mvc.presenter.Abstract],
 

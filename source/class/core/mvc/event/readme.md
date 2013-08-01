@@ -1,1 +1,0 @@
-Event objects used by the MVP layer.

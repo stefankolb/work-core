@@ -20,6 +20,7 @@ core.Class("core.bom.event.type.Pointer",
     var isMouse = nativeEvent.type != null ? true : false;
 
     this.__nativeEvent = nativeEvent;
+    this.__propagationStopped = this.__defaultPrevented = false;
 
     this.type = eventType;
     this.target = nativeEvent.target;
@@ -77,6 +78,41 @@ core.Class("core.bom.event.type.Pointer",
     pointerId : 0,
     pointerType : "mouse",
 
+    __nativeEvent : null,
+    __propagationStopped : false,
+    __defaultPrevented : false,
 
+    reflectState : function()
+    {
+      var nat = this.__nativeEvent;
+
+      if (nat)
+      {
+        if (this.__propagationStopped) {
+          nat.stopPropagation();
+        }
+
+        if (this.__defaultPrevented) {
+          nat.preventDefault();
+        }
+      }
+    },
+
+
+    preventDefault : function() {
+      this.__defaultPrevented = true;
+    },
+
+    isDefaultPrevented : function() {
+      return this.__defaultPrevented;
+    },
+
+    stopPropagation : function() {
+      this.__propagationStopped = true;
+    },
+
+    isPropagationStopped : function() {
+      return this.__propagationStopped;
+    }
   }
 });

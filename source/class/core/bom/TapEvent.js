@@ -52,6 +52,7 @@
         {
           var eventObj = core.bom.event.type.Pointer.obtain(e, "tap");
           callback(eventObj);
+          eventObj.reflectState();
           eventObj.release();
         }
 

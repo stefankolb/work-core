@@ -302,6 +302,7 @@
         {
           var eventObject = core.bom.event.type.Pointer.obtain(nativeEvent, pointerType);
           callback(eventObject);
+          eventObject.reflectState();
           eventObject.release();
         };
       }

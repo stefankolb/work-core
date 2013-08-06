@@ -601,6 +601,8 @@
       if (typeof timeStamp !== "number") {
         throw new Error("Invalid timestamp value: " + timeStamp);
       }
+
+      this.__touchNumber = touches.length;
       
       var self = this;
 
@@ -676,7 +678,7 @@
       if (timeStamp instanceof Date) {
         timeStamp = timeStamp.valueOf();
       }
-      
+
       if (typeof timeStamp !== "number") {
         throw new Error("Invalid timestamp value: " + timeStamp);
       }
@@ -857,9 +859,12 @@
       if (timeStamp instanceof Date) {
         timeStamp = timeStamp.valueOf();
       }
+
       if (typeof timeStamp !== "number") {
         throw new Error("Invalid timestamp value: " + timeStamp);
       }
+
+      this.__touchNumber--;
       
       var self = this;
 
@@ -1114,24 +1119,19 @@
         self.__stepThroughDeceleration(render);
       };
 
-      // How much velocity is required to keep the deceleration running
-      var minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.1;
-
-      // Detect whether it's still worth to continue animating steps
-      // If we are already slow enough to not being user perceivable anymore, we stop the whole process here.
-      var verify = function() {
-        return Math.abs(self.__decelerationVelocityX) >= minVelocityToKeepDecelerating || Math.abs(self.__decelerationVelocityY) >= minVelocityToKeepDecelerating;
-      };
-
-      var completed = function(renderedFramesPerSecond, animationId, wasFinished) {
+      var completed = function(renderedFramesPerSecond, animationId, wasFinished) 
+      {
         self.__isDecelerating = false;
 
-        // Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
-        self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping);
+        if (self.__touchNumber == 0)
+        {
+          // Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
+          self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping);
+        }
       };
 
       // Start animation and switch on flag
-      self.__isDecelerating = core.effect.Animate.start(step, verify, completed);
+      self.__isDecelerating = core.effect.Animate.start(step, null, completed);
 
     },
 
@@ -1206,23 +1206,21 @@
 
         self.__decelerationVelocityX *= frictionFactor;
         self.__decelerationVelocityY *= frictionFactor;
-
       }
 
 
+
       //
-      // BOUNCING SUPPORT
+      // COMPUTE OUTSIDE COORDS
+      // FOR BOUNCING AND AS A HELPER TO STOP DECELERATION
       //
 
-      if (self.options.bouncing) {
+      var scrollOutsideX = 0;
+      var scrollOutsideY = 0;
 
-        var scrollOutsideX = 0;
-        var scrollOutsideY = 0;
-
-        // This configures the amount of change applied to deceleration/acceleration when reaching boundaries
-        var penetrationDeceleration = 0.03;
-        var penetrationAcceleration = 0.08;
-
+      // Compute outside position
+      if (self.options.bouncing)
+      {
         // Check limits
         if (scrollLeft < self.__minDecelerationScrollLeft) {
           scrollOutsideX = self.__minDecelerationScrollLeft - scrollLeft;
@@ -1235,6 +1233,32 @@
         } else if (scrollTop > self.__maxDecelerationScrollTop) {
           scrollOutsideY = self.__maxDecelerationScrollTop - scrollTop;
         }
+      }
+
+
+
+      //
+      // AUTO STOP SUPPORT
+      //
+
+      // How much velocity is required to keep the deceleration running
+      var minVelocityToKeepDecelerating = self.options.snapping ? 4 : 0.1;
+
+      if (Math.abs(scrollOutsideX) < 1 && Math.abs(scrollOutsideY) < 1 && Math.abs(self.__decelerationVelocityX) < minVelocityToKeepDecelerating && Math.abs(self.__decelerationVelocityY) < minVelocityToKeepDecelerating) {
+        core.effect.Animate.stop(self.__isDecelerating);  
+      }
+
+
+
+      //
+      // BOUNCING SUPPORT
+      //
+
+      if (self.options.bouncing) {
+
+        // This configures the amount of change applied to deceleration/acceleration when reaching boundaries
+        var penetrationDeceleration = 0.03;
+        var penetrationAcceleration = 0.08;
 
         // Slow down until slow enough, then flip back to snap position
         if (scrollOutsideX !== 0) {

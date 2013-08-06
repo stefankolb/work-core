@@ -110,7 +110,7 @@
         var db = target["$$ev-touch"];
         if (db)
         {
-          console.log("Reuse existing event handlers...");
+          // console.log("Reuse existing event handlers...");
           db.push({type : type, callback : callback});
           return;
         }

@@ -48,6 +48,12 @@
 		{
 			var helper = function()
 			{
+				// Ignore any effects from input elements
+				var active = document.activeElement;
+				if (active && active.tagName.match(/input|textarea|select/i)) {
+					return;
+				}
+
 				// - First enforce height on documentElement to make document larger and allow scrolling
 				// - Scroll to any location (will hide the menu bar)
 				// - Sync body height with actual window inner height (now without the top bar)

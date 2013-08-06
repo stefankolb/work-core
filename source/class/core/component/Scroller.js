@@ -33,6 +33,8 @@
 
   core.Class("core.component.Scroller",
   {
+    include : [core.util.MLogging],
+
     construct : function(container, options) 
     {  
       if (jasy.Env.isSet("debug"))

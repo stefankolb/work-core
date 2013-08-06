@@ -597,6 +597,7 @@
       if (timeStamp instanceof Date) {
         timeStamp = timeStamp.valueOf();
       }
+
       if (typeof timeStamp !== "number") {
         throw new Error("Invalid timestamp value: " + timeStamp);
       }
@@ -675,6 +676,7 @@
       if (timeStamp instanceof Date) {
         timeStamp = timeStamp.valueOf();
       }
+      
       if (typeof timeStamp !== "number") {
         throw new Error("Invalid timestamp value: " + timeStamp);
       }

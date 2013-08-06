@@ -15,6 +15,7 @@
 	var millisecondsPerSecond = 1000;
 	var running = {};
 	var counter = 1;
+	var AnimationFrame = core.effect.AnimationFrame;
 
 	/**
 	 * Generic animation class with support for dropped frames both optional easing and duration.
@@ -28,27 +29,6 @@
 	 */
 	core.Module("core.effect.Animate", 
 	{
-		/**
-		 * {Boolean} Stops the given animation via its @id {Integer}. Returns whether the animation was stopped.
-		 */
-		stop: function(id) {
-			var cleared = running[id] != null;
-			if (cleared) {
-				running[id] = null;
-			}
-
-			return cleared;
-		},
-
-
-		/**
-		 * {Boolean} Whether the given animation via its @id {Integer} is still running.
-		 */
-		isRunning: function(id) {
-			return running[id] != null;
-		},
-
-
 		/**
 		 * {Integer} Start the animation. Returns the identifier of animation. Can be used to stop it any time.
 		 *
@@ -97,28 +77,28 @@
 				var now = time();
 
 				// Verification is executed before next animation step
-				if (!running[id] || (verifyCallback && !verifyCallback(id))) {
-
+				if (!running[id] || (verifyCallback && !verifyCallback(id))) 
+				{
 					running[id] = null;
 					completedCallback && completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, false);
 					return;
-
 				}
 
 				// For the current rendering to apply let's update omitted steps in memory.
 				// This is important to bring internal state variables up-to-date with progress in time.
-				if (render) {
-
+				if (render)
+				{
 					var droppedFrames = Math.round((now - lastFrame) / (millisecondsPerSecond / desiredFrames)) - 1;
-					for (var j = 0; j < Math.min(droppedFrames, 4); j++) {
+					for (var j = 0; j < Math.min(droppedFrames, 4); j++) 
+					{
 						step(true);
 						dropCounter++;
 					}
-
 				}
 
 				// Compute percent value
-				if (duration) {
+				if (duration)
+				{
 					percent = (now - start) / duration;
 					if (percent > 1) {
 						percent = 1;
@@ -127,12 +107,15 @@
 
 				// Execute step callback, then...
 				var value = easingMethod ? easingMethod(percent) : percent;
-				if ((stepCallback(value, now, render) === false || percent === 1) && render) {
+				if ((stepCallback(value, now, render) === false || percent === 1) && render) 
+				{
 					running[id] = null;
 					completedCallback && completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, percent === 1 || duration == null);
-				} else if (render) {
+				}
+				else if (render)
+				{
 					lastFrame = now;
-					core.effect.AnimationFrame.request(step, root);
+					AnimationFrame.request(step, root);
 				}
 			};
 
@@ -140,11 +123,33 @@
 			running[id] = true;
 
 			// Init first step
-			core.effect.AnimationFrame.request(step, root);
+			AnimationFrame.request(step, root);
 
 			// Return unique animation ID
 			return id;
-		}
+		},
+
+
+		/**
+		 * {Boolean} Stops the given animation via its @id {Integer}. Returns whether the animation was stopped.
+		 */
+		stop: function(id) 
+		{
+			var cleared = running[id] != null;
+			if (cleared) {
+				running[id] = null;
+			}
+
+			return cleared;
+		},
+
+
+		/**
+		 * {Boolean} Whether the given animation via its @id {Integer} is still running.
+		 */
+		isRunning: function(id) {
+			return running[id] != null;
+		}		
 	});
 })();
 

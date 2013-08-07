@@ -9,7 +9,18 @@
 
 (function()
 {
+  /** {=Array} Used for looking up hex characters */
   var hexTable = "0123456789abcdef".split("");
+
+  /** {=Map} Used to map specific string values to primitive counter parts */
+  var interpreterMap = 
+  {
+    true: true,
+    false: false,
+    null: null,
+    yes: true,
+    no: false
+  };
 
   /**
    * A collection of utility methods for native JavaScript strings.
@@ -31,6 +42,15 @@
       }
 
       return output;
+    },
+
+
+    /**
+     * {String|Boolean|null} Interprets the given @str {String} to make string values from e.g. localStorage
+     * form values, etc. richer and mapping them to their actual primitive values.
+     */
+    interpret : function(str) {
+      return str in interpreterMap ? interpreterMap[str] : str;
     },
 
     

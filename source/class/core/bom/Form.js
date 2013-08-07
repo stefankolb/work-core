@@ -52,7 +52,7 @@ core.Module("core.bom.Form",
 			  	// Behave differently on whether the key already existed or not:
 			  	// Check whether we expect an array return value
 			  	// which is true whenever two fields of the same name exist
-			  	if (name in result && core.bom.FormItem.isMulti(item)) 
+			  	if (name in result && !core.bom.FormItem.isExplicitSingle(item)) 
 			  	{
 			  		result[name] = [value];
 			  		boollike[name] = false;

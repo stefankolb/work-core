@@ -27,20 +27,20 @@ core.Module("core.bom.Form",
 
 		var elems = form.elements;
 		var result = {};
+		var undef;
 
 		for (var i=0, l=elems.length; i<l; i++)
 		{
 			var item = elems[i];
+			var name = item.name;
 
 			if (core.bom.FormItem.isSuccessful(item)) 
 			{
-				var name = item.name;
 				var value = core.bom.FormItem.getValue(item);
+				var stored = result[name];
 
-				if (name in result) 
+				if (stored !== undef) 
 				{
-					var stored = result[name];
-
 					if (stored instanceof Array) {
 						stored.push(value);
 					} else {
@@ -51,6 +51,13 @@ core.Module("core.bom.Form",
 				{
 					result[name]	= value;	
 				}
+			}
+			else if (!(name in result))
+			{
+				// Relevant for checkboxes which are about enabling a specific flag
+				// This way these are available as key only and can be passed to 
+				// the property system etc.
+				result[name] = undef;
 			}
 		}
 

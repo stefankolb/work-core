@@ -1,8 +1,8 @@
 /*
 ==================================================================================================
-  Core - JavaScript Foundation
-  Copyright 2010-2012 Zynga Inc.
-  Copyright 2012-2013 Sebastian Werner
+	Core - JavaScript Foundation
+	Copyright 2010-2012 Zynga Inc.
+	Copyright 2012-2013 Sebastian Werner
 ==================================================================================================
 */
 
@@ -41,7 +41,7 @@ core.Module("core.bom.Form",
 			{
 				var stored = result[name];
 
-			  // Always overwrite when it is a list value from e.g. a multi select field
+				// Always overwrite when it is a list value from e.g. a multi select field
 				if (value instanceof Array) 
 				{
 					result[name] = value;	
@@ -49,24 +49,24 @@ core.Module("core.bom.Form",
 				}
 
 				// Overwrite when current value is undefined
-			  else if (stored === undef) 
-			  {
-			  	// Behave differently on whether the key already existed or not:
-			  	// Check whether we expect an array return value
-			  	// which is true whenever two fields of the same name exist
-			  	if (name in result && !core.bom.FormItem.isExplicitSingle(item)) 
-			  	{
-			  		result[name] = [value];
-			  		boollike[name] = false;
-			  	}
-			  	else
-			  	{
-			  		result[name] = value;
+				else if (stored === undef) 
+				{
+					// Behave differently on whether the key already existed or not:
+					// Check whether we expect an array return value
+					// which is true whenever two fields of the same name exist
+					if (name in result && !core.bom.FormItem.isExplicitSingle(item)) 
+					{
+						result[name] = [value];
+						boollike[name] = false;
+					}
+					else
+					{
+						result[name] = value;
 						if (typeof value !== "boolean") {
 							boollike[name] = false;
 						}			  		
-			  	}
-			  }
+					}
+				}
 
 				// If there is already something stored (e.g. multiple checkboxes with the same name)
 				// we simple push to the list of values or create that list from the other value

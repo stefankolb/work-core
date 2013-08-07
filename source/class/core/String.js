@@ -15,11 +15,11 @@
   /** {=Map} Used to map specific string values to primitive counter parts */
   var interpreterMap = 
   {
-    true: true,
-    false: false,
-    null: null,
-    yes: true,
-    no: false
+    "true": true,
+    "false": false,
+    "null": null,
+    "yes": true,
+    "no": false
   };
 
   /**

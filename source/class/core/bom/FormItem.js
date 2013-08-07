@@ -58,7 +58,46 @@ core.Module("core.bom.FormItem",
 			core.dom.Node.assertIsNode(item);
 		}
 
-		return core.String.interpret(encodeURIComponent(item.value));
+		if (item.tagName == "SELECT")
+		{
+			// Inspired by jQuery
+			var index = item.selectedIndex;
+			var options = item.options;
+			var one = item.type === "select-one" || index < 0;
+			var max = one ? index + 1 : options.length;
+			var values = one ? null : [];
+			var i = index < 0 ? max : one ? index : 0;
+
+			for (; i<max; i++)
+			{
+				var option = options[i];
+
+				// Ignore disabled options
+				if (option.disabled) {
+					continue;
+				}
+
+				// Ignore options which are in disabled optgroups
+				var parent = option.parentNode;
+				if (parent.disabled && parent.tagName == "OPTGROUP") {
+					continue;
+				}
+
+				var value = option.value;
+
+				if (one) {
+					return value;
+				} else {
+					values.push(value);
+				}
+			}
+
+			return values;
+		}
+		else
+		{
+			return core.String.interpret(item.value || item.text);	
+		}
 	},
 
 
@@ -74,6 +113,24 @@ core.Module("core.bom.FormItem",
 			core.Assert.isType(item.name, "String");
 		}
 		
-		return item.name + "=" + this.getValue(item);
+		var name = encodeURIComponent(item.name);
+		var value = this.getValue(item);
+
+		// Support for select boxes with multiple values
+		if (value instanceof Array) 
+		{
+			var result = [];
+			for (var i=0, l=value.length; i<l; i++) {
+				result.push(name + "=" + encodeURIComponent(value[i]));
+			}
+
+			return result.join("&");
+		}
+
+		// Or everything else
+		else
+		{
+			return name + "=" + encodeURIComponent(value);	
+		}
 	}
 });

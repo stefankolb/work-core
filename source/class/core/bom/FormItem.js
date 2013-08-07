@@ -102,6 +102,18 @@ core.Module("core.bom.FormItem",
 
 
 	/**
+	 * {Boolean} Return whether from @item {Element} there is only exactly one value storable.
+	 */
+	isExplicitSingle : function(item) 
+	{
+		// Currently only true for radio fields where native behavior actually prevents
+		// selecting two radio buttons with the same name. Other fields like text fields
+		// and even select fields are all serialized and added the result.
+		return item.type == "radio";
+	},
+
+
+	/**
 	 * {String} Returns the serialized representation of the given form @item {Element}.
 	 */
 	serialize: function(item) 

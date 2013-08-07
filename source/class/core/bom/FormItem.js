@@ -58,7 +58,7 @@ core.Module("core.bom.FormItem",
 			core.dom.Node.assertIsNode(item);
 		}
 
-		return encodeURIComponent(item.value);
+		return core.String.interpret(encodeURIComponent(item.value));
 	},
 
 

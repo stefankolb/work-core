@@ -339,6 +339,24 @@
       exit : "return result;"
     }),
 
+
+    /**
+     * {Map} Create a shallow-copied clone of the @object {Object} where for
+     * every key in the original @object @mapper {Function} is called to 
+     * return the replacement key. It uses the original key when no translation is available.
+     * Any nested objects or arrays will be copied by reference, not duplicated.
+     */
+    map : createIterator(
+    {
+      has : true, 
+      stable : false,
+      args : "mapper",
+      init : "var result={};", 
+      iter : "result[mapper(key)||key]=object[key];", 
+      exit : "return result;"
+    }),    
+
+
     createEmpty : createEmpty,
     createFrom : createFrom
   });

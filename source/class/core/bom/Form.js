@@ -42,8 +42,10 @@ core.Module("core.bom.Form",
 				var stored = result[name];
 
 			  // Always overwrite when it is a list value from e.g. a multi select field
-				if (value instanceof Array) {
+				if (value instanceof Array) 
+				{
 					result[name] = value;	
+					boollike[name] = false;
 				}
 
 				// Overwrite when current value is undefined
@@ -60,6 +62,9 @@ core.Module("core.bom.Form",
 			  	else
 			  	{
 			  		result[name] = value;
+						if (typeof value !== "boolean") {
+							boollike[name] = false;
+						}			  		
 			  	}
 			  }
 
@@ -94,12 +99,13 @@ core.Module("core.bom.Form",
 			}
 		}
 
-		// Automatically translate checkboxes which have a unique name
+		// Automatically translate fields which have a unique name
 		// and are not checked and have a truish value to a falsy value
+		// And transform undefined values for input fields, select boxes, etc. to `null`.
 		for (var name in result)
 		{
-			if (result[name] === undef && boollike[name] !== false) {
-				result[name] = false;
+			if (result[name] === undef) {
+				result[name] = boollike[name] === false ? null : false;
 			}
 		}
 

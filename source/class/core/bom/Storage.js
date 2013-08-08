@@ -10,6 +10,7 @@
 (function(global)
 {
   var storage = global.localStorage;
+  var compress = false;
 
   /**
    * Wrapped Storage API to store small data fragments on the client
@@ -26,11 +27,12 @@
 
       // Auto cast JSON objects and mark as JSON
       if (typeof value == "object") {
-        value = "@J@" + core.JSON.stringify(value);
+        var text = "@J@" + core.JSON.stringify(value);
+      } else {
+        var text = value;
       }
       
-      var text = core.JSON.stringify(value);
-      var compressed = core.util.TextCompressor.compress(text);
+      var compressed = compress ? core.util.TextCompressor.compress(text) : text;
 
       storage.setItem(key, compressed);
     },
@@ -47,7 +49,7 @@
         return compressed;
       }
 
-      var text = core.util.TextCompressor.decompress(compressed);
+      var text = compress ? core.util.TextCompressor.decompress(compressed) : compressed;
 
       var type = text.slice(0,3);
       if (type == "@J@") {

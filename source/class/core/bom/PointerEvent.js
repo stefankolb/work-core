@@ -158,6 +158,10 @@
               }
             }
 
+            if (eventObject.isPropagationStopped()) {
+              nativeEvent.stopPropagation();
+            }
+
             eventObject.release();
           }
         };
@@ -190,6 +194,10 @@
               }
             }
 
+            if (eventObject.isPropagationStopped()) {
+              nativeEvent.stopPropagation();
+            }
+
             eventObject.release();
           }
         };
@@ -201,7 +209,7 @@
           {
             var point = changed[i];
 
-            // console.log("Fire pointerup: primary=" + (point.identifier == primaryIdentifier), point.target);
+            console.log("Fire pointerup: primary=" + (point.identifier == primaryIdentifier), point.target, nativeEvent.currentTarget);
 
             var eventObject = core.bom.event.type.Pointer.obtain(point, "pointerup");
             eventObject.isPrimary = point.identifier == primaryIdentifier;
@@ -213,6 +221,10 @@
               if (entry.type == "up") {
                 entry.callback(eventObject);
               }
+            }
+
+            if (eventObject.isPropagationStopped()) {
+              nativeEvent.stopPropagation();
             }
 
             eventObject.release();
@@ -244,6 +256,10 @@
               }
             }
 
+            if (eventObject.isPropagationStopped()) {
+              nativeEvent.stopPropagation();
+            }
+            
             eventObject.release();
 
             // Reset primary

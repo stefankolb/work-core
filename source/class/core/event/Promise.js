@@ -97,7 +97,7 @@ core.Class("core.event.Promise",
 		{
 			var child = entry[0];
 			var callback = entry[1];
-			var unsafe = entry[3];
+			var safe = entry[3];
 
 			if (callback == null) 
 			{
@@ -111,7 +111,7 @@ core.Class("core.event.Promise",
 			{
 				var retval;
 				var context = entry[2];
-				if (!unsafe)
+				if (safe)
 				{
 					try 
 					{
@@ -192,26 +192,31 @@ core.Class("core.event.Promise",
 		/**
 		 * {core.event.Promise} Register fulfillment handler @onFulfilled {Function}
 		 * and rejection handler @onRejected {Function} returning new child promise.
-		 * If @unsafe {Boolean} is true, no try and catch surrounds executing functions,
+		 * If @safe {Boolean} is set, the default value jasy.Env.getValue("safepromises")
+		 * is overwritten. If safe is false no try and catch surrounds executing functions,
 		 * so application execution is stopped due to uncatched error.
 		 */
-		then : function(onFulfilled, onRejected, context, unsafe) 
+		then : function(onFulfilled, onRejected, context, safe) 
 		{
 			var child = core.event.Promise.obtain();
 
 			var fullfilledQueue = this.__onFulfilledQueue;
 			var rejectedQueue = this.__onRejectedQueue;
 
+			if (safe == null) {
+				safe = jasy.Env.getValue("sagepromises");
+			}
+
 			if (onFulfilled && typeof onFulfilled == "function") {
-				fullfilledQueue.push([child, onFulfilled, context, !!unsafe]);
+				fullfilledQueue.push([child, onFulfilled, context, safe]);
 			} else {
-				fullfilledQueue.push([child, null, null, !!unsafe]);
+				fullfilledQueue.push([child, null, null, safe]);
 			}
 
 			if (onRejected && typeof onRejected == "function") {
-				rejectedQueue.push([child, onRejected, context, !!unsafe]);
+				rejectedQueue.push([child, onRejected, context, safe]);
 			} else {
-				rejectedQueue.push([child, null, null, !!unsafe]);
+				rejectedQueue.push([child, null, null, safe]);
 			}
 
 			if (this.__locked) {
@@ -236,7 +241,7 @@ core.Class("core.event.Promise",
 				{
 					console.error("Promise rejected: ", reason);
 				}
-			}, null, true);
+			}, null, false);
 		}
 	}
 });

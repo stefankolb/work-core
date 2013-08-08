@@ -9,7 +9,7 @@
 
 /**
  * Promises implementation of A+ specification passing Promises/A+ test suite.
- * Very efficient due to object pooling.
+ * Very efficient due to object pooling if release() is called.
  * http://promises-aplus.github.com/promises-spec/
  */
 core.Class("core.event.Promise", 
@@ -97,6 +97,7 @@ core.Class("core.event.Promise",
 		{
 			var child = entry[0];
 			var callback = entry[1];
+			var unsafe = entry[3];
 
 			if (callback == null) 
 			{
@@ -108,37 +109,46 @@ core.Class("core.event.Promise",
 			}
 			else
 			{
-				try 
+				var retval;
+				var context = entry[2];
+				if (!unsafe)
 				{
-					var context = entry[2];
-					var retval = context ? callback.call(context, valueOrReason) : callback(valueOrReason);
-					if (retval && retval.then && typeof retval.then == "function") 
-					{ 
-						var retstate = retval.getState ? retval.getState() : "pending";
-						if (retstate == "pending") 
-						{
-							retval.then(function(value) {
-								child.fulfill(value);
-							}, function(reason) {
-								child.reject(reason);
-							});
-						}
-						else if (retstate == "fulfilled") 
-					  {
-							child.fulfill(retval.getValue());
-						}
-						else if (retstate == "rejected") 
-						{
-							child.reject(retval.getValue());
-						}
-					} 
-					else 
+					try 
 					{
-						child.fulfill(retval);
+						retval = context ? callback.call(context, valueOrReason) : callback(valueOrReason);
+					} 
+					catch (ex) {
+						child.reject(ex);
+					}
+				}
+				else
+				{
+					retval = context ? callback.call(context, valueOrReason) : callback(valueOrReason);
+				}
+
+				if (retval && retval.then && typeof retval.then == "function") 
+				{ 
+					var retstate = retval.getState ? retval.getState() : "pending";
+					if (retstate == "pending") 
+					{
+						retval.then(function(value) {
+							child.fulfill(value);
+						}, function(reason) {
+							child.reject(reason);
+						});
+					}
+					else if (retstate == "fulfilled") 
+				  {
+						child.fulfill(retval.getValue());
+					}
+					else if (retstate == "rejected") 
+					{
+						child.reject(retval.getValue());
 					}
 				} 
-				catch (ex) {
-					child.reject(ex);
+				else 
+				{
+					child.fulfill(retval);
 				}
 			}
 		},
@@ -182,8 +192,10 @@ core.Class("core.event.Promise",
 		/**
 		 * {core.event.Promise} Register fulfillment handler @onFulfilled {Function}
 		 * and rejection handler @onRejected {Function} returning new child promise.
+		 * If @unsafe {Boolean} is true, no try and catch surrounds executing functions,
+		 * so application execution is stopped due to uncatched error.
 		 */
-		then : function(onFulfilled, onRejected, context) 
+		then : function(onFulfilled, onRejected, context, unsafe) 
 		{
 			var child = core.event.Promise.obtain();
 
@@ -191,15 +203,15 @@ core.Class("core.event.Promise",
 			var rejectedQueue = this.__onRejectedQueue;
 
 			if (onFulfilled && typeof onFulfilled == "function") {
-				fullfilledQueue.push([child, onFulfilled, context]);
+				fullfilledQueue.push([child, onFulfilled, context, !!unsafe]);
 			} else {
-				fullfilledQueue.push([child]);
+				fullfilledQueue.push([child, null, null, !!unsafe]);
 			}
 
 			if (onRejected && typeof onRejected == "function") {
-				rejectedQueue.push([child, onRejected, context]);
+				rejectedQueue.push([child, onRejected, context, !!unsafe]);
 			} else {
-				rejectedQueue.push([child]);
+				rejectedQueue.push([child, null, null, !!unsafe]);
 			}
 
 			if (this.__locked) {
@@ -207,6 +219,24 @@ core.Class("core.event.Promise",
 			}
 			
 			return child;
+		},
+
+		/**
+		 * Throws all remaining errors to application level and display promise rejecting
+		 * on console if in debug mode.
+		 */
+		done : function() 
+		{
+			this.then(null, function(reason) {
+				if (reason instanceof Error) 
+				{
+					throw reason;
+				}
+				else if (jasy.Env.isSet("debug"))
+				{
+					console.error("Promise rejected: ", reason);
+				}
+			}, null, true);
 		}
 	}
 });

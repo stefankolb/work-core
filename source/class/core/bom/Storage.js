@@ -51,7 +51,7 @@
 
       var type = text.slice(0,3);
       if (type == "@J@") {
-        var value = JSON.parse(text.slice(3));
+        var value = core.JSON.parse(text.slice(3));
       } else {
         var value = text;
       }

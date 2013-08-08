@@ -32,7 +32,7 @@
       var text = core.JSON.stringify(value);
       var compressed = core.util.TextCompressor.compress(text);
 
-      storage.setItem("checkout", compressed);
+      storage.setItem(key, compressed);
     },
 
 

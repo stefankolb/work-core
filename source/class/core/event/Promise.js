@@ -204,19 +204,19 @@ core.Class("core.event.Promise",
 			var rejectedQueue = this.__onRejectedQueue;
 
 			if (safe == null) {
-				safe = jasy.Env.getValue("sagepromises");
+				safe = jasy.Env.getValue("safepromises");
 			}
 
 			if (onFulfilled && typeof onFulfilled == "function") {
 				fullfilledQueue.push([child, onFulfilled, context, safe]);
 			} else {
-				fullfilledQueue.push([child, null, null, safe]);
+				fullfilledQueue.push([child, , , safe]);
 			}
 
 			if (onRejected && typeof onRejected == "function") {
 				rejectedQueue.push([child, onRejected, context, safe]);
 			} else {
-				rejectedQueue.push([child, null, null, safe]);
+				rejectedQueue.push([child, , , safe]);
 			}
 
 			if (this.__locked) {

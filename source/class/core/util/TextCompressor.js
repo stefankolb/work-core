@@ -23,7 +23,8 @@
 
 	// first 12 bits, remaining 4 bits are size infos
 	var MARKERINT = 2730;
-	var MARKER = String.fromCharCode(MARKERINT << 4);
+	var MARKERINTSHIFT = MARKERINT << 4;
+	var MARKER = String.fromCharCode(MARKERINTSHIFT);
 
 	/**
 	 * {String} Returns packed UTF16 representation of given base64 encoded @text {String}.
@@ -52,7 +53,7 @@
 
 		if (bits > 6) {
 			// Save used bits of last character into marker character
-			out[0] = String.fromCharCode(out[0].charCodeAt(0) + bits);
+			out[0] = String.fromCharCode(MARKERINTSHIFT + bits);
 			out.push(String.fromCharCode(chr));
 		}
 

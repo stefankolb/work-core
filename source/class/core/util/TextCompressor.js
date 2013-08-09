@@ -21,7 +21,9 @@
 		}
 	})();
 
-	var MARKER = String.fromCharCode(9730);
+	// first 12 bits, remaining 4 bits are size infos
+	var MARKERINT = 2730;
+	var MARKER = String.fromCharCode(MARKERINT << 4);
 
 	/**
 	 * {String} Returns packed UTF16 representation of given base64 encoded @text {String}.
@@ -34,6 +36,7 @@
 			if (character === "=") {
 				break;
 			}
+
 			if (bits > 6) {
 				bits -= 6;
 				var e = MAP[character];
@@ -46,6 +49,13 @@
 				bits = 16-rem;
 			}
 		}
+
+		if (bits > 6) {
+			// Save used bits of last character into marker character
+			out[0] = String.fromCharCode(out[0].charCodeAt(0) + bits);
+			out.push(String.fromCharCode(chr));
+		}
+
 		return out.join("");
 	};
 
@@ -53,7 +63,11 @@
 	 * {String} Returns unpacked base64 string representation of given @encodedText {String}.
 	 */
 	var decompress64 = function(encodedText) {
-		if (encodedText[0] !== MARKER) return encodedText;
+		var marker = encodedText.charCodeAt(0);
+		if ((marker >> 4) !== MARKERINT) return encodedText;
+
+		var lastBits = 16 - (marker & 0x0f);
+		var encodedTextLength = encodedText.length - 1;
 
 		var bitPos = 0;
 		var out = [];
@@ -66,6 +80,13 @@
 			chrPos = (i / 16) << 0;
 			chr = encodedText.charCodeAt(chrPos);
 
+			if (chrPos == encodedTextLength) {
+				if (bitPos + 6 > lastBits) {
+					// Break if rest of text is filled up
+					break;
+				}
+			}
+
 			var remainingBits = 16-bitPos;
 			if (remainingBits >= 6) {
 				var r = (chr >> (remainingBits - 6)) & 63;
@@ -77,6 +98,13 @@
 				var c2 = chr >> (16-tmpBits);
 				r = (r + c2) & 63;
 				out.push(REVMAP[r]);
+			}
+
+			if (chrPos == encodedTextLength) {
+				if (bitPos + 6 == lastBits) {
+					// Break if bit position is exactly on last bit
+					break;
+				}
 			}
 		}
 

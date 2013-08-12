@@ -20,8 +20,6 @@ core.Module("core.service.location.GeoCode",
     var url = "//maps.googleapis.com/maps/api/geocode/json?sensor=true&latlng=";
     url += data.latitude + "," + data.longitude;
 
-    console.log("Sending request to: " + url);
-
     // TODO: Make use for XHR wrapper
     var xhr = new XMLHttpRequest;
     xhr.open("GET", url, true);

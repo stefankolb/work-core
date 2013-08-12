@@ -54,9 +54,9 @@ var promisify = function(func, context, args) {
   var error;
   
   try {
-    var result = func.apply(context, args);
+    var result = func.apply(context || this, args);
     
-    if (!result.then) {
+    if ((result == null) || (!result.then)) {
       var promise = core.event.Promise.obtain();
       promise.fulfill(result);
       return promise;
@@ -154,6 +154,9 @@ core.Module("core.event.Flow",
    * If one returning promise is rejected or an error is thrown the returning promise is rejected.
    */
   sequence : function(tasks, context, arg1) {
+    if (jasy.Env.isSet("debug")) {
+      core.Assert.isType(tasks, "Array");
+    }
     var args = slice.call(arguments, 2);
     var promise = core.event.Promise.obtain();
     var result = [];

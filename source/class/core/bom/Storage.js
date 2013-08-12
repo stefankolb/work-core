@@ -17,6 +17,9 @@
    */
   core.Module("core.bom.Storage",
   {
+    /**
+     * Stores the given @value {any} under the given @key {String}.
+     */
     set : function(key, value)
     {
       if (jasy.Env.isSet("debug"))
@@ -38,6 +41,9 @@
     },
 
 
+    /**
+     * {any} Returns the value of the given @key.
+     */
     get : function(key)
     {
       if (jasy.Env.isSet("debug")) {
@@ -62,6 +68,9 @@
     },
 
 
+    /**
+     * Removes the given @key {String} from the storage.
+     */
     remove : function(key)
     {
       if (jasy.Env.isSet("debug")) {
@@ -70,8 +79,6 @@
 
       storage.removeItem(key);
     }
-
   });
-
 
 })(core.Main.getGlobal());

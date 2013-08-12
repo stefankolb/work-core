@@ -170,9 +170,14 @@ core.Class("core.event.Promise",
 		 */
 		release : function()
 		{
+			//console.log("CALL RELEASE ON: ", this)
+			//console.trace()
+
 			// Cleanup internal state
 			this.__state = "pending";
 			this.__locked = false;
+			this.__valueOrReason = null;
+			//this.__onRejectedQueue.length = this.__onFulfilledQueue.length = 0;
 
 			// Release for next usage
 			core.event.Promise.release(this);

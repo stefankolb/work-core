@@ -67,7 +67,7 @@
 				var link = doc.createElement('link');
 				var sheets = doc.styleSheets;
 				
-				handle = setInterval(function() 
+				var handle = setInterval(function() 
 				{
 					for (var i=0, l=sheets.length; i<l; i++)  
 					{

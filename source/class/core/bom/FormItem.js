@@ -48,6 +48,41 @@ core.Module("core.bom.FormItem",
 
 
 	/**
+	 * {String} Finds a label for the given form @item {Element} in the 
+	 * given @root {Element?document} to be shown in e.g. error messages.
+	 */
+	getLabel : function(item, root)
+	{
+		if (!root) {
+			root = document.body;
+		}
+
+		// Find matching label
+		if (item.id) 
+		{
+			var label = root.querySelector("label[for=" + item.id + "]");
+			if (label) 
+			{
+				label = label.innerText;
+
+				if (label)
+				{
+					// Strip marker for required field
+					if (core.String.endsWith(label, "*")) {
+						label = label.slice(0, label.length-1);
+					}
+
+					return label;
+				}
+			}
+		}
+
+		var label = item.getAttribute("data-label");
+		return label || item.placeholder || item.name || null;
+	},
+
+
+	/**
 	 * {String} Returns the value of the given form @item {Element}.
 	 */
 	getValue : function(item) 

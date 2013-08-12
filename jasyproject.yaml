@@ -53,4 +53,7 @@ fields:
     check: Boolean
     default: false
     detect: core.detect.HighRes
+  safepromises:
+    check: Boolean
+    default: true
 

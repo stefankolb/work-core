@@ -34,7 +34,8 @@
         var text = value;
       }
       
-      var compressed = core.util.TextCompressor.compress(text);
+      // var compressed = core.util.TextCompressor.compress(text);
+      var compressed = text;
 
       storage.setItem(key, compressed);
     },
@@ -54,7 +55,8 @@
         return compressed;
       }
 
-      var text = core.util.TextCompressor.decompress(compressed);
+      // var text = core.util.TextCompressor.decompress(compressed);
+      var text = compressed;
 
       var type = text.slice(0,3);
       if (type == "@J@") {

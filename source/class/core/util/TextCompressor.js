@@ -30,7 +30,6 @@
 	 * {String} Returns packed UTF16 representation of given base64 encoded @text {String}.
 	 */
 	var compress64 = function(text) {
-		var addedChar = 0;
 		var out=[MARKER];
 		var bits=16, chr=0, rem=0;
 		for (var i=0, l=text.length; i<l; i++) {
@@ -47,7 +46,6 @@
 				rem = 6 - bits;
 				chr += MAP[character] >> rem;
 				out.push(String.fromCharCode(chr));
-				addedChar++;
 				chr = (MAP[character] & MASK[rem]) << (16 - rem);
 				bits = 16-rem;
 			}
@@ -57,7 +55,6 @@
 			// Save used bits of last character into marker character
 			out[0] = String.fromCharCode(MARKERINTSHIFT + bits);
 			out.push(String.fromCharCode(chr));
-			addedChar++;
 		}
 		
 		return out.join("");

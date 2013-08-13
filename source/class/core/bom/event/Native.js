@@ -12,7 +12,7 @@
  */
 core.Module("core.event.Native",
 {
-  fireElementEvent : fireEvent(element, event)
+  fireElementEvent : function(element, event)
   {
     if (document.createEventObject)
     {

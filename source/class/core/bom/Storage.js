@@ -17,9 +17,10 @@
   core.Module("core.bom.Storage",
   {
     /**
-     * Stores the given @value {any} under the given @key {String}.
+     * Stores the given @value {any} under the given @key {String}. The storage
+     * uses text compression by default. Disable via passing `false` to @compress {Boolean?true}.
      */
-    set : function(key, value)
+    set : function(key, value, compress)
     {
       if (jasy.Env.isSet("debug"))
       {
@@ -34,9 +35,12 @@
         var text = value;
       }
       
-      // var compressed = core.util.TextCompressor.compress(text);
-      var compressed = text;
-
+      if (compress !== false) {
+        var compressed = "@C@" + core.util.TextCompressor.compress(text);
+      } else {
+        var compressed = text;
+      }
+      
       storage.setItem(key, compressed);
     },
 
@@ -55,8 +59,11 @@
         return compressed;
       }
 
-      // var text = core.util.TextCompressor.decompress(compressed);
-      var text = compressed;
+      if (compressed.slice(0,3) == "@C@") {
+        var text = core.util.TextCompressor.decompress(compressed.slice(3));  
+      } else {
+        var text = compressed;
+      }
 
       var type = text.slice(0,3);
       if (type == "@J@") {

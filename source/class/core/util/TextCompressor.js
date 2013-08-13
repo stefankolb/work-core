@@ -51,12 +51,12 @@
 			}
 		}
 
-		if (bits > 6) {
+		if (bits != 16) {
 			// Save used bits of last character into marker character
 			out[0] = String.fromCharCode(MARKERINTSHIFT + bits);
 			out.push(String.fromCharCode(chr));
 		}
-
+		
 		return out.join("");
 	};
 

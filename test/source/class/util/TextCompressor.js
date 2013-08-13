@@ -41,3 +41,21 @@ suite.test("test compress/decompress base64 part 2", function() {
 
 	this.isIdentical(unpacked, testStringB64.replace("=", ""));
 });
+
+suite.test("complex string", function() {
+	var testString = '@J@{"product":null,"internetRouter":"dir150n","tvHardware":"receiver-buy","phoneProof":null,"phoneProofAbbreviated":null,"phoneProofClean":null,"phoneEntry":null,"phoneEntryPrint":null,"phoneEntryDigital":null,"phoneEntryService":null,"phoneEntryReverse":null,"phoneTransfer":null,"phoneTransferAcademic":null,"phoneTransferFirstname":null,"phoneTransferName":null,"phoneTransferAreaCode":null,"phoneTransferFirstNumber":null,"phoneTransferSecondNumber":null,"phoneTransferProvider":null,"phoneTransferOtherProvider":null,"phoneLock0900":null,"phoneLockInternational":null,"personalTitle":null,"personalAcademic":null,"personalFirstname":null,"personalName":null,"personalBirthday":null,"personalEmail":null,"personalPhone":null,"personalCablebox":null,"personalFloor":null,"paymentFirstname":"Sebastian","paymentName":"Werner","paymentType":"bankcode","paymentBankcode":"50870024","paymentAccount":"018024000","paymentIban":null,"paymentBic":null,"billingAddress":null,"deliveryAddress":null,"id":null"}';
+
+	var packed = core.util.TextCompressor.compress(testString);
+	var unpacked = core.util.TextCompressor.decompress(packed);
+
+	this.isIdentical(unpacked, testString);
+});
+
+suite.test("complex string 2", function() {
+	var testString = '@J@{"product":null,"internetRouter":"dir150n","tvHardware":"recorder-buy","phoneProof":null,"phoneProofAbbreviated":null,"phoneProofClean":null,"phoneEntry":null,"phoneEntryPrint":null,"phoneEntryDigital":null,"phoneEntryService":null,"phoneEntryReverse":null,"phoneTransfer":null,"phoneTransferAcademic":null,"phoneTransferFirstname":null,"phoneTransferName":null,"phoneTransferAreaCode":null,"phoneTransferFirstNumber":null,"phoneTransferSecondNumber":null,"phoneTransferProvider":null,"phoneTransferOtherProvider":null,"phoneLock0900":null,"phoneLockInternational":null,"personalTitle":null,"personalAcademic":null,"personalFirstname":null,"personalName":null,"personalBirthday":null,"personalEmail":null,"personalPhone":null,"personalCablebox":null,"personalFloor":null,"paymentFirstname":null,"paymentName":null,"paymentType":null,"paymentBankcode":null,"paymentAccount":null,"paymentIban":null,"paymentBic":null,"billingAddress":null,"deliveryAddress":null,"id":null}';
+
+	var packed = core.util.TextCompressor.compress(testString);
+	var unpacked = core.util.TextCompressor.decompress(packed);
+
+	this.isIdentical(unpacked, testString);
+});

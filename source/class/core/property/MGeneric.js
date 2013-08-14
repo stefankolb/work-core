@@ -155,7 +155,7 @@
 
 					return this[method]();
 				}
-				else if (property === undef || core.Assert.isType(property, "Array"))
+				else if (property === undef || core.Main.isTypeOf(property, "Array"))
 				{
 					if (!property) 
 					{

@@ -352,7 +352,7 @@ core.Class("core.presenter.Abstract",
         var args = args || config.args;
       }
 
-      if (!args || args.length == 0) {
+      if (!args) {
         var view = new construct(this);
       } else if (args.length == 1) {
         var view = new construct(this, args[0]);

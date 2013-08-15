@@ -29,7 +29,7 @@
       core.Assert.isType(mapFunction, "Function", "Flow control map() requires second parameter to be an mapping function!");
 
       if (context != null) {
-        core.Assert.isType(context, "Object", "Flow control map() requires third parameter to be an context objext for the mapping function!");  
+        //core.Assert.isType(context, "Object", "Flow control map() requires third parameter to be an context objext for the mapping function!");  
       }
     }
 
@@ -155,7 +155,7 @@
     any : function(promisesOrValues)
     {
       if (jasy.Env.isSet("debug")) {
-        core.Assert.isType(tasks, "Array");
+        //core.Assert.isType(promisesOrValues, "Array");
       }
 
       var promise = core.event.Promise.obtain();
@@ -214,7 +214,7 @@
     all : function(promisesOrValues)
     {
       if (jasy.Env.isSet("debug")) {
-        core.Assert.isType(tasks, "Array");
+        //core.Assert.isType(promisesOrValues, "Array");
       }
 
       return map(promisesOrValues, identity);
@@ -237,7 +237,7 @@
     {
       if (jasy.Env.isSet("debug")) 
       {
-        core.Assert.isType(tasks, "Array");
+        //core.Assert.isType(tasks, "Array");
 
         if (context != null) {
           core.Assert.isType(context, "Object");
@@ -299,7 +299,7 @@
     {
       if (jasy.Env.isSet("debug")) 
       {
-        core.Assert.isType(tasks, "Array");
+        //core.Assert.isType(tasks, "Array");
 
         if (context != null) {
           core.Assert.isType(context, "Object");

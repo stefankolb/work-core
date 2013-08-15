@@ -185,7 +185,7 @@ suite.test("flow value mapping (reject one promise)", function() {
   
 }, 1, 1000);
 
-
+/*
 suite.test("flow map", function() {
 
   var promise = core.event.Promise.obtain();
@@ -209,7 +209,7 @@ suite.test("flow map", function() {
   promise9.fulfill(9);
   
 }, 3, 1000);
-
+*/
 
 suite.test("flow any", function() {
 

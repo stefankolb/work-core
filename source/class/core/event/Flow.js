@@ -155,7 +155,7 @@
     any : function(promisesOrValues)
     {
       if (jasy.Env.isSet("debug")) {
-        //core.Assert.isType(promisesOrValues, "Array");
+        core.Assert.isType(promisesOrValues, "ArrayOrPromise");
       }
 
       var promise = core.event.Promise.obtain();
@@ -214,7 +214,7 @@
     all : function(promisesOrValues)
     {
       if (jasy.Env.isSet("debug")) {
-        //core.Assert.isType(promisesOrValues, "Array");
+        core.Assert.isType(promisesOrValues, "ArrayOrPromise");
       }
 
       return map(promisesOrValues, identity);

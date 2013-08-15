@@ -202,6 +202,10 @@
 			{
 				result = value && typeof value.nodeType == "number";
 			}
+			else if (type == "ArrayOrPromise")
+			{
+				result = value && (typeof value.then == "function" || toString.call(value) == toStringMap.Array);
+			}
 
 			return result;
 		},

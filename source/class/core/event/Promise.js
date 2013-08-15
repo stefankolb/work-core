@@ -237,7 +237,8 @@ core.Class("core.event.Promise",
 		 */
 		done : function() 
 		{
-			this.then(null, function(reason) {
+			return this.then(null, function(reason) 
+			{
 				if (reason instanceof Error) 
 				{
 					throw reason;

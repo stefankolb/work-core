@@ -203,6 +203,8 @@ core.Class("core.view.Dom",
     ======================================================
     */
 
+    __partialNameExtract : /\/([a-zA-Z]*)\.[a-z]*$/,
+
     /**
      * {core.event.Promise} Loads and registers the given partial from 
      * a local @assetId {String}. Returns a promise for easy management.
@@ -216,9 +218,7 @@ core.Class("core.view.Dom",
 
       // Auto extract partial name from file name
       // Convention over configuration FTW
-      var lastSlash = assetId.lastIndexOf("/");
-      var lastDot = assetId.lastIndexOf(".");
-      var name = assetId.slice(lastSlash+1, lastDot);
+      var name = this.__partialNameExtract.exec(assetId)[1];
 
       core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {

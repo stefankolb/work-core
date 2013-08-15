@@ -250,13 +250,6 @@
       
       var prom;
       
-      var promisifyGenerator = function(task, context, args) 
-      {
-        return function() {
-          return promisify(task, context, args);
-        };
-      };
-      
       for (var i=0, l=tasks.length; i<l; i++) 
       {
         if (!prom) 
@@ -299,7 +292,7 @@
     {
       if (jasy.Env.isSet("debug")) 
       {
-        //core.Assert.isType(tasks, "Array");
+        core.Assert.isType(tasks, "Array");
 
         if (context != null) {
           core.Assert.isType(context, "Object");

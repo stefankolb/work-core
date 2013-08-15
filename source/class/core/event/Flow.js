@@ -25,7 +25,7 @@
   {
     if (jasy.Env.isSet("debug"))
     {
-      core.Assert.isNotNull(promisesOrValues, "Flow control map() requires an non null value as first input parameter!");
+      core.Assert.isNotUndefined(promisesOrValues, "Flow control map() requires an non null value as first input parameter!");
       core.Assert.isType(mapFunction, "Function", "Flow control map() requires second parameter to be an mapping function!");
 
       if (context != null) {

@@ -168,6 +168,8 @@
 		 * - `Primitive` - either String, Number or Boolean
 		 * - `Plain` - either Primitive, Array or Map
 		 * - `Node` - any DOM node
+		 * - `Promise` - Promise - any Object with then() method
+		 * - `ArrayOrPromise` - either Array or Promise
 		 */
 		isTypeOf : function(value, type) 
 		{
@@ -202,9 +204,13 @@
 			{
 				result = value && typeof value.nodeType == "number";
 			}
+			else if (type == "Promise")
+			{
+				result = typeof value == "object" && value != null && typeof value.then == "function";
+			}
 			else if (type == "ArrayOrPromise")
 			{
-				result = value && (typeof value.then == "function" || toString.call(value) == toStringMap.Array);
+				result = value && (this.isTypeOf(value, "Array") || this.isTypeOf(value, "Promise"));
 			}
 
 			return result;

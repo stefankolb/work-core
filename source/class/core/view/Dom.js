@@ -203,7 +203,15 @@ core.Class("core.view.Dom",
     ======================================================
     */
 
+    /** {=Map} Internal partial cache. Used for all instances */
+    __partialCache : {},
+
+    /** {=Map} Internal template cache. Used for all instances */
+    __templateCache : {},
+
+    /** {=RegExp} Regular expression for extracting the partial name from the assetId */
     __partialNameExtract : /\/([a-zA-Z]*)\.[a-z]*$/,
+
 
     /**
      * {core.event.Promise} Loads and registers the given partial from 
@@ -220,6 +228,17 @@ core.Class("core.view.Dom",
       // Convention over configuration FTW
       var name = this.__partialNameExtract.exec(assetId)[1];
 
+      // Use cached partial if available
+      var existing = this.__partialCache[name];
+      if (existing) 
+      {
+        this.addPartial(name, existing);
+        promise.fulfill(existing);
+        promise.release();
+        return promise;
+      }
+
+      // Otherwise load asset dynamically
       core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {
         if (jasy.Env.isSet("debug")) 
@@ -231,11 +250,22 @@ core.Class("core.view.Dom",
           }
         }
 
-        // Enable stripping (to remove white spaces from formatting)
-        var template = core.template.Compiler.compile(data.text, this.getLabels());
-        this.addPartial(name, template);
+        if (errornous)
+        {
+          // Reject as IO Error
+          promise.reject("io");
+        }
+        else
+        {
+          // Enable stripping (to remove white spaces from formatting)
+          var template = core.template.Compiler.compile(data.text, this.getLabels());
+          this.addPartial(name, template);
+          this.__partialCache[name] = template;
 
-        errornous ? promise.reject("io") : promise.fulfill(data);
+          // Finally fulfill
+          promise.fulfill(template);
+        }
+
         promise.release();
       }, this);
 
@@ -251,6 +281,16 @@ core.Class("core.view.Dom",
     {
       var promise = core.event.Promise.obtain();
 
+      // Use cached template if available
+      var existing = this.__templateCache[assetId];
+      if (existing) 
+      {
+        this.setTemplate(existing);
+        promise.fulfill(existing);
+        promise.release();
+        return promise;
+      }
+
       core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {
         if (jasy.Env.isSet("debug")) 
@@ -262,11 +302,22 @@ core.Class("core.view.Dom",
           }
         }
 
-        // Enable stripping (to remove white spaces from formatting)
-        var template = core.template.Compiler.compile(data.text, this.getLabels());
-        this.setTemplate(template);  
+        if (errornous)
+        {
+          // Reject as IO Error
+          promise.reject("io");
+        }
+        else
+        {
+          // Enable stripping (to remove white spaces from formatting)
+          var template = core.template.Compiler.compile(data.text, this.getLabels());
+          this.setTemplate(template);  
+          this.__templateCache[assetId] = template;
 
-        errornous ? promise.reject("io") : promise.fulfill(data);
+          // Finally fulfill
+          promise.fulfill(template);
+        }
+
         promise.release();
       }, this);
 

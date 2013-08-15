@@ -222,6 +222,15 @@ core.Class("core.view.Dom",
 
       core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {
+        if (jasy.Env.isSet("debug")) 
+        {
+          if (errornous) {
+            this.error("Failed to load partial: " + uri);
+          } else {
+            this.log("Loaded partial: " + uri);
+          }
+        }
+
         // Enable stripping (to remove white spaces from formatting)
         var template = core.template.Compiler.compile(data.text, this.getLabels());
         this.addPartial(name, template);
@@ -244,6 +253,15 @@ core.Class("core.view.Dom",
 
       core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {
+        if (jasy.Env.isSet("debug")) 
+        {
+          if (errornous) {
+            this.error("Failed to load template: " + uri);
+          } else {
+            this.log("Loaded template: " + uri);
+          }
+        }
+
         // Enable stripping (to remove white spaces from formatting)
         var template = core.template.Compiler.compile(data.text, this.getLabels());
         this.setTemplate(template);  
@@ -266,6 +284,15 @@ core.Class("core.view.Dom",
 
       core.io.StyleSheet.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {
+        if (jasy.Env.isSet("debug")) 
+        {
+          if (errornous) {
+            this.error("Failed to load stylesheet: " + uri);
+          } else {
+            this.log("Loaded stylesheet: " + uri);
+          }
+        }
+
         errornous ? promise.reject("io") : promise.fulfill(data);
         promise.release();
       }, this);

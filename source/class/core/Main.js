@@ -179,6 +179,10 @@
 			{
 				result = type == "Null";
 			}
+			else if (type == "Object")
+			{
+				return value && typeof value == "object";
+			}
 			else if (type in toStringMap) 
 			{
 				result = toString.call(value) == toStringMap[type];

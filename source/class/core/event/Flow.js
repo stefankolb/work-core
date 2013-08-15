@@ -25,11 +25,10 @@
   {
     if (jasy.Env.isSet("debug"))
     {
-      core.Assert.isNotUndefined(promisesOrValues, "Flow control map() requires an non null value as first input parameter!");
       core.Assert.isType(mapFunction, "Function", "Flow control map() requires second parameter to be an mapping function!");
 
       if (context != null) {
-        //core.Assert.isType(context, "Object", "Flow control map() requires third parameter to be an context objext for the mapping function!");  
+        core.Assert.isType(context, "Object", "Flow control map() requires third parameter to be an context objext for the mapping function!");  
       }
     }
 
@@ -220,9 +219,6 @@
       return map(promisesOrValues, identity);
     },
 
-
-    map : map,
-    
 
     /**
      * {Promise} Calls all functions of @tasks {Array} in @context {var} with following arguments 

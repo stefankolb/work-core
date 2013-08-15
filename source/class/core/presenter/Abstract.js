@@ -352,14 +352,16 @@ core.Class("core.presenter.Abstract",
         var args = args || config.args;
       }
 
-      if (args)
-      {
-        var view = core.Object.createFrom(construct);
-        construct.apply(view, args.slice(2));
-      }
-      else
-      {
+      if (args.length == 0) {
         var view = new construct(this);
+      } else if (args.length == 1) {
+        var view = new construct(this, args[0]);
+      } else if (args.length == 2) {
+        var view = new construct(this, args[0], args[1]);
+      } else if (args.length == 3) {
+        var view = new construct(this, args[0], args[1], args[2]);
+      } else if (jasy.Env.isSet("debug")) {
+        throw new Error("Too many arguments!");
       }
       
       db[name] = view;

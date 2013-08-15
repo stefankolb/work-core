@@ -150,8 +150,8 @@ core.Class("core.view.Dom",
       this.render();
     },
 
-    markAsFailed : function() {
-      this.error("Unable to load required assets. Please retry!");
+    markAsFailed : function(msg) {
+      this.error("Unable to load required assets: " + msg);
     },
 
 

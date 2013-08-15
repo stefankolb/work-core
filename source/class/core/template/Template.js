@@ -35,15 +35,17 @@
 	{
 		if (obj != null) 
 		{
+			var camelized = core.String.camelize(key);
+			
 			if (obj.constructor === Object) 
 			{
-				if (hasOwnProperty.call(obj, key)) {
-					return obj[key];
+				if (hasOwnProperty.call(obj, camelized)) {
+					return obj[camelized];
 				}
 			}
 			else if (typeof obj.get == "function") 
 			{
-				var value = obj.get(key);
+				var value = obj.get(camelized);
 				if (value != null) {
 					return value;
 				}

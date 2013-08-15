@@ -237,7 +237,7 @@
     {
       if (jasy.Env.isSet("debug")) 
       {
-        //core.Assert.isType(tasks, "Array");
+        core.Assert.isType(tasks, "Array");
 
         if (context != null) {
           core.Assert.isType(context, "Object");

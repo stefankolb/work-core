@@ -271,7 +271,7 @@
       self.__computeScrollMax();
 
       // Refresh scroll position
-      self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+      self.scrollTo(self.__scrollLeft, self.__scrollTop, null, null, false);
       
     },
 
@@ -470,8 +470,9 @@
      * @param top {Number?null} Vertical scroll position, keeps current if value is <code>null</code>
      * @param animate {Boolean?false} Whether the scrolling should happen using an animation
      * @param zoom {Number?null} Zoom level to go to
+     * @param fireEvents {Boolean?true} Whether events should be muted (if parameter is false)
      */
-    scrollTo: function(left, top, animate, zoom) {
+    scrollTo: function(left, top, animate, zoom, fireEvents) {
 
       var self = this;
       
@@ -540,7 +541,7 @@
       }
       
       // Publish new values
-      self.__publish(left, top, zoom, animate);
+      self.__publish(left, top, zoom, animate, fireEvents);
 
     },
 
@@ -980,8 +981,9 @@
      * @param left {Number} Left scroll position
      * @param top {Number} Top scroll position
      * @param animate {Boolean?false} Whether animation should be used to move to the new coordinates
+     * @param fireEvents {Boolean?true} Whether events should be muted (if parameter is false)
      */
-    __publish: function(left, top, zoom, animate) {
+    __publish: function(left, top, zoom, animate, fireEvents) {
 
       var self = this;
       
@@ -1048,7 +1050,7 @@
 
         // Push values out
         if (self.__callback) {
-          self.__callback(left, top, zoom);
+          self.__callback(left, top, zoom, (fireEvents===false)?"cleanup":null);
         }
 
         // Fix max scroll ranges

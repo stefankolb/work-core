@@ -146,8 +146,8 @@
     /** {Integer} Height to assign to refresh area */
     __refreshHeight: null,
     
-    /** {Boolean} Whether the refresh process is enabled when the event is released now */
-    __refreshActive: false,
+    /** {String} Direction of refresh process that is enabled when the event is released now */
+    __refreshActive: null,
     
     /** {Function} Callback to execute on activation. This is for signalling the user about a refresh is about to happen when he release */
     __refreshActivate: null,
@@ -329,6 +329,25 @@
 
     },
     
+
+    /**
+     * Programmatically executes pull to refresh action
+     * @location {String} executes pull to refresh on "top" or "bottom" of scroller
+     */
+    executePullToRefresh : function(location) {
+      var self = this;
+      self.__refreshActive = location;
+
+      // Use publish instead of scrollTo to allow scrolling to out of boundary position
+      // We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
+      var posY = (self.__refreshActive=="top") ? (-self.__refreshHeight) : (self.__maxScrollTop+self.__refreshHeight);
+      self.__publish(self.__scrollLeft, posY , self.__zoomLevel, true);
+
+      if (self.__refreshStart) {
+        self.__refreshStart(self.__refreshActive);
+      }
+    },
+
     
     /**
      * Signalizes that pull-to-refresh is finished. 
@@ -337,10 +356,10 @@
       
       var self = this;
       
-      self.__refreshActive = false;
       if (self.__refreshDeactivate) {
-        self.__refreshDeactivate();
+        self.__refreshDeactivate(self.__refreshActive);
       }
+      self.__refreshActive = null;
       
       self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
       
@@ -786,18 +805,25 @@
               if (!self.__enableScrollX && self.__refreshHeight != null) {
 
                 if (!self.__refreshActive && scrollTop <= -self.__refreshHeight) {
-
-                  self.__refreshActive = true;
+                  
+                  self.__refreshActive = "top";
                   if (self.__refreshActivate) {
-                    self.__refreshActivate();
+                    self.__refreshActivate("top");
                   }
 
-                } else if (self.__refreshActive && scrollTop > -self.__refreshHeight) {
+                } else if (!self.__refreshActive && scrollTop >= (maxScrollTop + self.__refreshHeight)) {
+                  
+                  self.__refreshActive = "bottom";
+                  if (self.__refreshActivate) {
+                    self.__refreshActivate("bottom");
+                  }
 
-                  self.__refreshActive = false;
+                } else if (self.__refreshActive && scrollTop > -self.__refreshHeight && scrollTop < (maxScrollTop + self.__refreshHeight)) {
+                  
                   if (self.__refreshDeactivate) {
-                    self.__refreshDeactivate();
+                    self.__refreshDeactivate(self.__refreshActive);
                   }
+                  self.__refreshActive = null;
 
                 }
               }
@@ -943,7 +969,7 @@
           self.__publish(self.__scrollLeft, -self.__refreshHeight, self.__zoomLevel, true);
           
           if (self.__refreshStart) {
-            self.__refreshStart();
+            self.__refreshStart(self.__refreshActive);
           }
           
         } else {
@@ -953,10 +979,10 @@
           // Directly signalize deactivation (nothing todo on refresh?)
           if (self.__refreshActive) {
             
-            self.__refreshActive = false;
             if (self.__refreshDeactivate) {
-              self.__refreshDeactivate();
+              self.__refreshDeactivate(self.__refreshActive);
             }
+            self.__refreshActive = null;
             
           }
         }

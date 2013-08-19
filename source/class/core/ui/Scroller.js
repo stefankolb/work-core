@@ -1017,7 +1017,7 @@
 
             // Push values out
             if (self.__callback) {
-              self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel);
+              self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel, "stop_animation");
             }
 
           }

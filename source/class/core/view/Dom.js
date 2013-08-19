@@ -246,7 +246,7 @@ core.Class("core.view.Dom",
           if (errornous) {
             this.error("Failed to load partial: " + uri);
           } else {
-            this.log("Loaded partial: " + uri);
+            // this.log("Loaded partial: " + uri);
           }
         }
 
@@ -298,7 +298,7 @@ core.Class("core.view.Dom",
           if (errornous) {
             this.error("Failed to load template: " + uri);
           } else {
-            this.log("Loaded template: " + uri);
+            // this.log("Loaded template: " + uri);
           }
         }
 
@@ -340,7 +340,7 @@ core.Class("core.view.Dom",
           if (errornous) {
             this.error("Failed to load stylesheet: " + uri);
           } else {
-            this.log("Loaded stylesheet: " + uri);
+            // this.log("Loaded stylesheet: " + uri);
           }
         }
 

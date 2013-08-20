@@ -975,6 +975,9 @@
         } else {
           
           self.scrollTo(self.__scrollLeft, self.__scrollTop, true, self.__zoomLevel);
+          if (self.__callback) {
+            self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel, "stop");
+          }
           
           // Directly signalize deactivation (nothing todo on refresh?)
           if (self.__refreshActive) {
@@ -1045,7 +1048,7 @@
 
             // Push values out
             if (self.__callback) {
-              self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel, "stop_animation");
+              self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel);
             }
 
           }
@@ -1062,6 +1065,9 @@
           
           if (self.options.zooming) {
             self.__computeScrollMax();
+          }
+          if (self.__callback) {
+            self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel, "stop_animation");
           }
         };
         
@@ -1155,6 +1161,9 @@
         {
           // Animate to grid when snapping is active, otherwise just fix out-of-boundary positions
           self.scrollTo(self.__scrollLeft, self.__scrollTop, self.options.snapping);
+          if (self.__callback) {
+            self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel, "stop_deceleration");
+          }
         }
       };
 

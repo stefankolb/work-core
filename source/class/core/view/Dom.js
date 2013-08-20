@@ -220,7 +220,7 @@ core.Class("core.view.Dom",
      * The name of the partial is auto extracted as the file name part
      * of the @assetId.
      */
-    loadPartial : function(assetId)
+    loadPartial : function(assetId, nostrip)
     {
       var promise = core.event.Promise.obtain();
 
@@ -258,7 +258,7 @@ core.Class("core.view.Dom",
         else
         {
           // Enable stripping (to remove white spaces from formatting)
-          var template = core.template.Compiler.compile(data.text, this.getLabels());
+          var template = core.template.Compiler.compile(data.text, this.getLabels(), nostrip, assetId);
           this.addPartial(name, template);
           this.__partialCache[name] = template;
 
@@ -277,7 +277,7 @@ core.Class("core.view.Dom",
      * {core.event.Promise} Loads and registers the given template from 
      * a local @assetId {String}. Returns a promise for easy management.
      */
-    loadTemplate : function(assetId)
+    loadTemplate : function(assetId, nostrip)
     {
       var promise = core.event.Promise.obtain();
 
@@ -310,7 +310,7 @@ core.Class("core.view.Dom",
         else
         {
           // Enable stripping (to remove white spaces from formatting)
-          var template = core.template.Compiler.compile(data.text, this.getLabels());
+          var template = core.template.Compiler.compile(data.text, this.getLabels(), nostrip, assetId);
           this.setTemplate(template);  
           this.__templateCache[assetId] = template;
 

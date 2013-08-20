@@ -121,14 +121,15 @@
 		 * the original @text {String} for template construction. There is also the possibility to inject
 		 * static @labels {Map} at compile time level or resolve them dynamically at every rendering.
 		 * Optionally you can keep white spaces (line breaks, leading, trailing, etc.) by 
-		 * enabling @nostrip {Boolean?false}.
+		 * enabling @nostrip {Boolean?false}. Additionally one can define a template @name {String} for 
+		 * improved debugging capabilities.
 		 */
-		compile : function(text, labels, nostrip) 
+		compile : function(text, labels, nostrip, name) 
 		{
 			var tree = core.template.Parser.parse(text, nostrip);
 			var wrapped = 'var buf="";' + walk(tree, labels, nostrip) + 'return buf;';
 
-			return new core.template.Template(new Function('data', 'partials', 'labels', wrapped), text);
+			return new core.template.Template(new Function('data', 'partials', 'labels', wrapped), text, name);
 		}
 	});	
 })();

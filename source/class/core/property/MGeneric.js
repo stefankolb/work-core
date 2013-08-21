@@ -12,6 +12,7 @@
 {
 	var setters = {};
 	var getters = {};
+	var resetters = {};
 	var validators = {};
 
 	var up = function(name) {
@@ -85,10 +86,12 @@
 
 
 			/**
-			 * {var} Generic getter for @property {String|Array}. Supports two possible use cases:
+			 * {var} Generic getter for @property {String|Array}. 
+			 * Supports three possible use cases:
 			 *
-			 *     var value = get("property");
-			 *     var values = get(["property1", "property2"]);
+			 *     var propertyValue = obj.get("property");
+			 *     var listOfValues = obj.get(["property1", "property2"]);
+			 *     var listOfAllValues = obj.get();
 			 */
 			get : function(property)
 			{
@@ -107,7 +110,12 @@
 				}
 				else
 				{
-					if (jasy.Env.isSet("debug")) {
+					if (!property) 
+					{
+						property = core.Object.getKeys(core.Class.getProperties(this.constructor));
+					}
+					else if (jasy.Env.isSet("debug")) 
+					{
 						core.Assert.isType(property, "Array");
 					}
 
@@ -134,11 +142,64 @@
 
 
 			/**
-			 * {var} Generic checker for @property {String|Array} being valid. Supports two possible use cases:
+			 * {var} Generic resetter for @property {String|Array?all} being valid. 
+			 * Supports three possible use cases:
 			 *
-			 *     var singleIsValid = isValid("property");
-			 *     var givenAreValid = isValid(["property1", "property2"]);
-			 *     var allAreValid = isValid();
+			 *     var resetSingle = obj.reset("property");
+			 *     var resetGiven = obj.reset(["property1", "property2"]);
+			 *     var resetAll = obj.reset();
+			 */
+			reset : function(property)
+			{
+				if (typeof property == "string")
+				{
+					var method = resetters[property];
+					if (!method) {
+						method = resetters[property] = "reset" + up(property);
+					}
+
+					if (jasy.Env.isSet("debug")) {
+						core.Assert.isType(this[method], "Function", "Invalid property to reset " + property + " on " + this);
+					}
+
+					return this[method]();
+				}
+				else
+				{
+					if (!property) 
+					{
+						property = core.Object.getKeys(core.Class.getProperties(this.constructor));
+					}
+					else if (jasy.Env.isSet("debug")) 
+					{
+						core.Assert.isType(property, "Array");
+					}
+
+					for (var i=0, l=property.length; i<l; i++)
+					{
+						var name = property[i];
+						var method = resetters[name];
+						if (!method) {
+							method = resetters[name] = "reset" + up(name);
+						}
+
+						if (jasy.Env.isSet("debug")) {
+							core.Assert.isType(this[method], "Function", "Invalid property to reset " + name + " on " + this);
+						}
+
+						this[method]();
+					}
+				}
+			},
+
+
+			/**
+			 * {var} Generic validator for @property {String|Array?all} being valid. 
+			 * Supports three possible use cases:
+			 *
+			 *     var singleIsValid = obj.isValid("property");
+			 *     var givenAreValid = obj.isValid(["property1", "property2"]);
+			 *     var allAreValid = obj.isValid();
 			 *
 			 * When validating a list of properties (all or custom list) it's optionally possible 
 			 * to @raise {Boolean?false} an error with the exact property not validating.

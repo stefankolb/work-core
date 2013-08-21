@@ -103,6 +103,24 @@ core.Class("core.application.SinglePage",
     },
 
 
+
+
+
+    navigateBack : function(alternate) 
+    {
+      // Navigate back to parent
+      var hash = location.hash;
+      var last = hash.lastIndexOf("/");
+
+      if (last == -1) {
+        location.hash += "/" + alternate;
+        return;
+      }
+
+      location.hash = hash.slice(0, last);      
+    },    
+
+
     /**
      * Real initialization code after first rendering
      */

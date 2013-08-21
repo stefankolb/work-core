@@ -100,7 +100,7 @@
 					}
 
 					if (jasy.Env.isSet("debug")) {
-						core.Assert.isType(this[method], "Function", "Invalid property to get: " + property);
+						core.Assert.isType(this[method], "Function", "Invalid property to get " + property + " on " + this);
 					}
 
 					return this[method]();
@@ -122,7 +122,7 @@
 						}
 
 						if (jasy.Env.isSet("debug")) {
-							core.Assert.isType(this[method], "Function", "Invalid property to get: " + name);
+							core.Assert.isType(this[method], "Function", "Invalid property to get " + name + " on " + this);
 						}
 
 						ret[name] = this[method]();

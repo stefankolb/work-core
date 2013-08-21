@@ -95,17 +95,29 @@
 		 * Creates a template instance with the given @render {Function} method. Best way to work with
 		 * the template class is to create one using the {core.template.Compiler#compile} method.
 		 */
-		construct: function(render) 
+		construct: function(render, text, name) 
 		{
-			if (jasy.Env.isSet("debug")) {
+			if (jasy.Env.isSet("debug")) 
+			{
 				core.Assert.isType(render, "Function", "Missing valid render method!");
+
+				if (name != null) {
+					core.Assert.isType(name, "String", "Invalid template name!");					
+				}
 			}
 			
 			this.__render = render;
+			this.__text = text;
+			this.__name = name;
 		},
 		
 		members: 
 		{
+			__name : null,
+			__text : null,
+			__render : null,
+
+
 			/**
 			 * {String} Public render method which transforms the stored template text using the @data {Map},
 			 * runtime specific @partials {Map?null} and @labels {Map?null}.
@@ -126,8 +138,27 @@
 						core.Assert.isType(labels, "Map", "Invalid labels");
 					}					
 				}
-				
-				return this.__render(data, partials, labels);
+
+				if (jasy.Env.isSet("debug")) 
+				{
+					try{
+						return this.__render(data, partials, labels);	
+					}
+					catch(ex) 
+					{
+						if (this.__name) {
+							this.error("Unable to render template " + this.__name + ": " + ex);	
+						} else {
+							this.error("Unable to render template: " + ex);
+						}
+						
+						return "";
+					}
+				} 
+				else 
+				{
+					return this.__render(data, partials, labels);	
+				}
 			},
 
 

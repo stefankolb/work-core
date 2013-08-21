@@ -139,8 +139,11 @@
 			 *     var singleIsValid = isValid("property");
 			 *     var givenAreValid = isValid(["property1", "property2"]);
 			 *     var allAreValid = isValid();
+			 *
+			 * When validating a list of properties (all or custom list) it's optionally possible 
+			 * to @raise {Boolean?false} an error with the exact property not validating.
 			 */
-			isValid : function(property)
+			isValid : function(property, raise)
 			{
 				if (typeof property == "string")
 				{
@@ -155,7 +158,7 @@
 
 					return this[method]();
 				}
-				else if (property === undef || core.Main.isTypeOf(property, "Array"))
+				else if (property == null || core.Main.isTypeOf(property, "Array"))
 				{
 					if (!property) 
 					{
@@ -179,8 +182,17 @@
 							core.Assert.isType(this[method], "Function", "Invalid property to validate: " + name);
 						}
 
-						if (!this[method]()) {
-							return false;
+						if (!this[method]()) 
+						{
+							if (jasy.Env.isSet("debug")) {
+								this.log("Property " + name + " is not valid!");
+							}
+
+							if (raise) {
+								throw new Error("Property " + name + " in " + this + " is not valid!");
+							} else {
+								return false;
+							}
 						}
 					}
 

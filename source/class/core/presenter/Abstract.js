@@ -176,6 +176,50 @@ core.Class("core.presenter.Abstract",
     },
 
 
+    /**
+     * {Object} Queries the presenter for the given expression. Supports:
+     *
+     * - models using their name
+     * - properties using getter
+     * - collections using ID find
+     */
+    query : function(expression)
+    {
+      var splits = expression.split("/");
+      var current = this;
+
+      for (var i=0, l=splits.length; i<l && current; i++)
+      {
+        var split = splits[i];
+
+        if (current.hasGetter && current.hasGetter(split))
+        {
+          current = current.get(split);
+        }
+        else if (split in current) 
+        {
+          current = current[split];
+        }
+        else if (current.__models && split in current.__models)
+        {
+          current = current.__models[split];
+        }
+        else if (current.find)
+        {
+          current = current.find(split);
+        }
+        else
+        {
+          current = null;
+        }
+      }
+
+      if (jasy.Env.isSet("debug") && current == null) {
+        this.warn("Could not resolve expression: " + expression);
+      }
+
+      return current;
+    },
 
 
 

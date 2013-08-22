@@ -325,7 +325,7 @@
 
       /**
        * {Integer} Combined call to replace all existing data with new 
-       * list of @items {Object...}. Returns the new length
+       * list of @items {Object}. Returns the new length
        * of the collection.
        */
       reset : function(items) 

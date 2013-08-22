@@ -86,6 +86,20 @@
 
 
 			/**
+			 * {Boolean} Rudimentary check whether a given @property {String} getter is available.
+			 */
+			hasGetter : function(property)
+			{
+				var method = getters[property];
+				if (!method) {
+					method = getters[property] = "get" + up(property);
+				}
+
+				return !!this[method];
+			},
+
+
+			/**
 			 * {var} Generic getter for @property {String|Array}. 
 			 * Supports three possible use cases:
 			 *

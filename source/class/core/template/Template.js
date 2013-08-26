@@ -141,18 +141,14 @@
 
 				if (jasy.Env.isSet("debug")) 
 				{
-					try{
+					try
+					{
 						return this.__render(data, partials, labels);	
 					}
 					catch(ex) 
 					{
-						if (this.__name) {
-							this.error("Unable to render template " + this.__name + ": " + ex);	
-						} else {
-							this.error("Unable to render template: " + ex);
-						}
-						
-						return "";
+						this.error("Unable to render template " + (this.__name||""));
+						throw ex;
 					}
 				} 
 				else 

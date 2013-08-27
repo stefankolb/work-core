@@ -32,6 +32,53 @@ core.Class("core.application.SinglePage",
 
   members : 
   {
+    /*
+    ==================================================================
+       ACTIVITY TRACKING
+    ==================================================================
+    */
+
+    /** {=Integer} Number of active tasks */
+    __activityCounter : 0,
+
+    /**
+     * Internal helper for updating activity indicator when some task was started.
+     */
+    incrementActivity : function() 
+    {
+      if (++this.__activityCounter == 1) {
+        this.getView("root").showActivityIndicator();
+      }
+
+      if (jasy.Env.isSet("debug")) {
+        // this.log("Waiting for " + this.__activityCounter + " background processes...");
+      }
+    },
+
+
+    /**
+     * Internal helper for updating activity indicator when some task was done.
+     */
+    decrementActivity : function() 
+    {
+      if (--this.__activityCounter == 0) {
+        this.getView("root").hideActivityIndicator();
+      }
+
+      if (jasy.Env.isSet("debug")) {
+        // this.log("Waiting for " + this.__activityCounter + " background processes...");
+      }
+    },
+
+
+
+
+    /*
+    ==================================================================
+       NAVIGATION HANDLING
+    ==================================================================
+    */
+
     /** {=String} Either "in", "out", "other" */
     __navigationDirection : null,
 

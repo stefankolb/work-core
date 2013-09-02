@@ -13,6 +13,9 @@ core.Class("core.application.SinglePage",
 
   properties :
   {
+    /**
+     * Currently active presenter (page/activity)
+     */
     active :
     {
       type : core.presenter.Abstract,
@@ -150,7 +153,14 @@ core.Class("core.application.SinglePage",
     },
 
 
-
+    /**
+     * {Boolean} Whether the given presenter {Object|Class} is active.
+     */
+    isPresenterActive : function(presenter) 
+    {
+      var active = this.getActive();
+      return active && (active == presenter || active.constructor == presenter);
+    },
 
 
     navigateBack : function(alternate) 

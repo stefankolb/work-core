@@ -27,7 +27,15 @@ core.Module("core.service.location.GeoCode",
     {
       if (xhr.readyState == 4) 
       {
-        var parsed = core.JSON.parse(xhr.responseText);
+        try{
+          var parsed = core.JSON.parse(xhr.responseText);  
+        } 
+        catch(ex) 
+        {
+          console.error("Error during parsing result: " + ex);
+          parsed = {};
+        }
+        
         if (parsed.status == "OK") 
         {
           var components = parsed.results[0].address_components;

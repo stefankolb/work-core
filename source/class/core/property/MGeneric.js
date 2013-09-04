@@ -260,7 +260,7 @@
 						if (!this[method]()) 
 						{
 							if (jasy.Env.isSet("debug")) {
-								this.log("Property " + name + " is not valid!");
+								this.warn("Property " + name + " is not valid!");
 							}
 
 							if (raise) {

@@ -53,7 +53,7 @@
         context = document;
       }
 
-      console.log("Found scripts: ", nodes.length);
+      var queue = [];
 
       // Evaluate executable scripts on first document insertion
       for (var i=0, l=nodes.length; i<l; i++) 
@@ -64,26 +64,31 @@
         {
           if (node.src) 
           {
-            // Optional AJAX dependency, but won't run scripts if not present
+            // Do basic synchronous XHR
+            var xhr = new XMLHttpRequest;
+            xhr.open("GET", node.src, false);
+            xhr.send(null);
 
-            console.log("Executing script URL: " + node.src);
-            continue;
-
-            if (jQuery._evalUrl) {
-              jQuery._evalUrl(node.src);
+            if (xhr.readyState == 4 && core.io.Util.isStatusOkay(xhr.status))
+            {
+              execScript(xhr.responseText);
             }
+            else
+            {
+              throw new Error("Unable to load script: " + node.src);
+            }              
           }
           else
           { 
             var code = node.textContent.replace(rcleanScript, "");
-
-            console.log("Executing script code: " + code);
 
             // Use global eval like feature from fix.ExecScript
             execScript(code);
           }
         }
       }
+
+      core.io.Queue.load(queue);
     },
 
 
@@ -128,19 +133,25 @@
     },
 
 
-    inject : function(elems, context, parent, rel)
+    /**
+     * Processes the given @elems {Element[]|String[]} (mixed string and/or elements)
+     * and inserts them in @relation {String} to the given @parent {Element}. The
+     * parameter @context {Document?document} is used to correctly parse HTML
+     * fragments to make them as children of that document (execution/DOM context).
+     */
+    inject : function(elems, context, parent, relation)
     {
       var scripts = [];
       var fragment = this.build(elems, context, scripts);
 
-      this.insert(fragment, parent, rel);
+      this.insert(fragment, parent, relation);
       this.execute(scripts, context);
     },
 
 
     /**
      * {DocumentFragment} Converts the given @elems {Element[]|String[]} (mixed string and/or elements)
-     * into a new document fragments. The @context {Document?document} defaults to the document in the execution
+     * into a new document fragment. The @context {Document?document} defaults to the document in the execution
      * environment and might be changed to another document e.g. inside an iframe. During the build process 
      * scripts can optionally being extracted. To enable this feature pass @scripts {Array?} to the function.
      */
@@ -213,12 +224,12 @@
         // Append to fragment
         fragment.appendChild(elem)
 
-        // Find script elements
-        var scriptElems = elem.tagName == "SCRIPT" ? [elem] : elem.getElementsByTagName("script");
-
-        // Capture executables
         if (scripts) 
         {
+          // Find script elements
+          var scriptElems = elem.tagName == "SCRIPT" ? [elem] : elem.nodeType == 1 ? elem.getElementsByTagName("script") : [];
+
+          // Capture executables
           var j = 0;
           while ((elem = scriptElems[j++])) 
           {

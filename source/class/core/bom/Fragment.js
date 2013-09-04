@@ -16,6 +16,7 @@
   var rhtml = /<|&#?\w+;/;
   var rtagName = /<([\w:]+)/;
   var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi;
+  var rcleanScript = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
 
   // We have to close these tags to support XHTML (#13200)
   var wrapMap = 
@@ -40,19 +41,124 @@
 
   core.Module("core.bom.Fragment",
   {
+    /**
+     * Executes the given set of script @nodes {Element[]}. Checks whether the script node
+     * is injected into the same document @context {Document?document} first. Supports 
+     * both, script nodes with inline code and script nodes with `src` attribute to load 
+     * and execute remote scripts.
+     */
+    execute : function(nodes, context)
+    {
+      if (context == null) {
+        context = document;
+      }
+
+      console.log("Found scripts: ", nodes.length);
+
+      // Evaluate executable scripts on first document insertion
+      for (var i=0, l=nodes.length; i<l; i++) 
+      {
+        var node = nodes[i];
+        
+        if (rscriptType.test(node.type || "") && core.dom.Node.contains(context, node)) 
+        {
+          if (node.src) 
+          {
+            // Optional AJAX dependency, but won't run scripts if not present
+
+            console.log("Executing script URL: " + node.src);
+            continue;
+
+            if (jQuery._evalUrl) {
+              jQuery._evalUrl(node.src);
+            }
+          }
+          else
+          { 
+            var code = node.textContent.replace(rcleanScript, "");
+
+            console.log("Executing script code: " + code);
+
+            // Use global eval like feature from fix.ExecScript
+            execScript(code);
+          }
+        }
+      }
+    },
+
+
+    /**
+     * Positioned insert for document fragments. Inserts @fragment {DocumentFragment}
+     * relative to the given @parent {Element} at the given @relation {String}.
+     *
+     * Supported relations are:
+     *
+     * - `beforebegin`
+     * - `afterbegin`
+     * - `beforeend`
+     * - `afterend`
+     */
+    insert : function(fragment, parent, relation)
+    {
+      var parentParent = parent.parentNode;
+      if (relation == "beforeend") 
+      {
+        parent.appendChild(fragment);
+      } 
+      else if (relation == "afterend") 
+      {
+        if (parent.nextSibling) {
+          parentParent.insertBefore(fragment, parent.nextSibling);  
+        } else {
+          parentParent.appendChild(fragment);
+        }
+      }
+      else if (relation == "beforebegin")
+      {
+        parentParent.insertBefore(fragment, parent);  
+      }
+      else if (relation == "afterbegin")
+      {
+        parent.insertBefore(fragment, parent.firstChild);
+      }
+      else if (jasy.Env.isSet("debug")) 
+      {
+        throw new Error("Invalid relation parameter: " + relation);
+      }
+    },
+
+
+    inject : function(elems, context, parent, rel)
+    {
+      var scripts = [];
+      var fragment = this.build(elems, context, scripts);
+
+      this.insert(fragment, parent, rel);
+      this.execute(scripts, context);
+    },
+
+
+    /**
+     * {DocumentFragment} Converts the given @elems {Element[]|String[]} (mixed string and/or elements)
+     * into a new document fragments. The @context {Document?document} defaults to the document in the execution
+     * environment and might be changed to another document e.g. inside an iframe. During the build process 
+     * scripts can optionally being extracted. To enable this feature pass @scripts {Array?} to the function.
+     */
     build : function(elems, context, scripts) 
     {
-      var elem, tmp, tag, wrap, contains, j,
-        i = 0,
-        l = elems.length,
-        fragment = context.createDocumentFragment(),
-        nodes = [];
+      if (context == null) {
+        context = document;
+      }
 
-      for (; i < l; i++) {
-        elem = elems[i];
+      var fragment = context.createDocumentFragment();
+      var nodes = [];
 
-        if (elem || elem === 0) {
+      for (var i=0, l=elems.length; i < l; i++) 
+      {
+        var elem = elems[i];
 
+        if (elem || elem === 0) 
+        {
           // Add nodes directly
           if (typeof elem === "object") 
           {
@@ -72,27 +178,27 @@
           // Convert html into DOM nodes
           else 
           {
-            tmp = tmp || fragment.appendChild(context.createElement("div"));
+            var wrapper = wrapper || fragment.appendChild(context.createElement("div"));
 
             // Deserialize a standard representation
-            tag = (rtagName.exec(elem) || ["", ""])[1].toLowerCase();
-            wrap = wrapMap[tag] || wrapMap._default;
-            tmp.innerHTML = wrap[1] + elem.replace(rxhtmlTag, "<$1></$2>") + wrap[2];
+            var tag = (rtagName.exec(elem) || ["", ""])[1].toLowerCase();
+            var wrap = wrapMap[tag] || wrapMap._default;
+            wrapper.innerHTML = wrap[1] + elem.replace(rxhtmlTag, "<$1></$2>") + wrap[2];
 
             // Descend through wrappers to the right content
-            j = wrap[0];
+            var j = wrap[0];
             while (j--) {
-              tmp = tmp.lastChild;
+              wrapper = wrapper.lastChild;
             }
 
-            nodes.push.apply(nodes, tmp.childNodes);
+            nodes.push.apply(nodes, wrapper.childNodes);
 
             // Remember the top-level container
-            tmp = fragment.firstChild;
+            wrapper = fragment.firstChild;
 
             // Fixes #12346
             // Support: Webkit, IE
-            tmp.textContent = "";
+            wrapper.textContent = "";
           }
         }
       }
@@ -100,20 +206,21 @@
       // Remove wrapper from fragment
       fragment.textContent = "";
 
-      i = 0;
+      // No append the real nodes
+      var i = 0;
       while ((elem = nodes[i++])) 
       {
         // Append to fragment
         fragment.appendChild(elem)
 
         // Find script elements
-        var tmp = elem.tagName == "SCRIPT" ? [elem] : elem.getElementsByTagName("script")
+        var scriptElems = elem.tagName == "SCRIPT" ? [elem] : elem.getElementsByTagName("script");
 
         // Capture executables
         if (scripts) 
         {
-          j = 0;
-          while ((elem = tmp[j++])) 
+          var j = 0;
+          while ((elem = scriptElems[j++])) 
           {
             if (rscriptType.test(elem.type || "")) {
               scripts.push(elem);
@@ -127,7 +234,5 @@
   })
 
 })();
-
-
 
   

@@ -77,7 +77,7 @@
 					
 					// Finally call the user defined callback (succeed with data)
 					var status = request.status;
-					var okay = status >= 200 && status < 300 || status == 304 || status == 1223;
+					var okay = core.io.Util.isStatusOkay(status);
 					callback.call(context, uri, !okay, { 
 						text : request.response || request.responseText || ""
 					});

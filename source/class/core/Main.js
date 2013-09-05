@@ -12,6 +12,12 @@
 {
 	var global = (function(){ return this || (1,eval)('this') })();
 
+	var createDict = Object.create ? function() {	
+		return Object.create(null);
+	} : function() {
+		return {};
+	};
+
 	// defineProperty exists in IE8 but will error when trying to define a property on
 	// native objects. IE8 does not have defineProperies, however, so this check saves a try/catch block.
 	if(Object.defineProperty && Object.defineProperties)
@@ -40,7 +46,8 @@
 		"global" : global
 	};
 
-	var typesCache = (Object.create || Object)(null);
+	var classToTypeCache = createDict();
+	var typeofToTypeCache = createDict();
 
 	/**
 	 * {Object} Declares the given @name {String} and stores the given @object {Object|Function} onto it.
@@ -57,7 +64,7 @@
 		{
 			segment = splits[i++];
 			if (current[segment] == null) {
-				current = current[segment] = {};
+				current = current[segment] = createDict();
 			} else {
 				current = current[segment];
 			}
@@ -127,11 +134,7 @@
 		/**
 		 * {Object} Returns an empty dictionary like object
 		 */
-		createDict : Object.create ? function() {	
-			return Object.create(null);
-		} : function() {
-			return {};
-		},
+		createDict : createDict,
 
 
 		/**
@@ -152,19 +155,36 @@
 
 		/**
 		 * {String} Returns the type of the @Unknown {any} value.
+		 *
+		 * Example types:
+		 *
+		 * - null
+		 * - undefined
+		 * - String
+		 * - Number
+		 * - Boolean
+		 * - Date
+		 * - Function
+		 * - RegExp
+		 *
+		 * any many more...
 		 */
-		getType : function(Unknown) 
+		getType : function(any) 
 		{
-			var asString = typeof Unknown;
-			return asString == 'object' ? (
-				Unknown === null ? 'null' : (
-					cache[asString = toString.call(Unknown)] || (
-						cache[asString] = asString
-							.slice(asString.indexOf(' ') + 1, -1)
-							.toLowerCase()
-					)
-				)
-			) : asString;
+			if (any == null) {
+				return any === null ? "null" : "undefined";
+			}
+
+			var asString = typeof any;
+			if (asString == "object")
+			{
+				asString = toString.call(any);
+				return classToTypeCache[asString] || (classToTypeCache[asString] = asString.slice(asString.indexOf(' ') + 1, -1));
+			}
+			else
+			{
+				return typeofToTypeCache[asString] || (typeofToTypeCache[asString] = asString.charAt(0).toUpperCase() + asString.slice(1));
+			}
 		},
 
 

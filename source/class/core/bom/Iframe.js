@@ -7,8 +7,6 @@
 
 /**
  * Utilities for working with iframes.
- *
- * #asset(core/empty.html)
  */
 core.Module("core.bom.Iframe",
 {
@@ -29,33 +27,42 @@ core.Module("core.bom.Iframe",
     var doc = parent.ownerDocument;
 
     var frame = doc.createElement("iframe");
+    var style = frame.style;
 
-    if (secure)
+    style.width = "0px";
+    style.height = "0px";
+    style.position = "absolute";
+    style.left = "-1000px";
+    style.top = "-1000px";
+
+    if (secure) 
     {
+      frame.setAttribute("sandbox", "allow-scripts");  
+
       var encoded = core.util.Base64.encode(html);
       frame.src = "data:text/html;base64," + encoded;
     }
     else
     {
-      frame.src = jasy.Asset.toUri("core/empty.html");  
-    }
-    
-    frame.style.display = "none";
+      var self = this;
 
-    if (secure) {
-      frame.setAttribute("sandbox", "allow-scripts");  
-    }
+      frame.onload = core.Function.debounce(function() 
+      {
+        frame.onload = null;
+
+        var doc = self.getDocument(frame);
+        doc.open('text/html', 'replace');
+        doc.write(html);
+        // Don't close document for allowing document.write()
+      });
+
+      /**
+       * #asset(core/empty.html)
+       */
+      frame.src = jasy.Asset.toUri("core/empty.html");  
+    };
 
     parent.appendChild(frame);
-
-    if (!secure)
-    {
-      var doc = this.getDocument(frame);
-      doc.open('text/html', 'replace');
-      doc.write(html);
-
-      // Don't close document for allowing document.write()
-    }
 
     return frame;
   },

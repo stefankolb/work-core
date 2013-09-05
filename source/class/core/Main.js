@@ -40,6 +40,7 @@
 		"global" : global
 	};
 
+	var typesCache = (Object.create || Object)(null);
 
 	/**
 	 * {Object} Declares the given @name {String} and stores the given @object {Object|Function} onto it.
@@ -78,10 +79,10 @@
 	// By Lodash
 	var objectRef = {};
 	var isNativeRepExp = RegExp('^' +
-    (objectRef.valueOf + '')
-      .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-      .replace(/valueOf|for [^\]]+/g, '.+?') + '$'
-  );
+		(objectRef.valueOf + '')
+			.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+			.replace(/valueOf|for [^\]]+/g, '.+?') + '$'
+	);
 	
 	/**
 	 * Useful root methods to add members to objects.
@@ -89,7 +90,7 @@
 	 * Loading this class also adds a few essential fixes for different engines.
 	 *
 	 * #load(fix.*)
- 	 */
+	 */
 	core.Main.declareNamespace("core.Main", 
 	{
 		declareNamespace : declareNamespace,
@@ -146,6 +147,24 @@
 		 */
 		getGlobal : function() {
 			return global;
+		},
+
+
+		/**
+		 * {String} Returns the type of the @Unknown {any} value.
+		 */
+		getType : function(Unknown) 
+		{
+			var asString = typeof Unknown;
+			return asString == 'object' ? (
+				Unknown === null ? 'null' : (
+					cache[asString = toString.call(Unknown)] || (
+						cache[asString] = asString
+							.slice(asString.indexOf(' ') + 1, -1)
+							.toLowerCase()
+					)
+				)
+			) : asString;
 		},
 
 

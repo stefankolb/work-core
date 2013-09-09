@@ -28,6 +28,8 @@
         core.Assert.isType(value, "Plain", "Invalid data type to store!");
       }
 
+      compress = false;
+
       // Auto cast JSON objects and mark as JSON
       if (typeof value == "object") {
         var text = "@J@" + core.JSON.stringify(value);

@@ -9,22 +9,17 @@
 
 /**
  * Promises implementation of A+ specification passing Promises/A+ test suite.
- * Very efficient due to object pooling if release() is called.
  * http://promises-aplus.github.com/promises-spec/
  */
 core.Class("core.event.Promise", 
 {
-	pooling : true,
 	include : [core.util.MLogging],
 	
 	construct : function() 
 	{
 		// Initialize lists on new Promises
-		if (this.__onFulfilledQueue == null)
-		{
-			this.__onFulfilledQueue = [];
-			this.__onRejectedQueue = [];
-		}
+		this.__onFulfilledQueue = [];
+		this.__onRejectedQueue = [];
 	},
 	
 	members : 
@@ -32,13 +27,17 @@ core.Class("core.event.Promise",
 		/** {=String} Current state */
 		__state : "pending",
 
-
 		/** {=Boolean} Whether the promise is locked */
 		__locked : false,
 
-
 		/** {=any} Any value */
 		__valueOrReason : null,
+
+		/** {=Array} Placeholder for internal fulfill queue */
+		__onFulfilledQueue : null,
+
+		/** {=Array} Placeholder for internal reject queue */
+		__onRejectedQueue : null,
 
 
 		/** 
@@ -176,25 +175,6 @@ core.Class("core.event.Promise",
 
 
 		/**
-		 * Releases the promise instance to the pool for reusage.
-		 */
-		release : function()
-		{
-			//console.log("CALL RELEASE ON: ", this)
-			//console.trace()
-
-			// Cleanup internal state
-			this.__state = "pending";
-			this.__locked = false;
-			this.__valueOrReason = null;
-			//this.__onRejectedQueue.length = this.__onFulfilledQueue.length = 0;
-
-			// Release for next usage
-			core.event.Promise.release(this);
-		},
-		
-
-		/**
 		 * {core.event.Promise} Register fulfillment handler @onFulfilled {Function}
 		 * and rejection handler @onRejected {Function} returning new child promise.
 		 * If @safe {Boolean} is set, the default value jasy.Env.getValue("safepromises")
@@ -230,6 +210,7 @@ core.Class("core.event.Promise",
 			
 			return child;
 		},
+
 
 		/**
 		 * Throws all remaining errors to application level and display promise rejecting

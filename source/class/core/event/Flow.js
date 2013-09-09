@@ -44,7 +44,7 @@
     }
     else if (core.Main.isTypeOf(promisesOrValues, "Array")) 
     {
-      var promise = core.event.Promise.obtain();
+      var promise = new core.event.Promise;
 
       var resolved = 0;
       var len = promisesOrValues.length;
@@ -99,7 +99,7 @@
       
       if ((result == null) || (!result.then)) 
       {
-        var promise = core.event.Promise.obtain();
+        var promise = new core.event.Promise;
         promise.fulfill(result);
         return promise;
       }
@@ -110,7 +110,7 @@
     } 
     catch (e)
     {
-      var promise = core.event.Promise.obtain();
+      var promise = new core.event.Promise;
       promise.reject(e);
       return promise;
     }
@@ -157,7 +157,7 @@
         core.Assert.isType(promisesOrValues, "ArrayOrPromise");
       }
 
-      var promise = core.event.Promise.obtain();
+      var promise = new core.event.Promise;
       var reasons = [];
       var promisesLength = promisesOrValues.length;
       
@@ -241,7 +241,7 @@
       }
 
       var args = slice.call(arguments, 2);
-      var promise = core.event.Promise.obtain();
+      var promise = new core.event.Promise;
       var result = [];
       
       var prom;

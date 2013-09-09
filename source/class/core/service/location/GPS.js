@@ -12,7 +12,7 @@ core.Module("core.service.location.GPS",
 {
   detect : function()
   {
-    var promise = core.event.Promise.obtain();
+    var promise = new core.event.Promise;
     
     if (navigator.geolocation) 
     {

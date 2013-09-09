@@ -15,7 +15,7 @@ core.Module("core.service.location.GeoCode",
 {
   detect : function(data)
   {
-    var promise = core.event.Promise.obtain();
+    var promise = new core.event.Promise;
 
     var url = "//maps.googleapis.com/maps/api/geocode/json?sensor=true&latlng=";
     url += data.latitude + "," + data.longitude;

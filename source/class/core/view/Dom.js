@@ -222,7 +222,7 @@ core.Class("core.view.Dom",
      */
     loadPartial : function(assetId, nostrip)
     {
-      var promise = core.event.Promise.obtain();
+      var promise = new core.event.Promise;
 
       // Auto extract partial name from file name
       // Convention over configuration FTW
@@ -279,7 +279,7 @@ core.Class("core.view.Dom",
      */
     loadTemplate : function(assetId, nostrip)
     {
-      var promise = core.event.Promise.obtain();
+      var promise = new core.event.Promise;
 
       // Use cached template if available
       var existing = this.__templateCache[assetId];
@@ -331,7 +331,7 @@ core.Class("core.view.Dom",
      */
     loadStyleSheet : function(assetId)
     {
-      var promise = core.event.Promise.obtain();
+      var promise = new core.event.Promise;
 
       core.io.StyleSheet.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
       {

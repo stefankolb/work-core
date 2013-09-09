@@ -183,7 +183,7 @@ core.Class("core.event.Promise",
 		 */
 		then : function(onFulfilled, onRejected, context, safe) 
 		{
-			var child = core.event.Promise.obtain();
+			var child = new core.event.Promise;
 
 			var fullfilledQueue = this.__onFulfilledQueue;
 			var rejectedQueue = this.__onRejectedQueue;

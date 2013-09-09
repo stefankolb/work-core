@@ -3,7 +3,7 @@ var suite = new core.testrunner.Suite("Promises");
 
 suite.test("successful promises", function() {
 
-  var promise = core.event.Promise.obtain();
+  var promise = new core.event.Promise;
   
   var fulfill = function(value) {
     this.isIdentical(value, "TEST1");
@@ -23,7 +23,7 @@ suite.test("successful promises", function() {
 
 suite.test("rejected promises", function() {
 
-  var promise = core.event.Promise.obtain();
+  var promise = new core.event.Promise;
   
   var fulfill = function(value) {
     this.isIdentical(value, "TEST1");
@@ -59,9 +59,9 @@ suite.test("flow value mapping (simple)", function() {
 
 suite.test("flow value mapping (promises list)", function() {
 
-  var promise0 = core.event.Promise.obtain();
-  var promise1 = core.event.Promise.obtain();
-  var promise9 = core.event.Promise.obtain();
+  var promise0 = new core.event.Promise;
+  var promise1 = new core.event.Promise;
+  var promise9 = new core.event.Promise;
   var promise = core.event.Flow.all([promise0, promise1, promise9]);
   
   promise.then(function(value) {
@@ -82,8 +82,8 @@ suite.test("flow value mapping (promises list)", function() {
 
 suite.test("flow value mapping (mixed values)", function() {
 
-  var promise0 = core.event.Promise.obtain();
-  var promise9 = core.event.Promise.obtain();
+  var promise0 = new core.event.Promise;
+  var promise9 = new core.event.Promise;
   var promise = core.event.Flow.all([promise0, 1, promise9]);
   
   promise.then(function(value) {
@@ -103,7 +103,7 @@ suite.test("flow value mapping (mixed values)", function() {
 
 suite.test("flow value mapping (promise for array of values)", function() {
 
-  var promise = core.event.Promise.obtain();
+  var promise = new core.event.Promise;
   
   core.event.Flow.all(promise).then(function(value) {
     
@@ -121,10 +121,10 @@ suite.test("flow value mapping (promise for array of values)", function() {
 
 suite.test("flow value mapping (promise for array of promises)", function() {
 
-  var promise = core.event.Promise.obtain();
-  var promise0 = core.event.Promise.obtain();
-  var promise1 = core.event.Promise.obtain();
-  var promise9 = core.event.Promise.obtain();
+  var promise = new core.event.Promise;
+  var promise0 = new core.event.Promise;
+  var promise1 = new core.event.Promise;
+  var promise9 = new core.event.Promise;
   
   core.event.Flow.all(promise).then(function(value) {
     
@@ -146,9 +146,9 @@ suite.test("flow value mapping (promise for array of promises)", function() {
 
 suite.test("flow value mapping (promise for array of mixed values and promises)", function() {
 
-  var promise = core.event.Promise.obtain();
-  var promise0 = core.event.Promise.obtain();
-  var promise9 = core.event.Promise.obtain();
+  var promise = new core.event.Promise;
+  var promise0 = new core.event.Promise;
+  var promise9 = new core.event.Promise;
   
   core.event.Flow.all(promise).then(function(value) {
     
@@ -169,9 +169,9 @@ suite.test("flow value mapping (promise for array of mixed values and promises)"
 
 suite.test("flow value mapping (reject one promise)", function() {
 
-  var promise = core.event.Promise.obtain();
-  var promise0 = core.event.Promise.obtain();
-  var promise9 = core.event.Promise.obtain();
+  var promise = new core.event.Promise;
+  var promise0 = new core.event.Promise;
+  var promise9 = new core.event.Promise;
   
   core.event.Flow.all(promise).then(null, function(reason) {
     this.isIdentical(reason, "REASON");
@@ -188,9 +188,9 @@ suite.test("flow value mapping (reject one promise)", function() {
 /*
 suite.test("flow map", function() {
 
-  var promise = core.event.Promise.obtain();
-  var promise0 = core.event.Promise.obtain();
-  var promise9 = core.event.Promise.obtain();
+  var promise = new core.event.Promise;
+  var promise0 = new core.event.Promise;
+  var promise9 = new core.event.Promise;
   
   core.event.Flow.map(promise, function(value) {
     return "X" + value;
@@ -213,9 +213,9 @@ suite.test("flow map", function() {
 
 suite.test("flow any", function() {
 
-  var promise0 = core.event.Promise.obtain();
-  var promise1 = core.event.Promise.obtain();
-  var promise9 = core.event.Promise.obtain();
+  var promise0 = new core.event.Promise;
+  var promise1 = new core.event.Promise;
+  var promise9 = new core.event.Promise;
   
   core.event.Flow.any([promise0, promise1, promise9]).then(function(value) {
     
@@ -234,8 +234,8 @@ suite.test("flow any", function() {
 
 suite.test("flow any with one failing", function() {
 
-  var promise0 = core.event.Promise.obtain();
-  var promise1 = core.event.Promise.obtain();
+  var promise0 = new core.event.Promise;
+  var promise1 = new core.event.Promise;
   
   core.event.Flow.any([promise0, promise1, 9]).then(function(value) {
     
@@ -252,9 +252,9 @@ suite.test("flow any with one failing", function() {
 
 suite.test("flow any with all failing", function() {
 
-  var promise0 = core.event.Promise.obtain();
-  var promise1 = core.event.Promise.obtain();
-  var promise9 = core.event.Promise.obtain();
+  var promise0 = new core.event.Promise;
+  var promise1 = new core.event.Promise;
+  var promise9 = new core.event.Promise;
   
   core.event.Flow.any([promise0, promise1, promise9]).then(null, function(value) {
     
@@ -276,7 +276,7 @@ suite.test("flow sequence", function() {
 
   var mutex = null;
 
-  var promise1 = core.event.Promise.obtain();
+  var promise1 = new core.event.Promise;
   
   var func1 = function(arg1, arg2) {
     this.isNull(mutex);
@@ -293,7 +293,7 @@ suite.test("flow sequence", function() {
   var func2 = function(arg1, arg2) {
     this.isNull(mutex);
     mutex = "func2";
-    var promise = core.event.Promise.obtain();
+    var promise = new core.event.Promise;
     
     core.Function.timeout(function() {
       this.isEqual(mutex, "func2");
@@ -338,7 +338,7 @@ suite.test("flow pipe", function() {
 
   var mutex = null;
 
-  var promise1 = core.event.Promise.obtain();
+  var promise1 = new core.event.Promise;
   
   var func1 = function(arg) {
     this.isIdentical(arg, "a");
@@ -349,7 +349,7 @@ suite.test("flow pipe", function() {
   
   var func2 = function(arg) {
     this.isIdentical(arg, 1);
-    var promise = core.event.Promise.obtain();
+    var promise = new core.event.Promise;
     
     core.Function.timeout(function() {
       promise.fulfill(2);
@@ -378,7 +378,7 @@ suite.test("flow pipe (rejected)", function() {
 
   var mutex = null;
 
-  var promise1 = core.event.Promise.obtain();
+  var promise1 = new core.event.Promise;
   
   var func1 = function(arg) {
     this.isIdentical(arg, "a");
@@ -389,7 +389,7 @@ suite.test("flow pipe (rejected)", function() {
   
   var func2 = function(arg) {
     this.isIdentical(arg, 1);
-    var promise = core.event.Promise.obtain();
+    var promise = new core.event.Promise;
     
     core.Function.timeout(function() {
       promise.reject(2);

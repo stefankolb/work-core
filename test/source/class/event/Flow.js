@@ -5,7 +5,7 @@ suite.test("sequence", function() {
   var result = [];  
 
   var func1 = function() {
-    var promise = core.event.Promise.obtain();
+    var promise = new core.event.Promise;
 
     core.Function.timeout(function() {
       result.push("func1");

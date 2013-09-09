@@ -228,6 +228,7 @@
       immediate(func);
     },
 
+
     /**
      * {Function} Returns a new function that curries all given arguments to the given @func {Function}.
      */

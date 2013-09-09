@@ -234,7 +234,6 @@ core.Class("core.view.Dom",
       {
         this.addPartial(name, existing);
         promise.fulfill(existing);
-        promise.release();
         return promise;
       }
 
@@ -265,8 +264,6 @@ core.Class("core.view.Dom",
           // Finally fulfill
           promise.fulfill(template);
         }
-
-        promise.release();
       }, this);
 
       return promise;
@@ -287,7 +284,6 @@ core.Class("core.view.Dom",
       {
         this.setTemplate(existing);
         promise.fulfill(existing);
-        promise.release();
         return promise;
       }
 
@@ -317,8 +313,6 @@ core.Class("core.view.Dom",
           // Finally fulfill
           promise.fulfill(template);
         }
-
-        promise.release();
       }, this);
 
       return promise;
@@ -345,7 +339,6 @@ core.Class("core.view.Dom",
         }
 
         errornous ? promise.reject("io") : promise.fulfill(data);
-        promise.release();
       }, this);
 
       return promise;

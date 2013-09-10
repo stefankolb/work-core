@@ -103,6 +103,11 @@
      * 
      * - Only one connection is made to allow proper disconnecting without access to the bound function. 
      * - Uses ES5 bind() to connect functions to objects internally.
+     * 
+     * Because bound functions are cached on the objects this approach is only useful for longer
+     * living methods like class or module methods and not a recommended approach for binding
+     * short living or temporary methods like the ones declared inside closures. Otherwise
+     * the cache would increase in size during application runtime.
      */    
     bind : bind,
 

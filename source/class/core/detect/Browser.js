@@ -38,7 +38,7 @@
       name = "safari";
       version = RegExp.$1;
 
-      if (agent.indexOf("Mobile Safari") != -1) {
+      if (agent.indexOf("mobile/") != -1) {
         name = "mobilesafari";
       }
     }

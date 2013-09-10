@@ -12,10 +12,6 @@ fields:
     - trident
     - presto
     detect: core.detect.Engine
-  es5:
-    check: Boolean
-    default: false
-    detect: core.detect.ES5
   json:
     check: Boolean
     default: false

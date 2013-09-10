@@ -13,6 +13,7 @@
 
   var name = jasy.Env.getValue("engine");
   var version = null;
+  var mobile = false;
 
   if (jasy.Env.isSet("engine", "trident")) 
   {
@@ -39,7 +40,7 @@
       version = RegExp.$1;
 
       if (agent.indexOf("mobile/") != -1) {
-        name = "mobilesafari";
+        mobile = true;
       }
     }
     else if ((global.chrome || global.chromium) && (/opr\/([0-9.]+)/.exec(agent) || /(chrome)\/([0-9.]+)/.exec(agent)))
@@ -54,11 +55,16 @@
         name = "opera";
         version = RegExp.$1;
       }
+
+      if (agent.indexOf("mobile safari") != -1) {
+        mobile = true;
+      }
     }
     else if (agent.indexOf("linux") != 1 && /(android) ([0-9.]+)/.exec(agent))
     {
       name = RegExp.$1;
       version = RegExp.$2;
+      mobile = true;
     }
   }
   else if (jasy.Env.isSet("engine", "presto") && (/version\/([0-9.]+)/.exec(agent) || /opera ([0-9.]+)/.exec(agent)))
@@ -73,6 +79,11 @@
   if (version != null && version != "") 
   {
     major = parseInt(version || "", 10);
+
+    if (mobile) {
+      value += " mobile";
+    }
+
     value += " " + major;
   }
 
@@ -85,7 +96,8 @@
     VALUE : value,
     VERSION : major,
     FULLVERSION : version,
-    NAME : name
+    NAME : name,
+    MOBILE : true
   });
 })(core.Main.getGlobal(), RegExp);
   

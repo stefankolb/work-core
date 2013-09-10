@@ -209,7 +209,7 @@
           {
             var point = changed[i];
 
-            console.log("Fire pointerup: primary=" + (point.identifier == primaryIdentifier), point.target, nativeEvent.currentTarget);
+            // console.log("Fire pointerup: primary=" + (point.identifier == primaryIdentifier), point.target, nativeEvent.currentTarget);
 
             var eventObject = core.bom.event.type.Pointer.obtain(point, "pointerup");
             eventObject.isPrimary = point.identifier == primaryIdentifier;

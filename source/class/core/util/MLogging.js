@@ -17,6 +17,13 @@
     var extended = slice.call(args);
     extended.unshift(obj.toString() + ":");
 
+    // Android's system browser does not support multi arguments on console instances (via ADB)
+    if (core.detect.Browser.NAME == "android") 
+    {
+      console[method](extended.join(" "));
+      return;
+    }
+
     // Failsafe output of multiple arguments
     // e.g. IE8 does not support apply on console methods.
     try{

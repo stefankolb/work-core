@@ -23,8 +23,10 @@
 	var methods = "log,debug,error,warn,info,timeStamp".split(",");
 	var console = global.console || (global.console = {});
 	
-	if (jasy.Env.isSet("runtime", "worker")) {
-		var workerConsoleGenerator = function(method) {
+	if (jasy.Env.isSet("runtime", "worker")) 
+	{
+		var workerConsoleGenerator = function(method) 
+		{
 			return function() {
 				self.postMessage({
 					type: "core/debug/" + method,
@@ -33,11 +35,14 @@
 			};
 		};
 
-		for (var i=0, l=methods.length; i<l; i++) {
+		for (var i=0, l=methods.length; i<l; i++) 
+		{
 			var method = methods[i];
 			console[method] = workerConsoleGenerator(method);
 		}
-	} else {
+	} 
+	else
+	{
 		var log = console.log || new Function;
 
 		for (var i=0, l=methods.length; i<l; i++)

@@ -115,16 +115,20 @@
 	/**
 	 * Text compressor to compress (mainly western) strings to UTF16 in an size efficient way. This is based upon work of FT.
 	 */
-	core.Module("core.util.TextCompressor", {
+	core.Module("core.util.TextCompressor", 
+	{
 		compress64 : compress64,
 		decompress64 : decompress64,
 
+	
 		/**
 		 * {String} Returns packed UTF16 representation of given encoded @text {String}.
 		 */
 		compress : function(text) {
 			return compress64(core.util.Base64.encode(text));
 		},
+
+
 		/**
 		 * {String} Returns unpacked string representation of given @encodedText {String}.
 		 */

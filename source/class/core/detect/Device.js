@@ -12,18 +12,15 @@
   if (jasy.Env.isSet("runtime", "browser"))
   {
     // Androids native system browser is buggy
-    if (core.detect.Browser.NAME == "android") 
-    {
+    if (core.detect.Browser.NAME == "android") {
       var largest = Math.max(window.innerWidth, window.innerHeight);
-    }
-    else
-    {
+    } else {
       var largest = Math.max(screen.width, screen.height);  
     }
 
     if (largest > 1000) {
       value = "desktop";
-    } else if (largest > 720) {
+    } else if (largest > 700) {
       value = "tablet";
     } else {
       value = "phone";

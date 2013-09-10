@@ -9,9 +9,10 @@
 
 (function(global, RegExp)
 {
+  var agent = navigator.userAgent.toLowerCase();
+
   var name = jasy.Env.getValue("engine");
   var version = null;
-  var agent = navigator.userAgent.toLowerCase();
 
   if (jasy.Env.isSet("engine", "trident")) 
   {
@@ -36,6 +37,10 @@
     {
       name = "safari";
       version = RegExp.$1;
+
+      if (agent.indexOf("Mobile Safari") != -1) {
+        name = "mobilesafari";
+      }
     }
     else if ((global.chrome || global.chromium) && (/opr\/([0-9.]+)/.exec(agent) || /(chrome)\/([0-9.]+)/.exec(agent)))
     {
@@ -49,6 +54,11 @@
         name = "opera";
         version = RegExp.$1;
       }
+    }
+    else if (agent.indexOf("linux") != 1 && /(android) ([0-9.]+)/.exec(agent))
+    {
+      name = RegExp.$1;
+      version = RegExp.$2;
     }
   }
   else if (jasy.Env.isSet("engine", "presto") && (/version\/([0-9.]+)/.exec(agent) || /opera ([0-9.]+)/.exec(agent)))

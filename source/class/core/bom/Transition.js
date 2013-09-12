@@ -53,12 +53,27 @@
     removeListener : removeListener,
 
     /**
+     * Stops current fade process on the given @elem {Element}.
+     */
+    fadeStop : function(elem) {
+      elem.fading = null;
+    },
+
+
+    /**
      * Fades in the given @elem {Element} moving @from {Map?} styles
      * to @to {Map} styles. Executes the @callback {Function?} in the
      * given @context {Object?} as soon as the fade in process was completed.
      */
     fadeIn : function(elem, from, to, callback, context)
     {
+      // Already running
+      if (elem.fading == "in") {
+        return;
+      }
+
+      elem.fading = "in";
+
       // Move element to initial position
       if (from != null)
       {
@@ -82,6 +97,10 @@
       {
         removeListener(elem, helper);
 
+        if (elem.fading == "in") {
+          elem.fading = null;
+        }
+
         if (callback) {
           context ? callback.call(context) : callback();
         }
@@ -98,6 +117,11 @@
      */
     fadeOut : function(elem, to, reset, callback, context)
     {
+      // Already running
+      if (elem.fading == "out") {
+        return;
+      }
+
       // Figure out whether there is an actual change which is transitioning.
       // Otherwise the transitionEnd event will never fire which leads to unwanted effects.
       var changed = false;
@@ -131,6 +155,8 @@
         return;
       }
 
+      elem.fading = "out";
+
       // Post-pone visible animation to next render frame
       core.effect.AnimationFrame.request(function()
       {
@@ -144,15 +170,20 @@
         // Only execute this helper once
         removeListener(elem, helper);
 
-        // Hide element first
-        elem.style.display = "none";
-
-        // Then apply reset rules
-        if (reset != null)
+        if (elem.fading == "out") 
         {
-          Style.set(elem, "transitionDuration", "0ms");
-          Style.set(elem, reset);
-        }        
+          elem.fading = null;
+
+          // Hide element first  
+          elem.style.display = "none";
+
+          // Then apply reset rules
+          if (reset != null)
+          {
+            Style.set(elem, "transitionDuration", "0ms");
+            Style.set(elem, reset);
+          }
+        }
 
         // And when all is done execute the callback
         if (callback) {

@@ -63,7 +63,7 @@
       {
         var value = map(promisesOrValues[i], mapFunction, context);
         
-        if (value.then) 
+        if (value && value.then) 
         {
           value.then(valueCallback, function(reason) {
             promise.reject(reason);
@@ -210,13 +210,13 @@
      * If any of the input promises is rejected, the returned promise will be 
      * rejected with the reason from the first one that is rejected.
      */
-    all : function(promisesOrValues)
+    all : function(promisesOrValues, context)
     {
       if (jasy.Env.isSet("debug")) {
         core.Assert.isType(promisesOrValues, "ArrayOrPromise");
       }
 
-      return map(promisesOrValues, identity);
+      return map(promisesOrValues, identity, context);
     },
 
 

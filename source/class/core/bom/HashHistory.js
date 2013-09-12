@@ -7,6 +7,7 @@
   2009-2010 Deutsche Telekom AG, Germany, http://telekom.com
 ==================================================================================================
 */
+
 (function()
 {
   /** {=Boolean} Whether the browser supports the native hash change event */
@@ -16,8 +17,7 @@
       return false;
     }
 
-    // documentMode logic from YUI to filter out IE8 Compat Mode
-    //   which false positives.
+    // documentMode logic from YUI to filter out IE8 Compat Mode which false positives.
     return (document.documentMode === undefined || document.documentMode > 7);  
   })();
 
@@ -40,7 +40,7 @@
       if (supportsHashChange) {
         window.addEventListener("hashchange", callback);
       } else {
-        this.__intervalHandler = window.setInterval(callback, 100);
+        this.__intervalHandler = setInterval(callback, 100);
       }
     },
 

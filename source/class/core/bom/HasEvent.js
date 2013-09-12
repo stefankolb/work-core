@@ -27,8 +27,6 @@
         core.Assert.isType(eventName, "String");
       }
 
-      var isSupported;
-
       if (!element || typeof element === "string") {
         element = document.createElement(element || "div");
       }
@@ -37,7 +35,7 @@
       // When using `setAttribute`, IE skips "unload", WebKit skips "unload" and
       // "resize", whereas `in` "catches" those.
       eventName = "on" + eventName;
-      isSupported = eventName in element;
+      var isSupported = eventName in element;
 
       // Fallback technique for old Firefox - bit.ly/event-detection
       if (!isSupported && needsFallback) 

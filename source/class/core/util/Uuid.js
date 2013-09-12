@@ -7,12 +7,13 @@
 
 "use strict";
 
-
-(function() {
+(function() 
+{
 	var Random = core.util.Random;
 	var ArrayType = typeof(Uint8Array) == "function" ? Uint8Array : Array;
 	
 	var hexTable = new Array(256);
+
 	for (var i=0; i<256; i++) {
 		if (i < 16) {
 			hexTable[i] = "0" + i.toString(16);
@@ -20,10 +21,13 @@
 			hexTable[i] = i.toString(16);
 		}
 	}
+
 	
-	var getArrayOfBytes = function() {
+	var getArrayOfBytes = function() 
+	{
 		var uuid = new ArrayType(16);
-		for (var i=0; i<16; i++) {
+		for (var i=0; i<16; i++) 
+		{
 			if (i==6) {
 				uuid[i] = 64 + (Random.getByte() & 0x0F); // 4 << 4 + RANDOM : First 4 bits representing version number (=4)
 			} else if (i==8) {
@@ -34,16 +38,19 @@
 		}
 		return uuid;
 	};
+
 	
 	/**
 	 * RFC4122 UUID version 4 generator (http://www.ietf.org/rfc/rfc4122.txt)
 	 */
-	core.Module("core.util.Uuid", {
+	core.Module("core.util.Uuid", 
+	{
 		/**
 		 * {String} Returns a 36 characters long standard conform 
 		 * UUID string containing dashes.
 		 */
-		get : function() {
+		get : function() 
+		{
 			var uuidBytes = getArrayOfBytes();
 			var uuidStrArray1 = new Array(4);
 			var uuidStrArray2 = new Array(2);
@@ -66,19 +73,23 @@
 			for (i=0; i<6; i++) {
 				uuidStrArray5[i] = hexTable[uuidBytes[i + 10]];
 			}
+
 			return uuidStrArray1.join("") + "-" + uuidStrArray2.join("") + "-" + uuidStrArray3.join("") + "-" + uuidStrArray4.join("") + "-" + uuidStrArray5.join("");
 		},
+		
 		
 		/**
 		 * {String} Returns a 32 characters long plain string 
 		 * representing hexadecimal value of UUID.
 		 */
-		getHex : function() {
+		getHex : function() 
+		{
 			var uuidBytes = getArrayOfBytes();
 			var uuidStrArray = new Array(16);
 			for (var i=0; i<16; i++) {
 				uuidStrArray[i] = hexTable[uuidBytes[i]];
 			}
+
 			return uuidStrArray.join("");
 		},
 	

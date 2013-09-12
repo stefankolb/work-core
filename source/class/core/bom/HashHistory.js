@@ -8,6 +8,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function()
 {
   /** {=Boolean} Whether the browser supports the native hash change event */

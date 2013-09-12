@@ -8,6 +8,8 @@
 ==================================================================================================
 */
 
+"use strict";
+
 (function()
 {
   /** {=RegExp} Matches location fragments (presenter.section:param) */

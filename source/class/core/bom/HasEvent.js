@@ -3,10 +3,12 @@
   Core - JavaScript Foundation
   Copyright 2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
-  Based on the work of the jQuery project
-  Copyright 2005, 2013 jQuery Foundation, Inc. and other contributors
+  Based on the work of the Modernizr project
+  Copyright Modernizr, http://modernizr.com/, MIT License
 ==================================================================================================
 */
+
+"use strict";
 
 (function(document, undefined) 
 {

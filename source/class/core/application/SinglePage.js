@@ -47,14 +47,16 @@ core.Class("core.application.SinglePage",
     /**
      * Internal helper for updating activity indicator when some task was started.
      */
-    incrementActivity : function() 
+    incrementActivity : function(hint) 
     {
       if (++this.__activityCounter == 1) {
         this.getView("root").showActivityIndicator();
       }
 
-      if (jasy.Env.isSet("debug")) {
-        // this.log("Waiting for " + this.__activityCounter + " background processes...");
+      if (jasy.Env.isSet("debug")) 
+      {
+        // this.log(">>> Incremented: " + hint, this.__activityCounter);
+        // this.log(">>> Waiting for " + this.__activityCounter + " background processes...");
       }
     },
 
@@ -62,14 +64,16 @@ core.Class("core.application.SinglePage",
     /**
      * Internal helper for updating activity indicator when some task was done.
      */
-    decrementActivity : function() 
+    decrementActivity : function(hint) 
     {
       if (--this.__activityCounter == 0) {
         this.getView("root").hideActivityIndicator();
       }
 
-      if (jasy.Env.isSet("debug")) {
-        // this.log("Waiting for " + this.__activityCounter + " background processes...");
+      if (jasy.Env.isSet("debug")) 
+      {
+        // this.log(">>> Decremented: " + hint, this.__activityCounter);
+        // this.log(">>> Waiting for " + this.__activityCounter + " background processes...");
       }
     },
 

@@ -8,14 +8,14 @@
 
 "use strict";
 
-(function() 
+(function(document, undef) 
 {
 	/** Caches CSS property names to browser specific names. Can be used as a fast lookup alternative to {#property}. */
 	var nameCache = {};
 
 	var helperElem = document.createElement('div');
 	var helperStyle = helperElem.style;
-	var undef;
+
 
 	// Following spec is to expose vendor-specific style properties as:
 	//   elem.style.WebkitBorderRadius
@@ -33,6 +33,7 @@
 		webkit: 'Webkit',
 		presto: 'O'
 	});
+
 
 	/**
 	 * {String} Returns the supported property (e.g. `WebkitTransform`) of the given standard CSS property 
@@ -69,7 +70,53 @@
 	{
 		names: nameCache,
 		property: getProperty,
-		
+
+
+		/**
+		 * Inject element with style element and some CSS ruless
+		 */
+		injectElementWithStyles : function(rules, callback) 
+		{
+			var id = 'elementtest';
+
+			var div = document.createElement('div');
+			var body = document.body;
+
+			var fakeBody = !body;
+			if (fakeBody) {
+				body = document.createElement("body");
+			}
+
+			// <style> elements in IE6-9 are considered 'NoScope' elements and therefore will be removed
+			// when injected with innerHTML. To get around this you need to prepend the 'NoScope' element
+			// with a 'scoped' element, in our case the soft-hyphen entity as it won't mess with our measurements.
+			// msdn.microsoft.com/en-us/library/ms533897%28VS.85%29.aspx
+			// Documents served as xml will throw if using &shy; so use xml friendly encoded version. See issue #277
+			var style = ['&#173;','<style id="s', id, '">', rules, '</style>'].join('');
+			div.id = id;
+			div.innerHTML += style;
+			
+			body.appendChild(div);
+			
+			if (fakeBody) 
+			{
+				// Avoid crashing IE8, if background image is used
+				body.style.background = '';
+				docElement.appendChild(body);
+			}
+
+			var ret = callback(div, rules);
+
+			// If this is done after page load we don't want to remove the body so check if body exists
+			if (fakeBody) {
+				body.parentNode.removeChild(body);
+			} else {
+				div.parentNode.removeChild(div);
+			}
+
+			return !!ret;
+		},
+
 
 		/**
 		 * {String} Returns the value of the given property @name {String} on the given @element {Element}. By
@@ -146,5 +193,5 @@
 			}
 		}
 	});
-})();
+})(document);
 

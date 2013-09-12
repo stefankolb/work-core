@@ -10,7 +10,9 @@
 
 (function(toString, undef) 
 {
-	var global = (function(){ return this || (1,eval)('this') })();
+	var global = (function(){ 
+		return this || (1,eval)('this') 
+	})();
 
 	var createDict = Object.create ? function() {	
 		return Object.create(null);
@@ -20,7 +22,7 @@
 
 	// defineProperty exists in IE8 but will error when trying to define a property on
 	// native objects. IE8 does not have defineProperies, however, so this check saves a try/catch block.
-	if(Object.defineProperty && Object.defineProperties)
+	if (Object.defineProperty && Object.defineProperties)
 	{
 		var add = function(target, name, method) 
 		{
@@ -72,13 +74,6 @@
 
 		return cache[name] = current[splits[i]] = object;
 	};
-
-	// Prefill cache
-	var toStringMap = {};
-	var classes = "Array Function RegExp Object Date Number String Boolean";
-	classes.replace(/\w+/g, function(cls) {
-		toStringMap[cls] = "[object " + cls + "]";
-	});
 	
 	// Temporary hack to make next statement workable
 	declareNamespace("core.Main.declareNamespace", declareNamespace);
@@ -101,10 +96,6 @@
 	core.Main.declareNamespace("core.Main", 
 	{
 		declareNamespace : declareNamespace,
-		
-
-		/** {=Array} Set of types which are supported */
-		TYPES: (classes + " Null Native Map Integer Primitive Plain Node").split(" "),
 		
 
 		/**
@@ -154,12 +145,13 @@
 
 
 		/**
-		 * {String} Returns the type of the @Unknown {any} value.
+		 * {String} Returns the type of the @any {any} value.
 		 *
 		 * Example types:
 		 *
 		 * - null
 		 * - undefined
+		 * - global
 		 * - String
 		 * - Number
 		 * - Boolean
@@ -169,7 +161,7 @@
 		 *
 		 * any many more...
 		 */
-		getType : function(any) 
+		getClass : function(any) 
 		{
 			if (any == null) {
 				return any === null ? "null" : "undefined";
@@ -191,24 +183,16 @@
 		/**
 		 * {Boolean} Whether the given @value {var} is of the given @type {String}.
 		 *
-		 * Supports these types:
+		 * Supports all types of `getClassType` and additionally these "virtual" types:
 		 * 
-		 * - `Null`
-		 * - `Array`
-		 * - `Function`
-		 * - `RegExp` - Instance of RegExp constructor
 		 * - `Object` - Any object (better use a more detailed type)
-		 * - `Date` - Instance of Date constructor
-		 * - `Number`
-		 * - `String`
-		 * - `Boolean`
-		 * - `Map`
-		 * - `Integer`
-		 * - `Primitive` - either String, Number or Boolean
-		 * - `Plain` - either Primitive, Array or Map
+		 * - `Map` - Any plain data object (no class instance)
+		 * - `Integer` - like `Number` but non floating
+		 * - `Primitive` - either `String`, `Number` or `Boolean`
+		 * - `Plain` - either `Primitive`, `Array` or `Map`
 		 * - `Node` - any DOM node
-		 * - `Promise` - Promise - any Object with then() method
-		 * - `ArrayOrPromise` - either Array or Promise
+		 * - `Promise` - Promise, any `Object` with then() method
+		 * - `ArrayOrPromise` - either `Array` or `Promise`
 		 */
 		isTypeOf : function(value, type) 
 		{
@@ -220,19 +204,15 @@
 			}
 			else if (type == "Object")
 			{
-				return value && typeof value == "object";
-			}
-			else if (type in toStringMap) 
-			{
-				result = toString.call(value) == toStringMap[type];
+				result = value && typeof value == "object";
 			}
 			else if (type == "Map") 
 			{
-				result = toString.call(value) == toStringMap.Object && value.constructor === Object;
+				result = this.isTypeOf(value, "Object") && value.constructor === Object;
 			}
 			else if (type == "Integer") 
 			{
-				result = toString.call(value) == toStringMap.Number && (~~value) == value;
+				result = this.isTypeOf(value, "Number") && (~~value) == value;
 			} 
 			else if (type == "Primitive") 
 			{
@@ -255,13 +235,18 @@
 			{
 				result = value && (this.isTypeOf(value, "Array") || this.isTypeOf(value, "Promise"));
 			}
+			else
+			{
+				result = this.getClass(value) === type;
+			}
 
 			return result;
 		},
 		
 
 		/**
-		 * {Boolean} Clears the object under the given @name {String} (including name cache) and returns if that was successful.
+		 * {Boolean} Clears the object under the given @name {String} (including name cache) and 
+		 * returns if that was successful.
 		 */
 		clearNamespace: function(name)
 		{

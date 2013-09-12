@@ -4,7 +4,7 @@
   Copyright 2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
   Based on Unify <unify-project.org>
-  Copyright: 2009-2010 Deutsche Telekom AG
+  Copyright 2009-2010 Deutsche Telekom AG
 ==================================================================================================
 */
 
@@ -153,7 +153,10 @@
           if (!data.pop()) 
           {
             destination.release();
-            throw new Error("Already on top!");
+
+            if (jasy.Env.isSet("debug")) {
+              throw new Error("Already on top!");    
+            }
           }
 
           return destination;

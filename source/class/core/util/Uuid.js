@@ -52,12 +52,15 @@
 		get : function() 
 		{
 			var uuidBytes = getArrayOfBytes();
+			
 			var uuidStrArray1 = new Array(4);
 			var uuidStrArray2 = new Array(2);
 			var uuidStrArray3 = new Array(2);
 			var uuidStrArray4 = new Array(2);
 			var uuidStrArray5 = new Array(6);
+			
 			var i;
+
 			for (i=0; i<4; i++) {
 				uuidStrArray1[i] = hexTable[uuidBytes[i]];
 			}
@@ -76,7 +79,7 @@
 
 			return uuidStrArray1.join("") + "-" + uuidStrArray2.join("") + "-" + uuidStrArray3.join("") + "-" + uuidStrArray4.join("") + "-" + uuidStrArray5.join("");
 		},
-		
+
 		
 		/**
 		 * {String} Returns a 32 characters long plain string 
@@ -86,12 +89,14 @@
 		{
 			var uuidBytes = getArrayOfBytes();
 			var uuidStrArray = new Array(16);
+
 			for (var i=0; i<16; i++) {
 				uuidStrArray[i] = hexTable[uuidBytes[i]];
 			}
 
 			return uuidStrArray.join("");
 		},
+	
 	
 		/**
 		 * {Uint8Array|Array} Returns a 16 elements long array of bytes 

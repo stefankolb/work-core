@@ -7,6 +7,18 @@
   2009-2010 Deutsche Telekom AG, Germany, http://telekom.com
 ==================================================================================================
 */
+(function()
+{
+  var supportsHashChange = (function()
+  {
+    if (core.bom.HasEvent.test("hashchange", window) === false) {
+      return false;
+    }
+
+    // documentMode logic from YUI to filter out IE8 Compat Mode
+    //   which false positives.
+    return (document.documentMode === undefined || document.documentMode > 7);  
+  })();
 
 /**
  * Newly written hash-based history managment.
@@ -31,7 +43,7 @@ core.Class("core.bom.HashHistory",
     // HTML5 hashchange supported by IE>=8, Firefox>=3.6, Webkit (!Safari 4)
     // See also: https://bugs.webkit.org/show_bug.cgi?id=21605
     // https://developer.mozilla.org/en/DOM/window.onhashchange
-    if (lowland.bom.Events.isSupported("hashchange", window)) {
+    if (supportsHashChange) {
       window.addEventListener("hashchange", this.__onCallbackWrapped);
     } else {
       this.__intervalHandler = window.setInterval(this.__onCallbackWrapped, 100);
@@ -144,3 +156,6 @@ core.Class("core.bom.HashHistory",
     }
   }
 });
+
+})();
+

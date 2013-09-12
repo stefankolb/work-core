@@ -75,6 +75,12 @@
 		/**
 		 * Inject element with style element and some CSS rules.
 		 * Use the ID `#elementtest` for assigning styles to the returned element.
+		 *
+		 * Usage example:
+		 *
+		 *     core.bom.Style.injectElementWithStyles("@media screen{#elementtest{color:red}}", function(node){
+		 *       alert(getComputedStyle(node).color)
+		 *     });
 		 */
 		injectElementWithStyles : function(rules, callback) 
 		{

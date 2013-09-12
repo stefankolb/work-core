@@ -1,8 +1,8 @@
 /*
 ==================================================================================================
-  Core - JavaScript Foundation
-  Copyright 2010-2012 Zynga Inc.
-  Copyright 2012-2013 Sebastian Werner
+	Core - JavaScript Foundation
+	Copyright 2010-2012 Zynga Inc.
+	Copyright 2012-2013 Sebastian Werner
 ==================================================================================================
 */
 
@@ -17,7 +17,17 @@
 	var helperStyle = helperElem.style;
 	var undef;
 
-	var vendorPrefix = jasy.Env.select("engine", {
+	// Following spec is to expose vendor-specific style properties as:
+	//   elem.style.WebkitBorderRadius
+	// and the following would be incorrect:
+	//   elem.style.webkitBorderRadius
+
+	// Webkit ghosts their properties in lowercase but Opera & Moz do not.
+	// Microsoft uses a lowercase `ms` instead of the correct `Ms` in IE8+
+	//   erik.eae.net/archives/2008/03/10/21.48.10/
+	
+	var vendorPrefix = jasy.Env.select("engine", 
+	{
 		trident: 'ms',
 		gecko: 'Moz',
 		webkit: 'Webkit',

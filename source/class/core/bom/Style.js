@@ -73,7 +73,8 @@
 
 
 		/**
-		 * Inject element with style element and some CSS ruless
+		 * Inject element with style element and some CSS rules.
+		 * Use the ID `#elementtest` for assigning styles to the returned element.
 		 */
 		injectElementWithStyles : function(rules, callback) 
 		{

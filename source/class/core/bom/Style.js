@@ -8,10 +8,13 @@
 
 "use strict";
 
-(function(document, undef) 
+(function(global, document, undef) 
 {
 	/** Caches CSS property names to browser specific names. Can be used as a fast lookup alternative to {#property}. */
 	var nameCache = {};
+
+	/** Caches CSS property/value support */
+	var supportCache = {};
 
 	var helperElem = document.createElement('div');
 	var helperStyle = helperElem.style;
@@ -62,6 +65,60 @@
 	};
 
 
+	if ("CSS" in global && "supports" in global.CSS)
+	{
+		var isSupported = function(property, value) 
+		{
+			if (value == null) {
+				value = "inherit";
+			}
+
+			return global.CSS.supports(property, value);  	
+		}
+	}
+	else if ("supportsCSS" in global)
+	{
+		var isSupported = function(property, value) 
+		{
+			if (value == null) {
+				value = "inherit";
+			}
+
+			return global.supportsCSS(property, value);
+		}
+	}
+	else
+	{
+		/**
+		 * {Boolean} Returns whether a specific style @property {String} 
+		 * (uses CSS-style with hyphens) and @value {any?inherit} is supported.
+		 */		
+		var isSupported = function(property, value)
+		{
+			if (value == null) {
+				value = "inherit";
+			}
+
+      var key = property + ':' + value;
+      if (key in supportCache){
+        return supportCache[key];  
+      }
+
+      var supported = false;
+      var camelized = core.String.camelize(property);
+
+      supported = typeof helperElem.style[camelized] === "string";
+      if (supported)
+      {
+	      helperElem.style.cssText = property + ":" + value;
+	      supported = helperElem.style[camelized] !== "";
+      }
+
+      return supportCache[key] = supported;
+		}
+	}
+
+
 	/**
 	 * Utility class for working with HTML style properties (setting/getting). Automatically figures out the
 	 * correct property name when the engine does not yet support the specified name, but a vendor prefixed one.
@@ -70,6 +127,7 @@
 	{
 		names: nameCache,
 		property: getProperty,
+		isSupported : isSupported,
 
 
 		/**
@@ -200,5 +258,5 @@
 			}
 		}
 	});
-})(document);
+})(core.Main.getGlobal(), document);
 

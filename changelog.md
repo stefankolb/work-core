@@ -1,5 +1,84 @@
-0.9-beta2
-=========
+# 0.9-beta4
+
+## Hightlights
+
+- Adopted to Jasy-1.1.1 (changes in permutation/build ID handling and updated skeleton to use new APIs and infrastructure)
+- Moved all MVC classes (which never were actual MVC but more MVP-like) one level up so that `core.mvc.model.Abstract` is now `core.model.Abstract` etc.
+- Added module `core.bom.Dimension` to compute inner dimensions of DOM elements.
+- Major rework for `core.bom.Form` and `core.bom.FormItem` to more correctly support quite a wide range of form elements correctly. Supports new `getData()` to auto serialize HTML forms into JSON or `serialize()` to a URL form encoded string.
+- Added `core.bom.FormItem.getLabel()` and `core.bom.FormItem.getValue()` to figure out a label for the given input field or reading out the value.
+- Added "Scroller" from seperate project as a Core class called `core.component.Scroller`. You can remove old dependencies from the Zynga Scroller now.
+- Added `core.bom.Fragment` to parse mixed HTML text content and nodes into a document fragment which can be later used for insertion. Supports executing scripts inside the HTML as well.
+- Added `core.bom.HasEvent` to verify whether a specific DOM elements supports the given event type.
+- Added `core.bom.HashHistory` to manage document history inside the so called hash of the URL location. Supports both modern and legacy clients. Useful for single page applications.
+- Added `core.bom.Iframe` to inject markup into dynamically created iframes into the document. Offers optional security method to prohibit content in the iframe from accessing the main document. This method is useful for injecting advertising/tracking markup without affecting the root application.
+- Added `core.event.Flow` for dealing with chains of promises and functions.
+- Added `core.bom.MediaQuery` to execute a given media query and returning whether the client is currenly matching this media query. Internally prefers modern API methods but supports a traditional variant as well (client still has to support media queries though).
+- Added `core.bom.Storage` to offer a nice useful wrapper for localStorage. Supports auto JSON.stringify/parse and compression using UTF-16 re-encoding.
+- Added `core.bom.Transition` for easily managing basic transitions like `fadeIn` and `fadeOut` with full callback support etc.
+- Added `core.detect.Browser` for browser and browser version detection.
+- Added generic `reset()` method to property system to mass reset all properties or a specified list of properties. Super useful when working with data models.
+- Improved and continued work on generic `isValid` property method. The method is now able to check all properties which have a validation method and returns the combined result.
+- Added `core.service.location.GeoCode` for translating geo coordinates into address data using the Google location services.
+- Added `core.util.Base62` - a full blown Base62 engine for Core. Useful for encoding/decoding URL-safe compressed strings.
+- Added `core.util.HashPath` which is a poolable class for storing a hash path in a structured and easily accessible format. The class is used internally by the new path handling features in e.g. `core.bom.HashHistory`.
+- Added `core.util.MersenneTwister` and `core.util.Random` for safer random numbers than `Math.random`.
+- Added `core.util.TextCompressor` for UTF-16 based text compression. Useful for client side storage like `localStorage` etc.
+- Added `core.util.Uuid` an RFC4122 UUID version 4 generator
+- Added `core.view.DomLayer` for `SinglePage` application which should behave like mobile applications where everytime is only one layer visible and where the layer changes are animated.
+
+## Beta
+
+- Beta addition to handle pointer and tap events. This is still very much in progress and can be found in `core.bom.PointerEvent` and `core.bom.TapEvent`.
+- Added new class `core.application.SinglePage` which is a presenter/application class for single page / mobile esque application with a single active child presenter. Supports e.g. history management, activity tracking and indicator, etc.
+- Added `core.detect.Device` for basic device category detection e.g. phone, tablet, desktop.
+- Support placeholders of environment variables inside assetIds.
+
+## Additions
+
+- Added fixes for mishaving `Array.splice` and `Array.unshift`.
+- Added ES5 based polyfill for `Array.indexOf` and `Array.lastIndexOf`.
+- Added supports for passing a name to compiled templates for easier debugging/better error messages when properties/fields are not available etc.
+- Minor improvement in template property accessor which now automatically camelizes the names used in the template. So that one can write the more natural `{{first-name}}` to access the `firstName` getter/property of the presenter.
+- Improved support for partial errors in template system which much improved error messages.
+- Added `core.event.Native` for firing native DOM element events.
+- Added `core.detect.HighRes` for detecting high resolution displays.
+- Added web worker detection to the runtime field via `core.detect.Runtime`.
+- Added `core.detect.Touch` for detecting devices which are capable of working with touch events.
+- Continued work on `core.dom.Mutation` and finalized in a first version of easy batch insertion of DOM content.
+- Continued work on promises API. Disabled support for pooling as this made to many issues. Added support for optionally disabled safe execution of promises/functions for improved performance. Added new `done()` method to throw remaining errors in a promise chain as standard JavaScript errors.
+- Added `core.dom.Parser` for parsing HTML and XML documents.
+- Added new utilities `core.Function.curry()`, `core.Object.map()`, `core.Object.createEmpty()`, etc.
+- Added new fields: "device" and "highres" with included detection classes
+- Added manual field "safepromises" to control whether promises should use try-catch to prevent callback errors from stopping execution (slow but enabled by default and required by spec)
+- Made script loader able to load scripts in native environment (NodeJS), too.
+
+## Changes / Fixes
+
+- Fixed issues with Android logging using `console` API.
+- Removed "es5" field and detection.
+- Removed IEDOM (core.bom.IEDOM) polyfill for adding support for IE-specific DOM manipulation methods to other browsers.
+- Removed preliminary `core.mvc.Sync`
+- Corrected skeleton to correctly pause/resume session for "server" task
+- Fixed issues with not polyfilling `Object.keys()` anymore and use `core.Object.keys()` internally instead.
+- File names from Jasy are now named by their build ID so you have to change: `jasy.Env.getChecksum()` to `jasy.Env.getId()`
+- Improved some error handling for class/module creation.
+- Added sealing of class prototypes for enhanced security.
+- Reworked type detection in `core.Main` to use stability and performance wise improved system in `isTypeOf()`.
+- Fixed issues with repeatly executing stylesheet load callback which lead to crazy side effects.
+- Improved test coverage.
+
+
+# 0.9-beta3
+
+- Added detection for full native JSON support `core.detect.JSON`.
+- Improved loading and positioning JS environment fixes in load order.
+- Improved API docs for MVC layer.
+- Renamed event class `core.mvc.event.Storage` to `core.mvc.event.Store`.
+- Added new JSON test suite.
+
+
+# 0.9-beta2
 
 New/Better
 ----------

@@ -24,7 +24,6 @@ def api():
 
     # Configure fields
     session.setField("debug", False)
-    session.permutateField("es5")
 
     # Initialize shared objects
     assetManager = AssetManager(session).addBuildProfile()

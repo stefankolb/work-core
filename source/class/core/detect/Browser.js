@@ -64,7 +64,7 @@
         mobile = true;
       }
     }
-    else if (engine == "native")
+    else if (agent == "native")
     {
       name = "nodejs";
     }

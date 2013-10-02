@@ -9,8 +9,12 @@
 
 (function(global, RegExp)
 {
-  var agent = navigator.userAgent.toLowerCase();
-
+  if (jasy.Env.isSet("runtime", "native")) {
+    var agent = "native";
+  } else {
+    var agent = navigator.userAgent.toLowerCase();
+  }
+  
   var name = jasy.Env.getValue("engine");
   var version = null;
   var mobile = false;
@@ -59,6 +63,10 @@
       if (agent.indexOf("mobile safari") != -1) {
         mobile = true;
       }
+    }
+    else if (engine == "native")
+    {
+      name = "nodejs";
     }
     else if (agent.indexOf("linux") != 1 && /(android) ([0-9.]+)/.exec(agent))
     {

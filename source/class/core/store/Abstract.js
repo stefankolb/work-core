@@ -40,7 +40,7 @@
 	 * betweeen storage/server and client) and a asynchronous storage API with 
 	 * activity reporting.
 	 */
-	core.Class("core.store.Store",
+	core.Class("core.store.Abstract",
 	{
 		include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
 

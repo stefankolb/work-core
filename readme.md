@@ -11,7 +11,7 @@ Core was designed to work together with the JavaScript tooling project [Jasy](ht
 Core offers a skeleton project for being used via `jasy create`. This allows for an easy usage of Jasy and Core and offers a good set of typical tasks pre-configured for your use. To create a new project execute the following after Jasy has been installed:
 
 ```bash
-jasy create --name myproject --origin https://github.com/sebastian-software/core.git 
+jasy create --name myproject --origin https://github.com/sebastian-software/core.git --skeleton application
 ```
 
 Note: Replace `myproject` with the name of the project (lowecase characters, no spaces) you want to create.

@@ -20,25 +20,21 @@ core.Class("core.store.Event",
 	/**
 	 * @type {String} Type of the event e.g. `click`, `load`, ...
 	 * @success {Boolean} Whether the reason for the event was a success or failure.
-	 * @data {var?null} Data to be attached to the event.
-	 * @message {String?null} Message for user feedback etc.
+	 * @key {var?null} Key pointing to storage data.
+	 * @value {var?null} Value read from storage.
 	 */
-	construct : function(type, success, data, message)
+	construct : function(type, success, key, value)
 	{
 		if (jasy.Env.isSet("debug"))
 		{
 			core.Assert.isType(type, "String", "Invalid event type!" + type + " :: " + typeof type);
 			core.Assert.isType(success, "Boolean", "Invalid event success state!");
-
-			if (message != null) {
-				core.Assert.isType(message, "String", "Invalid event message!");
-			}
 		}
 
 		this.__type = type;
 		this.__success = success;
-		this.__data = data;
-		this.__message = message;
+		this.__key = key;
+		this.__value = value;
 	},
 
 	members :
@@ -65,15 +61,15 @@ core.Class("core.store.Event",
 		/**
 		 * {var} Returns the data attached to the event.
 		 */
-		getData : function() {
-			return this.__item;
+		getKey : function() {
+			return this.__key;
 		},
 
 		/**
 		 * {String} Returns the message attached to the event.
 		 */
-		getMessage : function() {
-			return this.__message;
+		getValue : function() {
+			return this.__value;
 		}
 	}
 });

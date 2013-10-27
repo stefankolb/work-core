@@ -116,7 +116,7 @@
 				this.__queue.push({
 					action: action,
 					key: key,
-					data: data,
+					data: this._encode(data, action),
 					promise: promise,
 					value: null,
 					error: null
@@ -131,12 +131,13 @@
 				}
 				
 				return promise.then(function(value) {
+					value = this._decode(value, action);
 					tracker[action]--;
-					this.__fireStorageEvent(action, true, key, this._decode(data, action));
+					this.__fireStorageEvent(action, true, key, value);
 					return value;
 				}, function(reason) {
 					tracker[action]--;
-					this.__fireStorageEvent(action, false, key, this._decode(data, action));
+					this.__fireStorageEvent(action, false, key);
 					this.warn("Storage request '" + action + "' failed! ", reason.error ? reason.error : reason);
 					throw reason;
 				}, this);
@@ -184,12 +185,12 @@
 
 			/**
 			 * {Boolean} Shorthand for firing automatically pooled instances of {core.store.Event}
-			 * with the given @type {String}, @success {Boolean}, @payload {var} and @message {String}.
+			 * with the given @type {String}, @success {Boolean}, @key {var} and @value {var}.
 			 * The method returns whether any listers were processed.
 			 */
-			__fireStorageEvent : function(type, success, payload, message)
+			__fireStorageEvent : function(type, success, key, value)
 			{
-				var evt = core.store.Event.obtain(type, success, payload, message);
+				var evt = core.store.Event.obtain(type, success, key, value);
 				var retval = this.dispatchEvent(evt);
 				evt.release();
 

@@ -5,6 +5,9 @@ Core prepares the ground for JavaScript projects. It fills what is missing, fixe
 
 Core was designed to work together with the JavaScript tooling project [Jasy](https://github.com/sebastian-software/jasy).
 
+[![Code Climate](https://codeclimate.com/github/sebastian-software/core.png)](https://codeclimate.com/github/sebastian-software/core)
+
+
 
 ## Creating Projects
 

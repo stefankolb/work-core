@@ -47,16 +47,16 @@ def source():
     fileManager = FileManager(session)
     
     # Store kernel script
-    outputManager.storeKernel("{{prefix}}/script/kernel.js", bootCode="$${name}.Kernel.boot();")
+    outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="$${name}.Kernel.boot();")
     
     # Process every possible permutation
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName("$${name}.Main").getSortedClasses()
+        classes = ScriptResolver(session).add("$${name}.Main").getSorted()
         
         # Writing source loader
-        outputManager.storeLoader(classes, "{{prefix}}/script/$${name}-{{id}}.js", "new $${name}.Main();")
+        outputManager.storeLoaderScript(classes, "{{prefix}}/script/$${name}-{{id}}.js", "new $${name}.Main();")
 
 
 @task
@@ -76,7 +76,7 @@ def build():
     outputManager.deployAssets(["$${name}.Main"])
 
     # Write kernel script
-    outputManager.storeKernel("{{prefix}}/script/kernel.js", bootCode="$${name}.Kernel.boot();")
+    outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="$${name}.Kernel.boot();")
 
     # Copy files from source
     fileManager.updateFile("source/index.html", "{{prefix}}/index.html")
@@ -85,8 +85,8 @@ def build():
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName("$${name}.Main").getSortedClasses()
+        classes = ScriptResolver(session).add("$${name}.Main").getSorted()
 
         # Compressing classes
-        outputManager.storeCompressed(classes, "{{prefix}}/script/$${name}-{{id}}.js", "new $${name}.Main();")
+        outputManager.storeCompressedScript(classes, "{{prefix}}/script/$${name}-{{id}}.js", "new $${name}.Main();")
 

@@ -10,18 +10,18 @@
 
 "use strict";
 
-(function() 
+(function()
 {
   var cache = {};
   var hasOwnProperty = cache.hasOwnProperty;
   var prefixes = "O|o|MS|ms|Moz|moz|WebKit|Webkit|webKit|webkit|".split("|");
 
-  function find(object, what) 
+  function find(object, what)
   {
     var firstChar = what.charAt(0);
     var what = what.slice(1);
 
-    for (var i = prefixes.length, key; i--;) 
+    for (var i = prefixes.length, key; i--;)
     {
       key = prefixes[i];
       key += (key ? firstChar.toUpperCase() : firstChar) + what;
@@ -37,18 +37,18 @@
   /**
    * Utility for figuring out the given name of a experimental property / API.
    */
-  core.Module("core.util.Experimental", 
+  core.Module("core.util.Experimental",
   {
     /**
      * {String} Returns the name of @what {String} on the given @object {Object}.
      */
-    get : function(object, what) 
+    get : function(object, what)
     {
       var result = cache[what];
       if (result !== null) {
         result = cache[what] = find(object, what)
       }
-        
+
       return result;
     }
   });

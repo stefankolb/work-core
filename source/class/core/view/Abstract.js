@@ -7,14 +7,14 @@
 
 "use strict";
 
-(function() 
+(function()
 {
-  core.Class("core.view.Abstract", 
+  core.Class("core.view.Abstract",
   {
     include : [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging, core.locale.MTranslate],
-   
+
     // Interface implementation
-    construct: function(presenter) 
+    construct: function(presenter)
     {
       if (jasy.Env.isSet("debug")) {
         core.Assert.isType(presenter, "Object", "Invalid presenter instance!");
@@ -117,12 +117,12 @@
        * Registers a label with the @name {String} and a possible
        * static string or function @textOrFunction {any}.
        */
-      addLabel : function(name, textOrFunction) 
+      addLabel : function(name, textOrFunction)
       {
         if (jasy.Env.isSet("debug"))
         {
           core.Assert.isType(name, "String", "The label name must be type of string!");
-          
+
           if (typeof textOrFunction != "string" && typeof textOrFunction != "function") {
             throw new Error("The label value must be either type of string or function!");
           }

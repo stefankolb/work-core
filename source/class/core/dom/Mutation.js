@@ -30,13 +30,13 @@ if (jasy.Env.isSet("runtime", "browser"))
         return rel.replace.apply(rel, args(arguments));
       };
     }
-    else 
+    else
     {
-      var mutate = function(args) 
+      var mutate = function(args)
       {
         if (args.nodeType == 1) {
           return args;
-        } 
+        }
 
         var fragment = document.createDocumentFragment();
         for (var i=0, l=args.length; i<l; i++)
@@ -53,9 +53,9 @@ if (jasy.Env.isSet("runtime", "browser"))
         return fragment;
       };
 
-      if (testnode.insertAdjacentElement) 
+      if (testnode.insertAdjacentElement)
       {
-        var prepend = function(parent, child) 
+        var prepend = function(parent, child)
         {
           parent.insertAdjacentElement("afterbegin", mutate(child));
         };
@@ -64,19 +64,19 @@ if (jasy.Env.isSet("runtime", "browser"))
           parent.insertAdjacentElement("beforeend", mutate(child));
         };
 
-        var before = function(rel, child) 
+        var before = function(rel, child)
         {
           parent.insertAdjacentElement("beforebegin", mutate(child));
         };
 
-        var after = function(rel, child) 
+        var after = function(rel, child)
         {
           parent.insertAdjacentElement("afterend", mutate(child));
         };
       }
-      else 
+      else
       {
-        var prepend = function(parent, child) 
+        var prepend = function(parent, child)
         {
           child = mutate(child);
           var first = parent.firstChild;
@@ -91,7 +91,7 @@ if (jasy.Env.isSet("runtime", "browser"))
           parent.appendChild(mutate(child));
         };
 
-        var before = function(rel, child) 
+        var before = function(rel, child)
         {
           var parent = rel.parentNode;
           if (parent) {
@@ -99,14 +99,14 @@ if (jasy.Env.isSet("runtime", "browser"))
           }
         };
 
-        var after = function(rel, child) 
+        var after = function(rel, child)
         {
           var parent = rel.parentNode;
           var next = rel.nextSibling;
 
-          if (parent) 
+          if (parent)
           {
-            child = mutate(child);  
+            child = mutate(child);
             if (next) {
               parent.insertBefore(child, next);
             } else {
@@ -116,7 +116,7 @@ if (jasy.Env.isSet("runtime", "browser"))
         };
       }
 
-      var replace = function(rel, child) 
+      var replace = function(rel, child)
       {
         var parent = rel.parentNode;
         if (parent) {
@@ -125,7 +125,7 @@ if (jasy.Env.isSet("runtime", "browser"))
       };
     }
 
-    if (testnode.remove) 
+    if (testnode.remove)
     {
       var remove = function(rel) {
         rel.remove();
@@ -133,7 +133,7 @@ if (jasy.Env.isSet("runtime", "browser"))
     }
     else
     {
-      var remove = function(rel) 
+      var remove = function(rel)
       {
         var parent = rel.parentNode;
         if (parent) {

@@ -12,9 +12,9 @@
  */
 core.Interface("core.event.IEvent",
 {
-  members : 
+  members :
   {
-    /** 
+    /**
      * {String} Returns the type of the event.
      */
     getType : function() {},

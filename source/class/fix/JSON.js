@@ -7,7 +7,7 @@
 
 "use strict";
 
-(function(global, undef) 
+(function(global, undef)
 {
   var json = global.JSON;
   if (!json) {
@@ -19,7 +19,7 @@
   {
     json.stringify();
   }
-  catch(ex) 
+  catch(ex)
   {
     var stringifyOrig = json.stringify;
     json.stringify = function(value) {

@@ -1,4 +1,4 @@
-(function() 
+(function()
 {
   var value = false;
 
@@ -8,7 +8,7 @@
 
     if (win.devicePixelRatio > 1) {
       value = true;
-    } 
+    }
     else if (win.matchMedia)
     {
       if (win.matchMedia('(-webkit-min-device-pixel-ratio: 2)').matches) {
@@ -20,11 +20,11 @@
       }
     }
   }
-  
+
   /**
-   * Figures out whether the current device supports 
+   * Figures out whether the current device supports
    */
-  core.Module("core.detect.HighRes", 
+  core.Module("core.detect.HighRes",
   {
     VALUE : value
   });

@@ -8,7 +8,7 @@
 "use strict";
 
 /**
- * Wrapper around a group of {core.testrunner.Test}s. All tests in a suite are 
+ * Wrapper around a group of {core.testrunner.Test}s. All tests in a suite are
  * processed in arbitrary order.
  */
 core.Class("core.testrunner.Suite",
@@ -18,7 +18,7 @@ core.Class("core.testrunner.Suite",
    * The optionally defined @setup {Function?} and @teardown {Function?} can
    * be used to run methods either before or after each individual test.
    */
-  construct : function(caption, setup, teardown) 
+  construct : function(caption, setup, teardown)
   {
     // Verify that an instance was created
     if (!(this instanceof core.testrunner.Suite)) {
@@ -39,7 +39,7 @@ core.Class("core.testrunner.Suite",
     core.testrunner.Controller.registerSuite(this);
   },
 
-  members : 
+  members :
   {
     /*
     ----------------------------------------------
@@ -53,9 +53,9 @@ core.Class("core.testrunner.Suite",
      * happens it kills the interval and reports back to the given
      * @callback {Function?} that the suite was finished.
      */
-    __isFinishedInterval : function(callback) 
+    __isFinishedInterval : function(callback)
     {
-      if ((this.__passed.length + this.__failed.length) == this.__tests.length) 
+      if ((this.__passed.length + this.__failed.length) == this.__tests.length)
       {
         if (this.__waitHandle) {
           clearInterval(this.__waitHandle);
@@ -80,7 +80,7 @@ core.Class("core.testrunner.Suite",
     /**
      * Marks the given @test {core.testrunner.Test} as being successfully completed.
      */
-    testPassed : function(test) 
+    testPassed : function(test)
     {
       this.__passed.push(test);
       this.__testFinishedCallback(test);
@@ -90,7 +90,7 @@ core.Class("core.testrunner.Suite",
     /**
      * Marks the given @test {core.testrunner.Test} as having failed for various reasons.
      */
-    testFailed : function(test) 
+    testFailed : function(test)
     {
       this.__failed.push(test);
       this.__testFinishedCallback(test);
@@ -105,9 +105,9 @@ core.Class("core.testrunner.Suite",
     */
 
     /**
-     * {Array} Exports all test data 
+     * {Array} Exports all test data
      */
-    export : function() 
+    export : function()
     {
       return this.__tests.map(function(test) {
         return test.export();
@@ -125,11 +125,11 @@ core.Class("core.testrunner.Suite",
 
     /**
      * Registers a new test @func {Function} with the given @title {String} to
-     * the suite. It's possible to define the @total {Integer?} number of expected assertions. 
+     * the suite. It's possible to define the @total {Integer?} number of expected assertions.
      * This is especially useful in asynchronous or event based tests. Asynchronous mode
      * can be triggered via the optional @timeout {Integer?} which is the time to wait for
-     * `done` in milliseconds. For asynchronous tests the method {core.testrunner.Test#done} 
-     * needs to be called after all assertions have been processed. 
+     * `done` in milliseconds. For asynchronous tests the method {core.testrunner.Test#done}
+     * needs to be called after all assertions have been processed.
      */
     test : function(title, func, total, timeout) {
       this.__tests.push(new core.testrunner.Test(title, func, this, total, timeout));
@@ -144,7 +144,7 @@ core.Class("core.testrunner.Suite",
     },
 
 
-    /** 
+    /**
      * {String} Returns the caption of this test suite
      */
     getCaption : function() {
@@ -161,16 +161,16 @@ core.Class("core.testrunner.Suite",
 
 
     /**
-     * {Boolean} Runs the test suite. Executes the given @allDoneCallback {Function?} when 
+     * {Boolean} Runs the test suite. Executes the given @allDoneCallback {Function?} when
      * all tests have been completed. Executes the @testStartedCallback {Function?} every
      * single time a test was started. Executes the @testFinishedCallback {Function?} callback
      * every time a single test is completed. Returns `false` when
-     * there are no tests registered. 
-     * 
+     * there are no tests registered.
+     *
      * Optional @randomize {Boolean?true} allows
      * for disabling auto randomization of test order (don't use this).
      */
-    run : function(allDoneCallback, testStartedCallback, testFinishedCallback, randomize) 
+    run : function(allDoneCallback, testStartedCallback, testFinishedCallback, randomize)
     {
       var queue = this.__tests;
       var length = queue.length;
@@ -183,7 +183,7 @@ core.Class("core.testrunner.Suite",
       // Useful to be sure that test do not depend on each other
       // Works on a copy to be able to reproduce the list in the
       // order the developer has added the tests.
-      if (randomize !== false) 
+      if (randomize !== false)
       {
         queue = queue.slice().sort(function() {
           return Math.random() < 0.5 ? -1 : 1;
@@ -200,18 +200,18 @@ core.Class("core.testrunner.Suite",
       this.__verbose = false;
 
       // Process tests in queue
-      for (var i=0; i<length; i++) 
+      for (var i=0; i<length; i++)
       {
         if (this.__setup) {
-          this.__setup();  
-        }        
+          this.__setup();
+        }
 
         testStartedCallback(queue[i]);
         queue[i].run();
 
         if (this.__teardown) {
-          this.__teardown();  
-        }        
+          this.__teardown();
+        }
       }
 
       return true;

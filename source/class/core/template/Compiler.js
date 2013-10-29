@@ -14,7 +14,7 @@
 
 "use strict";
 
-(function () 
+(function ()
 {
 	var escapeMatcher = /[\\\"\n\r]/g;
 
@@ -28,8 +28,8 @@
 	var escapeReplacer = function(str) {
 		return escapeMap[str];
 	};
-	
-	var accessTags = 
+
+	var accessTags =
 	{
 		"#" : 1, // go into section / loop start
 		"?" : 1, // if / has
@@ -37,9 +37,9 @@
 		"$" : 1, // insert variable
 		"=" : 1  // insert raw / non escaped
 	};
-	
+
 	// Tags which support children
-	var innerTags = 
+	var innerTags =
 	{
 		"#" : 1,
 		"?" : 1,
@@ -49,26 +49,26 @@
 	function walk(node, labels, nostrip)
 	{
 		var code = '';
-		
-		for (var i=0, l=node.length; i<l; i++) 
+
+		for (var i=0, l=node.length; i<l; i++)
 		{
 			var current = node[i];
 			var tag = current.tag;
-			
-			if (tag == null) 
+
+			if (tag == null)
 			{
 				code += 'buf+="' + current.replace(escapeMatcher, escapeReplacer) + '";';
 			}
 			else if (tag == '\n')
 			{
 				code += 'buf+="\\n";';
-			}			
+			}
 			else
 			{
 				var name = current.name;
 				var escaped = name.replace(escapeMatcher, escapeReplacer);
-				
-				if (tag in accessTags) 
+
+				if (tag in accessTags)
 				{
 					var accessor = name == "." ? 2 : ~name.indexOf('.') ? 1 : 0;
 					var accessorCode = '"' + escaped + '",' + accessor + ',data';
@@ -76,7 +76,7 @@
 					if (tag in innerTags) {
 						var innerCode = walk(current.nodes, labels, nostrip);
 					}
-					
+
 					if (tag == '?') {
 						code += 'if(this._has(' + accessorCode + ')){' + innerCode + '}';
 					} else if (tag == '^') {
@@ -88,8 +88,8 @@
 					} else if (tag == '$') {
 						code += 'buf+=this._variable(' + accessorCode + ');';
 					}
-				} 
-				else if (tag == '>') 
+				}
+				else if (tag == '>')
 				{
 					code += 'buf+=this._partial("' + escaped + '",data,partials,labels);';
 				}
@@ -105,7 +105,7 @@
 				}
 			}
 		}
-		
+
 		return code;
 	}
 
@@ -113,24 +113,24 @@
 	/**
 	 * This is the Compiler of the template engine and transforms the token tree into a compiled template instance.
 	 */
-	core.Module("core.template.Compiler", 
+	core.Module("core.template.Compiler",
 	{
 		/**
-		 * {core.template.Template} Translates the @code {Array} tree from {core.template.Parser#parse} into actual JavaScript 
+		 * {core.template.Template} Translates the @code {Array} tree from {core.template.Parser#parse} into actual JavaScript
 		 * code (in form of a {core.template.Template} instance) to insert dynamic data fields. It uses
 		 * the original @text {String} for template construction. There is also the possibility to inject
 		 * static @labels {Map} at compile time level or resolve them dynamically at every rendering.
-		 * Optionally you can keep white spaces (line breaks, leading, trailing, etc.) by 
-		 * enabling @nostrip {Boolean?false}. Additionally one can define a template @name {String} for 
+		 * Optionally you can keep white spaces (line breaks, leading, trailing, etc.) by
+		 * enabling @nostrip {Boolean?false}. Additionally one can define a template @name {String} for
 		 * improved debugging capabilities.
 		 */
-		compile : function(text, labels, nostrip, name) 
+		compile : function(text, labels, nostrip, name)
 		{
 			var tree = core.template.Parser.parse(text, nostrip);
 			var wrapped = 'var buf="";' + walk(tree, labels, nostrip) + 'return buf;';
 
 			return new core.template.Template(new Function('data', 'partials', 'labels', wrapped), text, name);
 		}
-	});	
+	});
 })();
 

@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2013 Sebastian Fastner
@@ -7,8 +7,8 @@
 
 "use strict";
 
-(function() 
-{	
+(function()
+{
 	var base62Table = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 	var base62InvertedTable = {};
 	for (var i=0; i<62; i++) {
@@ -25,11 +25,11 @@
 		var bitLength = charLength * 8;
 		var bitPos = 0;
 		var specialBit = null;
-	
+
 		while (bitPos < bitLength) {
 			var charOffset = bitPos / 8 | 0;
 			var bitOffset = bitPos % 8;
-		
+
 			var extractedBits;
 			if (charOffset + 1 >= charLength) {
 				// Special case : no more next char so no more bits
@@ -46,7 +46,7 @@
 				extractedBits = (( (arr[charOffset] << bitOffset) & bitMask[bitOffset] )
 							+ ( (arr[charOffset+1] & bitMask[8-leftoverBits]) >> (6-leftoverBits) )) >> 2;
 			}
-		
+
 			if ((extractedBits & 62) == 60) {
 				extractedBits = 60;
 				bitPos -= 1;
@@ -55,10 +55,10 @@
 				bitPos -= 1;
 			}
 			result.push(extractedBits);
-		
+
 			bitPos += 6;
 		}
-	
+
 		return result;
 	};
 
@@ -68,10 +68,10 @@
 		var bitOffset = 0;
 		var charOffset = 0;
 		var charLength = arr.length;
-	
+
 		for (var charOffset=0; charOffset < charLength; charOffset++) {
 			var char = arr[charOffset];
-		
+
 			var bitsNeeded = 8 - bitOffset;
 			if (char == 60 || char == 61) {
 				var correctBits = (char == 60) ? 30 : 31;
@@ -83,7 +83,7 @@
 				} else {
 					current = (current << 5) + correctBits;
 					bitOffset += 5;
-				
+
 					if (bitOffset == 8) {
 						result.push(current);
 						current = 0;
@@ -105,7 +105,7 @@
 				} else {
 					current = (current << 6) + char;
 					bitOffset += 6;
-				
+
 					if (bitOffset == 8) {
 						result.push(current);
 						current = 0;
@@ -113,19 +113,19 @@
 				}
 			}
 		}
-	
+
 		return result;
 	};
-	
+
 	var encodeArrayToString = function(arr) {
 		var result = encodeArrayOfBytes(arr);
 		for (var i=0, ii=result.length; i<ii; i++) {
 			result[i] = base62Table[result[i]];
 		}
-		
+
 		return result.join("");
 	};
-	
+
 	var decodeStringToArray = function(str) {
 		var len = str.length;
 		var byteArray = new Array(len);
@@ -134,14 +134,14 @@
 		}
 		return decodeToArrayOfBytes(byteArray);
 	};
-	
+
 	/**
 	 * Base62 encoder and decoder.
 	 * Most implementations out there encodes and decodes only one byte/character
 	 * and joins the result to one result string. This is wrong behaviour as the
 	 * resulting string is longer than needed.
-	 * This implementation supports bit packing as described in 
-	 * http://202.194.20.8/proc/ICCS2008/papers/156.pdf (A Secure, Lossless, and 
+	 * This implementation supports bit packing as described in
+	 * http://202.194.20.8/proc/ICCS2008/papers/156.pdf (A Secure, Lossless, and
 	 * Compressed Base62 Encoding) / Section Base62 Encoding.
 	 */
 	core.Module("core.util.Base62", {
@@ -155,20 +155,20 @@
 			for (var i=0; i<len; i++) {
 				byteArray[i] = str.charCodeAt(i);
 			}
-			
+
 			return encodeArrayToString(byteArray);
 		},
-		
+
 		/**
 		 * {Array} Encodes @arr {Array} to base62 encoded array
 		 */
 		encodeArray : encodeArrayOfBytes,
-		
+
 		/**
 		 * {String} Encodes @arr {Array} to base62 encoded string.
 		 */
 		encodeArrayToString : encodeArrayToString,
-		
+
 		/**
 		 * {String} Decodes base62 encoded @str {String} to plain text string.
 		 */
@@ -177,15 +177,15 @@
 			for (var i=0, ii=result.length; i<ii; i++) {
 				result[i] = String.fromCharCode(result[i]);
 			}
-			
+
 			return core.String.decodeUtf8(result.join(""));
 		},
-		
+
 		/**
 		 * {Array} Decodes base62 encoded @arr {Array}.
 		 */
 		decodeArray : decodeToArrayOfBytes,
-		
+
 		/**
 		 * {Array} Decodes base62 encoded @str {String}.
 		 */

@@ -23,20 +23,20 @@ core.Module("core.service.location.GeoCode",
     // TODO: Make use for XHR wrapper
     var xhr = new XMLHttpRequest;
     xhr.open("GET", url, true);
-    xhr.onreadystatechange = function() 
+    xhr.onreadystatechange = function()
     {
-      if (xhr.readyState == 4) 
+      if (xhr.readyState == 4)
       {
         try{
-          var parsed = core.JSON.parse(xhr.responseText);  
-        } 
-        catch(ex) 
+          var parsed = core.JSON.parse(xhr.responseText);
+        }
+        catch(ex)
         {
           console.error("Error during parsing result: " + ex);
           parsed = {};
         }
-        
-        if (parsed.status == "OK") 
+
+        if (parsed.status == "OK")
         {
           var components = parsed.results[0].address_components;
           var relevant = ["street_number", "route", "locality", "postal_code"];

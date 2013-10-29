@@ -10,16 +10,16 @@
 /**
  * Contains all relevant data fields for property change events.
  */
-core.Class("core.property.Event", 
+core.Class("core.property.Event",
 {
   pooling: true,
   include : [core.event.MDispatchable],
 
   /**
-   * Creates a new event object with the given @type {String}. It stores the current @value {var}, 
+   * Creates a new event object with the given @type {String}. It stores the current @value {var},
    * the @old {var?} value and the @name {String?} of the property which was modified.
    */
-  construct : function(type, value, old, name) 
+  construct : function(type, value, old, name)
   {
     this.__type = type;
     this.__value = value;
@@ -27,7 +27,7 @@ core.Class("core.property.Event",
     this.__name = name;
   },
 
-  members : 
+  members :
   {
     /** {=var} Type of event */
     __type : null,

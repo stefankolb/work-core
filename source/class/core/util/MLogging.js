@@ -12,13 +12,13 @@
   var console = core.Main.getGlobal().console;
   var slice = Array.prototype.slice;
 
-  var print = function(obj, method, args) 
+  var print = function(obj, method, args)
   {
     var extended = slice.call(args);
     extended.unshift(obj.toString() + ":");
 
     // Android's system browser does not support multi arguments on console instances (via ADB)
-    if (jasy.Env.isSet("runtime", "browser")) 
+    if (jasy.Env.isSet("runtime", "browser"))
     {
       if (core.detect.Browser.NAME == "android")
       {

@@ -14,17 +14,17 @@
 
 "use strict";
 
-(function(Util, StringUtil) 
+(function(Util, StringUtil)
 {
 	/**
 	 * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message Digest Algorithm, as defined in RFC 1321.
 	 */
-	core.Module("core.crypt.MD5", 
+	core.Module("core.crypt.MD5",
 	{
 		/**
 		 * {String} Returns the MD5 checksum of the given @str {String} as a raw string.
 		 */
-		checksum : function(str) { 
+		checksum : function(str) {
 			return Util.byteArrayToRawString(this.checksumAsByteArray(str));
 		},
 
@@ -32,7 +32,7 @@
 		/**
 		 * {Array} Returns the MD5 checksum of the given @str {String} as an byte array.
 		 */
-		checksumAsByteArray : function(str) 
+		checksumAsByteArray : function(str)
 		{
 			str = StringUtil.encodeUtf8(str);
 			return Util.littleEndianToByteArray(binl_md5(Util.rawStringToLittleEndian(str), str.length * 8));
@@ -42,17 +42,17 @@
 		/**
 		 * {String} Returns a HMAC (Hash-based Message Authentication Code) using the MD5 hash function as a raw string.
 		 *
-		 * HMAC is a specific construction for calculating a message authentication code (MAC) involving a 
+		 * HMAC is a specific construction for calculating a message authentication code (MAC) involving a
 		 * cryptographic hash function in combination with a secret key.
 		 *
 		 * - @key {String} The secret key for verifying authenticity
 		 * - @str {String} Message to compute the HMAC for
 		 */
-		hmac : function(key, str) 
-		{ 
+		hmac : function(key, str)
+		{
 			key = StringUtil.encodeUtf8(key);
 			str = StringUtil.encodeUtf8(str);
-			
+
 			var bkey = Util.rawStringToLittleEndian(key);
 			if (bkey.length > 16) {
 				bkey = binl_md5(bkey, key.length * 8);
@@ -60,7 +60,7 @@
 
 			var ipad = Array(16);
 			var opad = Array(16);
-			
+
 			for (var i = 0; i < 16; i++)
 			{
 				ipad[i] = bkey[i] ^ 0x36363636;
@@ -93,7 +93,7 @@
 			var oldb = b;
 			var oldc = c;
 			var oldd = d;
-          
+
 			a = md5_ff(a, b, c, d, x[i+ 0], 7 , -680876936);
 			d = md5_ff(d, a, b, c, x[i+ 1], 12, -389564586);
 			c = md5_ff(c, d, a, b, x[i+ 2], 17,  606105819);
@@ -110,7 +110,7 @@
 			d = md5_ff(d, a, b, c, x[i+13], 12, -40341101);
 			c = md5_ff(c, d, a, b, x[i+14], 17, -1502002290);
 			b = md5_ff(b, c, d, a, x[i+15], 22,  1236535329);
-          
+
 			a = md5_gg(a, b, c, d, x[i+ 1], 5 , -165796510);
 			d = md5_gg(d, a, b, c, x[i+ 6], 9 , -1069501632);
 			c = md5_gg(c, d, a, b, x[i+11], 14,  643717713);
@@ -127,7 +127,7 @@
 			d = md5_gg(d, a, b, c, x[i+ 2], 9 , -51403784);
 			c = md5_gg(c, d, a, b, x[i+ 7], 14,  1735328473);
 			b = md5_gg(b, c, d, a, x[i+12], 20, -1926607734);
-          
+
 			a = md5_hh(a, b, c, d, x[i+ 5], 4 , -378558);
 			d = md5_hh(d, a, b, c, x[i+ 8], 11, -2022574463);
 			c = md5_hh(c, d, a, b, x[i+11], 16,  1839030562);
@@ -144,7 +144,7 @@
 			d = md5_hh(d, a, b, c, x[i+12], 11, -421815835);
 			c = md5_hh(c, d, a, b, x[i+15], 16,  530742520);
 			b = md5_hh(b, c, d, a, x[i+ 2], 23, -995338651);
-          
+
 			a = md5_ii(a, b, c, d, x[i+ 0], 6 , -198630844);
 			d = md5_ii(d, a, b, c, x[i+ 7], 10,  1126891415);
 			c = md5_ii(c, d, a, b, x[i+14], 15, -1416354905);
@@ -167,7 +167,7 @@
 			c = safe_add(c, oldc);
 			d = safe_add(d, oldd);
 		}
-		
+
 		return Array(a, b, c, d);
 	};
 
@@ -181,15 +181,15 @@
 	var md5_ff = function(a, b, c, d, x, s, t) {
 		return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t);
 	};
-	
+
 	var md5_gg = function(a, b, c, d, x, s, t) {
 		return md5_cmn((b & d) | (c & (~d)), a, b, x, s, t);
 	};
-	
+
 	var md5_hh = function(a, b, c, d, x, s, t) {
 		return md5_cmn(b ^ c ^ d, a, b, x, s, t);
 	};
-	
+
 	var md5_ii = function(a, b, c, d, x, s, t) {
 		return md5_cmn(c ^ (b | (~d)), a, b, x, s, t);
 	};
@@ -202,7 +202,7 @@
 	{
 		var lsw = (x & 0xFFFF) + (y & 0xFFFF);
 		var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-		
+
 		return (msw << 16) | (lsw & 0xFFFF);
 	};
 
@@ -212,5 +212,5 @@
 	var bit_rol = function(num, cnt) {
 		return (num << cnt) | (num >>> (32 - cnt));
 	};
-	
+
 })(core.crypt.Util, core.String);

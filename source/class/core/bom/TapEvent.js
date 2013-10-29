@@ -7,7 +7,7 @@
 
 "use strict";
 
-(function() 
+(function()
 {
   var maxClickMovement = 5;
   var Util = core.bom.event.Util;
@@ -31,7 +31,7 @@
       var downX = -1000;
       var downY = -1000;
 
-      listeners.down = function(e) 
+      listeners.down = function(e)
       {
         if (!e.isPrimary) {
           return;
@@ -42,13 +42,13 @@
         downY = e.offsetY;
       };
 
-      listeners.up = function(e) 
+      listeners.up = function(e)
       {
         if (!e.isPrimary) {
           return;
         }
 
-        if (e.target == downOn && Math.abs(downX - e.offsetX) < maxClickMovement && Math.abs(downY - e.offsetY) < maxClickMovement) 
+        if (e.target == downOn && Math.abs(downX - e.offsetX) < maxClickMovement && Math.abs(downY - e.offsetY) < maxClickMovement)
         {
           var eventObj = core.bom.event.type.Pointer.obtain(e, "tap");
           callback(eventObj);
@@ -58,7 +58,7 @@
 
         // Garbage collection
         downOn = null;
-      };  
+      };
 
       Util.addPointer(target, eventId, capture);
     },

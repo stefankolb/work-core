@@ -14,7 +14,7 @@
  * Emulates just the basic logging methods with an empty function. Maps missing functions
  * to `console.log` automatically.
  *
- * If inside of web worker redirects console logging output to a message to main thread. 
+ * If inside of web worker redirects console logging output to a message to main thread.
  * The message itself is an object containing both fields type="core/debug/(method)" and
  * msg=[..], e.g. { type: "core/debug/warn", msg: ["my warning"] }
  */
@@ -22,10 +22,10 @@
 {
 	var methods = "log,debug,error,warn,info,timeStamp".split(",");
 	var console = global.console || (global.console = {});
-	
-	if (jasy.Env.isSet("runtime", "worker")) 
+
+	if (jasy.Env.isSet("runtime", "worker"))
 	{
-		var workerConsoleGenerator = function(method) 
+		var workerConsoleGenerator = function(method)
 		{
 			return function() {
 				self.postMessage({
@@ -35,12 +35,12 @@
 			};
 		};
 
-		for (var i=0, l=methods.length; i<l; i++) 
+		for (var i=0, l=methods.length; i<l; i++)
 		{
 			var method = methods[i];
 			console[method] = workerConsoleGenerator(method);
 		}
-	} 
+	}
 	else
 	{
 		var log = console.log || new Function;
@@ -53,10 +53,10 @@
 			}
 		}
 	}
-	
-	if (!console.assert) 
+
+	if (!console.assert)
 	{
-		console.assert = function(expression) 
+		console.assert = function(expression)
 		{
 			if (!expression) {
 				throw new Error(slice.call(arguments, 1).join(" "));

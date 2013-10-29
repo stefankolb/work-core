@@ -8,7 +8,7 @@
 
 "use strict";
 
-(function(global, Array, Math, undef) 
+(function(global, Array, Math, undef)
 {
 	/**
 	 * A collection of utility methods for native JavaScript arrays.
@@ -17,15 +17,15 @@
 	 * as this makes things dramatically slower. See also:
 	 * http://jsperf.com/cost-of-sparse-array-support
 	 */
-	core.Module("core.Array", 
+	core.Module("core.Array",
 	{
 		/**
-		 * {any} Returns the value of the @array {Array} at the given 
+		 * {any} Returns the value of the @array {Array} at the given
 		 * @position {Integer}. Supports negative indexes, too.
 		 */
-		at : function(array, position) 
+		at : function(array, position)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isType(position, "Integer");
@@ -34,11 +34,11 @@
 			return array[position < 0 ? array.length + position : position];
 		},
 
-		
+
 		/**
 		 * {Array} Clones the whole @array {Array} and returns the clone.
 		 */
-		clone : function(array) 
+		clone : function(array)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(array, "Array");
@@ -46,59 +46,59 @@
 
 			return array.concat();
 		},
-		
-		
+
+
 		/**
-		 * {Array} Filters out sparse fields from the given @array {Array} and 
+		 * {Array} Filters out sparse fields from the given @array {Array} and
 		 * returns a new compacted array.
 		 */
-		compact : function(array) 
+		compact : function(array)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(array, "Array");
 			}
 
 			var compacted = [];
-			for (var i=0, l=array.length; i<l; i++) 
+			for (var i=0, l=array.length; i<l; i++)
 			{
 				if (i in array) {
-					compacted.push(array[i]);	
+					compacted.push(array[i]);
 				}
 			}
 
 			return compacted;
 		},
-		
-		
+
+
 		/**
 		 * {Boolean} Whether the @array {Array} contains the given @value {any}.
 		 */
-		contains : function(array, value) 
+		contains : function(array, value)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isNotUndefined(value);
 			}
 
 			return array.indexOf(value) > -1;
-		},	
+		},
 
 
 		/**
-		 * {Array} Returns whether every entry in @array {Array} passes the test implemented 
-		 * by the provided @callback {Function}. The @callback is executed in global context 
+		 * {Array} Returns whether every entry in @array {Array} passes the test implemented
+		 * by the provided @callback {Function}. The @callback is executed in global context
 		 * by default, but might also be executed in the given @context {Object?global}.
 		 */
 		every : function(array, callback, context)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isType(callback, "Function");
 
 				if (context) {
-					core.Assert.isType(context, "Object");	
+					core.Assert.isType(context, "Object");
 				}
 			}
 
@@ -106,7 +106,7 @@
 				context = global;
 			}
 
-			for (var i=0, length=array.length; i<length; i++) 
+			for (var i=0, length=array.length; i<length; i++)
 			{
 				var value = array[i];
 				if (!callback.call(context, value, i, array)) {
@@ -115,13 +115,13 @@
 			}
 
 			return true;
-		},		
-		
+		},
+
 
 		/**
 		 * {Array} Returns a flattened, one-dimensional copy of the @array {Array}.
 		 */
-		flatten: function(array) 
+		flatten: function(array)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(array, "Array");
@@ -138,7 +138,7 @@
 					result.push(value);
 				}
 			}
-			
+
 			return result;
 		},
 
@@ -146,18 +146,18 @@
 		/**
 		 * {Array} Returns a new array which only contains the entries of
 		 * the original @array {Array} where the @callback {Function} returns `true`.
-		 * The callback is executed in global context by default, but might also be 
+		 * The callback is executed in global context by default, but might also be
 		 * executed in the given @context {Object?global}.
 		 */
 		filter : function(array, callback, context)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isType(callback, "Function");
 
 				if (context) {
-					core.Assert.isType(context, "Object");	
+					core.Assert.isType(context, "Object");
 				}
 			}
 
@@ -166,7 +166,7 @@
 			}
 
 			var result = [];
-			for (var i=0, length=array.length; i<length; i++) 
+			for (var i=0, length=array.length; i<length; i++)
 			{
 				var value = array[i];
 				if (callback.call(context, value, i, array)) {
@@ -184,13 +184,13 @@
 		 */
 		forEach : function(array, callback, context)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isType(callback, "Function");
 
 				if (context) {
-					core.Assert.isType(context, "Object");	
+					core.Assert.isType(context, "Object");
 				}
 			}
 
@@ -207,7 +207,7 @@
 		/**
 		 * {Array} Converts the given @args {arguments} into an array.
 		 */
-		fromArguments : function(args) 
+		fromArguments : function(args)
 		{
 			// See also: http://jsperf.com/arrayifying-arguments/7
 			return args.length === 1 ? [ args[0] ] : Array.apply(null, args);
@@ -216,12 +216,12 @@
 
 		/**
 		 * {any} Inserts and returns the given @value {any} at the given @position {Integer?-1}
-		 * into the given @array {Array}. 
+		 * into the given @array {Array}.
 		 * Supports negative position values, too. Appends to the end if no position is defined.
 		 */
-		insertAt : function(array, value, position) 
+		insertAt : function(array, value, position)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isNotUndefined(value);
@@ -233,8 +233,8 @@
 
 			if (position == null) {
 				array.push(value)
-			} 
-			else 
+			}
+			else
 			{
 				if (position < 0) {
 					position = array.length + position;
@@ -244,13 +244,13 @@
 			}
 
 			return value;
-		},	
+		},
 
 
 		/**
 		 * {any} Returns the last item in the @array {Array}.
 		 */
-		last: function(array) 
+		last: function(array)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(array, "Array");
@@ -267,13 +267,13 @@
 		 */
 		map : function(array, callback, context)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isType(callback, "Function");
 
 				if (context) {
-					core.Assert.isType(context, "Object");	
+					core.Assert.isType(context, "Object");
 				}
 			}
 
@@ -295,7 +295,7 @@
 		/**
 		 * {Number} Returns the maximum number in the @array {Array}.
 		 */
-		max : function(array) 
+		max : function(array)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(array, "Array");
@@ -303,12 +303,12 @@
 
 			return Math.max.apply(Math, array);
 		},
-		
+
 
 		/**
 		 * {Number} Returns the minimum number in the @array {Array}.
 		 */
-		min : function(array) 
+		min : function(array)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(array, "Array");
@@ -316,12 +316,12 @@
 
 			return Math.min.apply(Math, array);
 		},
-		
+
 
 		/**
 		 * Randomizes the @array {Array} via Fisher-Yates algorithm.
 		 */
-		randomize : function(array) 
+		randomize : function(array)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(array, "Array");
@@ -329,21 +329,21 @@
 
 			for (var j, x, self=array, i=self.length; i; j = parseInt(Math.random() * i), x = self[--i], self[i] = self[j], self[j] = x);
 		},
-		
-		
-		/** 
+
+
+		/**
 		 * {any} Removes the given @value {any} (first occourence only) from the @array {Array} and returns it.
 		 */
-		remove : function(array, value) 
+		remove : function(array, value)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isNotUndefined(value);
 			}
 
 			var position = array.indexOf(value);
-			if (position != -1) 
+			if (position != -1)
 			{
 				array.splice(position, 1);
 				return value;
@@ -351,12 +351,12 @@
 		},
 
 
-		/** 
+		/**
 		 * {any} Removes and returns the value at the given @position {Integer} in the @array {Array}.
 		 */
-		removeAt : function(array, position) 
+		removeAt : function(array, position)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isType(position, "Integer");
@@ -370,11 +370,11 @@
 
 
 		/**
-		 * {Array} Removes a specific range (@from {Integer} <-> @to {Integer}) from the @array {Array}. 
+		 * {Array} Removes a specific range (@from {Integer} <-> @to {Integer}) from the @array {Array}.
 		 * Supports negative indexes, too.
 		 *
 		 * A few examples:
-		 * 
+		 *
 		 * - `0` = first item
 		 * - `1` = second item
 		 * - `-1` = last item
@@ -382,11 +382,11 @@
 		 *
 		 * To remove all but the first and last do:
 		 *
-		 * `core.Array.removeRange(array, 1, -2);` 
+		 * `core.Array.removeRange(array, 1, -2);`
 		 */
-		removeRange : function(array, from, to) 
+		removeRange : function(array, from, to)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isType(from, "Integer");
@@ -395,7 +395,7 @@
 
 			// Based on Array Remove - By John Resig (MIT Licensed)
 			// http://ejohn.org/blog/javascript-array-remove/
-			
+
 			var rest = array.slice((to || from) + 1 || array.length);
 			array.length = from < 0 ? array.length + from : from;
 			array.push.apply(array, rest);
@@ -405,19 +405,19 @@
 
 
 		/**
-		 * {Array} Returns whether any entry in @array {Array} passes the test implemented 
-		 * by the provided @callback {Function}. The @callback is executed in global context 
+		 * {Array} Returns whether any entry in @array {Array} passes the test implemented
+		 * by the provided @callback {Function}. The @callback is executed in global context
 		 * by default, but might also be executed in the given @context {Object?global}.
 		 */
 		some : function(array, callback, context)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(array, "Array");
 				core.Assert.isType(callback, "Function");
 
 				if (context) {
-					core.Assert.isType(context, "Object");	
+					core.Assert.isType(context, "Object");
 				}
 			}
 
@@ -425,7 +425,7 @@
 				context = global;
 			}
 
-			for (var i=0, length=array.length; i<length; i++) 
+			for (var i=0, length=array.length; i<length; i++)
 			{
 				var value = array[i];
 				if (callback.call(context, value, i, array)) {
@@ -434,26 +434,26 @@
 			}
 
 			return false;
-		},		
-		
+		},
+
 
 		/**
 		 * {Number} Returns the sum of all values in the @array {Array}.
 		 */
-		sum : function(array) 
+		sum : function(array)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(array, "Array");
 			}
 
-			for (var i=0, l=array.length, sum=0; i<l; i++) 
+			for (var i=0, l=array.length, sum=0; i<l; i++)
 			{
 				var value = array[i];
 				if (value != null) {
-					sum += array[i];	
+					sum += array[i];
 				}
 			}
-			
+
 			return sum;
 		},
 
@@ -477,15 +477,15 @@
 			return result;
 		},
 
-		
+
 		/**
-		 * {Array} Returns a new array with all elements that are unique in @array {Array}. 
-		 * 
+		 * {Array} Returns a new array with all elements that are unique in @array {Array}.
+		 *
 		 * Comparison happens based on the toString() value! So numbers
 		 * and booleans might be unified with strings with the same "value".
 		 * This is mainly because of performance reasons.
 		 */
-		unique : function(array) 
+		unique : function(array)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(array, "Array");
@@ -499,8 +499,8 @@
 			{
 				var value = array[i];
 				var asString = "" + value;
-				
-				if (!hasOwnProperty.call(strings, asString)) 
+
+				if (!hasOwnProperty.call(strings, asString))
 				{
 					strings[asString] = true;
 					result.push(value);
@@ -509,13 +509,13 @@
 
 			return result;
 		},
-		
+
 
 		/**
 		 * {Map} Merges both given arrays into an object where entries of @keys {Array} are used
 		 * as keys and entries of @values {Array} are used as values.
 		 */
-		zip : function(keys, values) 
+		zip : function(keys, values)
 		{
 			if (jasy.Env.isSet("debug"))
 			{

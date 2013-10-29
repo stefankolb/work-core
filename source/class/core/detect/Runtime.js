@@ -8,10 +8,10 @@
 
 "use strict";
 
-(function() 
+(function()
 {
 	var global = core.Main.getGlobal();
-	
+
 	/**
 	 * Holds basic informations about the environment the script is running in.
 	 */

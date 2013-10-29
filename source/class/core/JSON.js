@@ -1,6 +1,6 @@
-/* 
+/*
 ==================================================================================================
-  Core - JavaScript Foundation 
+  Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
   Copyright 2012-2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
@@ -12,7 +12,7 @@
 
 "use strict";
 
-(function(global) 
+(function(global)
 {
   var stringify = function(source, filter, width) {
     return global.JSON.stringify(source, filter, width);
@@ -20,9 +20,9 @@
 
   var parse = function(source, callback) {
     return global.JSON.parse(source, callback);
-  };  
+  };
 
-  if (!jasy.Env.isSet("json")) 
+  if (!jasy.Env.isSet("json"))
   {
     // Convenience aliases.
     var getClass = {}.toString;
@@ -34,7 +34,7 @@
     // indicates which properties should be serialized. The optional `width`
     // argument may be either a string or number that specifies the indentation
     // level of the output.
-    if (!core.detect.JSON.VALID_STRINGIFY) 
+    if (!core.detect.JSON.VALID_STRINGIFY)
     {
       // Internal: A map of control characters and their escaped equivalents.
       var Escapes = {
@@ -74,10 +74,10 @@
 
       // Internal: Recursively serializes an object. Implements the
       // `Str(key, holder)`, `JO(value)`, and `JA(value)` operations.
-      var serialize = function (property, object, callback, properties, whitespace, indentation, stack) 
+      var serialize = function (property, object, callback, properties, whitespace, indentation, stack)
       {
         var value = object[property], className, year, month, date, time, hours, minutes, seconds, milliseconds, results, element, index, length, prefix, any, result;
-        if ((typeof value == "object" || typeof value == "function") && value) 
+        if ((typeof value == "object" || typeof value == "function") && value)
         {
           if (typeof value.toJSON == "function") {
             value = value.toJSON();
@@ -86,7 +86,7 @@
           }
         }
 
-        if (callback) 
+        if (callback)
         {
           // If a replacement function was provided, call it to obtain the value
           // for serialization.
@@ -98,7 +98,7 @@
         }
 
         className = getClass.call(value);
-        
+
         if (className == "[object Boolean]") {
           // Booleans are represented literally.
           return "" + value;
@@ -189,7 +189,7 @@
     }
 
     // Public: Parses a JSON source string.
-    if (!core.detect.JSON.VALID_PARSE) 
+    if (!core.detect.JSON.VALID_PARSE)
     {
       var Index, Source;
       var fromCharCode = String.fromCharCode;

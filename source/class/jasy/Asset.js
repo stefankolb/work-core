@@ -13,9 +13,9 @@
 
 	// Internal data storage
 	var profiles, assets, sprites;
-	
+
 	/** {Map} Expands internal type names to user readable ones */
-	var typeExpansion = 
+	var typeExpansion =
 	{
 		i: "image",
 		a: "audio",
@@ -30,12 +30,12 @@
 	/**
 	 * {Array} Resolves the given @id {String} into the stored entry of the asset data base.
 	 */
-	var resolve = function(id) 
+	var resolve = function(id)
 	{
 		if (id.constructor == Object) {
 			return id;
 		}
-		
+
 		if (jasy.Env.isSet("debug")) {
 			core.Assert.isType(id, "String");
 		}
@@ -53,23 +53,23 @@
 		for (var i=0, l=splits.length; current && i<l; i++) {
 			current = current[splits[i]];
 		}
-		
+
 		return current || null;
 	};
 
 
-	/** 
+	/**
 	 * {String} Returns the URI for the given @entry {Map} (as returned by #resolve) and @id {String}.
 	 */
-	var entryToUri = function(entry, id) 
+	var entryToUri = function(entry, id)
 	{
-		if (jasy.Env.isSet("debug")) 
+		if (jasy.Env.isSet("debug"))
 		{
 			core.Assert.isType(id, "String", "Unknown asset ID: " + id);
 			core.Assert.isType(entry, "Map", "Invalid entry: " + entry + " for asset ID: " + id);
 			core.Assert.isType(entry.p, "Integer", "Invalid profile in entry: " + entry.p + "for asset " + id + ". Do not now how to construct an URI for that entry!");
 		}
-		
+
 		var profile = profiles[entry.p];
 
 		// Support placeholders for environment variables
@@ -78,7 +78,7 @@
 			id = id.replace(/{{([a-zA-Z0-9]+)}}/g, function(match, field) {
 				return jasy.Env.getValue(field);
 			});
-		}		
+		}
 
 		var delegate = delegates[profile.name];
 		if (delegate) {
@@ -88,33 +88,33 @@
 		} else {
 			var url = (profile.root || "") + (entry.u || id);
 		}
-		
+
 		return url;
 	};
-	
-	
+
+
 	/**
-	 * Merged two data maps @src {Map} and @dst {Map} recursively by using as much of 
+	 * Merged two data maps @src {Map} and @dst {Map} recursively by using as much of
 	 * the original data as possible (no copying). Will never override existing values!
 	 */
 	var mergeData = function(src, dst)
 	{
-		for (var key in src) 
+		for (var key in src)
 		{
 			var srcValue = src[key];
 			var dstValue = dst[key];
-			
+
 			// Just use value from source (works for folders and files)
 			if (dstValue == null) {
 				dst[key] = srcValue;
 			}
-			
+
 			// Deep merge
 			else if (srcValue.constructor === Object && dstValue.constructor === Object) {
 				mergeData(srcValue, dstValue);
 			}
 		}
-	};  
+	};
 
 
 	/**
@@ -126,34 +126,34 @@
 		entryToUri : entryToUri,
 
 		/**
-		 * {String} Returns the sprite ID for the given data @spriteNumber {Integer} and image 
+		 * {String} Returns the sprite ID for the given data @spriteNumber {Integer} and image
 		 * @assetId {String}.
 		 */
 		resolveSprite : function(spriteNumber, assetId)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(spriteNumber, "Number");
 				core.Assert.isType(assetId, "String");
 			}
-			
+
 			// Sprite data format: index, left, top
 			var spriteId = sprites[spriteNumber];
-			
+
 			// Explicit root path
 			if (spriteId.charAt(0) == "/") {
 				spriteId = spriteId.slice(1);
 			}
 
 			// Local path (same folder as requested image)
-			else if (spriteId.indexOf("/") == -1) 
+			else if (spriteId.indexOf("/") == -1)
 			{
 				var pos = assetId.lastIndexOf("/");
 				if (pos != -1) {
 					spriteId = assetId.slice(0, pos+1) + spriteId;
 				}
 			}
-			
+
 			return spriteId;
 		},
 
@@ -161,15 +161,15 @@
 		/**
 		 * Adds the given asset @data {Map}. This is typically generated and called by Jasy.
 		 */
-		addData : function(data) 
+		addData : function(data)
 		{
 			// Validate input data
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(data, "Map", "Asset data must be a map with the keys assets and profiles.");
 				core.Assert.isType(data.profiles, "Array", "Asset data must have an array of profiles under the profiles key.");
 				core.Assert.isType(data.assets, "Map", "Asset data must define a structure of assets under the assets keys.");
-				
+
 				if ("sprites" in data) {
 					core.Assert.isType(data.sprites, "Array", "Sprite data inside assets must be delivered as an Array.");
 				}
@@ -182,39 +182,39 @@
 				assets = data.assets;
 				sprites = data.sprites;
 			}
-			
+
 			// Inject data
 			else
 			{
 				mergeData(data.assets, assets);
 
-				// Hint: Profiles and Sprites should be identical in every set of assets 
+				// Hint: Profiles and Sprites should be identical in every set of assets
 				// (aka only the first one is relevant for keeping)
 			}
 		},
-		
-		
+
+
 		/**
 		 * Resets the internal state of the asset class.
 		 */
 		resetData : function() {
 			profiles = assets = sprites = null;
 		},
-		
+
 
 		/**
 		 * Registers a @delegate {Function} for URL construction of the given @profile {String}.
 		 * The @delegate is called with the parameters `profile`, `id` and `entry` and should return a fully qualified URL.
 		 */
-		registerDelegate : function(profile, delegate) 
+		registerDelegate : function(profile, delegate)
 		{
 			// Validate input data
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(profile, "String");
 				core.Assert.isType(delegate, "Function");
 			}
-			
+
 			delegates[profile] = delegate;
 		},
 
@@ -222,12 +222,12 @@
 		/**
 		 * {Boolean} Whether the registry has information about the given asset @id {String}.
 		 */
-		has : function(id) 
+		has : function(id)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(id, "String");
 			}
-			
+
 			return !!(resolve(id));
 		},
 
@@ -236,7 +236,7 @@
 		 * {String} Returns the type of the given asset @id {String}. One of
 		 * `image`, `audio`, `video`, `font`, `text`, `binary`, `other`.
 		 */
-		getType : function(id) 
+		getType : function(id)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(id, "String", "Invalid asset ID (no string): " + id + "!");
@@ -250,21 +250,21 @@
 			return typeExpansion[entry.t] || "other";
 		},
 
-	
+
 		/**
 		 * {String} Returns the URI for the given asset @id {String}
 		 */
-		toUri : function(id) 
+		toUri : function(id)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(id, "String");
 			}
-			
+
 			var resolved = resolve(id);
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isNotNull(resolved, "Failed to resolve asset ID: " + id);
 			}
-			
+
 			return entryToUri(resolved, id);
 		}
 	});

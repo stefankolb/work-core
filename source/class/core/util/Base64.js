@@ -1,17 +1,17 @@
-/* 
+/*
 ==================================================================================================
-  Core - JavaScript Foundation 
+  Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
   Copyright 2012-2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
-  Based on base64 implementation by: 
+  Based on base64 implementation by:
   https://bitbucket.org/davidchambers/base64.js
 ==================================================================================================
 */
 
 "use strict";
 
-(function (global) 
+(function (global)
 {
 	var btoa = global.btoa;
 	var atob = global.atob;
@@ -20,7 +20,7 @@
 	{
 		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 		var fromCharCode = String.fromCharCode;
-		
+
 		// Slight performance impact for much better compression
 		var charAt = "charAt";
 		var charCodeAt = "charCodeAt";
@@ -31,13 +31,13 @@
 		 *
 		 * See also: https://developer.mozilla.org/en/DOM/window.btoa
 		 */
-		var btoa = function(string) 
+		var btoa = function(string)
 		{
 			var i = 0;
 			var len = string.length;
 			var result = [];
 
-			while (i < len) 
+			while (i < len)
 			{
 				var a = string[charCodeAt](i++) || 0;
 				var b = string[charCodeAt](i++) || 0;
@@ -66,14 +66,14 @@
 		 *
 		 * See also: https://developer.mozilla.org/en/DOM/window.atob
 		 */
-		var atob = function(string) 
+		var atob = function(string)
 		{
 			string = string.replace(/=+$/, "");
 
 			var len = string.length;
 			var i = 0;
 			var chars = [];
-			while (i < len) 
+			while (i < len)
 			{
 				var b1 = characters[indexOf](string[charAt](i++));
 				var b2 = characters[indexOf](string[charAt](i++));

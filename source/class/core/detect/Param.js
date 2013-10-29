@@ -20,7 +20,7 @@ core.Module("core.detect.Param",
 		} else {
 			var items = ""; // TODO: NodeJS support
 		}
-		
+
 		var map = {};
 
 		var translate =

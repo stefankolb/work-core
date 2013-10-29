@@ -42,7 +42,7 @@
    *
    * Supports a structure of presenters, sections and parameters.
    */
-  core.Class("core.util.HashPath", 
+  core.Class("core.util.HashPath",
   {
     pooling : true,
 
@@ -52,18 +52,18 @@
 
       // Support reusing existing array for pooling
       if (!data) {
-        data = this.__data = [];  
+        data = this.__data = [];
       } else {
         data.length = 0;
       }
-      
+
       if (path && path.length > 0)
       {
         var fragments = path.split("/");
         for (var i=0, l=fragments.length; i<l; i++) {
           data.push(parseFragment(fragments[i]));
         }
-      }    
+      }
     },
 
     members :
@@ -83,7 +83,7 @@
        */
       getLength : function() {
         return this.__data.length;
-      },      
+      },
 
 
       /**
@@ -150,12 +150,12 @@
         {
           var destination = this.clone();
           var data = destination.__data;
-          if (!data.pop()) 
+          if (!data.pop())
           {
             destination.release();
 
             if (jasy.Env.isSet("debug")) {
-              throw new Error("Already on top!");    
+              throw new Error("Already on top!");
             }
           }
 
@@ -165,12 +165,12 @@
         {
           throw new Error("Invalid link!");
         }
-        else if (relation == "top") 
+        else if (relation == "top")
         {
           // Replace current structure path with top level page
           var destination = core.util.HashPath.obtain(fragment);
         }
-        else if (relation == "same") 
+        else if (relation == "same")
         {
           // New page replaces current page
           var destination = this.clone();
@@ -182,9 +182,9 @@
           // New page is child of current page
           var destination = this.clone();
           destination.__data.push(parseFragment(fragment));
-        }  
-        
-        return destination; 
+        }
+
+        return destination;
       },
 
 
@@ -205,7 +205,7 @@
         for (var i=0; i<length; i++)
         {
           var thisFragment = thisData[i];
-          cloneData[i] = 
+          cloneData[i] =
           {
             presenter : thisFragment.presenter,
             section : thisFragment.section,
@@ -242,8 +242,8 @@
         }
 
         return result.join("/");
-      }    
+      }
     }
-  });  
+  });
 
 })();

@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
@@ -23,7 +23,7 @@ core.Main.addMembers("Function",
 	 *
 	 * See also: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
 	 */
-	bind : function(context, varargs) 
+	bind : function(context, varargs)
 	{
 		// closest thing possible to the ECMAScript 5 internal IsCallable function
 		if (typeof this !== "function") {
@@ -38,11 +38,11 @@ core.Main.addMembers("Function",
 		// we are interested into more complex operations
 		// this will speed up common bind creation
 		// avoiding useless slices over arguments
-		if (varargs !== undef) 
+		if (varargs !== undef)
 		{
 			// extra arguments to send by default
 			var extraargs = Array.prototype.slice.call(arguments, 1);
-			
+
 			return function()
 			{
 				return self.apply(
@@ -59,7 +59,7 @@ core.Main.addMembers("Function",
 		else
 		{
 			// optimized callback
-			return function() 
+			return function()
 			{
 				// speed up when function is called without arguments
 				return arguments.length ? self.apply(context, arguments) : self.call(context);

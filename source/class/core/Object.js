@@ -8,14 +8,14 @@
   {
     var hasDontEnumBug = true;
     for (var key in {"toString": null}) {
-      hasDontEnumBug = false;  
+      hasDontEnumBug = false;
     }
 
     if (hasDontEnumBug)
     {
-      // Used to fix the JScript [[DontEnum]] bug 
+      // Used to fix the JScript [[DontEnum]] bug
       var shadowed = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");
-      var shadowedLength = shadowed.length;    
+      var shadowedLength = shadowed.length;
     }
   }
 
@@ -48,7 +48,7 @@
     }
     else
     {
-      if (config.stable) { 
+      if (config.stable) {
         code += 'var keys=[];';
       }
 
@@ -147,7 +147,7 @@
       return { "__proto__": null };
     };
 
-    var createFrom = function(clazz) 
+    var createFrom = function(clazz)
     {
       EmptyConstructor.prototype = clazz;
       var object = new EmptyConstructor;
@@ -162,7 +162,7 @@
     // aside from Object.prototype itself. Instead, create a new global
     // object and *steal* its Object.prototype and strip it bare. This is
     // used as the prototype to create nullary objects.
-    var EmptyClass = (function () 
+    var EmptyClass = (function ()
     {
       var iframe = document.createElement('iframe');
       var parent = document.body || document.documentElement;
@@ -170,12 +170,12 @@
       iframe.style.display = 'none';
       parent.appendChild(iframe);
       iframe.src = 'javascript:';
-      
+
       var empty = iframe.contentWindow.Object.prototype;
-      
+
       parent.removeChild(iframe);
       iframe = null;
-      
+
       delete empty.constructor;
       delete empty.hasOwnProperty;
       delete empty.propertyIsEnumerable;
@@ -183,7 +183,7 @@
       delete empty.toLocaleString;
       delete empty.toString;
       delete empty.valueOf;
-      
+
       empty.__proto__ = null;
 
       function Empty() {}
@@ -195,11 +195,11 @@
       return new EmptyClass;
     };
 
-    var createFrom = function(clazz) 
+    var createFrom = function(clazz)
     {
       EmptyConstructor.prototype = clazz;
       return new EmptyConstructor;
-    };    
+    };
   }
 
 
@@ -211,15 +211,15 @@
   core.Module("core.Object",
   {
     /**
-     * {Map} Create a shallow-copied clone of the @object {Map}. Any nested 
+     * {Map} Create a shallow-copied clone of the @object {Map}. Any nested
      * objects or arrays will be copied by reference, not duplicated.
      */
     clone : createIterator(
     {
-      has : true, 
+      has : true,
       stable : false,
-      init : "var clone={};", 
-      iter : "clone[key]=object[key];", 
+      init : "var clone={};",
+      iter : "clone[key]=object[key];",
       exit : "return clone;"
     }),
 
@@ -237,7 +237,7 @@
       iter : executeCallback
     }),
 
-    
+
     /**
      * Loops trough the entries of the given @object {Object} and executes the
      * given @callback {Function} in the given @context {Object} on each entry.
@@ -258,7 +258,7 @@
      */
     getKeys : createIterator(
     {
-      has : true, 
+      has : true,
       stable : true, // otherwise we might not have "keys"
       exit : "return keys;"
     }),
@@ -269,10 +269,10 @@
      */
     getLength : createIterator(
     {
-      has : true, 
+      has : true,
       stable : false,
-      init : "var length=0;", 
-      iter : "length++;", 
+      init : "var length=0;",
+      iter : "length++;",
       exit : "return length;",
       nokeys : true
     }),
@@ -283,7 +283,7 @@
      */
     getValues : createIterator(
     {
-      has : true, 
+      has : true,
       stable : false,
       init : "var values=[];",
       iter : "values.push(object[key]);",
@@ -305,15 +305,15 @@
 
 
     /**
-     * {Map} Returns a copy of the @object {Object}, 
+     * {Map} Returns a copy of the @object {Object},
      * filtered to only have values for the whitelisted @keys {String...}.
      */
-    pick : function(object, keys) 
+    pick : function(object, keys)
     {
       var result = {};
       var args = arguments;
 
-      for (var i=1, l=args.length; i<l; i++) 
+      for (var i=1, l=args.length; i<l; i++)
       {
         var key = args[i];
         result[key] = object[key];
@@ -331,30 +331,30 @@
      */
     translate : createIterator(
     {
-      has : true, 
+      has : true,
       stable : false,
       args : "table",
-      init : "var result={};", 
-      iter : "result[table[key]||key]=object[key];", 
+      init : "var result={};",
+      iter : "result[table[key]||key]=object[key];",
       exit : "return result;"
     }),
 
 
     /**
      * {Map} Create a shallow-copied clone of the @object {Object} where for
-     * every key in the original @object @mapper {Function} is called to 
+     * every key in the original @object @mapper {Function} is called to
      * return the replacement key. It uses the original key when no translation is available.
      * Any nested objects or arrays will be copied by reference, not duplicated.
      */
     map : createIterator(
     {
-      has : true, 
+      has : true,
       stable : false,
       args : "mapper",
-      init : "var result={};", 
-      iter : "result[mapper(key)||key]=object[key];", 
+      init : "var result={};",
+      iter : "result[mapper(key)||key]=object[key];",
       exit : "return result;"
-    }),    
+    }),
 
 
     createEmpty : createEmpty,

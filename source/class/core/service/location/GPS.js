@@ -13,10 +13,10 @@ core.Module("core.service.location.GPS",
   detect : function()
   {
     var promise = new core.event.Promise;
-    
-    if (navigator.geolocation) 
+
+    if (navigator.geolocation)
     {
-      navigator.geolocation.getCurrentPosition(function(result) 
+      navigator.geolocation.getCurrentPosition(function(result)
       {
         if (result) {
           promise.fulfill(result.coords);

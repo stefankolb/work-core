@@ -21,7 +21,7 @@ core.Class("core.testrunner.Test",
    * - @total {Integer?null} Configure the total number of assertions which are expected to run
    * - @timeout {Integer?null} Configure timeout to enable async execution of test
    */
-  construct : function(title, func, suite, total, timeout) 
+  construct : function(title, func, suite, total, timeout)
   {
     this.__title = title;
     this.__func = func;
@@ -34,7 +34,7 @@ core.Class("core.testrunner.Test",
   },
 
 
-  members : 
+  members :
   {
     /*
     ----------------------------------------------
@@ -43,10 +43,10 @@ core.Class("core.testrunner.Test",
     */
 
     /** {=String} Reason of failure, value is `null` when successful */
-    __failureReason : null,    
+    __failureReason : null,
 
     /** {=String} Message to describe the failure */
-    __failureMessage : null,    
+    __failureMessage : null,
 
     /** Number of passed assertions */
     __passedCount : 0,
@@ -54,11 +54,11 @@ core.Class("core.testrunner.Test",
     /** Number of failed assertions */
     __failedCount : 0,
 
-    
-    /** 
-     * Helper method to track new passed assertions with @message {String?""}. 
+
+    /**
+     * Helper method to track new passed assertions with @message {String?""}.
      */
-    __passed : function(message) 
+    __passed : function(message)
     {
       this.__items.push({
         passed : true,
@@ -70,14 +70,14 @@ core.Class("core.testrunner.Test",
     },
 
 
-    /** 
+    /**
      * Helper method to track new failed assertions with @message {String?""} and
      * an optional exception @ex {Exception?null}.
      */
-    __failed : function(message, ex) 
+    __failed : function(message, ex)
     {
       var combined = message || "";
-      if (ex && combined != ex.message) 
+      if (ex && combined != ex.message)
       {
         if (combined) {
           combined += ": ";
@@ -108,10 +108,10 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    isEqual : function(a, b, message) 
+    isEqual : function(a, b, message)
     {
       try{
-        core.Assert.isEqual(a, b);  
+        core.Assert.isEqual(a, b);
       } catch(ex) {
         return this.__failed(message, ex);
       }
@@ -125,16 +125,16 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    isNotEqual : function(a, b, message) 
+    isNotEqual : function(a, b, message)
     {
       try{
-        core.Assert.isNotEqual(a, b);  
+        core.Assert.isNotEqual(a, b);
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
-    },    
+    },
 
 
     /**
@@ -142,16 +142,16 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    isIdentical : function(a, b, message) 
+    isIdentical : function(a, b, message)
     {
       try{
-        core.Assert.isIdentical(a, b);  
+        core.Assert.isIdentical(a, b);
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
-    },      
+    },
 
 
     /**
@@ -159,16 +159,16 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    isNotIdentical : function(a, b, message) 
+    isNotIdentical : function(a, b, message)
     {
       try{
-        core.Assert.isNotIdentical(a, b);  
+        core.Assert.isNotIdentical(a, b);
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
-    },         
+    },
 
 
     /**
@@ -176,10 +176,10 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    isTrue : function(a, message) 
+    isTrue : function(a, message)
     {
       try{
-        core.Assert.isTrue(a);  
+        core.Assert.isTrue(a);
       } catch(ex) {
         return this.__failed(message, ex);
       }
@@ -193,16 +193,16 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    isFalse : function(a, message) 
+    isFalse : function(a, message)
     {
       try{
-        core.Assert.isFalse(a);  
+        core.Assert.isFalse(a);
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
-    },    
+    },
 
 
     /**
@@ -210,16 +210,16 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    isNull : function(a, message) 
+    isNull : function(a, message)
     {
       try{
-        core.Assert.isNull(a);  
+        core.Assert.isNull(a);
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
-    },    
+    },
 
 
     /**
@@ -227,46 +227,46 @@ core.Class("core.testrunner.Test",
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    isInstance : function(a, b, message) 
+    isInstance : function(a, b, message)
     {
       try{
-        core.Assert.isInstance(a, b);  
+        core.Assert.isInstance(a, b);
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
-    },    
-    
+    },
+
 
     /**
      * Test whether @a {var} is type of @b {var} and registers
      * the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    isType : function(a, b, message) 
+    isType : function(a, b, message)
     {
       try{
-        core.Assert.isType(a, b);  
+        core.Assert.isType(a, b);
       } catch(ex) {
         return this.__failed(message, ex);
       }
 
       this.__passed(message);
-    }, 
+    },
 
 
     /**
-     * Test whether @func {Function} raises an exception (which it should) 
+     * Test whether @func {Function} raises an exception (which it should)
      * and register the result to the internal storage. Optional @message {String?""}
      * for more details to understand the context of the assertion.
      */
-    raisesException : function(func, message) 
+    raisesException : function(func, message)
     {
       try {
         func();
       } catch(ex) {
-        return this.__passed(message);  
+        return this.__passed(message);
       }
 
       this.__failed(message + ": Did not throwed an exception!");
@@ -293,7 +293,7 @@ core.Class("core.testrunner.Test",
      * e.g. exceptions or timeouts occured. Define the @message {String}
      * to give more hints about the issue.
      */
-    failure : function(message) 
+    failure : function(message)
     {
       if (this.__timeoutHandle) {
         clearTimeout(this.__timeoutHandle);
@@ -318,15 +318,15 @@ core.Class("core.testrunner.Test",
     /**
      * {Map} Returns internal data to a Testem compatible JSON object.
      */
-    export : function() 
+    export : function()
     {
       // the result object to report for this test
       return {
-        passed: this.__passedCount, 
-        failed: this.__failedCount, 
-        total: this.getTotalCount(), 
-        id: this.getId(), 
-        name: this.__title, 
+        passed: this.__passedCount,
+        failed: this.__failedCount,
+        total: this.getTotalCount(),
+        id: this.getId(),
+        name: this.__title,
         items: this.__items
       };
     },
@@ -342,7 +342,7 @@ core.Class("core.testrunner.Test",
 
     /**
      * {Boolean} Whether the test is running asynchronously
-     */      
+     */
     isAsynchronous : function() {
       return this.__timeout != null;
     },
@@ -367,7 +367,7 @@ core.Class("core.testrunner.Test",
     /**
      * {String} Returns a useful one liner of the status of the test
      */
-    getSummary : function() 
+    getSummary : function()
     {
       var reason = this.__failureReason;
       var message = this.__failureMessage;
@@ -380,7 +380,7 @@ core.Class("core.testrunner.Test",
     },
 
 
-    /** 
+    /**
      * {String} Returns the reason of the failure. One of:
      *
      * - assertions: Failed assertions
@@ -430,9 +430,9 @@ core.Class("core.testrunner.Test",
     /**
      * Used to update failed count to sensible value when error happens
      */
-    __updateOnFatalError : function() 
+    __updateOnFatalError : function()
     {
-      if (this.__totalCount == null) 
+      if (this.__totalCount == null)
       {
         // Assume that at least one assertion is failed
         if (this.__failedCount == 0) {
@@ -447,24 +447,24 @@ core.Class("core.testrunner.Test",
     },
 
 
-    /** 
-     * This method is automatically triggered whenever the test was marked as done 
+    /**
+     * This method is automatically triggered whenever the test was marked as done
      */
-    __checkState : function() 
+    __checkState : function()
     {
       if (this.__timeoutHandle) {
         clearTimeout(this.__timeoutHandle);
       }
 
       var failedAssertions = this.__failedCount;
-      if (failedAssertions) 
+      if (failedAssertions)
       {
         this.__failureReason = "assertions";
         this.__failureMessage = "Did not successfully pass " + failedAssertions + " assertions.";
 
         this.__suite.testFailed(this);
       }
-      else if (this.__totalCount != null && this.__totalCount != this.__passedCount) 
+      else if (this.__totalCount != null && this.__totalCount != this.__passedCount)
       {
         this.__failureReason = "mismatch";
         this.__failureMessage = "Did to match number of assertions expected (" + this.__totalCount + " vs. " + this.__passedCount + ")";
@@ -486,14 +486,14 @@ core.Class("core.testrunner.Test",
     /**
      * Executes the attached test method
      */
-    run : function() 
+    run : function()
     {
       // Asynchronous test with timeout
       var timeout = this.__timeout;
-      if (timeout != null) 
+      if (timeout != null)
       {
         var self = this;
-        this.__timeoutHandle = setTimeout((function() 
+        this.__timeoutHandle = setTimeout((function()
         {
           self.__failureReason = "timeout";
           self.__failureMessage = "Timeout (" + timeout + "ms)";
@@ -506,9 +506,9 @@ core.Class("core.testrunner.Test",
 
       try
       {
-        this.__func();    
-      } 
-      catch(ex) 
+        this.__func();
+      }
+      catch(ex)
       {
         this.__failureReason = "exception";
         this.__failureMessage = "Exception: " + ex;

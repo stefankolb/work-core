@@ -16,7 +16,7 @@
 	var genericToString = function() {
 		return "[module " + this.moduleName + "]";
 	};
-	
+
 
 	/**
 	 * Define a module with the given @name {String} with static @members {Map} being attached.
@@ -26,7 +26,7 @@
 		if (!core.Module.isModuleName(name)) {
 			throw new Error("Invalid module name " + name + "!");
 		}
-		
+
 		if (!core.Main.isTypeOf(members, "Map")) {
 			throw new Error("Invalid map as module configuration in " + name + "!");
 		}
@@ -63,8 +63,8 @@
 		// Attach to name
 		core.Main.declareNamespace(name, members);
 	});
-	
-	
+
+
 	/**
 	 * {core.Module} Resolves a given @name {String} and returns the stored module.
 	 */
@@ -80,16 +80,16 @@
 	var isModuleName = function(name) {
 		return /^(([a-z][a-z0-9]*\.)*)([A-Z][a-zA-Z0-9]*)$/.test(name);
 	};
-	
+
 	/**
 	 * {Boolean} Whether the given object is a valid @module {Object}.
 	 */
 	var isModule = function(module) {
 		return !!(module && typeof module == "object" && module.__isModule);
 	};
-	
-	
-	core.Main.addStatics("core.Module", 
+
+
+	core.Main.addStatics("core.Module",
 	{
 		getByName : getByName,
 		isModuleName : isModuleName,

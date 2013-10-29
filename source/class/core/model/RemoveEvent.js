@@ -10,7 +10,7 @@
 /**
  * Event class which is fired whenever a model is removed from a collection.
  */
-core.Class("core.model.RemoveEvent", 
+core.Class("core.model.RemoveEvent",
 {
   pooling: true,
   include : [core.event.MDispatchable],
@@ -23,13 +23,13 @@ core.Class("core.model.RemoveEvent",
     this.__item = item;
   },
 
-  members: 
+  members:
   {
     // Interface implementation
     getType : function() {
       return "remove";
     },
-    
+
     /**
      * Sets the removed @item {Object}.
      */

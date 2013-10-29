@@ -10,7 +10,7 @@
 /**
  * Event class for simple notifications style events with support
  * for a notification message and some data attached to it.
- * 
+ *
  * Please note: This should rarely be used, instead better
  * develop custom event classes offering the exact methods/fields
  * for storing and accessing event specific data.
@@ -26,7 +26,7 @@ core.Class("core.event.Simple",
    * @data {var?null} Data to be attached to the event.
    * @message {String?null} Message for user feedback etc.
    */
-  construct : function(type, data, message) 
+  construct : function(type, data, message)
   {
     if (jasy.Env.isSet("debug"))
     {
@@ -43,7 +43,7 @@ core.Class("core.event.Simple",
   },
 
   members :
-  {  
+  {
     // Interface implementation
     getType : function() {
       return this.__type;

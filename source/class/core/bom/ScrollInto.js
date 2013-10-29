@@ -13,12 +13,12 @@
  * for doing a minimum effort scrolling which is not supported by native
  * methods.
  */
-core.Module("core.bom.ScrollInto", 
+core.Module("core.bom.ScrollInto",
 {
   /**
    * Scrolls the @element {Element} into view (x-axis only).
    * The optional @align {String?} could be configured with
-   * `left` or `right` to enforce alignment. The default behavior 
+   * `left` or `right` to enforce alignment. The default behavior
    * is to scroll with the minimum effort to make the element visible.
    */
   scrollX : function(element, align)
@@ -89,7 +89,7 @@ core.Module("core.bom.ScrollInto",
         else if (alignRight) {
           scrollDiff = rightOffset + parentScrollBarWidth;
         }
-        // element must go down when current left offset is smaller than 0 or 
+        // element must go down when current left offset is smaller than 0 or
         // when width is bigger than the inner width of the parent
         else if (leftOffset < 0 || elementWidth > parentClientWidth) {
           scrollDiff = leftOffset;
@@ -110,7 +110,7 @@ core.Module("core.bom.ScrollInto",
   /**
    * Scrolls the @element {Element} into view (y-axis only).
    * The optional @align {String?} could be configured with
-   * `top` or `bottom` to enforce alignment. The default behavior 
+   * `top` or `bottom` to enforce alignment. The default behavior
    * is to scroll with the minimum effort to make the element visible.
    */
   scrollY : function(element, align)

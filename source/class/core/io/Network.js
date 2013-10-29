@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
@@ -10,7 +10,7 @@
 
 "use strict";
 
-(function(global) 
+(function(global)
 {
 	// Detect native support
 	var XHR = global.XMLHttpRequest;
@@ -23,28 +23,28 @@
 
 	var abortHandle = null;
 	var abortAfter = 5000;
-	
-	
-	var setOnline = function(value) 
+
+
+	var setOnline = function(value)
 	{
 		isOnline = value;
 		console.debug("IsOnline: " + isOnline);
 		updateHandle = setTimeout(detectOnline, updateInterval);
 	};
-	
-	
-	var abortRequest = function() 
+
+
+	var abortRequest = function()
 	{
 		request.onreadystatechange = empty;
 		request.abort();
-		
+
 		setOnline(false);
 	};
-	
-	
-	var onStateChange = function(e) 
+
+
+	var onStateChange = function(e)
 	{
-		if (request.readyState == 4) 
+		if (request.readyState == 4)
 		{
 			request.onreadystatechange = empty;
 			clearTimeout(abortHandle);
@@ -53,15 +53,15 @@
 			setOnline(status >= 200 && status < 300 || status == 304 || status == 1223);
 		}
 	};
-	
-	
-	var detectOnline = function() 
+
+
+	var detectOnline = function()
 	{
 		// IE vs. standard XHR creation
 		request = XHR ? new XHR : new ActiveXObject("Microsoft.XMLHTTP");
 		request.onreadystatechange = onStateChange;
 		request.open("HEAD", "//" + location.hostname + "/?rand=" + Math.random(), true);
-		
+
 		// Catch network & other problems
 		try {
 			abortHandle = setTimeout(abortRequest, abortAfter);
@@ -70,13 +70,13 @@
 			setOnline(false);
 		}
 	};
-	
-	
+
+
 	/**
 	 * Generic network monitor and inspection
 	 *
 	 */
-	core.Module("core.io.Network", 
+	core.Module("core.io.Network",
 	{
 		/**
 		 * {Boolean} Returns whether the client is online based on the last check
@@ -84,32 +84,32 @@
 		isOnline : function() {
 			return updateHandle ? isOnline : null;
 		},
-		
+
 
 		/**
 		 * Starts the network monitoring with the given @interval {Number?1000} in milliseconds.
 		 */
-		startMonitoring : function(interval) 
+		startMonitoring : function(interval)
 		{
 			// allow for timeout reconfiguration
 			this.stopMonitoring();
-			
+
 			// Reconfigure timeout and start first iteration
 			updateInterval = interval || 1000;
 			updateHandle = setTimeout(detectOnline, updateInterval);
 		},
-		
+
 
 		/**
 		 * Stop network monitoring
 		 */
-		stopMonitoring : function() 
+		stopMonitoring : function()
 		{
-			if (updateHandle) 
+			if (updateHandle)
 			{
 				// Abort current request...
 				abortRequest();
-				
+
 				// ... and stop timer
 				clearTimeout(updateHandle);
 				updateHandle = null;

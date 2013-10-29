@@ -13,7 +13,7 @@
  */
 core.Interface("core.property.IThemeable",
 {
-	members : 
+	members :
 	{
 		/**
 		 * {var} Returns the themed value of the given @property {String}.
@@ -21,4 +21,3 @@ core.Interface("core.property.IThemeable",
 		getThemedValue : function(property) {}
 	}
 });
- 

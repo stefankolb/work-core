@@ -28,11 +28,11 @@
   var negativeDate = -62198755200000;
   var negativeYearString = "-000001";
 
-  if (!Date.prototype.toISOString || (new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1)) 
+  if (!Date.prototype.toISOString || (new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1))
   {
     core.Main.addMembers("Date",
     {
-      toISOString : function() 
+      toISOString : function()
       {
         var self = this;
         var result, length, value, year, month;
@@ -49,7 +49,7 @@
 
         // the date time string format is specified in 15.9.1.15.
         result = [month + 1, self.getUTCDate(), self.getUTCHours(), self.getUTCMinutes(), self.getUTCSeconds()];
-        
+
         year = (
           (year < 0 ? "-" : (year > 9999 ? "+" : "")) +
           ("00000" + Math.abs(year))
@@ -57,10 +57,10 @@
         );
 
         length = result.length;
-        while (length--) 
+        while (length--)
         {
           value = result[length];
-          
+
           // pad months, days, hours, minutes, and seconds to have two digits.
           if (value < 10) {
             result[length] = "0" + value;

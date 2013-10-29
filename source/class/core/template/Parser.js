@@ -14,26 +14,26 @@
 
 "use strict";
 
-(function() 
+(function()
 {
 	var tagSplitter = /(\{\{[^\{\}}]*\}\})/;
 	var tagMatcher = /^\{\{\s*([#\^\/\?\!\<\>\$\=_]?)\s*([^\{\}}]*?)\s*\}\}$/;
-	
-	
+
+
 	/**
-	 * {Array} Processes a list of @tokens {String[]} to create a tree. 
+	 * {Array} Processes a list of @tokens {String[]} to create a tree.
 	 * Optional @stack {Array?} is used internally during recursion.
 	 */
-	function buildTree(tokens, stack) 
+	function buildTree(tokens, stack)
 	{
 		var instructions = [];
 		var opener = null;
 		var token = null;
-		
-		while (tokens.length > 0) 
+
+		while (tokens.length > 0)
 		{
 			token = tokens.shift();
-			
+
 			// Sections (and inverted sections) are stored structured in the tree
 			if (token.tag == "#" || token.tag == "^" || token.tag == "?")
 			{
@@ -41,23 +41,23 @@
 				token.nodes = buildTree(tokens, stack);
 				instructions.push(token);
 			}
-			else if (token.tag == "/") 
+			else if (token.tag == "/")
 			{
 				if (jasy.Env.isSet("debug") && stack.length === 0) {
 					throw new Error("Closing tag without opener: /" + token.name);
 				}
-				
+
 				opener = stack.pop();
-				
+
 				if (jasy.Env.isSet("debug") && token.name != opener.name) {
 					throw new Error("Nesting error: " + opener.name + " vs. " + token.name);
 				}
-				
+
 				return instructions;
 			}
-			
+
 			// All other tokens are just copied into the structure
-			else 
+			else
 			{
 				instructions.push(token);
 			}
@@ -69,12 +69,12 @@
 
 		return instructions;
 	}
-	
-	
+
+
 	/**
 	 * This is the Parser of the template engine and transforms the template text into a tree of tokens.
 	 */
-	core.Module("core.template.Parser", 
+	core.Module("core.template.Parser",
 	{
 		/**
 		 * {String[]} Tokenizer for template @text {String}. Returns an array of tokens
@@ -84,40 +84,40 @@
 		 * Optionally you can keep white spaces (line breaks,
 		 * leading, trailing, etc.) by enabling @nostrip {Boolean?false}.
 		 */
-		tokenize: function(text, nostrip) 
+		tokenize: function(text, nostrip)
 		{
 			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(text, "String", "Template text must be type of string.");
 
 				if (nostrip != null) {
-					core.Assert.isType(nostrip, "Boolean", "Nostrip must be type of boolean.");	
+					core.Assert.isType(nostrip, "Boolean", "Nostrip must be type of boolean.");
 				}
 			}
 
-			if (nostrip !== true) 
+			if (nostrip !== true)
 			{
 				var splits = text.split("\n");
 				for (var i=0, l=splits.length; i<l; i++) {
 					splits[i] = splits[i].trim();
 				}
-				
+
 				text = splits.join("");
 			}
-			
+
 			var tokens = [];
 			var splitted = text.split(tagSplitter);
 			var matched;
 
-			for (var i=0, l=splitted.length; i<l; i++) 
+			for (var i=0, l=splitted.length; i<l; i++)
 			{
 				var segment = splitted[i];
-				if (segment.charAt(0) == "{" && (matched = tagMatcher.exec(segment))) 
+				if (segment.charAt(0) == "{" && (matched = tagMatcher.exec(segment)))
 				{
 					var tag = matched[1] || "$";
 
 					// Ignore comment types
-					if (tag != "!") 
+					if (tag != "!")
 					{
 						tokens.push({
 							tag: tag,
@@ -134,8 +134,8 @@
 
 			return tokens;
 		},
-		
-		
+
+
 		/**
 		 * {String[]} Returns the token tree of the given template @text {String}.
 		 *

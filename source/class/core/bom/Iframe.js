@@ -37,9 +37,9 @@ core.Module("core.bom.Iframe",
     style.left = "-1000px";
     style.top = "-1000px";
 
-    if (secure) 
+    if (secure)
     {
-      frame.setAttribute("sandbox", "allow-scripts");  
+      frame.setAttribute("sandbox", "allow-scripts");
 
       var encoded = core.util.Base64.encode(html);
       frame.src = "data:text/html;base64," + encoded;
@@ -48,7 +48,7 @@ core.Module("core.bom.Iframe",
     {
       var self = this;
 
-      frame.onload = core.Function.debounce(function() 
+      frame.onload = core.Function.debounce(function()
       {
         frame.onload = null;
 
@@ -61,7 +61,7 @@ core.Module("core.bom.Iframe",
       /**
        * #asset(core/empty.html)
        */
-      frame.src = jasy.Asset.toUri("core/empty.html");  
+      frame.src = jasy.Asset.toUri("core/empty.html");
     };
 
     parent.appendChild(frame);

@@ -13,10 +13,10 @@ core.Module("core.bom.MediaQuery",
   // adapted from matchMedia polyfill
   // by Scott Jehl and Paul Irish
   // gist.github.com/786768
-  test : (function(window) 
+  test : (function(window)
   {
     var matchMedia = window.matchMedia || window.msMatchMedia;
-    if (matchMedia) 
+    if (matchMedia)
     {
       return function(mq) {
         var mql = matchMedia(mq);
@@ -24,7 +24,7 @@ core.Module("core.bom.MediaQuery",
       };
     }
 
-    return function(mq) 
+    return function(mq)
     {
       var result = false;
 

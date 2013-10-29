@@ -10,7 +10,7 @@
 /**
  * Event class which is fired whenever a model is added to a collection.
  */
-core.Class("core.model.AddEvent", 
+core.Class("core.model.AddEvent",
 {
   pooling: true,
   include : [core.event.MDispatchable],
@@ -23,13 +23,13 @@ core.Class("core.model.AddEvent",
     this.__item = item;
   },
 
-  members: 
+  members:
   {
     // Interface implementation
     getType : function() {
       return "add";
     },
-    
+
     /**
      * Sets the added @item {Object}.
      */

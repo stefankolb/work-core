@@ -16,16 +16,16 @@ core.Module("core.bom.Caret",
 	/**
 	 * {Integer} Returns the caret position on the given @element {Element}.
 	 */
-	getPosition : function(element) 
+	getPosition : function(element)
 	{
-		if (document.selection) 
+		if (document.selection)
 		{
 			element.focus();
 			var sel = document.selection.createRange();
 			sel.moveStart('character', -element.value.length);
 			return sel.text.length;
 		}
-		else if (typeof element.selectionStart == "number") 
+		else if (typeof element.selectionStart == "number")
 		{
 			return element.selectionStart;
 		}
@@ -36,7 +36,7 @@ core.Module("core.bom.Caret",
 	 */
 	setPosition : function(element, position)
 	{
-		if (document.selection) 
+		if (document.selection)
 		{
 			var range = element.createTextRange();
 			range.collapse(true);
@@ -44,7 +44,7 @@ core.Module("core.bom.Caret",
 			range.moveStart('character', position);
 			range.select();
 		}
-		else if (typeof element.selectionStart == "number") 
+		else if (typeof element.selectionStart == "number")
 		{
 			element.selectionStart = position;
 			element.selectionEnd = position;

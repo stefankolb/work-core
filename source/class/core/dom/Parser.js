@@ -37,6 +37,6 @@ core.Module("core.dom.Parser",
   parseXml : function(content)
   {
     var parser = new DOMParser();
-    return parser.parseFromString(content, "application/xml");    
+    return parser.parseFromString(content, "application/xml");
   }
 });

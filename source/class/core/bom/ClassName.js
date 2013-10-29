@@ -8,7 +8,7 @@
 
 "use strict";
 
-(function() 
+(function()
 {
 	/**
 	 * {Boolean} Returns whether the given @string {String} is a valid CSS class name.
@@ -16,11 +16,11 @@
 	var isValid = function(string) {
 		return typeof string == "string" && string.length != 0 && !(/\s/.test(string));
 	};
-	
+
 	// Verify incoming parameters
-	if (jasy.Env.isSet("debug")) 
+	if (jasy.Env.isSet("debug"))
 	{
-		var validate = function(args) 
+		var validate = function(args)
 		{
 			core.Assert.isEqual(args.length, 2);
 			core.dom.Node.assertIsNode(args[0]);
@@ -29,26 +29,26 @@
 			}
 		};
 	}
-	
+
 	// Support new classList interface
-	if ("classList" in document.createElement("div")) 
+	if ("classList" in document.createElement("div"))
 	{
 		/**
 		 * Adds the @className {String} to the given @elem {Element}.
 		 */
-		var addClass = function(elem, className) 
+		var addClass = function(elem, className)
 		{
 			if (jasy.Env.isSet("debug")) {
 				validate(arguments);
 			}
-			
+
 			elem.classList.add(className);
 		};
 
 		/**
 		 * Removes the @className {String} from the given @elem {Element}.
 		 */
-		var removeClass = function(elem, className) 
+		var removeClass = function(elem, className)
 		{
 			if (jasy.Env.isSet("debug")) {
 				validate(arguments);
@@ -60,19 +60,19 @@
 		/**
 		 * {Boolean} Returns whether @className {String} is applied to the given @elem {Element}.
 		 */
-		var containsClass = function(elem, className) 
+		var containsClass = function(elem, className)
 		{
 			if (jasy.Env.isSet("debug")) {
 				validate(arguments);
 			}
-		
+
 			return elem.classList.contains(className);
 		};
 
 		/**
 		 * Toggles the @className {String} for the given @elem {Element}.
 		 */
-		var toggleClass = function(elem, className) 
+		var toggleClass = function(elem, className)
 		{
 			if (jasy.Env.isSet("debug")) {
 				validate(arguments);
@@ -83,21 +83,21 @@
 	}
 	else
 	{
-		
+
 		var space = " ";
-		
-		var addClass = function(elem, className) 
+
+		var addClass = function(elem, className)
 		{
 			if (jasy.Env.isSet("debug")) {
 				validate(arguments);
 			}
-			
+
 			if (!containsClass(elem, className)) {
 				elem.className += space + className;
 			}
 		};
 
-		var removeClass = function(elem, className) 
+		var removeClass = function(elem, className)
 		{
 			if (jasy.Env.isSet("debug")) {
 				validate(arguments);
@@ -106,7 +106,7 @@
 			elem.className = (space + elem.className + space).replace(className, "")
 		};
 
-		var containsClass = function(elem, className) 
+		var containsClass = function(elem, className)
 		{
 			if (jasy.Env.isSet("debug")) {
 				validate(arguments);
@@ -115,12 +115,12 @@
 		  return elem.className && (elem.className == className || (space + elem.className + space).indexOf(space + className + space) !== -1);
 		};
 
-		var toggleClass = function(elem, className) 
+		var toggleClass = function(elem, className)
 		{
 			if (jasy.Env.isSet("debug")) {
 				validate(arguments);
 			}
-			
+
 			if (containsClass(elem, className)) {
 				removeClass(elem, className);
 			} else {
@@ -137,7 +137,7 @@
 	var setClass = function(elem, className, enabled) {
 		return enabled ? addClass(elem, className) : removeClass(elem, className);
 	};
-	
+
 
 	/**
 	 * Managing class names on DOM nodes the easy way.
@@ -154,5 +154,5 @@
 		toggle : toggleClass,
 		set : setClass
 	});
-	
+
 })();

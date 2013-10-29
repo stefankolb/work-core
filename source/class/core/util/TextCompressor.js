@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2013 Sebastian Fastner
@@ -87,7 +87,7 @@
 			out[0] = fromCodePoint(MARKERINTSHIFT + bits);
 			out.push(fromCodePoint(chr));
 		}
-		
+
 		return out.join("");
 	};
 
@@ -146,12 +146,12 @@
 	/**
 	 * Text compressor to compress (mainly western) strings to UTF16 in an size efficient way. This is based upon work of FT.
 	 */
-	core.Module("core.util.TextCompressor", 
+	core.Module("core.util.TextCompressor",
 	{
 		compress64 : compress64,
 		decompress64 : decompress64,
 
-	
+
 		/**
 		 * {String} Returns packed UTF16 representation of given encoded @text {String}.
 		 */

@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2013 Sebastian Werner
@@ -7,7 +7,7 @@
 
 "use strict";
 
-(function() 
+(function()
 {
   var doc = document;
 

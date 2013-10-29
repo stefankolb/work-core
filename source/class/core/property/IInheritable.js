@@ -13,7 +13,7 @@
  */
 core.Interface("core.property.IInheritable",
 {
-	members : 
+	members :
 	{
 		/**
 		 * {var} Returns the inherited value of the given @property {String}.

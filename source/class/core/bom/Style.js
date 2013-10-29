@@ -8,7 +8,7 @@
 
 "use strict";
 
-(function(global, document, undef) 
+(function(global, document, undef)
 {
 	/** Caches CSS property names to browser specific names. Can be used as a fast lookup alternative to {#property}. */
 	var nameCache = {};
@@ -28,8 +28,8 @@
 	// Webkit ghosts their properties in lowercase but Opera & Moz do not.
 	// Microsoft uses a lowercase `ms` instead of the correct `Ms` in IE8+
 	//   erik.eae.net/archives/2008/03/10/21.48.10/
-	
-	var vendorPrefix = jasy.Env.select("engine", 
+
+	var vendorPrefix = jasy.Env.select("engine",
 	{
 		trident: 'ms',
 		gecko: 'Moz',
@@ -39,10 +39,10 @@
 
 
 	/**
-	 * {String} Returns the supported property (e.g. `WebkitTransform`) of the given standard CSS property 
+	 * {String} Returns the supported property (e.g. `WebkitTransform`) of the given standard CSS property
 	 * @name {String} like `transform`. Returns `null` when the property is not supported.
 	 */
-	var getProperty = function(name) 
+	var getProperty = function(name)
 	{
 		// Fast path, real native property
 		if (name in helperStyle) {
@@ -60,25 +60,25 @@
 		if (vendorName in helperStyle) {
 			return (nameCache[name] = vendorName);
 		}
-		
+
 		return null;
 	};
 
 
 	if ("CSS" in global && "supports" in global.CSS)
 	{
-		var isSupported = function(property, value) 
+		var isSupported = function(property, value)
 		{
 			if (value == null) {
 				value = "inherit";
 			}
 
-			return global.CSS.supports(property, value);  	
+			return global.CSS.supports(property, value);
 		}
 	}
 	else if ("supportsCSS" in global)
 	{
-		var isSupported = function(property, value) 
+		var isSupported = function(property, value)
 		{
 			if (value == null) {
 				value = "inherit";
@@ -90,9 +90,9 @@
 	else
 	{
 		/**
-		 * {Boolean} Returns whether a specific style @property {String} 
+		 * {Boolean} Returns whether a specific style @property {String}
 		 * (uses CSS-style with hyphens) and @value {any?inherit} is supported.
-		 */		
+		 */
 		var isSupported = function(property, value)
 		{
 			if (value == null) {
@@ -101,7 +101,7 @@
 
       var key = property + ':' + value;
       if (key in supportCache){
-        return supportCache[key];  
+        return supportCache[key];
       }
 
       var supported = false;
@@ -123,7 +123,7 @@
 	 * Utility class for working with HTML style properties (setting/getting). Automatically figures out the
 	 * correct property name when the engine does not yet support the specified name, but a vendor prefixed one.
 	 */
-	core.Module("core.bom.Style", 
+	core.Module("core.bom.Style",
 	{
 		names: nameCache,
 		property: getProperty,
@@ -140,7 +140,7 @@
 		 *       alert(getComputedStyle(node).color)
 		 *     });
 		 */
-		injectElementWithStyles : function(rules, callback) 
+		injectElementWithStyles : function(rules, callback)
 		{
 			var id = 'elementtest';
 
@@ -160,10 +160,10 @@
 			var style = ['&#173;','<style id="s', id, '">', rules, '</style>'].join('');
 			div.id = id;
 			div.innerHTML += style;
-			
+
 			body.appendChild(div);
-			
-			if (fakeBody) 
+
+			if (fakeBody)
 			{
 				// Avoid crashing IE8, if background image is used
 				body.style.background = '';
@@ -193,7 +193,7 @@
 		 * of the property as applied - non interpreted. This means that units are not translated
 		 * to pixels etc. like which is normally the case in computed properties.
 		 */
-		get: function(element, name, computed) 
+		get: function(element, name, computed)
 		{
 			// Find real name, use if supported
 			var supported = name in helperStyle && name || nameCache[name] || getProperty(name);
@@ -216,27 +216,27 @@
 
 
 		/**
-		 * {Integer} Returns an integer representation of the given style property @name {String} on the 
-		 * given @element {Element}. By default the method returns the locally applied property value 
-		 * but there is also support for figuring out the @computed {Boolean?false} value by triggering 
+		 * {Integer} Returns an integer representation of the given style property @name {String} on the
+		 * given @element {Element}. By default the method returns the locally applied property value
+		 * but there is also support for figuring out the @computed {Boolean?false} value by triggering
 		 * the corresponding flag.
 		 */
 		getInteger: function(element, name, computed) {
 			return parseInt(this.get(element, name, computed), 10) || 0;
 		},
-		
+
 
 		/**
 		 * Sets one or multiple style properties on the given @element {Element}. If @name {String|Map} is a `String`
 		 * the third parameter @value defines the value to apply. Alternatively @name can be a `Map` which defines
 		 * all properties to set.
 		 */
-		set: function(element, name, value) 
+		set: function(element, name, value)
 		{
 			var style = element.style;
 			var supported;
 
-			if (typeof name === 'string') 
+			if (typeof name === 'string')
 			{
 				// Find real name, apply if supported
 				supported = name in helperStyle && name || nameCache[name] || getProperty(name);
@@ -246,7 +246,7 @@
 			}
 			else
 			{
-				for (var key in name) 
+				for (var key in name)
 				{
 					// Find real name, apply if supported
 					value = name[key];

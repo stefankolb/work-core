@@ -15,10 +15,10 @@ core.Module("core.bom.Form",
 {
 	/**
 	 * {Map} Serializes a HTML @form {Element}.
-	 */	
+	 */
 	getData : function(form)
 	{
-		if (jasy.Env.isSet("debug")) 
+		if (jasy.Env.isSet("debug"))
 		{
 			core.Assert.isEqual(arguments.length, 1);
 			core.dom.Node.assertIsNode(form);
@@ -37,24 +37,24 @@ core.Module("core.bom.Form",
 			var value = core.bom.FormItem.getValue(item);
 
 			// Only keep successful items
-			if (core.bom.FormItem.isSuccessful(item)) 
+			if (core.bom.FormItem.isSuccessful(item))
 			{
 				var stored = result[name];
 
 				// Always overwrite when it is a list value from e.g. a multi select field
-				if (value instanceof Array) 
+				if (value instanceof Array)
 				{
-					result[name] = value;	
+					result[name] = value;
 					boollike[name] = false;
 				}
 
 				// Overwrite when current value is undefined
-				else if (stored === undef) 
+				else if (stored === undef)
 				{
 					// Behave differently on whether the key already existed or not:
 					// Check whether we expect an array return value
 					// which is true whenever two fields of the same name exist
-					if (name in result && !core.bom.FormItem.isExplicitSingle(item)) 
+					if (name in result && !core.bom.FormItem.isExplicitSingle(item))
 					{
 						result[name] = [value];
 						boollike[name] = false;
@@ -64,13 +64,13 @@ core.Module("core.bom.Form",
 						result[name] = value;
 						if (typeof value !== "boolean") {
 							boollike[name] = false;
-						}			  		
+						}
 					}
 				}
 
 				// If there is already something stored (e.g. multiple checkboxes with the same name)
 				// we simple push to the list of values or create that list from the other value
-				else if (stored instanceof Array) 
+				else if (stored instanceof Array)
 				{
 					stored.push(value);
 				}
@@ -85,7 +85,7 @@ core.Module("core.bom.Form",
 			// where non is enabled and to pass any value/key at all.
 			else if (!(name in result))
 			{
-				result[name] = undef;	
+				result[name] = undef;
 				if (typeof value !== "boolean") {
 					boollike[name] = false;
 				}
@@ -116,9 +116,9 @@ core.Module("core.bom.Form",
 	/**
 	 * {String} Serializes a HTML @form {Element}.
 	 */
-	serialize: function(form) 
+	serialize: function(form)
 	{
-		if (jasy.Env.isSet("debug")) 
+		if (jasy.Env.isSet("debug"))
 		{
 			core.Assert.isEqual(arguments.length, 1);
 			core.dom.Node.assertIsNode(form);

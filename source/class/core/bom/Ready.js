@@ -8,15 +8,15 @@
 
 "use strict";
 
-(function(doc, re) 
+(function(doc, re)
 {
 	/**
 	 * Easy wrapper on content loaded event registration
 	 */
-	core.Module("core.bom.Ready", 
+	core.Module("core.bom.Ready",
 	{
 		/**
-		 * Executes the given @callback {Function} (in given @context {Object?}) 
+		 * Executes the given @callback {Function} (in given @context {Object?})
 		 * when the document is ready.
 		 */
 		exec: function(callback, context)

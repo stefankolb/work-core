@@ -7,22 +7,22 @@
 
 "use strict";
 
-(function() 
+(function()
 {
-  var getHandlers = function(object, type, capture, create) 
+  var getHandlers = function(object, type, capture, create)
   {
     if (capture) {
-      var events = object.__capturePhaseHandlers || (create && (object.__capturePhaseHandlers = {}));  
+      var events = object.__capturePhaseHandlers || (create && (object.__capturePhaseHandlers = {}));
     } else {
-      var events = object.__bubblePhaseHandlers || (create && (object.__bubblePhaseHandlers = {}));  
+      var events = object.__bubblePhaseHandlers || (create && (object.__bubblePhaseHandlers = {}));
     }
-    
+
     return events && (events[type] || (create && (events[type] = [])));
   };
 
   var slice = Array.prototype.slice;
 
-  var getTargets = function(obj) 
+  var getTargets = function(obj)
   {
     if (!obj.getEventParent) {
       return [obj];
@@ -49,19 +49,19 @@
   /**
    * Generic event interface for Core classes.
    */
-  core.Class("core.event.MEventTarget", 
+  core.Class("core.event.MEventTarget",
   {
     members :
     {
       /**
-       * {Boolean} Registers a listener of the given @type {String} of event to 
+       * {Boolean} Registers a listener of the given @type {String} of event to
        * execute the @callback {Function} in the given @context {Object?}. Supports
        * executing the listener during the @capture {Boolean?false} phase when `true`
        * is passed in. Returns whether adding the listener was successful.
        */
-      addListener : function(type, callback, context, capture) 
+      addListener : function(type, callback, context, capture)
       {
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           core.Assert.isType(type, "String", "Invalid event type - non string!");
           core.Assert.isNotEmpty(type, "Invalid event type - empty string!");
@@ -88,16 +88,16 @@
       },
 
 
-      /** 
+      /**
        * {Boolean} Like {#addListener} but executes the @callback {Function} for the event @type {String}
-       * only on the first event and then unregisters the @callback automatically. 
+       * only on the first event and then unregisters the @callback automatically.
        * Supports @context {Object?} for defining the execution context as well. Supports
        * executing the listener during the @capture {Boolean?false} phase when `true`
        * is passed in. Returns whether adding the listener was successful.
        */
-      addListenerOnce : function(type, callback, context, capture) 
+      addListenerOnce : function(type, callback, context, capture)
       {
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           core.Assert.isType(type, "String", "Invalid event type!");
           core.Assert.isNotEmpty(type, "Invalid event type!");
@@ -112,9 +112,9 @@
 
         if (self.hasListener(type, callback, context, capture)) {
           return false;
-        }          
+        }
 
-        var wrapper = function() 
+        var wrapper = function()
         {
           self.removeListener(type, wrapper);
           return callback.apply(context || self, arguments);
@@ -125,14 +125,14 @@
 
 
       /**
-       * {Boolean} Removes a listener of the given @type {String} of event to 
+       * {Boolean} Removes a listener of the given @type {String} of event to
        * execute the @callback {Function} in the given @context {Object?}. Supports
        * executing the listener during the @capture {Boolean?false} phase when `true`
        * is passed in. Returns whether removing the listener was successful.
        */
-      removeListener : function(type, callback, context, capture) 
+      removeListener : function(type, callback, context, capture)
       {
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           core.Assert.isType(type, "String", "Invalid event type!");
           core.Assert.isNotEmpty(type, "Invalid event type!");
@@ -169,29 +169,29 @@
        * Is able to filter capture/bubble phase via @capture {Boolean?null}.
        * By default it removes both groups of events.
        */
-      removeAllListeners : function(type, capture) 
+      removeAllListeners : function(type, capture)
       {
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
-          if (type != null) 
+          if (type != null)
           {
             core.Assert.isType(type, "String", "Invalid event type!");
             core.Assert.isNotEmpty(type, "Invalid event type!");
           }
         }
 
-        if (type != null) 
+        if (type != null)
         {
           // Remove both, bubbling and capturing when capture is null
-          if (this.__capturePhaseHandlers && (capture === true || capture == null)) 
+          if (this.__capturePhaseHandlers && (capture === true || capture == null))
           {
             var entries = this.__capturePhaseHandlers[type];
             if (entries) {
               entries.length = 0;
             }
           }
-          
-          if (this.__bubblePhaseHandlers && (capture === false || capture == null)) 
+
+          if (this.__bubblePhaseHandlers && (capture === false || capture == null))
           {
             var entries = this.__bubblePhaseHandlers[type];
             if (entries) {
@@ -211,18 +211,18 @@
       /**
        * {Boolean} Returns whether the given event @type {String} has any listeners.
        * The method could optionally figure out whether a specific
-       * @callback {Function?} (with optional @context {Object?}) is 
+       * @callback {Function?} (with optional @context {Object?}) is
        * registered already. The @capture {Boolean} flag defines whether
        * events for the capture or bubble phase should be queried.
        */
-      hasListener : function(type, callback, context, capture) 
+      hasListener : function(type, callback, context, capture)
       {
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           core.Assert.isType(type, "String", "Invalid event type!");
           core.Assert.isNotEmpty(type, "Invalid event type!");
 
-          if (callback != null) 
+          if (callback != null)
           {
             core.Assert.isType(callback, "Function", "Invalid event callback!");
 
@@ -246,13 +246,13 @@
         if (context) {
           callback = core.Function.bind(callback, context);
         }
-        
+
         return handlers.indexOf(callback) != -1;
       },
 
 
       /**
-       * {Boolean} Dispatches the given @eventObject {Object} on this object. 
+       * {Boolean} Dispatches the given @eventObject {Object} on this object.
        * The object can be an arbitrary Object with a valid `type` information.
        * The method returns whether any listers were processed.
        */
@@ -261,7 +261,7 @@
         var eventType = eventObject.getType();
         var eventTarget = this;
 
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           core.Assert.isType(eventObject, "Object", "Invalid event object to dispatch!");
           if (!eventObject.setTarget) {
@@ -288,7 +288,7 @@
         // - AT_TARGET = 2
         // - BUBBLING_PHASE = 3
         var eventPhase = canBubble ? 1 : 2;
-        eventObject.setEventPhase(eventPhase);        
+        eventObject.setEventPhase(eventPhase);
 
         for (var targetIndex=0; targetIndex<targetsLength; targetIndex++)
         {
@@ -303,7 +303,7 @@
           var handlers = getHandlers(currentTarget, eventType, eventPhase !== 3, false);
 
           // When at-target we use all handlers, capture and bubble
-          if (atTarget) 
+          if (atTarget)
           {
             // Note: concat() returns a new array
             var bubbleHandlers = getHandlers(currentTarget, eventType, false, false);
@@ -354,7 +354,7 @@
        * with the given @type {String}, @data {var} and @message {String}.
        * The method returns whether any listers were processed.
        */
-      fireEvent : function(type, data, message) 
+      fireEvent : function(type, data, message)
       {
         var eventObject = core.event.Simple.obtain(type, data, message);
         var retval = this.dispatchEvent(eventObject);

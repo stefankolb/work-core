@@ -34,7 +34,7 @@
 		 * - @plural {String?} Identifier string for plural
 		 * - @context {String?} Identifier extension for context information
 		 */
-		getEntry : function(basic, plural, context) 
+		getEntry : function(basic, plural, context)
 		{
 			var id = basic
 
@@ -42,7 +42,7 @@
 				id += "[C:" + context + "]";
 			} else if (plural != null) {
 				id += "[N:" + plural + "]";
-			}			
+			}
 
 			return translations[id];
 		}

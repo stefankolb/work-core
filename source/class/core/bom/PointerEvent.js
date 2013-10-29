@@ -25,7 +25,7 @@
 
   if (jasy.Env.isSet("debug"))
   {
-    var checkSignature = function(target, type, callback, context, capture) 
+    var checkSignature = function(target, type, callback, context, capture)
     {
       if (target == null) {
         throw new Error("Invalid target: " + target);
@@ -40,13 +40,13 @@
       core.Assert.isType(callback, "Function");
 
       if (context != null) {
-        core.Assert.isType(context, "String");  
+        core.Assert.isType(context, "String");
       }
 
       if (capture != null) {
-        core.Assert.isType(capture, "Boolean");  
+        core.Assert.isType(capture, "Boolean");
       }
-    };    
+    };
   }
 
   /**
@@ -79,7 +79,7 @@
     },
 
 
-    add : function(target, type, callback, context, capture) 
+    add : function(target, type, callback, context, capture)
     {
       var specialHandler = special[type];
       if (specialHandler) {
@@ -126,8 +126,8 @@
         var previousTargets = {};
 
         // Touch Identifier:
-        // An identification number for each touch point. When a touch point becomes active, it must be assigned an 
-        // identifier that is distinct from any other active touch point. While the touch point remains active, all 
+        // An identification number for each touch point. When a touch point becomes active, it must be assigned an
+        // identifier that is distinct from any other active touch point. While the touch point remains active, all
         // events that refer to it must assign it the same identifier.
 
         listeners.touchstart = function(nativeEvent)
@@ -141,7 +141,7 @@
 
           for (var i=0, il=changed.length; i<il; i++)
           {
-            var point = changed[i];          
+            var point = changed[i];
             var currentTarget = previousTargets[point.identifier] = point.target;
 
             // console.log("Fire pointerdown: primary=" + (point.identifier == primaryIdentifier), point.target);
@@ -259,7 +259,7 @@
             if (eventObject.isPropagationStopped()) {
               nativeEvent.stopPropagation();
             }
-            
+
             eventObject.release();
 
             // Reset primary
@@ -344,7 +344,7 @@
       if (context) {
         callback = core.Function.bind(callback, context);
       }
-      
+
       // Unregistering all native listeners
       var eventId = core.bom.event.Util.getId(type, callback, capture);
       core.bom.event.Util.removeNative(target, eventId, capture);

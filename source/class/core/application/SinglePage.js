@@ -6,7 +6,7 @@ core.Class("core.application.SinglePage",
   {
     core.presenter.Abstract.call(this, parent);
 
-    // Prepare history object   
+    // Prepare history object
     this.__history = new core.bom.HashHistory;
     this.__history.addListener("change", this.__onHistoryChange, this);
   },
@@ -33,7 +33,7 @@ core.Class("core.application.SinglePage",
     }
   },
 
-  members : 
+  members :
   {
     /*
     ==================================================================
@@ -47,13 +47,13 @@ core.Class("core.application.SinglePage",
     /**
      * Internal helper for updating activity indicator when some task was started.
      */
-    incrementActivity : function(hint) 
+    incrementActivity : function(hint)
     {
       if (++this.__activityCounter == 1) {
         this.getView("root").showActivityIndicator();
       }
 
-      if (jasy.Env.isSet("debug")) 
+      if (jasy.Env.isSet("debug"))
       {
         // this.log(">>> Incremented: " + hint, this.__activityCounter);
         // this.log(">>> Waiting for " + this.__activityCounter + " background processes...");
@@ -64,13 +64,13 @@ core.Class("core.application.SinglePage",
     /**
      * Internal helper for updating activity indicator when some task was done.
      */
-    decrementActivity : function(hint) 
+    decrementActivity : function(hint)
     {
       if (--this.__activityCounter == 0) {
         this.getView("root").hideActivityIndicator();
       }
 
-      if (jasy.Env.isSet("debug")) 
+      if (jasy.Env.isSet("debug"))
       {
         // this.log(">>> Decremented: " + hint, this.__activityCounter);
         // this.log(">>> Waiting for " + this.__activityCounter + " background processes...");
@@ -99,10 +99,10 @@ core.Class("core.application.SinglePage",
     __onHistoryChange : function(e)
     {
       var path = core.util.HashPath.obtain(e.getData());
-      if (path.length == 0) 
+      if (path.length == 0)
       {
         this.__history.setLocation("home");
-        return;       
+        return;
       }
 
       var current = path.getCurrent();
@@ -111,7 +111,7 @@ core.Class("core.application.SinglePage",
       }
 
       var presenter = this.getChild(current.presenter);
-      if (!presenter) 
+      if (!presenter)
       {
         this.warn("Unknown presenter: " + current.presenter);
         return;
@@ -126,7 +126,7 @@ core.Class("core.application.SinglePage",
 
       // Make old path available for reusage
       if (oldPath) {
-        oldPath.release();  
+        oldPath.release();
       }
 
       // Configure next presenter
@@ -160,14 +160,14 @@ core.Class("core.application.SinglePage",
     /**
      * {Boolean} Whether the given presenter {Object|Class} is active.
      */
-    isPresenterActive : function(presenter) 
+    isPresenterActive : function(presenter)
     {
       var active = this.getActive();
       return active && (active == presenter || active.constructor == presenter);
     },
 
 
-    navigateBack : function(alternate) 
+    navigateBack : function(alternate)
     {
       // Navigate back to parent
       var hash = location.hash;
@@ -178,14 +178,14 @@ core.Class("core.application.SinglePage",
         return;
       }
 
-      location.hash = hash.slice(0, last);      
-    },    
+      location.hash = hash.slice(0, last);
+    },
 
 
     /**
      * Real initialization code after first rendering
      */
-    init : function() 
+    init : function()
     {
       this.__history.init();
 

@@ -21,14 +21,14 @@ core.Interface("core.model.ICollection",
     "remove" : core.event.Simple
   },
 
-  members : 
+  members :
   {
-    /** 
+    /**
      * Adds the given @model {core.model.IModel...} to the collection.
      */
     add : function(model) {},
 
-    /** 
+    /**
      * Removes the given @model {core.model.IModel} from the collection.
      */
     remove : function(model) {},

@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2013 Sebastian Werner
@@ -7,7 +7,7 @@
 
 "use strict";
 
-(function() 
+(function()
 {
   var name = "transitionend";
 
@@ -32,7 +32,7 @@
   };
 
   /**
-   * Removes the @callback {Function} with its @context {Object?} 
+   * Removes the @callback {Function} with its @context {Object?}
    * from the transition end event of the given @elem {Element}
    */
   var removeListener = function(elem, callback, context)
@@ -41,7 +41,7 @@
       callback = core.Function.bind(callback, context);
     }
 
-    elem.removeEventListener(name, callback, false);      
+    elem.removeEventListener(name, callback, false);
   };
 
   /**
@@ -93,7 +93,7 @@
       });
 
       // Connect to transition end event
-      var helper = function() 
+      var helper = function()
       {
         removeListener(elem, helper);
 
@@ -127,7 +127,7 @@
       var changed = false;
       for (var property in to)
       {
-        if (Style.get(elem, property) != to[property]) 
+        if (Style.get(elem, property) != to[property])
         {
           changed = true;
           break;
@@ -135,7 +135,7 @@
       }
 
       // Fast path for cases where no changes for transitioning are detected
-      if (!changed) 
+      if (!changed)
       {
         // Hide element first
         elem.style.display = "none";
@@ -145,7 +145,7 @@
         {
           Style.set(elem, "transitionDuration", "0ms");
           Style.set(elem, reset);
-        }        
+        }
 
         // Finally let requester know
         if (callback) {
@@ -165,16 +165,16 @@
       });
 
       // Connect to transition end event
-      var helper = function() 
+      var helper = function()
       {
         // Only execute this helper once
         removeListener(elem, helper);
 
-        if (elem.fading == "out") 
+        if (elem.fading == "out")
         {
           elem.fading = null;
 
-          // Hide element first  
+          // Hide element first
           elem.style.display = "none";
 
           // Then apply reset rules
@@ -191,7 +191,7 @@
         }
       };
 
-      addListener(elem, helper);     
+      addListener(elem, helper);
     }
   });
 })();

@@ -15,9 +15,9 @@ core.Interface("core.view.IView",
   /**
    * @presenter {core.presenter.Abstract} Presenter instance to connect to
    */
-  // Not supported yet  
+  // Not supported yet
   // construct: function(presenter) {},
-  
+
   events :
   {
     /** Fired after the view has been shown */

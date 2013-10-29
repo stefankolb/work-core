@@ -8,10 +8,10 @@
 "use strict";
 
 /**
- * A reporter for the `console` interface which is available in 
+ * A reporter for the `console` interface which is available in
  * web browsers, NodeJS, PhantomJS, etc.
  */
-core.Class("core.testrunner.reporter.Console", 
+core.Class("core.testrunner.reporter.Console",
 {
   implement: [core.testrunner.reporter.IReporter],
 
@@ -22,7 +22,7 @@ core.Class("core.testrunner.reporter.Console",
     console.info("Suites: " + suites.length);
   },
 
-  members : 
+  members :
   {
     // interface implementation
     start : function() {
@@ -30,7 +30,7 @@ core.Class("core.testrunner.reporter.Console",
     },
 
     // interface implementation
-    finished : function(successfully) 
+    finished : function(successfully)
     {
       if (successfully) {
         console.info("Testing finished successfully.");
@@ -50,28 +50,28 @@ core.Class("core.testrunner.reporter.Console",
     },
 
     // interface implementation
-    testStarted : function(test) 
+    testStarted : function(test)
     {
       if (test.isAsynchronous()) {
-        console.info("- Start: " + test.getTitle());  
-      }  
+        console.info("- Start: " + test.getTitle());
+      }
     },
 
     // interface implementation
-    testFinished : function(test) 
+    testFinished : function(test)
     {
       console.info("- " + test.getSummary());
 
-      if (!test.wasSuccessful()) 
+      if (!test.wasSuccessful())
       {
-        if (test.getFailureReason() == "assertions") 
+        if (test.getFailureReason() == "assertions")
         {
           var items = test.export().items;
           for (var i=0, l=items.length; i<l; i++)
           {
             var current = items[i];
 
-            if (current.passed) 
+            if (current.passed)
             {
               console.info("  #" + i + ": succeeded");
               continue;
@@ -93,7 +93,7 @@ core.Class("core.testrunner.reporter.Console",
           var lines = stacktrace.split("\n");
           for (var j=0, jl=lines.length; j<jl; j++) {
             console.log("  " + lines[j])
-          }          
+          }
         }
       }
     }

@@ -8,13 +8,13 @@
 
 "use strict";
 
-(function(toString, undef) 
+(function(toString, undef)
 {
-	var global = (function(){ 
-		return this || (1,eval)('this') 
+	var global = (function(){
+		return this || (1,eval)('this')
 	})();
 
-	var createDict = Object.create ? function() {	
+	var createDict = Object.create ? function() {
 		return Object.create(null);
 	} : function() {
 		return {};
@@ -24,25 +24,25 @@
 	// native objects. IE8 does not have defineProperies, however, so this check saves a try/catch block.
 	if (Object.defineProperty && Object.defineProperties)
 	{
-		var add = function(target, name, method) 
+		var add = function(target, name, method)
 		{
-			Object.defineProperty(target, name, 
+			Object.defineProperty(target, name,
 			{
-				value: method, 
-				configurable: true, 
-				enumerable: false, 
-				writeable: true 
+				value: method,
+				configurable: true,
+				enumerable: false,
+				writeable: true
 			});
 		};
 	}
-	else 
+	else
 	{
 		var add = function(target, name, method) {
 			target[name] = method;
 		};
 	};
-	
-	
+
+
 	/** {Map} Stores and maps namespaces */
 	var cache = {
 		"global" : global
@@ -74,7 +74,7 @@
 
 		return cache[name] = current[splits[i]] = object;
 	};
-	
+
 	// Temporary hack to make next statement workable
 	declareNamespace("core.Main.declareNamespace", declareNamespace);
 
@@ -85,7 +85,7 @@
 			.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 			.replace(/valueOf|for [^\]]+/g, '.+?') + '$'
 	);
-	
+
 	/**
 	 * Useful root methods to add members to objects.
 	 *
@@ -93,10 +93,10 @@
 	 *
 	 * #load(fix.*)
 	 */
-	core.Main.declareNamespace("core.Main", 
+	core.Main.declareNamespace("core.Main",
 	{
 		declareNamespace : declareNamespace,
-		
+
 
 		/**
 		 * {Boolean} Host objects can return type values that are different from their actual
@@ -105,8 +105,8 @@
 		 *
 		 * - @object {var} The owner of the property.
 		 * - @property {String} The property to check.
-		 */		
-		isHostType : function(object, property) 
+		 */
+		isHostType : function(object, property)
 		{
 			var type = object != null ? typeof object[property] : 'number';
 			return !/^(?:boolean|number|string|undefined)$/.test(type) && (type == 'object' ? !!object[property] : true);
@@ -161,7 +161,7 @@
 		 *
 		 * any many more...
 		 */
-		getClass : function(any) 
+		getClass : function(any)
 		{
 			if (any == null) {
 				return any === null ? "null" : "undefined";
@@ -184,7 +184,7 @@
 		 * {Boolean} Whether the given @value {var} is of the given @type {String}.
 		 *
 		 * Supports all types of `getClassType` and additionally these "virtual" types:
-		 * 
+		 *
 		 * - `Object` - Any object (better use a more detailed type)
 		 * - `Map` - Any plain data object (no class instance)
 		 * - `Integer` - like `Number` but non floating
@@ -194,11 +194,11 @@
 		 * - `Promise` - Promise, any `Object` with then() method
 		 * - `ArrayOrPromise` - either `Array` or `Promise`
 		 */
-		isTypeOf : function(value, type) 
+		isTypeOf : function(value, type)
 		{
 			var result = false;
 
-			if (value == null) 
+			if (value == null)
 			{
 				result = type == "Null";
 			}
@@ -206,15 +206,15 @@
 			{
 				result = value && typeof value == "object";
 			}
-			else if (type == "Map") 
+			else if (type == "Map")
 			{
 				result = this.isTypeOf(value, "Object") && value.constructor === Object;
 			}
-			else if (type == "Integer") 
+			else if (type == "Integer")
 			{
 				result = this.isTypeOf(value, "Number") && (~~value) == value;
-			} 
-			else if (type == "Primitive") 
+			}
+			else if (type == "Primitive")
 			{
 				var type = typeof value;
 				result = value == null || type == "boolean" || type == "number" || type == "string";
@@ -242,10 +242,10 @@
 
 			return result;
 		},
-		
+
 
 		/**
-		 * {Boolean} Clears the object under the given @name {String} (including name cache) and 
+		 * {Boolean} Clears the object under the given @name {String} (including name cache) and
 		 * returns if that was successful.
 		 */
 		clearNamespace: function(name)
@@ -272,7 +272,7 @@
 
 			return false;
 		},
-		
+
 
 		/**
 		 * {Object|Function|Array} Resolves a given @name {String} into the item stored unter it.
@@ -306,13 +306,13 @@
 		 * Add @statics {Map} to the object found under the given @name {String}.
 		 * Supports overriding the existing key via @override {Boolean?false}.
 		 */
-		addStatics : function(name, statics, override) 
+		addStatics : function(name, statics, override)
 		{
 			var object = global[name] || cache[name];
 			var prefix = name + ".";
-			for (var staticName in statics) 
+			for (var staticName in statics)
 			{
-				if (override || object[staticName] === undef) 
+				if (override || object[staticName] === undef)
 				{
 					var item = statics[staticName];
 					if (item instanceof Function) {
@@ -329,14 +329,14 @@
 		 * Add @members {Map} to the prototype of the object found under the given @name {String}.
 		 * Supports overriding the existing key via @override {Boolean?false}.
 		 */
-		addMembers : function(name, members, override) 
+		addMembers : function(name, members, override)
 		{
 			var object = global[name] || cache[name];
 			var proto = object.prototype;
 			var prefix = name + ".prototype.";
-			for (var memberName in members) 
+			for (var memberName in members)
 			{
-				if (override || proto[memberName] === undef) 
+				if (override || proto[memberName] === undef)
 				{
 					var item = members[memberName];
 					if (item instanceof Function) {

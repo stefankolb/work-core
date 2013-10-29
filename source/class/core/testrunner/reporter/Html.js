@@ -10,24 +10,24 @@
 /**
  * Reporter which produces visual HTML output into the document.
  */
-core.Class("core.testrunner.reporter.Html", 
+core.Class("core.testrunner.reporter.Html",
 {
   implement: [core.testrunner.reporter.IReporter],
 
   /**
    * @suites {core.testrunner.Suite[]} Array of suites to report for
    */
-  construct : function(suites) 
+  construct : function(suites)
   {
     var root = document.getElementById("reporter");
-    if (!root) 
+    if (!root)
     {
       root = document.createElement("div");
       root.id = "reporter";
       document.body.appendChild(root);
     }
 
-    var suitesTemplate = 
+    var suitesTemplate =
       core.template.Compiler.compile(
       '<ul class="suites">' +
         '{{#suites}}<li class="suite running" id="suite-{{id}}">' +
@@ -38,7 +38,7 @@ core.Class("core.testrunner.reporter.Html",
               '<span class="failed">0</span>→' +
               '<span class="total">{{total}}</span>' +
             '</span>' +
-          '</h3>' + 
+          '</h3>' +
           '<ul class="tests">{{#tests}}' +
             '<li class="test" id="test-{{id}}">' +
               '<h4>{{title}}' +
@@ -54,34 +54,34 @@ core.Class("core.testrunner.reporter.Html",
         '</li>{{/suites}}' +
       '</ul>');
 
-    var suitesData = 
-    { 
+    var suitesData =
+    {
       suites : suites.map(function(suite)
       {
         return {
           id : suite.getId(),
           caption : suite.getCaption(),
           total : suite.getTests().length,
-          tests : suite.getTests().map(function(test) 
+          tests : suite.getTests().map(function(test)
           {
             return {
               id : test.getId(),
               total : test.getTotalCount(),
               title : test.getTitle()
             };
-          })       
+          })
         };
-      }) 
+      })
     };
 
     root.innerHTML = suitesTemplate.render(suitesData);
 
     if (typeof console == "object") {
-      this.__consoleReporter = new core.testrunner.reporter.Console(suites);  
+      this.__consoleReporter = new core.testrunner.reporter.Console(suites);
     }
   },
 
-  members : 
+  members :
   {
     // interface implementation
     start : function() {
@@ -96,17 +96,17 @@ core.Class("core.testrunner.reporter.Html",
 
 
     // interface implementation
-    suiteStarted : function(suite) 
+    suiteStarted : function(suite)
     {
-      var li = document.getElementById("suite-" + suite.getId());      
+      var li = document.getElementById("suite-" + suite.getId());
       core.bom.ClassName.add(li, "running");
       li.scrollIntoView();
     },
 
     // interface implementation
-    suiteFinished : function(suite) 
+    suiteFinished : function(suite)
     {
-      var li = document.getElementById("suite-" + suite.getId());      
+      var li = document.getElementById("suite-" + suite.getId());
       core.bom.ClassName.remove(li, "running");
 
       if (suite.wasSuccessful()) {
@@ -128,16 +128,16 @@ core.Class("core.testrunner.reporter.Html",
     },
 
     // interface implementation
-    testStarted : function(test) 
+    testStarted : function(test)
     {
       var li = document.getElementById("test-" + test.getId());
       core.bom.ClassName.add(li, "running");
     },
 
     // interface implementation
-    testFinished : function(test) 
+    testFinished : function(test)
     {
-      var li = document.getElementById("test-" + test.getId());      
+      var li = document.getElementById("test-" + test.getId());
       core.bom.ClassName.remove(li, "running");
 
       if (test.wasSuccessful()) {

@@ -8,7 +8,7 @@
 
 "use strict";
 
-(function() 
+(function()
 {
 	/**
 	 * {String} Returns a string representing the Interface.
@@ -31,7 +31,7 @@
 			if (!core.Module.isModuleName(name)) {
 				throw new Error("Invalid interface name " + name + "!");
 			}
-			
+
 			core.Assert.isType(config, "Map", "Invalid interface configuration in " + name);
 			core.Assert.doesOnlyHaveKeys(config, "properties,events,members", "Unallowed keys in interface: " + name);
 		}
@@ -55,7 +55,7 @@
 		core.Main.declareNamespace(name, iface);
 	});
 
-	core.Main.addStatics("core.Interface", 
+	core.Main.addStatics("core.Interface",
 	{
 		/**
 		 * {core.Interface} Resolves a given @interfaceName {String}.

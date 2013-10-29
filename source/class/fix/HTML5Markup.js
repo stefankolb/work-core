@@ -1,6 +1,6 @@
-/* 
+/*
 ==================================================================================================
-  Core - JavaScript Foundation 
+  Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
   Copyright 2012-2013 Sebastian Werner
 --------------------------------------------------------------------------------------------------
@@ -12,15 +12,15 @@
 "use strict";
 
 /**
- * Adds HTML5 tag support to Internet Explorer 
+ * Adds HTML5 tag support to Internet Explorer
  */
 if (jasy.Env.isSet("runtime", "browser"))
 {
-  (function(doc) 
+  (function(doc)
   {
 		var tags = 'abbr article aside audio canvas details figcaption figure footer header hgroup main mark meter nav output progress section summary time video';
 		tags.replace(/\w+/g, function(tagName) {
-			doc.createElement(tagName); 
+			doc.createElement(tagName);
 		});
   })(document);
 }

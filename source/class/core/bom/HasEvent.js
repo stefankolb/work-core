@@ -10,7 +10,7 @@
 
 "use strict";
 
-(function(document, undefined) 
+(function(document, undefined)
 {
   // Detect whether event support can be detected via `in`. Test on a DOM element
   // using the "blur" event b/c it should ƒalways exist. bit.ly/event-detection
@@ -23,7 +23,7 @@
      * @param  {(Object|string|*)=} element    is the element|document|window|tagName to test on
      * @return {boolean}
      */
-    test : function(eventName, element) 
+    test : function(eventName, element)
     {
       if (jasy.Env.isSet("debug")) {
         core.Assert.isType(eventName, "String");
@@ -40,7 +40,7 @@
       var isSupported = eventName in element;
 
       // Fallback technique for old Firefox - bit.ly/event-detection
-      if (!isSupported && needsFallback) 
+      if (!isSupported && needsFallback)
       {
         // Switch to generic element if it lacks `setAttribute`.
         // It could be the `document`, `window`, or something else.
@@ -48,12 +48,12 @@
           element = document.createElement("div");
         }
 
-        if (element.setAttribute && element.removeAttribute) 
+        if (element.setAttribute && element.removeAttribute)
         {
           element.setAttribute(eventName, "");
           isSupported = typeof element[eventName] === "function";
 
-          if (element[eventName] !== undefined) 
+          if (element[eventName] !== undefined)
           {
             // If property was created, "remove it" by setting value to `undefined`.
             element[eventName] = undefined;

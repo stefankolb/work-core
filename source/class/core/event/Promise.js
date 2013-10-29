@@ -11,18 +11,18 @@
  * Promises implementation of A+ specification passing Promises/A+ test suite.
  * http://promises-aplus.github.com/promises-spec/
  */
-core.Class("core.event.Promise", 
+core.Class("core.event.Promise",
 {
 	include : [core.util.MLogging],
-	
-	construct : function() 
+
+	construct : function()
 	{
 		// Initialize lists on new Promises
 		this.__onFulfilledQueue = [];
 		this.__onRejectedQueue = [];
 	},
-	
-	members : 
+
+	members :
 	{
 		/** {=String} Current state */
 		__state : "pending",
@@ -40,7 +40,7 @@ core.Class("core.event.Promise",
 		__onRejectedQueue : null,
 
 
-		/** 
+		/**
 		 * {any} Returns the value of the promise
 		 */
 		getValue : function() {
@@ -59,9 +59,9 @@ core.Class("core.event.Promise",
 		/**
 		 * Fulfill promise with @value {any?}.
 		 */
-		fulfill : function(value) 
+		fulfill : function(value)
 		{
-			if (!this.__locked) 
+			if (!this.__locked)
 			{
 				this.__locked = true;
 				this.__state = "fulfilled";
@@ -70,14 +70,14 @@ core.Class("core.event.Promise",
 				core.Function.immediate(this.__execute, this);
 			}
 		},
-		
+
 
 		/**
 		 * Reject promise with @reason {String|any?}.
 		 */
-		reject : function(reason) 
+		reject : function(reason)
 		{
-			if (!this.__locked) 
+			if (!this.__locked)
 			{
 				this.__locked = true;
 				this.__state = "rejected";
@@ -87,18 +87,18 @@ core.Class("core.event.Promise",
 			}
 		},
 
-	
+
 		/**
-		 * Executes a single fulfillment or rejection queue @entry {Array} 
+		 * Executes a single fulfillment or rejection queue @entry {Array}
 		 * with the give @valueOrReason {any} and @state {String}.
-		 */	
-		__executeEntry : function(entry, valueOrReason, state) 
+		 */
+		__executeEntry : function(entry, valueOrReason, state)
 		{
 			var child = entry[0];
 			var callback = entry[1];
 			var safe = entry[3];
 
-			if (callback == null) 
+			if (callback == null)
 			{
 				if (state == "rejected") {
 					child.reject(valueOrReason);
@@ -112,10 +112,10 @@ core.Class("core.event.Promise",
 				var context = entry[2];
 				if (safe)
 				{
-					try 
+					try
 					{
 						retval = context ? callback.call(context, valueOrReason) : callback(valueOrReason);
-					} 
+					}
 					catch (ex) {
 						child.reject(ex);
 					}
@@ -125,10 +125,10 @@ core.Class("core.event.Promise",
 					retval = context ? callback.call(context, valueOrReason) : callback(valueOrReason);
 				}
 
-				if (retval && retval.then && typeof retval.then == "function") 
-				{ 
+				if (retval && retval.then && typeof retval.then == "function")
+				{
 					var retstate = retval.getState ? retval.getState() : "pending";
-					if (retstate == "pending") 
+					if (retstate == "pending")
 					{
 						retval.then(function(value) {
 							child.fulfill(value);
@@ -136,16 +136,16 @@ core.Class("core.event.Promise",
 							child.reject(reason);
 						});
 					}
-					else if (retstate == "fulfilled") 
+					else if (retstate == "fulfilled")
 				  {
 						child.fulfill(retval.getValue());
 					}
-					else if (retstate == "rejected") 
+					else if (retstate == "rejected")
 					{
 						child.reject(retval.getValue());
 					}
-				} 
-				else 
+				}
+				else
 				{
 					child.fulfill(retval);
 				}
@@ -157,7 +157,7 @@ core.Class("core.event.Promise",
 		 * Handle fulfillment or rejection of promise
 		 * Runs all registered then handlers
 		 */
-		__execute : function() 
+		__execute : function()
 		{
 			// Shorthands
 			var state = this.__state;
@@ -181,7 +181,7 @@ core.Class("core.event.Promise",
 		 * is overwritten. If safe is false no try and catch surrounds executing functions,
 		 * so application execution is stopped due to uncatched error.
 		 */
-		then : function(onFulfilled, onRejected, context, safe) 
+		then : function(onFulfilled, onRejected, context, safe)
 		{
 			var child = new core.event.Promise;
 
@@ -207,7 +207,7 @@ core.Class("core.event.Promise",
 			if (this.__locked) {
 				core.Function.immediate(this.__execute, this);
 			}
-			
+
 			return child;
 		},
 
@@ -216,9 +216,9 @@ core.Class("core.event.Promise",
 		 * Throws all remaining errors to application level and display promise rejecting
 		 * on console if in debug mode.
 		 */
-		done : function() 
+		done : function()
 		{
-			return this.then(null, function(reason) 
+			return this.then(null, function(reason)
 			{
 				if (jasy.Env.isSet("debug"))
 				{

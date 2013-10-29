@@ -10,7 +10,7 @@
 
 "use strict";
 
-(function() 
+(function()
 {
   var rscriptType = /^$|\/(?:java|ecma)script/i;
   var rhtml = /<|&#?\w+;/;
@@ -19,7 +19,7 @@
   var rcleanScript = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
 
   // We have to close these tags to support XHTML (#13200)
-  var wrapMap = 
+  var wrapMap =
   {
     // Support: IE 9
     option: [1, "<select multiple='multiple'>", "</select>"],
@@ -43,8 +43,8 @@
   {
     /**
      * Executes the given set of script @nodes {Element[]}. Checks whether the script node
-     * is injected into the same document @context {Document?document} first. Supports 
-     * both, script nodes with inline code and script nodes with `src` attribute to load 
+     * is injected into the same document @context {Document?document} first. Supports
+     * both, script nodes with inline code and script nodes with `src` attribute to load
      * and execute remote scripts.
      */
     execute : function(nodes, context)
@@ -56,13 +56,13 @@
       var queue = [];
 
       // Evaluate executable scripts on first document insertion
-      for (var i=0, l=nodes.length; i<l; i++) 
+      for (var i=0, l=nodes.length; i<l; i++)
       {
         var node = nodes[i];
-        
-        if (rscriptType.test(node.type || "") && core.dom.Node.contains(context, node)) 
+
+        if (rscriptType.test(node.type || "") && core.dom.Node.contains(context, node))
         {
-          if (node.src) 
+          if (node.src)
           {
             // Do basic synchronous XHR
             var xhr = new XMLHttpRequest;
@@ -76,10 +76,10 @@
             else
             {
               throw new Error("Unable to load script: " + node.src);
-            }              
+            }
           }
           else
-          { 
+          {
             var code = node.textContent.replace(rcleanScript, "");
 
             // Use global eval like feature from fix.ExecScript
@@ -106,27 +106,27 @@
     insert : function(fragment, parent, relation)
     {
       var parentParent = parent.parentNode;
-      if (relation == "beforeend") 
+      if (relation == "beforeend")
       {
         parent.appendChild(fragment);
-      } 
-      else if (relation == "afterend") 
+      }
+      else if (relation == "afterend")
       {
         if (parent.nextSibling) {
-          parentParent.insertBefore(fragment, parent.nextSibling);  
+          parentParent.insertBefore(fragment, parent.nextSibling);
         } else {
           parentParent.appendChild(fragment);
         }
       }
       else if (relation == "beforebegin")
       {
-        parentParent.insertBefore(fragment, parent);  
+        parentParent.insertBefore(fragment, parent);
       }
       else if (relation == "afterbegin")
       {
         parent.insertBefore(fragment, parent.firstChild);
       }
-      else if (jasy.Env.isSet("debug")) 
+      else if (jasy.Env.isSet("debug"))
       {
         throw new Error("Invalid relation parameter: " + relation);
       }
@@ -152,10 +152,10 @@
     /**
      * {DocumentFragment} Converts the given @elems {Element[]|String[]} (mixed string and/or elements)
      * into a new document fragment. The @context {Document?document} defaults to the document in the execution
-     * environment and might be changed to another document e.g. inside an iframe. During the build process 
+     * environment and might be changed to another document e.g. inside an iframe. During the build process
      * scripts can optionally being extracted. To enable this feature pass @scripts {Array?} to the function.
      */
-    build : function(elems, context, scripts) 
+    build : function(elems, context, scripts)
     {
       if (context == null) {
         context = document;
@@ -164,14 +164,14 @@
       var fragment = context.createDocumentFragment();
       var nodes = [];
 
-      for (var i=0, l=elems.length; i < l; i++) 
+      for (var i=0, l=elems.length; i < l; i++)
       {
         var elem = elems[i];
 
-        if (elem || elem === 0) 
+        if (elem || elem === 0)
         {
           // Add nodes directly
-          if (typeof elem === "object") 
+          if (typeof elem === "object")
           {
             if (elem.nodeType) {
               nodes.push(elem);
@@ -185,9 +185,9 @@
           {
             nodes.push(context.createTextNode(elem));
           }
-          
+
           // Convert html into DOM nodes
-          else 
+          else
           {
             var wrapper = wrapper || fragment.appendChild(context.createElement("div"));
 
@@ -219,19 +219,19 @@
 
       // No append the real nodes
       var i = 0;
-      while ((elem = nodes[i++])) 
+      while ((elem = nodes[i++]))
       {
         // Append to fragment
         fragment.appendChild(elem)
 
-        if (scripts) 
+        if (scripts)
         {
           // Find script elements
           var scriptElems = elem.tagName == "SCRIPT" ? [elem] : elem.nodeType == 1 ? elem.getElementsByTagName("script") : [];
 
           // Capture executables
           var j = 0;
-          while ((elem = scriptElems[j++])) 
+          while ((elem = scriptElems[j++]))
           {
             if (rscriptType.test(elem.type || "")) {
               scripts.push(elem);
@@ -246,4 +246,3 @@
 
 })();
 
-  

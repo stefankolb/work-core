@@ -18,7 +18,7 @@ core.Module("core.bom.Dimension",
   getInnerWidth : function(element) {
     return element.clientWidth - core.bom.Style.getInteger(element, "paddingLeft", true) - core.bom.Style.getInteger(element, "paddingRight", true);
   },
-  
+
 
   /**
    * {Integer} Returns the inner height of @element {Element}.

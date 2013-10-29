@@ -23,7 +23,7 @@ core.Class("core.event.MDispatchable",
 
     /**
      * Sets the given @target {Object} during dispatching of the event object.
-     */    
+     */
     setTarget : function(target) {
       this.__target = target;
     },
@@ -39,7 +39,7 @@ core.Class("core.event.MDispatchable",
 
     /**
      * Sets the given @currentTarget {Object} during dispatching of the event object.
-     */    
+     */
     setCurrentTarget : function(currentTarget) {
       this.__currentTarget = currentTarget;
     },
@@ -76,7 +76,7 @@ core.Class("core.event.MDispatchable",
      * - AT_TARGET: 2
      * - BUBBLING_PHASE: 3
      */
-    setEventPhase : function(eventPhase) 
+    setEventPhase : function(eventPhase)
     {
       if (jasy.Env.isSet("debug")) {
         core.Assert.isType(eventPhase, "Integer", "Invalid event phase: %value!");
@@ -97,7 +97,7 @@ core.Class("core.event.MDispatchable",
     /**
      * Internal method to reset bubbling state.
      */
-    resetDispatch : function() 
+    resetDispatch : function()
     {
       this.__target = null;
       this.__currentTarget = null;

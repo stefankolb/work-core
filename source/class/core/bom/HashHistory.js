@@ -20,15 +20,15 @@
     }
 
     // documentMode logic from YUI to filter out IE8 Compat Mode which false positives.
-    return (document.documentMode === undefined || document.documentMode > 7);  
+    return (document.documentMode === undefined || document.documentMode > 7);
   })();
 
 
   /**
    * Hash-based browser history management
    */
-  core.Class("core.bom.HashHistory", 
-  {  
+  core.Class("core.bom.HashHistory",
+  {
     include : [core.event.MEventTarget],
 
     construct : function()

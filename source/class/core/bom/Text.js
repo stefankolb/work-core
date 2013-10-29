@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
@@ -8,7 +8,7 @@
 
 "use strict";
 
-(function() 
+(function()
 {
 	// Requires DOM interface
 	if (jasy.Env.isSet("runtime", "native")) {
@@ -36,8 +36,8 @@
 	core.Module("core.bom.Text", {
 
 		/**
-		 * {Map} Returns the `width` and `height` of the given @text {String} with the given 
-		 * @styles {Map} (supports `fontFamily`, `fontSize`, `fontStyle` and `lineHeight`). 
+		 * {Map} Returns the `width` and `height` of the given @text {String} with the given
+		 * @styles {Map} (supports `fontFamily`, `fontSize`, `fontStyle` and `lineHeight`).
 		 * Supports optional maximum @width {Number ? "auto"} for supporting text wrapping.
 		 */
 		measure: function(text, styles, width) {

@@ -7,7 +7,7 @@
 
 "use strict";
 
-(function(global) 
+(function(global)
 {
   var value = false;
 
@@ -24,7 +24,7 @@
   /**
    * Detects whether the device supports touch events
    */
-  core.Module("core.detect.Touch", 
+  core.Module("core.detect.Touch",
   {
     /**
      * {=Boolean} Whether the device supports touch events

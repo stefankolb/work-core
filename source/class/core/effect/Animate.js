@@ -27,7 +27,7 @@
 	 * rendering. This eases a lot of cases where it might be pretty complex to break down a state
 	 * based on the pure time difference.
 	 */
-	core.Module("core.effect.Animate", 
+	core.Module("core.effect.Animate",
 	{
 		/**
 		 * {Integer} Start the animation. Returns the identifier of animation. Can be used to stop it any time.
@@ -44,7 +44,7 @@
 		 * - @root {Element ? document.body} Render root, when available. Used for
 		 *   optimizing native requestAnimationFrame.
 		 */
-		start: function(stepCallback, verifyCallback, completedCallback, duration, easingMethod, root) 
+		start: function(stepCallback, verifyCallback, completedCallback, duration, easingMethod, root)
 		{
 			var start = time();
 			var lastFrame = start;
@@ -57,7 +57,7 @@
 			}
 
 			// Compacting running db automatically every few new animations
-			if (id % 20 === 0) 
+			if (id % 20 === 0)
 			{
 				var newRunning = {};
 				for (var usedId in running) {
@@ -68,7 +68,7 @@
 			}
 
 			// This is the internal step method which is called every few milliseconds
-			var step = function(virtual) 
+			var step = function(virtual)
 			{
 				// Normalize virtual value
 				var render = virtual !== true;
@@ -77,7 +77,7 @@
 				var now = time();
 
 				// Verification is executed before next animation step
-				if (!running[id] || (verifyCallback && !verifyCallback(id))) 
+				if (!running[id] || (verifyCallback && !verifyCallback(id)))
 				{
 					running[id] = null;
 					completedCallback && completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, false);
@@ -89,7 +89,7 @@
 				if (render)
 				{
 					var droppedFrames = Math.round((now - lastFrame) / (millisecondsPerSecond / desiredFrames)) - 1;
-					for (var j = 0; j < Math.min(droppedFrames, 4); j++) 
+					for (var j = 0; j < Math.min(droppedFrames, 4); j++)
 					{
 						step(true);
 						dropCounter++;
@@ -107,7 +107,7 @@
 
 				// Execute step callback, then...
 				var value = easingMethod ? easingMethod(percent) : percent;
-				if ((stepCallback(value, now, render) === false || percent === 1) && render) 
+				if ((stepCallback(value, now, render) === false || percent === 1) && render)
 				{
 					running[id] = null;
 					completedCallback && completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, percent === 1 || duration == null);
@@ -133,7 +133,7 @@
 		/**
 		 * {Boolean} Stops the given animation via its @id {Integer}. Returns whether the animation was stopped.
 		 */
-		stop: function(id) 
+		stop: function(id)
 		{
 			var cleared = running[id] != null;
 			if (cleared) {
@@ -149,7 +149,7 @@
 		 */
 		isRunning: function(id) {
 			return running[id] != null;
-		}		
+		}
 	});
 })();
 

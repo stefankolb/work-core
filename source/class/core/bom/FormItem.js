@@ -18,12 +18,12 @@ core.Module("core.bom.FormItem",
 	 */
 	isSuccessful: function(item)
 	{
-		if (jasy.Env.isSet("debug")) 
+		if (jasy.Env.isSet("debug"))
 		{
 			core.Assert.isEqual(arguments.length, 1);
 			core.dom.Node.assertIsNode(item);
 		}
-		
+
 		if (!item.name || item.disabled) {
 			return false;
 		}
@@ -48,7 +48,7 @@ core.Module("core.bom.FormItem",
 
 
 	/**
-	 * {String} Finds a label for the given form @item {Element} in the 
+	 * {String} Finds a label for the given form @item {Element} in the
 	 * given @root {Element?document} to be shown in e.g. error messages.
 	 */
 	getLabel : function(item, root)
@@ -58,10 +58,10 @@ core.Module("core.bom.FormItem",
 		}
 
 		// Find matching label
-		if (item.id) 
+		if (item.id)
 		{
 			var label = root.querySelector("label[for=" + item.id + "]");
-			if (label) 
+			if (label)
 			{
 				label = label.innerText;
 
@@ -85,9 +85,9 @@ core.Module("core.bom.FormItem",
 	/**
 	 * {String} Returns the value of the given form @item {Element}.
 	 */
-	getValue : function(item) 
+	getValue : function(item)
 	{
-		if (jasy.Env.isSet("debug")) 
+		if (jasy.Env.isSet("debug"))
 		{
 			core.Assert.isEqual(arguments.length, 1);
 			core.dom.Node.assertIsNode(item);
@@ -131,7 +131,7 @@ core.Module("core.bom.FormItem",
 		}
 		else
 		{
-			return core.String.interpret(item.value || item.text);	
+			return core.String.interpret(item.value || item.text);
 		}
 	},
 
@@ -139,7 +139,7 @@ core.Module("core.bom.FormItem",
 	/**
 	 * {Boolean} Return whether from @item {Element} there is only exactly one value storable.
 	 */
-	isExplicitSingle : function(item) 
+	isExplicitSingle : function(item)
 	{
 		// Currently only true for radio fields where native behavior actually prevents
 		// selecting two radio buttons with the same name. Other fields like text fields
@@ -151,20 +151,20 @@ core.Module("core.bom.FormItem",
 	/**
 	 * {String} Returns the serialized representation of the given form @item {Element}.
 	 */
-	serialize: function(item) 
+	serialize: function(item)
 	{
-		if (jasy.Env.isSet("debug")) 
+		if (jasy.Env.isSet("debug"))
 		{
 			core.Assert.isEqual(arguments.length, 1);
 			core.dom.Node.assertIsNode(item);
 			core.Assert.isType(item.name, "String");
 		}
-		
+
 		var name = encodeURIComponent(item.name);
 		var value = this.getValue(item);
 
 		// Support for select boxes with multiple values
-		if (value instanceof Array) 
+		if (value instanceof Array)
 		{
 			var result = [];
 			for (var i=0, l=value.length; i<l; i++) {
@@ -177,7 +177,7 @@ core.Module("core.bom.FormItem",
 		// Or everything else
 		else
 		{
-			return name + "=" + encodeURIComponent(value);	
+			return name + "=" + encodeURIComponent(value);
 		}
 	}
 });

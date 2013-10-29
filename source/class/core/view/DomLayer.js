@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2013 Sebastian Werner
@@ -7,7 +7,7 @@
 
 "use strict";
 
-(function() 
+(function()
 {
   var hasPerspective = !!core.bom.Style.property("perspective");
 
@@ -34,7 +34,7 @@
 
   var outLeft = buildTranslate("-100%");
   var outRight = buildTranslate("100%");
-  
+
 
   /**
    * Animatable DOM Layer View
@@ -126,4 +126,3 @@
   });
 
 })();
-  

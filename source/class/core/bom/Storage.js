@@ -34,15 +34,15 @@
       } else {
         var text = value;
       }
-      
+
       if (compress !== false) {
         var compressed = "@C@" + core.util.TextCompressor.compress(text);
       } else {
         var compressed = text;
       }
-      
+
       try{
-        storage.setItem(key, compressed);  
+        storage.setItem(key, compressed);
       } catch(ex) {
         console.warn("Storing value for " + key + " did not work: " + ex);
       }
@@ -64,7 +64,7 @@
       }
 
       if (compressed.slice(0,3) == "@C@") {
-        var text = core.util.TextCompressor.decompress(compressed.slice(3));  
+        var text = core.util.TextCompressor.decompress(compressed.slice(3));
       } else {
         var text = compressed;
       }

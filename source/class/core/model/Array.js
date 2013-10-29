@@ -7,7 +7,7 @@
 
 "use strict";
 
-(function() 
+(function()
 {
   var globalId = 0;
 
@@ -18,7 +18,7 @@
   /**
    * Arrays are ordered sets of items.
    */
-  core.Class("core.model.Array", 
+  core.Class("core.model.Array",
   {
     include: [core.property.MGeneric, core.event.MEventTarget, core.util.MLogging],
     implement : [core.model.IModel, core.model.ICollection],
@@ -26,12 +26,12 @@
     /**
      * Prefill the collection with @data {var}.
      */
-    construct: function(data, item, parent) 
+    construct: function(data, item, parent)
     {
       // Automatically created client-side ID
       this.__clientId = "collection-" + (globalId++);
 
-      // Do not directly use given items to have a internal 
+      // Do not directly use given items to have a internal
       // "protected" copy of the original data and using
       // the real append() method instead.
       this.__items = [];
@@ -46,12 +46,12 @@
         }
       }
 
-      // The parent is used for event bubbling for either 
+      // The parent is used for event bubbling for either
       // the collection itself and the presenter items.
       // Model items refer to the collection as parent.
-      if (parent != null) 
+      if (parent != null)
       {
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           if (parent == this) {
             throw new Error("Parent must be another object than this!");
@@ -79,10 +79,10 @@
       "remove" : core.event.Simple
     },
 
-    properties : 
+    properties :
     {
       // Model Interface implementation
-      id : 
+      id :
       {
         type : "String",
         nullable : true
@@ -137,12 +137,12 @@
       */
 
       // Collection Interface implementation
-      find : function(id) 
+      find : function(id)
       {
-        if (id != null) 
+        if (id != null)
         {
           var items = this.__items;
-          for (var i=0, l=items.length; i<l; i++) 
+          for (var i=0, l=items.length; i<l; i++)
           {
             var item = items[i];
             if (item.getId() == id || item.getClientId() == id) {
@@ -157,7 +157,7 @@
       // Collection Interface implementation
       getLength : function() {
         return this.__items.length;
-      },    
+      },
 
       // Collection Interface implementation
       isEmpty : function() {
@@ -175,7 +175,7 @@
       },
 
       // Collection Interface Implementation
-      remove : function(item) 
+      remove : function(item)
       {
         var index = this.__items.indexOf(item);
         if (index == -1) {
@@ -203,7 +203,7 @@
       {
         var item;
 
-        if (core.Main.isTypeOf(itemOrProperties, "Plain")) 
+        if (core.Main.isTypeOf(itemOrProperties, "Plain"))
         {
           var itemPresenter = this.__itemPresenter;
           if (itemPresenter)
@@ -237,15 +237,15 @@
       {
         var removeEvent = core.model.RemoveEvent.obtain(item);
         this.dispatchEvent(removeEvent);
-        removeEvent.release();        
+        removeEvent.release();
       },
 
       __fireAdd : function(item)
       {
         var addEvent = core.model.AddEvent.obtain(item);
         this.dispatchEvent(addEvent);
-        addEvent.release();        
-      },   
+        addEvent.release();
+      },
 
 
 
@@ -259,10 +259,10 @@
        * {Integer} Appends an array of @items {Object[]} into the collection.
        * Returns the new length of the collection.
        */
-      append : function(items) 
+      append : function(items)
       {
         var db = this.__items;
-        for (var i=0, l=items.length, item; i<l; i++) 
+        for (var i=0, l=items.length, item; i<l; i++)
         {
           item = this.__autoCast(items[i]);
           db.push(item);
@@ -280,14 +280,14 @@
       prepend : function(items)
       {
         var db = this.__items;
-        for (var i=0, l=items.length, item; i<l; i++) 
+        for (var i=0, l=items.length, item; i<l; i++)
         {
           item = this.__autoCast(items[i]);
           db.push(item);
           this.__fireAdd(item);
         }
 
-        return db.length;        
+        return db.length;
       },
 
 
@@ -303,7 +303,7 @@
        * {Integer} Clears the collection so that all items are removed from it. Returns
        * the new length of the collection afterwards (always zero here).
        */
-      clear : function() 
+      clear : function()
       {
         var db = this.__items;
 
@@ -312,7 +312,7 @@
           return;
         }
 
-        for (var i=length-1, item; i>=0; i--) 
+        for (var i=length-1, item; i>=0; i--)
         {
           item = db[i];
           db.length--;
@@ -324,29 +324,29 @@
 
 
       /**
-       * {Integer} Combined call to replace all existing data with new 
+       * {Integer} Combined call to replace all existing data with new
        * list of @items {Object}. Returns the new length
        * of the collection.
        */
-      reset : function(items) 
+      reset : function(items)
       {
         this.clear();
         return this.append(items);
       },
 
 
-      /** 
-       * {Object} Returns the item at the given @index {Integer}. 
+      /**
+       * {Object} Returns the item at the given @index {Integer}.
        */
       at : function(index) {
         return this.__items[index] || null;
       },
 
 
-      /** 
-       * {Object} Removes and returns the last model of the collection. 
+      /**
+       * {Object} Removes and returns the last model of the collection.
        */
-      pop : function() 
+      pop : function()
       {
         var removedItem = this.__items.pop();
         if (removedItem) {
@@ -357,10 +357,10 @@
       },
 
 
-      /** 
-       * {Object} Removes and returns the first model of the collection. 
+      /**
+       * {Object} Removes and returns the first model of the collection.
        */
-      shift : function() 
+      shift : function()
       {
         var removedItem = this.__items.shift();
         if (!removedItem) {
@@ -381,7 +381,7 @@
 
 
       /**
-       * {Object} Returns the first item which matches all values of the 
+       * {Object} Returns the first item which matches all values of the
        * given @properties {Map}.
        */
       findBy : function(properties)
@@ -393,9 +393,9 @@
           var matched = true;
 
           for (var name in properties)
-          { 
-            // Looking for false matches for faster failures 
-            if (item.get(name) !== properties[name]) 
+          {
+            // Looking for false matches for faster failures
+            if (item.get(name) !== properties[name])
             {
               matched = false;
               break;
@@ -420,9 +420,9 @@
       },
 
 
-      /** 
-       * {Array} Creates a new array with the results of calling a provided 
-       * @callback {Function} on every model in this collection. It's possible 
+      /**
+       * {Array} Creates a new array with the results of calling a provided
+       * @callback {Function} on every model in this collection. It's possible
        * to define the execution @context {Object?} of every @callback call.
        * The context defaults to the global object. The parameters with which the
        * callback is executed are: `value`, `key`, `array`.
@@ -433,10 +433,10 @@
 
 
       /**
-       * {Array} Pluck a @property {String} from each model in the collection. 
+       * {Array} Pluck a @property {String} from each model in the collection.
        * Equivalent to calling {#map}, and returning a single property from the iterator.
        */
-      pluck : function(property) 
+      pluck : function(property)
       {
         return this.__items.map(function() {
           return this.get(property);

@@ -21,11 +21,11 @@ core.Class("core.presenter.Abstract",
   /**
    * @parent {core.presenter.Abstract} Parent presenter to attach to this presenter
    */
-  construct : function(parent) 
+  construct : function(parent)
   {
     // Keep reference to parent presenter
     if (parent != null) {
-      this.__parent = parent;  
+      this.__parent = parent;
     }
 
     // Child presenters and views
@@ -43,7 +43,7 @@ core.Class("core.presenter.Abstract",
     */
 
     __parent : null,
-    
+
 
     /**
      * {core.presenter.Abstract} Returns the parent presenter.
@@ -58,7 +58,7 @@ core.Class("core.presenter.Abstract",
      */
     setParent : function(parent) {
       this.__parent = parent;
-    },    
+    },
 
 
     /**
@@ -76,10 +76,10 @@ core.Class("core.presenter.Abstract",
     ======================================================
     */
 
-    /** 
-     * {Object} Returns a model by its @name {String}. 
+    /**
+     * {Object} Returns a model by its @name {String}.
      */
-    getModel : function(name) 
+    getModel : function(name)
     {
       if (jasy.Env.isSet("debug")) {
         core.Assert.isType(name, "String", "Invalid model name!");
@@ -92,16 +92,16 @@ core.Class("core.presenter.Abstract",
     /**
      * {this} Adds a @model {Object} by its @name {String}.
      */
-    addModel : function(name, model) 
+    addModel : function(name, model)
     {
       var db = this.__models;
 
-      if (jasy.Env.isSet("debug")) 
+      if (jasy.Env.isSet("debug"))
       {
         if (name in db) {
-          throw new Error("Model name " + name + " is already in use!");  
+          throw new Error("Model name " + name + " is already in use!");
         }
-        
+
         core.Assert.isType(model, "Object", "Invalid model instance!");
       }
 
@@ -111,10 +111,10 @@ core.Class("core.presenter.Abstract",
 
 
     /**
-     * {Object} Removes the given model by its @name {String}. 
+     * {Object} Removes the given model by its @name {String}.
      * Returns the removed model.
      */
-    removeModelByName : function(name) 
+    removeModelByName : function(name)
     {
       var db = this.__models;
       var model = db[name];
@@ -129,12 +129,12 @@ core.Class("core.presenter.Abstract",
     /**
      * {Boolean} Removes the given @model {Object} and returns whether it succeeded.
      */
-    removeModel : function(model) 
+    removeModel : function(model)
     {
       var db = this.__models;
-      for (var name in db) 
+      for (var name in db)
       {
-        if (db[name] === model) 
+        if (db[name] === model)
         {
           delete db[name];
           return true;
@@ -151,7 +151,7 @@ core.Class("core.presenter.Abstract",
      * using @varargs {any...} which are passed to the constructor. Returns the
      * model instance which was created.
      */
-    createModel : function(name, construct, varargs) 
+    createModel : function(name, construct, varargs)
     {
       var args = arguments;
 
@@ -171,7 +171,7 @@ core.Class("core.presenter.Abstract",
       {
         var model = new construct();
       }
-      
+
       return this.addModel(name, model);
     },
 
@@ -196,7 +196,7 @@ core.Class("core.presenter.Abstract",
         {
           current = current.get(split);
         }
-        else if (split in current) 
+        else if (split in current)
         {
           current = current[split];
         }
@@ -239,15 +239,15 @@ core.Class("core.presenter.Abstract",
 
     /**
      * Executes @callback {Function} in @context {Object?} for every created view.
-     * Optionally also creates the views which have not been created 
+     * Optionally also creates the views which have not been created
      * yet dynamically when @all {Boolean} is set to `true`.
      */
-    forEachView : function(callback, context, all) 
+    forEachView : function(callback, context, all)
     {
       var db = this.__views;
       var view;
 
-      for (var name in db) 
+      for (var name in db)
       {
         var entry = db[name];
         if (!entry.__placeholder) {
@@ -263,12 +263,12 @@ core.Class("core.presenter.Abstract",
     },
 
 
-    /** 
+    /**
      * {Object} Returns a view by its @name {String}. If the view was only
      * registered for lazy creation this method will dynamically create it with
      * the parameters given at registration.
      */
-    getView : function(name) 
+    getView : function(name)
     {
       if (jasy.Env.isSet("debug")) {
         core.Assert.isType(name, "String", "Invalid view name!");
@@ -299,14 +299,14 @@ core.Class("core.presenter.Abstract",
     /**
      * Adds a @view {Object} by its @name {String}.
      */
-    addView : function(name, view) 
+    addView : function(name, view)
     {
       var db = this.__views;
 
-      if (jasy.Env.isSet("debug")) 
+      if (jasy.Env.isSet("debug"))
       {
         if (name in db) {
-          throw new Error("View name " + name + " is already in use!");  
+          throw new Error("View name " + name + " is already in use!");
         }
 
         core.Assert.isType(view, "Object", "Invalid view instance!");
@@ -318,10 +318,10 @@ core.Class("core.presenter.Abstract",
 
 
     /**
-     * {Object} Removes the given view by its @name {String}. 
+     * {Object} Removes the given view by its @name {String}.
      * Returns the removed view.
      */
-    removeViewByName : function(name) 
+    removeViewByName : function(name)
     {
       var db = this.__views;
       var view = db[name];
@@ -336,12 +336,12 @@ core.Class("core.presenter.Abstract",
     /**
      * {Boolean} Removes the given @view {Object} and returns whether it succeeded.
      */
-    removeView : function(view) 
+    removeView : function(view)
     {
       var db = this.__views;
-      for (var name in db) 
+      for (var name in db)
       {
-        if (db[name] === view) 
+        if (db[name] === view)
         {
           delete db[name];
           return true;
@@ -358,20 +358,20 @@ core.Class("core.presenter.Abstract",
      * using @varargs {any...} which are passed to the constructor. Returns the
      * view instance which was created.
      */
-    createView : function(name, construct, varargs) 
+    createView : function(name, construct, varargs)
     {
       this.log("Creating view: " + name);
 
       var db = this.__views;
 
-      if (jasy.Env.isSet("debug")) 
+      if (jasy.Env.isSet("debug"))
       {
         if (name in db && !db[name].__placeholder) {
-          throw new Error("View name " + name + " is already in use!");  
+          throw new Error("View name " + name + " is already in use!");
         }
 
         if (construct) {
-          core.Assert.isType(construct, "Function", "Invalid view constructor!");  
+          core.Assert.isType(construct, "Function", "Invalid view constructor!");
         }
       }
 
@@ -381,7 +381,7 @@ core.Class("core.presenter.Abstract",
       {
         var config = db[name];
 
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           if (!config) {
             throw new Error("Missing constructor or registration for creating the view " + name + "!");
@@ -407,7 +407,7 @@ core.Class("core.presenter.Abstract",
       } else if (jasy.Env.isSet("debug")) {
         throw new Error("Too many arguments!");
       }
-      
+
       db[name] = view;
       return view;
     },
@@ -421,16 +421,16 @@ core.Class("core.presenter.Abstract",
     {
       var db = this.__views;
 
-      if (jasy.Env.isSet("debug")) 
+      if (jasy.Env.isSet("debug"))
       {
         if (name in db) {
-          throw new Error("View name " + name + " is already in use!");  
+          throw new Error("View name " + name + " is already in use!");
         }
 
         core.Assert.isType(construct, "Function", "Invalid view constructor!");
       }
 
-      db[name] = 
+      db[name] =
       {
         __placeholder : true,
         construct : construct,
@@ -450,7 +450,7 @@ core.Class("core.presenter.Abstract",
     /**
      * Returns a child presenter by its @name {String}.
      */
-    getChild : function(name) 
+    getChild : function(name)
     {
       if (jasy.Env.isSet("debug")) {
         core.Assert.isType(name, "String", "Invalid child name!");
@@ -461,19 +461,19 @@ core.Class("core.presenter.Abstract",
 
 
     /**
-     * Adds the given @presenter {Object} instance to the child registry 
+     * Adds the given @presenter {Object} instance to the child registry
      * by the given @name {String}.
      */
-    addChild : function(name, presenter) 
+    addChild : function(name, presenter)
     {
       var db = this.__children;
 
-      if (jasy.Env.isSet("debug")) 
+      if (jasy.Env.isSet("debug"))
       {
         if (name in db) {
-          throw new Error("Child name " + name + " is already in use!");  
+          throw new Error("Child name " + name + " is already in use!");
         }
-        
+
         core.Assert.isType(presenter, "Object", "Invalid presenter instance!");
       }
 
@@ -493,10 +493,10 @@ core.Class("core.presenter.Abstract",
     /**
      * {Boolean} Removes the given @child {Object}. Returns whether it succeeded.
      */
-    removeChild : function(child) 
+    removeChild : function(child)
     {
       var db = this.__children;
-      for (var name in db) 
+      for (var name in db)
       {
         if (db[name] === child) {
           return delete db[name];
@@ -513,7 +513,7 @@ core.Class("core.presenter.Abstract",
      * using @varargs {var...} which are passed to the constructor. Returns the
      * presenter instance which was created.
      */
-    createChild : function(name, construct, varargs) 
+    createChild : function(name, construct, varargs)
     {
       var args = arguments;
 
@@ -533,7 +533,7 @@ core.Class("core.presenter.Abstract",
       {
         var child = new construct(this);
       }
-      
+
       return this.addChild(name, child);
     }
   }

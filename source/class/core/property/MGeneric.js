@@ -100,7 +100,7 @@
 
 
 			/**
-			 * {var} Generic getter for @property {String|Array}. 
+			 * {var} Generic getter for @property {String|Array}.
 			 * Supports three possible use cases:
 			 *
 			 *     var propertyValue = obj.get("property");
@@ -124,11 +124,11 @@
 				}
 				else
 				{
-					if (!property) 
+					if (!property)
 					{
 						property = core.Object.getKeys(core.Class.getProperties(this.constructor));
 					}
-					else if (jasy.Env.isSet("debug")) 
+					else if (jasy.Env.isSet("debug"))
 					{
 						core.Assert.isType(property, "Array");
 					}
@@ -156,7 +156,7 @@
 
 
 			/**
-			 * {var} Generic resetter for @property {String|Array?all} being valid. 
+			 * {var} Generic resetter for @property {String|Array?all} being valid.
 			 * Supports three possible use cases:
 			 *
 			 *     var resetSingle = obj.reset("property");
@@ -180,11 +180,11 @@
 				}
 				else
 				{
-					if (!property) 
+					if (!property)
 					{
 						property = core.Object.getKeys(core.Class.getProperties(this.constructor));
 					}
-					else if (jasy.Env.isSet("debug")) 
+					else if (jasy.Env.isSet("debug"))
 					{
 						core.Assert.isType(property, "Array");
 					}
@@ -208,14 +208,14 @@
 
 
 			/**
-			 * {var} Generic validator for @property {String|Array?all} being valid. 
+			 * {var} Generic validator for @property {String|Array?all} being valid.
 			 * Supports three possible use cases:
 			 *
 			 *     var singleIsValid = obj.isValid("property");
 			 *     var givenAreValid = obj.isValid(["property1", "property2"]);
 			 *     var allAreValid = obj.isValid();
 			 *
-			 * When validating a list of properties (all or custom list) it's optionally possible 
+			 * When validating a list of properties (all or custom list) it's optionally possible
 			 * to @raise {Boolean?false} an error with the exact property not validating.
 			 */
 			isValid : function(property, raise)
@@ -235,7 +235,7 @@
 				}
 				else if (property == null || core.Main.isTypeOf(property, "Array"))
 				{
-					if (!property) 
+					if (!property)
 					{
 						property = core.Object.getKeys(core.Class.getProperties(this.constructor));
 						var all = true;
@@ -257,7 +257,7 @@
 							core.Assert.isType(this[method], "Function", "Invalid property to validate: " + name);
 						}
 
-						if (!this[method]()) 
+						if (!this[method]())
 						{
 							if (raise) {
 								throw new Error("Property " + name + " in " + this + " is not valid!");

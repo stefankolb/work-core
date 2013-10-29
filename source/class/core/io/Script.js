@@ -21,7 +21,7 @@
 
 	// Used for shorten calls
 	var assignCallback = function(elem, value) {
-		elem.onload = elem.onerror = elem.onreadystatechange = value;		
+		elem.onload = elem.onerror = elem.onreadystatechange = value;
 	};
 
 	// If native, try to use importScripts; if not available shim importScripts via use of eval and readFileSync.
@@ -47,7 +47,7 @@
 	{
 		/** Whether the loader supports parallel requests */
 		SUPPORTS_PARALLEL : supportsScriptAsync || jasy.Env.isSet("engine", "gecko") || jasy.Env.isSet("engine", "opera"),
-		
+
 		/** {String|null} URL prefix to prepend to given relative URL. Used by worker script loading */
 		URL_PREFIX : null,
 
@@ -86,7 +86,7 @@
 				if (callback) {
 					callback.call(context||global, uri, false);
 				}
-				
+
 				return;
 			}
 			else if (jasy.Env.isSet("runtime", "worker"))

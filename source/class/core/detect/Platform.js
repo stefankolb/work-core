@@ -16,9 +16,9 @@
  * phase of the class. The defaults listed in the API viewer need not
  * to be identical to the values at runtime.
  */
-core.Module("core.detect.Platform", 
+core.Module("core.detect.Platform",
 {
-	VALUE: jasy.Env.isSet("runtime", "browser") ? (function() 
+	VALUE: jasy.Env.isSet("runtime", "browser") ? (function()
 	{
 		var input = navigator.platform || navigator.userAgent;
 		var name;
@@ -31,7 +31,7 @@ core.Module("core.detect.Platform",
 			name = "unix";
 		}
 
-		/** 
+		/**
 		 * {=String} One of `win`, `mac` or `unix`
 		 */
 		return name;

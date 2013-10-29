@@ -14,24 +14,24 @@
 core.Module("core.dom.Node",
 {
 	/**
-	 * Throws an exception when @node {var} is not a valid DOM node. 
+	 * Throws an exception when @node {var} is not a valid DOM node.
 	 * The exception @message {String} can be customized via the parameter.
 	 */
-	assertIsNode: function(node, message) 
+	assertIsNode: function(node, message)
 	{
 		if (typeof node != "object" || node.nodeType == null) {
 			throw new Error(message || "Invalid DOM node: " + node);
 		}
 	},
-	
+
 
 	/**
-	 * {Element} Finds the closest parent of @start {Element} which is 
+	 * {Element} Finds the closest parent of @start {Element} which is
 	 * successfully tested against the given @test {Function}.
 	 */
-	closest: function(start, test) 
+	closest: function(start, test)
 	{
-		while (start && start.nodeType != 9) 
+		while (start && start.nodeType != 9)
 		{
 			if (test(start)) {
 				return start;
@@ -40,13 +40,13 @@ core.Module("core.dom.Node",
 			start = start.parentNode;
 		}
 	},
-	
-	
+
+
 	/**
 	 * {Boolean} Returns whether the given @parent {Element} contains the
 	 * given @child {Element}.
 	 */
-	contains: function(parent, child) 
+	contains: function(parent, child)
 	{
 		if (parent.nodeType == 9) {
 			return child.ownerDocument === parent;
@@ -55,7 +55,7 @@ core.Module("core.dom.Node",
 		} else if (parent.compareDocumentPosition) {
 			return !!(parent.compareDocumentPosition(child) & 16);
 		}
-		
+
 		while(target)
 		{
 			if (element == target) {

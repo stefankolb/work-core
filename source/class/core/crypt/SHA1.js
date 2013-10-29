@@ -14,17 +14,17 @@
 
 "use strict";
 
-(function(Util, StringUtil) 
+(function(Util, StringUtil)
 {
 	/**
 	 * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined in FIPS 180-1
 	 */
-	core.Module("core.crypt.SHA1", 
+	core.Module("core.crypt.SHA1",
 	{
 		/**
 		 * {String} Returns the SHA1 checksum of the given @str {String} as a raw string.
 		 */
-		checksum : function(str) { 
+		checksum : function(str) {
 			return Util.byteArrayToRawString(this.checksumAsByteArray(str));
 		},
 
@@ -32,7 +32,7 @@
 		/**
 		 * {Array} Returns the SHA1 checksum of the given @str {String} as an byte array.
 		 */
-		checksumAsByteArray : function(str) 
+		checksumAsByteArray : function(str)
 		{
 			str = StringUtil.encodeUtf8(str);
 			return Util.bigEndianToByteArray(binb_sha1(Util.rawStringToBigEndian(str), str.length * 8));
@@ -42,17 +42,17 @@
 		/**
 		 * {String} Returns a HMAC (Hash-based Message Authentication Code) using the SHA1 hash function as a raw string.
 		 *
-		 * HMAC is a specific construction for calculating a message authentication code (MAC) involving a 
+		 * HMAC is a specific construction for calculating a message authentication code (MAC) involving a
 		 * cryptographic hash function in combination with a secret key.
 		 *
 		 * - @key {String} The secret key for verifying authenticity
 		 * - @str {String} Message to compute the HMAC for
 		 */
-		hmac : function(key, str) 
-		{ 
+		hmac : function(key, str)
+		{
 			key = StringUtil.encodeUtf8(key);
 			str = StringUtil.encodeUtf8(str);
-			
+
 			var bkey = Util.rawStringToBigEndian(key);
 			if (bkey.length > 16) {
 				bkey = binb_sha1(bkey, key.length * 8);
@@ -60,7 +60,7 @@
 
 			var ipad = Array(16);
 			var opad = Array(16);
-			
+
 			for (var i = 0; i < 16; i++)
 			{
 				ipad[i] = bkey[i] ^ 0x36363636;
@@ -83,7 +83,7 @@
 		x[((len + 64 >> 9) << 4) + 15] = len;
 
 		var w = Array(80);
-		
+
 		var a = 1732584193;
 		var b = -271733879;
 		var c = -1732584194;
@@ -121,7 +121,7 @@
 			d = safe_add(d, oldd);
 			e = safe_add(e, olde);
 		}
-		
+
 		return Array(a, b, c, d, e);
 	}
 
@@ -157,7 +157,7 @@
 	{
 		var lsw = (x & 0xFFFF) + (y & 0xFFFF);
 		var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-		
+
 		return (msw << 16) | (lsw & 0xFFFF);
 	}
 
@@ -167,5 +167,5 @@
 	function bit_rol(num, cnt) {
 		return (num << cnt) | (num >>> (32 - cnt));
 	}
-	
+
 })(core.crypt.Util, core.String);

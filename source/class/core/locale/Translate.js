@@ -10,9 +10,9 @@
 (function(global)
 {
 	var plural;
-	if (global.locale) 
+	if (global.locale)
 	{
-		
+
 		plural = (function(fields, Plural)
 		{
 			var code="", pos=0;
@@ -30,12 +30,12 @@
 
 			return new Function("n", code);
 		})(["ZERO", "ONE", "TWO", "FEW", "MANY"], locale.Plural);
-		
+
 	}
-	else 
+	else
 	{
 		if (jasy.Env.isSet("debug")) {
-			console.warn("Using locale fallback support (Detailed plural rules are not available!)")	
+			console.warn("Using locale fallback support (Detailed plural rules are not available!)")
 		}
 
 		/**
@@ -48,7 +48,7 @@
 			return n == 1 ? 0 : 1;
 		}
 	}
-	
+
 	/**
 	 * {String} Quick and easy string templating using %1, %2, etc. as placeholders
 	 * and an array for the data. You pass in the @message {String} and the @data {Array}
@@ -63,7 +63,7 @@
 		});
 	};
 
-	
+
 	/**
 	 * Developer interface to translation API of Core Library.
 	 */
@@ -74,7 +74,7 @@
 
 
 		/**
-		 * {String} Translates the given @message {String} and replaces any numeric placeholders 
+		 * {String} Translates the given @message {String} and replaces any numeric placeholders
 		 * (`%[0-9]`) with the corresponding number arguments passed via @varargs {var...?}.
 		 */
 		tr : function(message, varargs)
@@ -87,8 +87,8 @@
 
 
 		/**
-		 * {String} Translates the given @message {String} und while choosing the one which matches the 
-		 * given @context {String} and replaces any numeric placeholders (`%[0-9]`) with the corresponding 
+		 * {String} Translates the given @message {String} und while choosing the one which matches the
+		 * given @context {String} and replaces any numeric placeholders (`%[0-9]`) with the corresponding
 		 * number arguments passed via @varargs {var...?}.
 		 */
 		trc : function(context, message, varargs)
@@ -101,9 +101,9 @@
 
 
 		/**
-		 * {String} Translates the given @messageSingular {String} or @messagePlural {String} 
+		 * {String} Translates the given @messageSingular {String} or @messagePlural {String}
 		 * depending on the @number {Number} passed to the method.
-		 * Like the other methods it also supports replacing any numeric placeholders 
+		 * Like the other methods it also supports replacing any numeric placeholders
 		 * (`%[0-9]`) with the corresponding number arguments passed via @varargs {var...?}.
 		 */
 		trn : function(messageSingular, messagePlural, number, varargs)
@@ -138,7 +138,7 @@
 				result = messages[0];
 			}
 
-			return args.length <= 2 ? result : template(result, args, 2);     
+			return args.length <= 2 ? result : template(result, args, 2);
 		}
 	});
 })(core.Main.getGlobal());

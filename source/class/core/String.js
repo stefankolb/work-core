@@ -13,7 +13,7 @@
   var hexTable = "0123456789abcdef".split("");
 
   /** {=Map} Used to map specific string values to primitive counter parts */
-  var interpreterMap = 
+  var interpreterMap =
   {
     "true": true,
     "false": false,
@@ -30,7 +30,7 @@
     /**
      * {String} Converts the @str {String} into a hex string
      */
-    toHex : function(str) 
+    toHex : function(str)
     {
       var output = "";
       var code;
@@ -53,7 +53,7 @@
       return str in interpreterMap ? interpreterMap[str] : str;
     },
 
-    
+
     /**
      * {String} Encodes the @str {String} as UTF-8.
      *
@@ -62,8 +62,8 @@
     encodeUtf8 : function(str) {
       return unescape(encodeURIComponent(str));
     },
-    
-    
+
+
     /**
      * {String} Decodes the @str {String} from UTF-8.
      *
@@ -140,15 +140,15 @@
       if (nr < 1) {
         return '';
       }
-      
+
       var pattern = str;
       var result = "";
-      while (nr > 0) 
+      while (nr > 0)
       {
         if (nr & 1) {
           result += pattern;
         }
-        
+
         nr >>= 1;
         pattern += pattern;
       }
@@ -170,6 +170,6 @@
      */
     endsWith : function(str, end) {
       return end == str.slice(-end.length);
-    }  
+    }
   });
 })();

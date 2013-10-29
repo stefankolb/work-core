@@ -18,7 +18,7 @@ core.Module("core.detect.Engine",
 	VALUE : (function(global, toString)
 	{
 		var engine;
-		
+
 		if (jasy.Env.isSet("runtime", "browser"))
 		{
 			var doc = global.document;
@@ -37,13 +37,13 @@ core.Module("core.detect.Engine",
 				engine = "gecko"; // Firefox, Camino, ...
 			} else if (nav && typeof nav.cpuClass === "string") {
 				engine = "trident"; // Internet Explorer
-			}			
+			}
 		}
  		else
  		{
 			engine = "webkit"; // NodeJS
 		}
-		
+
 		return engine;
 	})(core.Main.getGlobal(), Object.prototype.toString)
 });

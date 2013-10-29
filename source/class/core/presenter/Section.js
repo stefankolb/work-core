@@ -14,7 +14,7 @@ core.Class("core.presenter.Section",
     __param : null,
     __segment : null,
 
-    setParam : function(param) 
+    setParam : function(param)
     {
       this.__param = param;
 
@@ -27,7 +27,7 @@ core.Class("core.presenter.Section",
       return this.__param;
     },
 
-    setSegment : function(segment) 
+    setSegment : function(segment)
     {
       this.__segment = segment;
 

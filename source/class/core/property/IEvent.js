@@ -13,11 +13,11 @@
  */
 core.Interface("core.property.IEvent",
 {
-	members : 
+	members :
 	{
 		/**
 		 * Dispatches an previously created @eventObject {Object} to all listeners.
 		 */
-		dispatchEvent : function(eventObject) {}		
+		dispatchEvent : function(eventObject) {}
 	}
 });

@@ -18,9 +18,9 @@
 	var checksum = null;
 
 	// At this level Array.prototype.indexOf might not be support, so we implement a custom logic for a contains check
-	var contains = function(array, value) 
+	var contains = function(array, value)
 	{
-		for (var i=0, l=array.length; i<l; i++) 
+		for (var i=0, l=array.length; i<l; i++)
 		{
 			if (array[i] == value) {
 				return true;
@@ -31,7 +31,7 @@
 	/**
 	 * {var} Returns the value of the field with the given @name {String}.
 	 */
-	var getValue = function(name) 
+	var getValue = function(name)
 	{
 		if (!(name in selected)) {
 			throw new Error("[jasy.Env]: Field " + name + " is not available (yet)!");
@@ -105,7 +105,7 @@
 			selected[name] = value;
 
 			// Only add permutated fields to the permutated map.
-			if (type == 1 || type == 2) 
+			if (type == 1 || type == 2)
 			{
 				permutated[name] = value;
 				checksum = null;
@@ -131,11 +131,11 @@
 			names.sort();
 
 			var list = [];
-			for (var i=0, l=names.length; i<l; i++) 
-			{	
+			for (var i=0, l=names.length; i<l; i++)
+			{
 				var name = names[i];
 				list.push(name + ":" + permutated[name]);
-			}			
+			}
 
 			var key = list.join(";");
 			var rev = selected["jasy.build.rev"];
@@ -161,10 +161,10 @@
 
 
 		getValue : getValue,
-		
-		
+
+
 		/**
-		 * {Boolean} Whether the field with the given @name {String} was set to the given @value {var?true}. 
+		 * {Boolean} Whether the field with the given @name {String} was set to the given @value {var?true}.
 		 *
 		 * Boolean fields could also be checked without a given value as the value
 		 * defaults to `true`.
@@ -182,7 +182,7 @@
 
 
 		/**
-		 * {var} Selects and returns the current value of the field with the given 
+		 * {var} Selects and returns the current value of the field with the given
 		 * @name {String} from the given @map {Map}.
 		 */
 		select: function(name, map) {

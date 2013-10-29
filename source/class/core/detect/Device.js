@@ -15,7 +15,7 @@
     if (core.detect.Browser.NAME == "android") {
       var largest = Math.max(window.innerWidth, window.innerHeight);
     } else {
-      var largest = Math.max(screen.width, screen.height);  
+      var largest = Math.max(screen.width, screen.height);
     }
 
     if (largest > 1000) {
@@ -31,5 +31,5 @@
   {
     /** {=String} Any of desktop, tablet, smartphone or other */
     VALUE : value
-  });  
+  });
 })();

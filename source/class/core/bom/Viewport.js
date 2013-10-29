@@ -10,24 +10,24 @@
 
 "use strict";
 
-(function(window) 
+(function(window)
 {
 	/**
 	 * Support for the browsers viewport. Also contains methods
 	 * specifically interesting for mobile devices like smartphones/tablets (orientation, etc.)
 	 */
-	core.Module("core.bom.Viewport", 
+	core.Module("core.bom.Viewport",
 	{
 		/** {Integer} Returns the viewport width */
 		getWidth: function() {
 			return window.innerWidth;
 		},
-		
+
 		/** {Integer} Returns the viewport height */
 		getHeight: function() {
 			return window.innerHeight;
 		},
-		
+
 		/** {Boolean} Whether the viewport is in landscape orientation */
 		isLandscape: function() {
 			return window.outerWidth > window.outerHeight;
@@ -42,7 +42,7 @@
 		 * Works the viewport magic on sites which do not like to offer native scrolling
 		 * but works with fixed components and custom scrolling. In these app like sites
 		 * we like to offer a view without the top browser bar. This is possible and will
-		 * be applied by this method. The method also offers features to make 
+		 * be applied by this method. The method also offers features to make
 		 */
 		enableAppLayout : function()
 		{
@@ -66,29 +66,29 @@
 
 			// Execute on every orientation/size change
 			window.addEventListener('orientationchange', helper, false);
-			window.addEventListener('resize', helper, false);			
+			window.addEventListener('resize', helper, false);
 
 			// Directly execute for the first time
 			helper();
 		},
-		
+
 		/** {String} Returns the viewport orientation. */
-		getOrientation: function() 
+		getOrientation: function()
 		{
 			var orient = window.orientation;
-			
+
 			// TODO
-			
+
 			if (orient != null) {
-				
-				
-				
+
+
+
 			}
-			
+
 			return orient;
-			
+
 		}
-		
+
 	});
-	
+
 })(core.Main.getGlobal());

@@ -8,7 +8,7 @@
 "use strict";
 
 /**
- * Event class for storage API. Like {core.event.Simple} but with support for 
+ * Event class for storage API. Like {core.event.Simple} but with support for
  * a new `item` field to keep the item ID which was stored/removed.
  */
 core.Class("core.store.Event",

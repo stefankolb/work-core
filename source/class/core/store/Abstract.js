@@ -37,7 +37,7 @@
 
 	/**
 	 * A store is pretty much a combination of the adapter pattern (convert data
-	 * betweeen storage/server and client) and a asynchronous storage API with 
+	 * betweeen storage/server and client) and a asynchronous storage API with
 	 * activity reporting.
 	 */
 	core.Class("core.store.Abstract",
@@ -57,9 +57,9 @@
 		},
 
 		events : {
-			/** 
-			 * Fired whenever the activity state was changed 
-			 * (Please note that every single change produces a new event - 
+			/**
+			 * Fired whenever the activity state was changed
+			 * (Please note that every single change produces a new event -
 			 * even if the storage is still active e.g. when the second request is send out.)
 			 */
 			change : core.event.Simple,
@@ -129,7 +129,7 @@
 					this.__flushMutex = true;
 					core.Function.immediate(this.__flush, this);
 				}
-				
+
 				return promise.then(function(value) {
 					value = this._decode(value, action);
 					tracker[action]--;
@@ -153,7 +153,7 @@
 					var promise = task.promise;
 
 					this.__fireStorageEvent(ActionEventStartMapper[action], true, task);
-					
+
 					var promise2 = new core.event.Promise();
 					promise2.then(function() {
 						return this._communicate(task.action, task.key, task.data);
@@ -256,7 +256,7 @@
 			*/
 
 			/**
-			 * {core.event.Promise} Communicates data changes to the underlying storage using 
+			 * {core.event.Promise} Communicates data changes to the underlying storage using
 			 * the given @action {String} on the given optional @key {var?null}
 			 * with the given optional @data {var?}.
 			 */
@@ -266,7 +266,7 @@
 
 
 			/**
-			 * Applying correction on outgoing @data {var}, typically the model/collection 
+			 * Applying correction on outgoing @data {var}, typically the model/collection
 			 * for the given @action {String}.
 			 */
 			_encode : function(data, action) {

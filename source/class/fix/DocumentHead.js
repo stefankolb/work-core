@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
@@ -13,10 +13,10 @@
  */
 if (jasy.Env.isSet("runtime", "browser"))
 {
-  (function(doc) 
+  (function(doc)
   {
     if (!doc.head) {
       doc.head = doc.getElementsByTagName('head')[0];
     }
-  })(document);  
+  })(document);
 }

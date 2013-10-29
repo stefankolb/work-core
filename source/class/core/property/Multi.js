@@ -170,11 +170,11 @@
 				}
 
 				// Fire event
-				if (propertyFire) 
+				if (propertyFire)
 				{
 					var eventObject = core.property.Event.obtain(propertyFire, childNewValue, childOldValue, propertyName);
 					context.dispatchEvent(eventObject);
-					eventObject.release();					
+					eventObject.release();
 				}
 
 				// Go into recursion
@@ -324,11 +324,11 @@
 							}
 
 							// Fire event
-							if (propertyFire) 
+							if (propertyFire)
 							{
 								var eventObject = core.property.Event.obtain(propertyFire, newValue, oldValue, propertyName);
 								context.dispatchEvent(eventObject);
-								eventObject.release();					
+								eventObject.release();
 							}
 
 							// Inheritance support
@@ -423,7 +423,7 @@
 						}
 
 						// Fire event
-						if (propertyFire) 
+						if (propertyFire)
 						{
 							var eventObject = core.property.Event.obtain(propertyFire, newValue, oldValue, propertyName);
 							context.dispatchEvent(eventObject);
@@ -540,11 +540,11 @@
 					}
 
 					// Fire event
-					if (propertyFire) 
+					if (propertyFire)
 					{
 						var eventObject = core.property.Event.obtain(propertyFire, propertyInit, Undefined, config.name);
 						context.dispatchEvent(eventObject);
-						eventObject.release();					
+						eventObject.release();
 					}
 
 					// Inheritance support
@@ -560,8 +560,8 @@
 
 
 		/**
-		 * Returns a value of the @obj {Object} from a specific @field {String} 
-		 * (one of "init", "inheritance", "theme", "user" or "override") for the given @propertyName {String} - 
+		 * Returns a value of the @obj {Object} from a specific @field {String}
+		 * (one of "init", "inheritance", "theme", "user" or "override") for the given @propertyName {String} -
 		 * ignoring any priorities.
 		 */
 		getSingleValue : function(obj, propertyName, field)
@@ -716,11 +716,11 @@
 					}
 
 					// Fire event
-					if (config.fire) 
+					if (config.fire)
 					{
 						var eventObject = core.property.Event.obtain(config.fire, newValue, oldValue, config.name);
 						obj.dispatchEvent(eventObject);
-						eventObject.release();	
+						eventObject.release();
 					}
 
 					// Inheritance support
@@ -911,11 +911,11 @@
 					}
 
 					// Fire event
-					if (propertyConfig.fire) 
+					if (propertyConfig.fire)
 					{
 						var eventObject = core.property.Event.obtain(propertyConfig.fire, newValue, oldValue, propertyName);
 						context.dispatchEvent(eventObject);
-						eventObject.release();	
+						eventObject.release();
 					}
 
 					// Update children

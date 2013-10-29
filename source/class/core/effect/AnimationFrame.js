@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
   Core - JavaScript Foundation
   Copyright 2010-2012 Zynga Inc.
@@ -10,7 +10,7 @@
 
 if (jasy.Env.isSet("runtime", "browser"))
 {
-	(function(global) 
+	(function(global)
 	{
 		var request = core.util.Experimental.get(global, "requestAnimationFrame");
 		var cancel = core.util.Experimental.get(global, "cancelRequestAnimationFrame");
@@ -30,15 +30,15 @@ if (jasy.Env.isSet("runtime", "browser"))
 			var rafHandle = 1;
 			var timeoutHandle = null;
 
-			/** 
-			 * {var} Tells the browser that you wish to perform an animation; this requests that the browser schedule a 
-			 * repaint of the window for the next animation frame. The method takes as an argument a @callback {Function} to 
+			/**
+			 * {var} Tells the browser that you wish to perform an animation; this requests that the browser schedule a
+			 * repaint of the window for the next animation frame. The method takes as an argument a @callback {Function} to
 			 * be invoked before the repaint and a @root {Element?} to specifying the element that visually bounds the entire animation.
 			 * Returns a handle to cancel the request using {#cancel}.
 			 *
 			 * See also: https://developer.mozilla.org/en/DOM/window.requestAnimationFrame
 			 */
-			request = function(callback, root) 
+			request = function(callback, root)
 			{
 				var callbackHandle = rafHandle++;
 
@@ -46,9 +46,9 @@ if (jasy.Env.isSet("runtime", "browser"))
 				requests[callbackHandle] = callback;
 
 				// Create timeout at first request
-				if (timeoutHandle === null) 
+				if (timeoutHandle === null)
 				{
-					timeoutHandle = setTimeout(function() 
+					timeoutHandle = setTimeout(function()
 					{
 						var time = Date.now();
 						var currentRequests = requests;
@@ -70,29 +70,29 @@ if (jasy.Env.isSet("runtime", "browser"))
 
 			/**
 			 * Stops the animation scheduled under the given @handle {var}.
-			 * 
+			 *
 			 * See also: https://developer.mozilla.org/en/DOM/window.requestAnimationFrame
 			 */
-			cancel = function(handle) 
+			cancel = function(handle)
 			{
 				delete requests[handle];
 
 				// Stop timeout if all where removed
-				if (core.Object.isEmpty(requests)) 
+				if (core.Object.isEmpty(requests))
 				{
 					clearTimeout(timeoutHandle);
 					timeoutHandle = null;
 				}
-			};			
+			};
 		}
 
 		/**
 		 * Module to request a function call for the next render loop.
 		 *
-		 * Used native methods where possible but includes a fallback to 
+		 * Used native methods where possible but includes a fallback to
 		 * a custom timeout based logic.
 		 */
-		core.Module("core.effect.AnimationFrame", 
+		core.Module("core.effect.AnimationFrame",
 		{
 			request : request,
 			cancel : cancel

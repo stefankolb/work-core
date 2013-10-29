@@ -10,7 +10,7 @@
 
 /**
  * Implements the Adler32 checksum
- * 
+ *
  * See also: http://en.wikipedia.org/wiki/Adler-32
  */
 core.Module("core.crypt.Adler32",
@@ -22,7 +22,7 @@ core.Module("core.crypt.Adler32",
 	{
 		var MOD_ADLER = 65521;
 		var a=1, b=0;
-		
+
 		str = core.String.encodeUtf8(str);
 
 		// Process each byte of the string in order

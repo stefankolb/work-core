@@ -11,7 +11,7 @@
 /**
  * Shared data for property system
  */
-core.Module("core.property.Core", 
+core.Module("core.property.Core",
 {
 	/** Internal unique ID for usage in Single/Multi properties */
 	ID : 1

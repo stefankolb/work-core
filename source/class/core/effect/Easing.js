@@ -16,7 +16,7 @@
 /**
  * Collection of pretty much standard easing methods. Based on the work of Robert Penner.
  */
-core.Module("core.effect.Easing", 
+core.Module("core.effect.Easing",
 {
 	/**
 	 * {Number} Transforms a position (@pos {Number}) between 0 (start of effect) and 1 (end of effect) into a effect modified one.

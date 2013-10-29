@@ -47,11 +47,11 @@ core.Class("core.bom.event.type.Pointer",
     }
 
     // Pressure
-    if (nativeEvent.pressure) 
+    if (nativeEvent.pressure)
     {
       this.pressure = nativeEvent.pressure;
     }
-    else 
+    else
     {
       var button = 0;
       if (nativeEvent.which != null) {

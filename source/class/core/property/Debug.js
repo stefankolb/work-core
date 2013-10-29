@@ -60,22 +60,22 @@ core.Module("core.property.Debug",
 			{
 				try
 				{
-					if (type instanceof Array) 
+					if (type instanceof Array)
 					{
 						if (type.indexOf(value) == -1) {
 							throw new Error("Value of property must be one of " + type + ". Invalid value: " + value);
 						}
 					}
-					else if (core.Class.isClass(type)) 
+					else if (core.Class.isClass(type))
 					{
 						if (!(value instanceof type || core.Class.includesClass(value.constructor, type))) {
 							throw new Error("Value of property " + name + " must be instance of or include " + type + ". Invalid value: " + value);
 						}
 					}
-					else if (core.Interface.isInterface(type)) 
+					else if (core.Interface.isInterface(type))
 					{
 						core.Interface.assert(value, type);
-					} 
+					}
 					else
 					{
 						core.Assert.isType(value, type);

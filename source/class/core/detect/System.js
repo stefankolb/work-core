@@ -13,7 +13,7 @@
 "use strict";
 
 (function() {
-	
+
 	var agent = navigator.userAgent.replace(/_/g, ".");
 	var match, version, name;
 	var platform = core.detect.Platform.VALUE;
@@ -81,7 +81,7 @@
 		else
 		{
 			var match = /OS ([0-9\._]+) like Mac OS/.exec(agent);
-			if (match) 
+			if (match)
 			{
 				name = "ios";
 				version = parseFloat(match[1].replace(/_/, "."), 10);
@@ -128,8 +128,8 @@
 	if (version == null) {
 		version = "0.0";
 	}
-	
-	
+
+
 	/**
 	 * Detects the system where the application is running on. This is more detailed
 	 * than just the platform as on most of them it includes the specific version
@@ -139,10 +139,10 @@
 	 * phase of the class. The defaults listed in the API viewer need not
 	 * to be identical to the values at runtime.
 	 */
-	core.Module("core.detect.System", 
-	{	
+	core.Module("core.detect.System",
+	{
 		/** System identification */
-		VALUE: name + " " + version	
+		VALUE: name + " " + version
 	});
-	
+
 })();

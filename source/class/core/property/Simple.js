@@ -86,7 +86,7 @@
 					core.Assert.isType(propertyApply, "Function");
 				}
 
-				if (propertyCast != null) 
+				if (propertyCast != null)
 				{
 					core.Assert.isType(propertyCast, "Boolean");
 
@@ -181,7 +181,7 @@
 						}
 
 						// Fire event
-						if (propertyFire) 
+						if (propertyFire)
 						{
 							var eventObject = core.property.Event.obtain(propertyFire, propertyInit, undef, propertyName);
 							context.dispatchEvent(eventObject);
@@ -206,15 +206,15 @@
 				// Wrap plain types to match property type
 				// Modifying `value` should also modify the arguments object which
 				// is required for value tests happening via checkSetter
-				if (config.cast && core.Main.isTypeOf(value, "Plain")) 
+				if (config.cast && core.Main.isTypeOf(value, "Plain"))
 				{
 					value = new config.type(value);
 
-					if (jasy.Env.isSet("debug")) 
+					if (jasy.Env.isSet("debug"))
 					{
 						// arguments object is not updated in strict mode anymore, fix this
 						if (arguments[0] !== value) {
-							arguments[0] = value;	
+							arguments[0] = value;
 						}
 					}
 				}
@@ -243,7 +243,7 @@
 						propertyApply.call(context, value, old);
 					}
 
-					if (propertyFire) 
+					if (propertyFire)
 					{
 						var eventObject = core.property.Event.obtain(propertyFire, value, old, propertyName);
 						context.dispatchEvent(eventObject);
@@ -298,7 +298,7 @@
 						propertyApply.call(context, value, old);
 					}
 
-					if (propertyFire) 
+					if (propertyFire)
 					{
 						var eventObject = core.property.Event.obtain(propertyFire, value, old, propertyName);
 						context.dispatchEvent(eventObject);
@@ -313,7 +313,7 @@
 			---------------------------------------------------------------------------
 				 METHODS :: ISVALID
 			---------------------------------------------------------------------------
-			*/			
+			*/
 
 			if (propertyValidate)
 			{
@@ -333,16 +333,16 @@
 
 					if (value === undef)
 					{
-						if (propertyInit !== undef) 
+						if (propertyInit !== undef)
 						{
 							value = propertyInit;
 						}
-						else if (!propertyNullable) 
+						else if (!propertyNullable)
 						{
 							context.error("Missing value for: " + propertyName + " (during isValid())");
 							return false;
 						}
-					}					
+					}
 
 					return propertyValidate.call(context, value);
 				};

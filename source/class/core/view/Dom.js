@@ -22,20 +22,20 @@ core.Class("core.view.Dom",
 
     this.__renderRequestBound = core.Function.bind(this.__renderRequest, this);
 
-    if (root != null) 
+    if (root != null)
     {
       if (jasy.Env.isSet("debug")) {
-        core.Assert.isType(root, "Node", "Invalid root node!");  
+        core.Assert.isType(root, "Node", "Invalid root node!");
       }
-      
+
       this.setRoot(root);
     }
   },
 
-  properties : 
+  properties :
   {
     /** Instance of compiled template to produce final data / text for output e.g. HTML, JSON, ... */
-    template : 
+    template :
     {
       type: core.template.Template,
       nullable : true,
@@ -45,7 +45,7 @@ core.Class("core.view.Dom",
     },
 
     /** The root element to render into */
-    root : 
+    root :
     {
       type: "Node",
       nullable : true,
@@ -62,7 +62,7 @@ core.Class("core.view.Dom",
 
   },
 
-  members : 
+  members :
   {
     /*
     ======================================================
@@ -83,12 +83,12 @@ core.Class("core.view.Dom",
 
     /**
      * This method checks for whether all required data is available and triggers
-     * the rendering as soon as this happens. Until than it regularly re-evaluates 
+     * the rendering as soon as this happens. Until than it regularly re-evaluates
      * whether this case happens.
      */
     __renderRequest : function()
     {
-      if (this.__loaded && this._shouldRender()) 
+      if (this.__loaded && this._shouldRender())
       {
         this.__render();
         this.__renderScheduled = null;
@@ -143,7 +143,7 @@ core.Class("core.view.Dom",
 
     __loaded : false,
 
-    markAsLoaded : function() 
+    markAsLoaded : function()
     {
       this.log("All assets loaded!");
       this.__loaded = true;
@@ -214,9 +214,9 @@ core.Class("core.view.Dom",
 
 
     /**
-     * {core.event.Promise} Loads and registers the given partial from 
+     * {core.event.Promise} Loads and registers the given partial from
      * a local @assetId {String}. Returns a promise for easy management.
-     * 
+     *
      * The name of the partial is auto extracted as the file name part
      * of the @assetId.
      */
@@ -230,7 +230,7 @@ core.Class("core.view.Dom",
 
       // Use cached partial if available
       var existing = this.__partialCache[name];
-      if (existing) 
+      if (existing)
       {
         this.addPartial(name, existing);
         promise.fulfill(existing);
@@ -238,9 +238,9 @@ core.Class("core.view.Dom",
       }
 
       // Otherwise load asset dynamically
-      core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
+      core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data)
       {
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           if (errornous) {
             this.error("Failed to load partial: " + uri);
@@ -271,7 +271,7 @@ core.Class("core.view.Dom",
 
 
     /**
-     * {core.event.Promise} Loads and registers the given template from 
+     * {core.event.Promise} Loads and registers the given template from
      * a local @assetId {String}. Returns a promise for easy management.
      */
     loadTemplate : function(assetId, nostrip)
@@ -280,16 +280,16 @@ core.Class("core.view.Dom",
 
       // Use cached template if available
       var existing = this.__templateCache[assetId];
-      if (existing) 
+      if (existing)
       {
         this.setTemplate(existing);
         promise.fulfill(existing);
         return promise;
       }
 
-      core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
+      core.io.Text.load(jasy.Asset.toUri(assetId), function(uri, errornous, data)
       {
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           if (errornous) {
             this.error("Failed to load template: " + uri);
@@ -307,7 +307,7 @@ core.Class("core.view.Dom",
         {
           // Enable stripping (to remove white spaces from formatting)
           var template = core.template.Compiler.compile(data.text, this.getLabels(), nostrip, assetId);
-          this.setTemplate(template);  
+          this.setTemplate(template);
           this.__templateCache[assetId] = template;
 
           // Finally fulfill
@@ -320,16 +320,16 @@ core.Class("core.view.Dom",
 
 
     /**
-     * {core.event.Promise} Loads and injects the given stylesheet from 
+     * {core.event.Promise} Loads and injects the given stylesheet from
      * a local @assetId {String}. Returns a promise for easy management.
      */
     loadStyleSheet : function(assetId)
     {
       var promise = new core.event.Promise;
 
-      core.io.StyleSheet.load(jasy.Asset.toUri(assetId), function(uri, errornous, data) 
+      core.io.StyleSheet.load(jasy.Asset.toUri(assetId), function(uri, errornous, data)
       {
-        if (jasy.Env.isSet("debug")) 
+        if (jasy.Env.isSet("debug"))
         {
           if (errornous) {
             this.error("Failed to load stylesheet: " + uri);

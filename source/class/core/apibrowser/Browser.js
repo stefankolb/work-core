@@ -14,9 +14,9 @@
  * #asset(core/apibrowser/*)
  * #require(core.io.StyleSheet)
  */
-core.Class('core.apibrowser.Browser', 
+core.Class('core.apibrowser.Browser',
 {
-	construct: function() 
+	construct: function()
 	{
 		this.__headElem = document.createElement("div");
 		this.__headElem.id = "head";

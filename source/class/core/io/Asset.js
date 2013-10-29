@@ -12,21 +12,21 @@
 {
 	/** {Map} Internal cache for holding preloaded data */
 	var cache = {};
-	
+
 	/**
-	 * {Map} Collects asset with the given asset @prefix {String} from the given @section {Map}. 
-	 * Optionally works recursively by enabling @recursive {Boolean?false}. Last parameter @entries {Map?} 
+	 * {Map} Collects asset with the given asset @prefix {String} from the given @section {Map}.
+	 * Optionally works recursively by enabling @recursive {Boolean?false}. Last parameter @entries {Map?}
 	 * is used to fill an existing object instead of a new one.
 	 */
-	var collect = function(prefix, section, recursive, entries) 
+	var collect = function(prefix, section, recursive, entries)
 	{
 		if (!entries) {
 			entries = {};
 		}
-		
+
 		if (section)
 		{
-			for (var filename in section) 
+			for (var filename in section)
 			{
 				var entry = section[filename];
 				var id = prefix + "/" + filename;
@@ -39,19 +39,19 @@
 				}
 			}
 		}
-		
+
 		return entries;
 	};
 
-	
+
 	/**
 	 * {Integer} Returns the number of frames for the given @data {Array}.
 	 */
-	var getFrameNumber = function(data) 
+	var getFrameNumber = function(data)
 	{
 		// Data format is [width, height, spriteData, animationData]
 		var animationData = data[3];
-		
+
 		// Correct entry length for format detection
 		if (animationData)
 		{
@@ -70,11 +70,11 @@
 					return animationData[2];
 			}
 		}
-		
+
 		return 1;
 	};
-	
-	
+
+
 	/**
 	 * {var} Returns a @key {String} from the given asset @id {String} when its available in cache.
 	 */
@@ -106,7 +106,7 @@
 		 * Optionally caching can be disabled by attaching a random `GET` parameter via
 		 * setting @random {Boolean} to `true`.
 		 */
-		preloadSection: function(section, recursive, callback, context, random) 
+		preloadSection: function(section, recursive, callback, context, random)
 		{
 			if (jasy.Env.isSet("debug"))
 			{
@@ -115,7 +115,7 @@
 				if (section == "") {
 					throw new Error("Invalid section: " + section);
 				}
-				
+
 				if (core.String.endsWith(section, "/")) {
 					throw new Error("Sections must not end with a slash!")
 				}
@@ -136,30 +136,30 @@
 					core.Assert.isType(random, "Boolean");
 				}
 			}
-			
+
 			// Collect asset entries
 			var entries = collect(section, jasy.Asset.resolve(section), recursive);
 
 			// Resolve URIs for assets
 			var uris = [];
 			var uriToId = {};
-			
-			for (var id in entries) 
+
+			for (var id in entries)
 			{
 				// Filter loaded assets
 				if (!(id in cache))
 				{
 					var entry = entries[id];
-					
+
 					// Don't preload audio/fonts/video
 					// - The formats for video/audio is typcially streamed.
 					// - Mostly offered files are alternative e.g. aac/mp3, ttf/woff, m4v/webm, etc.
 					if (entry.t == "a" || entry.t == "f" || entry.t == "v") {
 						continue;
 					}
-					
+
 					// Check whether entry is type of image and is part of a sprite image
-					if (entry.t == "i" && entry.d[2]) 
+					if (entry.t == "i" && entry.d[2])
 					{
 						id = jasy.Asset.resolveSprite(entry.d[2][0], id);
 
@@ -174,16 +174,16 @@
 					{
 						var uri = jasy.Asset.entryToUri(entry, id);
 					}
-					
+
 					uris.push(uri);
 					uriToId[uri] = id;
-					
+
 					// Pre-fill cache to mark as blocked for further calls
 					cache[id] = true;
 				}
 			}
-			
-			if (uris.length == 0) 
+
+			if (uris.length == 0)
 			{
 				// Execute user defined callback method
 				if (callback) {
@@ -193,11 +193,11 @@
 			else
 			{
 				if (jasy.Env.isSet("debug")) {
-					console.debug("Preloading " + section + " (" + uris.length + " assets)...");	
+					console.debug("Preloading " + section + " (" + uris.length + " assets)...");
 				}
-				
+
 				// Start loading of assets
-				core.io.Queue.load(uris, function(data) 
+				core.io.Queue.load(uris, function(data)
 				{
 					// Fill cache with actual data
 					for (var uri in data) {
@@ -216,10 +216,10 @@
 
 		/**
 		 * Loads the given assets by their @ids {String[]} and executes @callback {Function?}
-		 * in the given @context {Object?global}. * Optionally caching can be disabled 
+		 * in the given @context {Object?global}. * Optionally caching can be disabled
 		 * by attaching a random `GET` parameter via setting @random {Boolean} to `true`.
 		 */
-		load: function(ids, callback, context, random) 
+		load: function(ids, callback, context, random)
 		{
 			if (jasy.Env.isSet("debug"))
 			{
@@ -237,14 +237,14 @@
 					core.Assert.isType(random, "Boolean");
 				}
 			}
-			
+
 			var uris = ids.map(jasy.Asset.toUri);
 			var urisToIds = uris.zip(ids);
 
 			var helper = callback ? function(data) {
 				callback.call(context||global, core.Object.translate(data, urisToIds));
 			} : callback;
-			
+
 			core.io.Queue.load(uris, helper, this, random);
 		},
 
@@ -259,7 +259,7 @@
 			}
 
 			var entry = jasy.Asset.resolve(id);
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				if (!entry) {
 					throw new Error("Could not figure out size of unknown image: " + id);
@@ -269,28 +269,28 @@
 					throw new Error("Could not figure out size of non image asset: " + id);
 				}
 			}
-			
+
 			// First two values in data are the size of the image
 			return entry.d.slice(0, 2);
 		},
-		
-		
+
+
 		/**
 		 * {Integer} Returns the number of frames (for animations) for the given image @id {String}.
 		 */
-		getFrameNumber: function(id) 
+		getFrameNumber: function(id)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(id, "String", "Invalid asset ID (no string): " + id + "!");
 			}
-			
+
 			var entry = jasy.Asset.resolve(id);
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				if (!entry) {
 					throw new Error("Could not figure out frame number of unknown image: " + id);
 				}
-				
+
 				if (entry.t != "i") {
 					throw new Error("Could not figure out number of frames of non image asset: " + id);
 				}
@@ -305,29 +305,29 @@
 		 * `src`, `left`, `top`, `width` and `height` to being used in a sprite compatible
 		 * image rendering mechanism (e.g. CSS background image + position, Canvas `dragImage`, etc.)
 		 */
-		getImage : function(id) 
+		getImage : function(id)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(id, "String", "Invalid asset ID (no string): " + id + "!");
 			}
-			
+
 			var entry = jasy.Asset.resolve(id);
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				if (!entry) {
-					throw new Error("Unknown image: " + id);	
+					throw new Error("Unknown image: " + id);
 				}
-				
+
 				if (entry.t != "i") {
 					throw new Error("Could not figure out image data of non image asset: " + id);
 				}
 			}
-			
+
 			var data = entry.d;
-			
+
 			var width = data[0];
 			var height = data[1];
-			
+
 			var spriteData = data[2];
 			if (spriteData)
 			{
@@ -354,39 +354,39 @@
 				};
 			}
 		},
-		
-		
+
+
 		/**
 		 * {Map} Collects and returns data about the given image @id {String} on the given @frame {Number}.
 		 * The following fields are available `src`, `left`, `top`, `width`, `height`, `offsetLeft`, `offsetTop` and `rotation`.
 		 */
-		getFrame : function(id, frame) 
+		getFrame : function(id, frame)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(id, "String", "Invalid asset ID (no string): " + id + "!");
 				core.Assert.isType(frame, "Integer", "Invalid frame number (no integer): " + frame + " for asset " + id + "!");
 			}
-			
+
 			var entry = jasy.Asset.resolve(id);
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				if (!entry) {
-					throw new Error("Unknown image: " + id);	
+					throw new Error("Unknown image: " + id);
 				}
-				
+
 				if (entry.t != "i") {
 					throw new Error("Could not figure out image data of non image asset: " + id);
 				}
-			}			
-			
+			}
+
 			var data = entry.d;
-			
+
 			var width = data[0];
 			var height = data[1];
-			
+
 			var spriteData = data[2];
-			if (spriteData) 
+			if (spriteData)
 			{
 				var spriteId = jasy.Asset.resolveSprite(spriteData[0], id);
 				var src = jasy.Asset.toUri(spriteId);
@@ -403,37 +403,37 @@
 				var left = 0;
 				var top = 0;
 			}
-			
+
 			var offsetLeft = 0;
 			var offsetTop = 0;
-			
+
 			var rotation = 0;
-			
+
 			// Detect whether a frame config is available
 			var frameData = data[3];
-			if (frameData) 
+			if (frameData)
 			{
 				var number = getFrameNumber(entry.d);
 				if (frame >= number && jasy.Env.isSet("debug")) {
 					throw new Error("Invalid frame number " + frame + " for asset " + id + "!");
 				}
-				
+
 				// Manual frames
 				// Just one sub array with all frames configured manually
 				if (frameData.length == 1)
 				{
 					var frameConfig = frameData[0][frame];
-					
+
 					// Format: left, top, width, height, offsetX?, offsetY?, rotation?
-					
+
 					// Required fields
 					left += frameConfig[0];
 					top += frameConfig[1];
 					width = frameConfig[2];
 					height = frameConfig[3];
-					
+
 					// Optional fields
-					if (frameConfig.length > 4) 
+					if (frameConfig.length > 4)
 					{
 						offsetLeft = frameConfig[4] || 0;
 						offsetTop = frameConfig[5] || 0;
@@ -447,11 +447,11 @@
 					// Correctly work when using sprite images
 					var cols = frameData[0];
 					var rows = frameData[1];
-					
+
 					// Correct image dimensions
 					width /= cols;
 					height /= rows;
-					
+
 					// Calculate position inside sprite image
 					left += (frame % cols) * width;
 					top += (~~(frame / cols)) * height;
@@ -462,7 +462,7 @@
 				throw new Error("Invalid frame number " + frame + " for asset " + id + "!");
 			}
 
-			var result = 
+			var result =
 			{
 				node : node,
 				src : src,
@@ -474,15 +474,15 @@
 				offsetTop : offsetTop,
 				rotation : rotation
 			};
-			
+
 			// Prevent changes in object
 			if (jasy.Env.isSet("debug") && Object.freeze) {
 				Object.freeze(result);
 			}
-			
+
 			return result;
 		}
 	});
-	
+
 })(core.Main.getGlobal(), Object);
 

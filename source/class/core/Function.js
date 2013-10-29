@@ -67,6 +67,9 @@
 
   var immediate;
 
+  // Keep in mind IE10 bugs:
+  // http://codeforhire.com/2013/09/21/setimmediate-and-messagechannel-broken-on-internet-explorer-10/
+
   // Try NodeJS style nextTick() API
   // http://howtonode.org/understanding-process-next-tick
   if (global.process && process.nextTick) 

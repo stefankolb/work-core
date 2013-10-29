@@ -1,4 +1,4 @@
-/* 
+/*
 ==================================================================================================
 	Core - JavaScript Foundation
 	Copyright 2010-2012 Zynga Inc.
@@ -8,14 +8,14 @@
 
 "use strict";
 
-(function(undef) 
+(function(undef)
 {
 	var supportsSeal = !!Object.seal;
 
 	var genericToString = function() {
 		return "[class " + this.className + "]";
 	};
-	
+
 	var extendClass = function(clazz, construct, superClass, name, basename)
 	{
 		var superproto = superClass.prototype;
@@ -42,11 +42,11 @@
 		// Store statics onto prototype
 		construct.self = clazz.constructor = proto.constructor = clazz;
 	};
-	
-	
+
+
 	if (jasy.Env.isSet("debug"))
 	{
-		var checkMixinMemberConflicts = function(include, members, name) 
+		var checkMixinMemberConflicts = function(include, members, name)
 		{
 			// Simplifies routine
 			if (!members) {
@@ -54,16 +54,16 @@
 			}
 
 			var allIncludeMembers = {};
-			for (var i=0, l=include.length; i<l; i++) 
+			for (var i=0, l=include.length; i<l; i++)
 			{
 				var includedClass = include[i];
 				var includedMembers = core.Object.getKeys(includedClass.prototype);
 
-				for(var j=0, jl=includedMembers.length; j<jl; j++) 
+				for(var j=0, jl=includedMembers.length; j<jl; j++)
 				{
 					var key = includedMembers[j];
 
-					if (members.hasOwnProperty(key)) 
+					if (members.hasOwnProperty(key))
 					{
 						// Private member conflict with including class (must fail, always)
 						if (key.substring(0,2) == "__") {
@@ -73,14 +73,14 @@
 						// members are allowed to override protected and public members of any included class
 					}
 
-					if (allIncludeMembers.hasOwnProperty(key)) 
+					if (allIncludeMembers.hasOwnProperty(key))
 					{
 						// Private members conflict between included classes (must fail, always)
 						if (key.substring(0,2) == "__") {
 							throw new Error("Included class " + includedClass.className + " overwrites private member " + key + " of other included class " + allIncludeMembers[key].className + " in class " + name);
 						}
 
-						// If both included classes define this key as a function check whether 
+						// If both included classes define this key as a function check whether
 						// the members section has a function as well (which might call both of them).
 						if (key in members && members[key] instanceof Function && includedClass.prototype[key] instanceof Function && allIncludeMembers[key] instanceof Function) {
 							// pass
@@ -95,11 +95,11 @@
 		};
 
 		// Events between included classes must not collide
-		// Including class can override any event 
-		var checkMixinEventConflicts = function(include, events, name) 
+		// Including class can override any event
+		var checkMixinEventConflicts = function(include, events, name)
 		{
 			var allIncludeEvents = {};
-			for (var i=0, l=include.length; i<l; i++) 
+			for (var i=0, l=include.length; i<l; i++)
 			{
 				var includedClass = include[i];
 				var includedEvents = includedClass.__events;
@@ -117,10 +117,10 @@
 
 		// Properties between included classes must not collide
 		// Including class can override any property
-		var checkMixinPropertyConflicts = function(include, properties, name) 
+		var checkMixinPropertyConflicts = function(include, properties, name)
 		{
 			var allIncludeProperties = {};
-			for (var i=0, l=include.length; i<l; i++) 
+			for (var i=0, l=include.length; i<l; i++)
 			{
 				var includedClass = include[i];
 				var includedProperties = includedClass.__properties;
@@ -135,36 +135,36 @@
 			}
 		};
 	}
-	
-	
+
+
 	var propertyJoinableNames = {};
-	
-	
+
+
 	/**
 	 * Rich class system for declaring powerful classes in JavaScript. The declarations supports a lot of convenience
 	 * features and unifies all features under a simple declarative API which can be easily processed by 3rd party tools.
 	 *
 	 * Defines a new class with @name {String} using the given @config {Map}.
 	 */
-	core.Main.declareNamespace("core.Class", function(name, config) 
+	core.Main.declareNamespace("core.Class", function(name, config)
 	{
-		if (jasy.Env.isSet("debug")) 
+		if (jasy.Env.isSet("debug"))
 		{
 			if (!core.Module.isModuleName(name)) {
 				throw new Error("Invalid class name " + name + "!");
 			}
-			
+
 			core.Assert.isType(config, "Map", "Invalid class configuration in " + name);
 			core.Assert.doesOnlyHaveKeys(config, "construct,pooling,events,members,properties,include,implement", "Unallowed keys in class: " + name);
-			
+
 			if ("construct" in config) {
 				core.Assert.isType(config.construct, "Function", "Invalid constructor in class " + name + "!");
 			}
-			
+
 			if ("events" in config) {
 				core.Assert.isType(config.events, "Map", "Invalid event data in class " + name + "!");
 			}
-			
+
 			if ("members" in config) {
 				core.Assert.isType(config.members, "Map", "Invalid member section in class " + name);
 			}
@@ -172,7 +172,7 @@
 			if ("properties" in config) {
 				core.Assert.isType(config.properties, "Map", "Invalid properties section in class " + name);
 			}
-			
+
 			if ("include" in config) {
 				core.Assert.isType(config.include, "Array", "Invalid include list in class " + name);
 			}
@@ -181,20 +181,20 @@
 				core.Assert.isType(config.implement, "Array", "Invalid implement list in class " + name);
 			}
 		}
-		
-		
-		
+
+
+
 		// ------------------------------------
 		//	 CONSTRUCTOR
 		// ------------------------------------
-		
+
 		var construct = config.construct || function(){};
-	
+
 		// Store name / type
 		construct.className = name;
 		construct.displayName = name;
 		construct.__isClass = true;
-	
+
 		// Add toString() / valueOf()
 		construct.toString = genericToString;
 		construct.valueOf = genericToString;
@@ -202,10 +202,10 @@
 		// Attach events and properties data (use cryptic private fields for class storage)
 		var events = construct.__events = config.events || {};
 		var properties = construct.__properties = config.properties || {};
-		
+
 		// Prototype (stuff attached to all instances)
 		var proto = construct.prototype;
-	
+
 		// Assign generic toString() method
 		// This is assigned before mixins or members are applied
 		proto.toString = function() {
@@ -217,9 +217,9 @@
 		//   POOLING
 		// ------------------------------------
 
-		if (config.pooling) 
+		if (config.pooling)
 		{
-			(function(poolConfig) 
+			(function(poolConfig)
 			{
 				var max = poolConfig.max || 25;
 				var pool = new Array(max);
@@ -238,7 +238,7 @@
 				/**
 				 * Releases the given @obj {Object}.
 				 */
-				construct.release = function(obj) 
+				construct.release = function(obj)
 				{
 					if (length < max) {
 						pool[length++] = obj;
@@ -249,7 +249,7 @@
 				 * {Object} Obtains a new object from the pool or create one
 				 * dynamically based on the given constructor arguments.
 				 */
-				construct.obtain = function(varargs) 
+				construct.obtain = function(varargs)
 				{
 					if (length > 0)
 					{
@@ -277,7 +277,7 @@
 				/**
 				 * Releases the object to the pool.
 				 */
-				proto.release = function() 
+				proto.release = function()
 				{
 					if (length < max) {
 						pool[length++] = this;
@@ -286,31 +286,31 @@
 
 			})(config.pooling);
 		}
-	
-	
+
+
 		// ------------------------------------
 		//	 MIXINS
 		// ------------------------------------
-	
+
 		// Insert other classes
 		var include = config.include;
-		if (include) 
+		if (include)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				for (var i=0, l=include.length; i<l; i++) {
 					core.Class.assertIsClass(include[i], "Class " + name + " includes invalid class " + include[i] + " at position: " + i + "!");
 				}
-				
+
 				checkMixinMemberConflicts(include, config.members, name);
 				checkMixinEventConflicts(include, config.events, name);
 				checkMixinPropertyConflicts(include, config.properties, name);
 			}
-			
+
 			// Copy over list to class constructor
 			construct.__includes = include;
 
-			for (var i=0, l=include.length; i<l; i++) 
+			for (var i=0, l=include.length; i<l; i++)
 			{
 				var includedClass = include[i];
 
@@ -318,7 +318,7 @@
 				if (includedClass.__includes) {
 					include.push.apply(include, includedClass.__includes);
 				}
-				
+
 				// Just remap members. Validation already happended in debug mode.
 				// Function name keeps to be the same after inclusion. Still refering to original class.
 				var includeMembers = includedClass.prototype;
@@ -330,19 +330,19 @@
 				var includeProperties = includedClass.__properties;
 				for (var key in includeProperties) {
 					var property = {};
-					
+
 					var includeProperty = includeProperties[key];
 					for (var key2 in includeProperty) {
 						property[key2] = includeProperty[key2];
 					}
-					
+
 					var ownProperty = properties && properties[key];
 					if (ownProperty) {
 						for (var key2 in ownProperty) {
 							property[key2] = ownProperty[key2];
 						}
 					}
-					
+
 					properties[key] = property;
 				}
 
@@ -352,23 +352,23 @@
 					events[key] = includeEvents[key];
 				}
 			}
-		} 
-	
-	
-	
+		}
+
+
+
 		// ------------------------------------
 		//	 LOCALS
 		// ------------------------------------
-	
+
 		// Add properties
-		for (var propertyName in properties) 
+		for (var propertyName in properties)
 		{
 			var propertyConfig = properties[propertyName];
-			
+
 			// Inject property name into config
 			propertyConfig.name = propertyName;
 
-			// Create members via specific property implementation 
+			// Create members via specific property implementation
 			if (propertyConfig.group) {
 				var propertyMembers = core.property.Group.create(propertyConfig);
 			} else if (propertyConfig.themeable || propertyConfig.inheritable) {
@@ -377,34 +377,34 @@
 			} else {
 				var propertyMembers = core.property.Simple.create(propertyConfig);
 			}
-			
+
 			// Prepare function names
 			var propertyMethodPostfix = propertyJoinableNames[propertyName];
-			if (propertyMethodPostfix === undef) 
+			if (propertyMethodPostfix === undef)
 			{
 				propertyMethodPostfix = propertyName.charAt(0).toUpperCase() + propertyName.slice(1);
 				propertyJoinableNames[propertyName] = propertyMethodPostfix;
 			}
-			
+
 			// Attach property methods
-			for (var propertyMemberKey in propertyMembers) 
+			for (var propertyMemberKey in propertyMembers)
 			{
 				var propertyMemberName = propertyMemberKey + propertyMethodPostfix;
 				var propertyMember = propertyMembers[propertyMemberKey];
-				
+
 				proto[propertyMemberName] = propertyMember;
 				propertyMember.displayName = name + "." + propertyMemberName;
 			}
 		}
-		
-		
+
+
 		// Attach members
 		var members = config.members;
-		if (members) 
+		if (members)
 		{
-			for (var key in members) 
+			for (var key in members)
 			{
-				// Chrome as of version 22 does not support displayName: 
+				// Chrome as of version 22 does not support displayName:
 				// https://code.google.com/p/chromium/issues/detail?id=17356
 				var entry = proto[key] = members[key];
 				if (entry instanceof Function) {
@@ -412,20 +412,20 @@
 				}
 			}
 		}
-	
-	
-	
+
+
+
 		// ------------------------------------
 		//	 INTERFACES
 		// ------------------------------------
-	
-		if (jasy.Env.isSet("debug")) 
+
+		if (jasy.Env.isSet("debug"))
 		{
 			var implement = config.implement;
-			if (implement) 
+			if (implement)
 			{
 				var iface;
-				for (var i=0, l=implement.length; i<l; i++) 
+				for (var i=0, l=implement.length; i<l; i++)
 				{
 					iface = implement[i];
 					if (!iface) {
@@ -439,9 +439,9 @@
 					}
 				}
 			}
-			
+
 			var propertyFeatures = Class.getPropertyFeatures(construct);
-			if (propertyFeatures) 
+			if (propertyFeatures)
 			{
 				if (propertyFeatures.fire) {
 					core.Interface.assert(construct, core.property.IEvent);
@@ -456,12 +456,12 @@
 				}
 			}
 		}
-		
-		
+
+
 		// ------------------------------------
 		//	 FINISH
 		// ------------------------------------
-		
+
 		// Attach to namespace
 		core.Main.declareNamespace(name, construct);
 
@@ -471,23 +471,23 @@
 		}
 	});
 
-	
+
 	// Shorthand
 	var Class = core.Class;
 
-	
+
 	/**
 	 * {Boolean} Returns whether the given @object {Object} is a class.
 	 */
 	var isClass = function(object) {
 		return !!(object && typeof object == "function" && object.__isClass);
 	};
-	
-	
+
+
 	/**
 	 * Throws an error with a custom @message {String?} when the given @object {var} is not a class.
 	 */
-	var assertIsClass = function(object, message) 
+	var assertIsClass = function(object, message)
 	{
 		if (!isClass(object)) {
 			throw new Error(message || "Invalid class: " + object);
@@ -495,16 +495,16 @@
 	};
 
 
-	core.Main.addStatics("core.Class", 
+	core.Main.addStatics("core.Class",
 	{
 		isClass : isClass,
 		assertIsClass: assertIsClass,
-		
-		
+
+
 		/**
 		 * {core.Class} Resolves a given @className {String}
 		 */
-		getByName : function(className) 
+		getByName : function(className)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Assert.isType(className, "String");
@@ -518,7 +518,7 @@
 		/**
 		 * {Map} Returns a map of all events and their type of the given class (@cls {core.Class}).
 		 */
-		getEvents : function(cls) 
+		getEvents : function(cls)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Class.assertIsClass(cls);
@@ -531,7 +531,7 @@
 		/**
 		 * {Map} Returns a map of all properties and their configuration supported by the given class (@cls {core.Class}).
 		 */
-		getProperties : function(cls) 
+		getProperties : function(cls)
 		{
 			if (jasy.Env.isSet("debug")) {
 				core.Class.assertIsClass(cls);
@@ -544,7 +544,7 @@
 		/**
 		 * {Map} Returns all property features used in the given class (@cls {core.Class}).
 		 */
-		getPropertyFeatures : function(cls) 
+		getPropertyFeatures : function(cls)
 		{
 			var all = {};
 			var properties = cls.__properties;
@@ -566,9 +566,9 @@
 		 * - @cls {core.Class} Class to check for including other class.
 		 * - @inc {core.Class} Class for checking if being included into first one.
 		 */
-		includesClass : function(cls, inc) 
+		includesClass : function(cls, inc)
 		{
-			if (jasy.Env.isSet("debug")) 
+			if (jasy.Env.isSet("debug"))
 			{
 				core.Class.assertIsClass(cls, "Class to check for wether it includes class " + inc + " is itself not a class " + cls + "!");
 				core.Class.assertIsClass(inc, "Class to check for being included is not a class: " + inc + "!");

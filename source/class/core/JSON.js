@@ -76,7 +76,7 @@
       // `Str(key, holder)`, `JO(value)`, and `JA(value)` operations.
       var serialize = function (property, object, callback, properties, whitespace, indentation, stack)
       {
-        var value = object[property], className, year, month, date, time, hours, minutes, seconds, milliseconds, results, element, index, length, prefix, any, result;
+        var value = object[property], className, date, results, element, index, length, prefix, any, result;
         if ((typeof value == "object" || typeof value == "function") && value)
         {
           if (typeof value.toJSON == "function") {

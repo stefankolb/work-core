@@ -11,7 +11,7 @@
 /**
  * Declarations of simple modules with static members
  */
-(function(undef)
+(function()
 {
 	var genericToString = function() {
 		return "[module " + this.moduleName + "]";
@@ -78,7 +78,7 @@
 	 * {Boolean} Returns whether the given @name {String} is a valid module name.
 	 */
 	var isModuleName = function(name) {
-		return /^(([a-z][a-z0-9]*\.)*)([A-Z][a-zA-Z0-9]*)$/.test(name);
+		return (/^(([a-z][a-z0-9]*\.)*)([A-Z][a-zA-Z0-9]*)$/).test(name);
 	};
 
 	/**

@@ -80,17 +80,17 @@
 	 * Main sha256 function, with its support functions
 	 */
 	function S (X, n) {return ( X >>> n ) | (X << (32 - n));}
-	function sha256_R (X, n) {return ( X >>> n );}
-	function sha256_Ch(x, y, z) {return ((x & y) ^ ((~x) & z));}
-	function sha256_Maj(x, y, z) {return ((x & y) ^ (x & z) ^ (y & z));}
+	function R (X, n) {return ( X >>> n );}
+	function Ch(x, y, z) {return ((x & y) ^ ((~x) & z));}
+	function Maj(x, y, z) {return ((x & y) ^ (x & z) ^ (y & z));}
 	function sigma0256(x) {return (S(x, 2) ^ S(x, 13) ^ S(x, 22));}
 	function sigma1256(x) {return (S(x, 6) ^ S(x, 11) ^ S(x, 25));}
-	function gamma0256(x) {return (S(x, 7) ^ S(x, 18) ^ sha256_R(x, 3));}
-	function gamma1256(x) {return (S(x, 17) ^ S(x, 19) ^ sha256_R(x, 10));}
+	function gamma0256(x) {return (S(x, 7) ^ S(x, 18) ^ R(x, 3));}
+	function gamma1256(x) {return (S(x, 17) ^ S(x, 19) ^ R(x, 10));}
 	function sigma0512(x) {return (S(x, 28) ^ S(x, 34) ^ S(x, 39));}
 	function sigma1512(x) {return (S(x, 14) ^ S(x, 18) ^ S(x, 41));}
-	function gamma0512(x) {return (S(x, 1)	^ S(x, 8) ^ sha256_R(x, 7));}
-	function gamma1512(x) {return (S(x, 19) ^ S(x, 61) ^ sha256_R(x, 6));}
+	function gamma0512(x) {return (S(x, 1)	^ S(x, 8) ^ R(x, 7));}
+	function gamma1512(x) {return (S(x, 19) ^ S(x, 61) ^ R(x, 6));}
 
 	var K =
 	[
@@ -134,8 +134,8 @@
 				if (j < 16) W[j] = m[j + i];
 				else W[j] = safeAdd(safeAdd(safeAdd(gamma1256(W[j - 2]), W[j - 7]), gamma0256(W[j - 15])), W[j - 16]);
 
-				T1 = safeAdd(safeAdd(safeAdd(safeAdd(h, sigma1256(e)), sha256_Ch(e, f, g)), K[j]), W[j]);
-				T2 = safeAdd(sigma0256(a), sha256_Maj(a, b, c));
+				T1 = safeAdd(safeAdd(safeAdd(safeAdd(h, sigma1256(e)), Ch(e, f, g)), K[j]), W[j]);
+				T2 = safeAdd(sigma0256(a), Maj(a, b, c));
 
 				h = g;
 				g = f;

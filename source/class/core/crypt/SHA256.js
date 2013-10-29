@@ -75,7 +75,6 @@
 		}
 	});
 
-
 	/*
 	 * Main sha256 function, with its support functions
 	 */
@@ -127,8 +126,11 @@
 
 			for(j = 0; j < 64; j++)
 			{
-				if (j < 16) W[j] = m[j + i];
-				else W[j] = safeAdd(safeAdd(safeAdd(gamma1256(W[j - 2]), W[j - 7]), gamma0256(W[j - 15])), W[j - 16]);
+				if (j < 16) {
+					W[j] = m[j + i];
+				} else {
+					W[j] = safeAdd(safeAdd(safeAdd(gamma1256(W[j - 2]), W[j - 7]), gamma0256(W[j - 15])), W[j - 16]);
+				}
 
 				T1 = safeAdd(safeAdd(safeAdd(safeAdd(h, sigma1256(e)), Ch(e, f, g)), K[j]), W[j]);
 				T2 = safeAdd(sigma0256(a), Maj(a, b, c));

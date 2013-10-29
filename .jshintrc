@@ -75,12 +75,6 @@
     "wsh"           : false,    // Windows Scripting Host
     "yui"           : false,    // Yahoo User Interface
 
-    // Legacy
-    "nomen"         : false,    // true: Prohibit dangling `_` in variables
-    "onevar"        : false,    // true: Allow only one `var` statement per function
-    "passfail"      : false,    // true: Stop on first error
-    "white"         : false,    // true: Check against strict whitespace and indentation rules
-
     // Custom Globals
     "globals"       : {"core":false, "jasy":false}        // additional predefined global variables
 }

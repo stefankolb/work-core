@@ -11,6 +11,8 @@
 
 "use strict";
 
+/* jshint bitwise:false */
+
 (function (global)
 {
 	var btoa = global.btoa;

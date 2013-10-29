@@ -7,6 +7,8 @@
 
 "use strict";
 
+/* jshint bitwise:false */
+
 (function() {
 
 	var getRandomByte;

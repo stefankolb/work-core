@@ -7,6 +7,8 @@
 
 "use strict";
 
+/* jshint -W098 */
+
 (function()
 {
   var console = core.Main.getGlobal().console;

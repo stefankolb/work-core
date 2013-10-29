@@ -7,6 +7,9 @@
 
 "use strict";
 
+/* jshint bitwise:false */
+/* jshint -W116 */
+
 /*
 Again rewrapped to be part of core - Sebastian Fastner
 Found at https://gist.github.com/banksean/300494
@@ -38,7 +41,7 @@ A C-program for MT19937, with initialization improved 2002/1/26.
 Coded by Takuji Nishimura and Makoto Matsumoto.
 
 Before using, initialize the state by using init_genrand(seed)
-or init_by_array(init_key, key_length).
+or init_by_array(initKey, keyLength).
 
 Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
 All rights reserved.
@@ -120,18 +123,18 @@ email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 			},
 
 			/* initialize by an array with array-length */
-			/* init_key is the array for initializing keys */
-			/* key_length is its length */
+			/* initKey is the array for initializing keys */
+			/* keyLength is its length */
 			/* slight change for C++, 2004/2/26 */
-			initByArray : function(init_key, key_length) {
+			initByArray : function(initKey, keyLength) {
 				var i, j, k;
 				this.__initGenrand(19650218);
 				i = 1;
 				j = 0;
-				k = (N > key_length ? N : key_length);
+				k = (N > keyLength ? N : keyLength);
 				for (; k; k--) {
 					var s = this.__mt[i - 1] ^ (this.__mt[i - 1] >>> 30)
-					this.__mt[i] = (this.__mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) + ((s & 0x0000ffff) * 1664525))) + init_key[j] + j; /* non linear */
+					this.__mt[i] = (this.__mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) + ((s & 0x0000ffff) * 1664525))) + initKey[j] + j; /* non linear */
 					this.__mt[i] >>>= 0; /* for WORDSIZE > 32 machines */
 					i++;
 					j++;
@@ -139,7 +142,7 @@ email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 						this.__mt[0] = this.__mt[N - 1];
 						i = 1;
 					}
-					if (j >= key_length) j = 0;
+					if (j >= keyLength) j = 0;
 				}
 				for (k = N - 1; k; k--) {
 					var s = this.__mt[i - 1] ^ (this.__mt[i - 1] >>> 30);

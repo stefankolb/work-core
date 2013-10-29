@@ -117,7 +117,7 @@
           // Length differences
           if (!myFragment || !otherFragment)
           {
-            if (i == 0) {
+            if (i === 0) {
               return "jump";
             } else if (!myFragment) {
               return "in";
@@ -161,16 +161,16 @@
 
           return destination;
         }
-        else if (fragment == "" && jasy.Env.isSet("debug"))
+        else if (fragment === "" && jasy.Env.isSet("debug"))
         {
           throw new Error("Invalid link!");
         }
-        else if (relation == "top")
+        else if (relation === "top")
         {
           // Replace current structure path with top level page
           var destination = core.util.HashPath.obtain(fragment);
         }
-        else if (relation == "same")
+        else if (relation === "same")
         {
           // New page replaces current page
           var destination = this.clone();

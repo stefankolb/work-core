@@ -7,6 +7,8 @@
 
 "use strict";
 
+/* jshint bitwise:false */
+
 (function() {
 
 	var MASK = [0, 1, 3, 7, 15, 31, 63];
@@ -96,7 +98,9 @@
 	 */
 	var decompress64 = function(encodedText) {
 		var marker = codePointAt(encodedText, 0);
-		if ((marker >> 4) !== MARKERINT) return encodedText;
+		if ((marker >> 4) !== MARKERINT) {
+			return encodedText;
+		}
 
 		var lastBits = 16 - (marker & 0x0f);
 		var encodedTextLength = encodedText.length - 1;

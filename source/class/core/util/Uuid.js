@@ -7,6 +7,8 @@
 
 "use strict";
 
+/* jshint bitwise:false */
+
 (function()
 {
 	var Random = core.util.Random;
@@ -77,7 +79,8 @@
 				uuidStrArray5[i] = hexTable[uuidBytes[i + 10]];
 			}
 
-			return uuidStrArray1.join("") + "-" + uuidStrArray2.join("") + "-" + uuidStrArray3.join("") + "-" + uuidStrArray4.join("") + "-" + uuidStrArray5.join("");
+			return uuidStrArray1.join("") + "-" + uuidStrArray2.join("") + "-" +
+				uuidStrArray3.join("") + "-" + uuidStrArray4.join("") + "-" + uuidStrArray5.join("");
 		},
 
 

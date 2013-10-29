@@ -25,6 +25,7 @@
 
 			case 2:
 				data[2] = data[0];
+				/* jshint -W086 */
 				// no break here
 
 			case 3:
@@ -65,10 +66,9 @@
 			var shorthand = config.shorthand;
 			var group = config.group;
 			var length = group.length;
-			var self = this;
 
 			return {
-				set : function(first, second, third, fourth)
+				set : function(first /*, second, third, fourth*/)
 				{
 					var data = arguments.length > 1 ? arguments : first;
 					if (shorthand) {

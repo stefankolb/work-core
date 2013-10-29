@@ -8,6 +8,8 @@
 
 "use strict";
 
+/* jshint -W098 */
+
 /**
  * For classes which use event firing properties.
  */

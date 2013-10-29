@@ -60,8 +60,8 @@
 				bkey = binb(bkey, key.length * 8);
 			}
 
-			var ipad = Array(16);
-			var opad = Array(16);
+			var ipad = new Array(16);
+			var opad = new Array(16);
 
 			for (var i = 0; i < 16; i++)
 			{
@@ -84,7 +84,7 @@
 		x[len >> 5] |= 0x80 << (24 - len % 32);
 		x[((len + 64 >> 9) << 4) + 15] = len;
 
-		var w = Array(80);
+		var w = new Array(80);
 
 		var a = 1732584193;
 		var b = -271733879;
@@ -124,7 +124,7 @@
 			e = safeAdd(e, olde);
 		}
 
-		return Array(a, b, c, d, e);
+		return new Array(a, b, c, d, e);
 	}
 
 	/*

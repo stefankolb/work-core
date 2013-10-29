@@ -87,8 +87,14 @@
 				var c = ((b3 & 0x3) << 6) | (b4 & 0x3F);
 
 				chars.push(fromCharCode(a));
-				b && chars.push(fromCharCode(b));
-				c && chars.push(fromCharCode(c));
+
+				if (b) {
+					chars.push(fromCharCode(b));
+				}
+
+				if (c) {
+					chars.push(fromCharCode(c));
+				}
 			}
 
 			return chars.join("");

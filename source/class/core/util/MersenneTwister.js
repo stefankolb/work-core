@@ -95,8 +95,9 @@ email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 	core.Class("core.util.MersenneTwister", {
 
 		construct : function(seed) {
-			if (seed == undefined) {
-				 seed = Date.now();
+			var undef;
+			if (seed === undef) {
+				seed = Date.now();
 			}
 
 			this.__mt = new Array(N); /* the array for the state vector */
@@ -133,8 +134,9 @@ email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 				j = 0;
 				k = (N > keyLength ? N : keyLength);
 				for (; k; k--) {
-					var s = this.__mt[i - 1] ^ (this.__mt[i - 1] >>> 30)
-					this.__mt[i] = (this.__mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) + ((s & 0x0000ffff) * 1664525))) + initKey[j] + j; /* non linear */
+					var s = this.__mt[i - 1] ^ (this.__mt[i - 1] >>> 30);
+					this.__mt[i] = (this.__mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) +
+						((s & 0x0000ffff) * 1664525))) + initKey[j] + j; /* non linear */
 					this.__mt[i] >>>= 0; /* for WORDSIZE > 32 machines */
 					i++;
 					j++;
@@ -146,7 +148,8 @@ email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 				}
 				for (k = N - 1; k; k--) {
 					var s = this.__mt[i - 1] ^ (this.__mt[i - 1] >>> 30);
-					this.__mt[i] = (this.__mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1566083941) << 16) + (s & 0x0000ffff) * 1566083941)) - i; /* non linear */
+					this.__mt[i] = (this.__mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1566083941) << 16) +
+						(s & 0x0000ffff) * 1566083941)) - i; /* non linear */
 					this.__mt[i] >>>= 0; /* for WORDSIZE > 32 machines */
 					i++;
 					if (i >= N) {

@@ -45,7 +45,7 @@
     {
       var result = cache[what];
       if (result !== null) {
-        result = cache[what] = find(object, what)
+        result = cache[what] = find(object, what);
       }
 
       return result;

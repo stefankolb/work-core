@@ -31,7 +31,7 @@
 
   var createDelayed = function(nativeMethod)
   {
-    return function(callback, context, delay, args)
+    return function(callback, context, delay)
     {
       if (jasy.Env.isSet("debug"))
       {

@@ -40,6 +40,8 @@
 				context = global;
 			}
 
+			/* global ActiveXObject : false */
+
 			var timeoutHandle = null;
 			var request = XHR ? new XHR : new ActiveXObject("Microsoft.XMLHTTP");
 

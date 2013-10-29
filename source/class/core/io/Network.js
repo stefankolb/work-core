@@ -42,7 +42,7 @@
 	};
 
 
-	var onStateChange = function(e)
+	var onStateChange = function()
 	{
 		if (request.readyState == 4)
 		{
@@ -57,6 +57,8 @@
 
 	var detectOnline = function()
 	{
+		/* global ActiveXObject : false */
+
 		// IE vs. standard XHR creation
 		request = XHR ? new XHR : new ActiveXObject("Microsoft.XMLHTTP");
 		request.onreadystatechange = onStateChange;

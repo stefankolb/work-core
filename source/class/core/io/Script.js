@@ -34,7 +34,7 @@
 					var uri = arguments[i];
 					eval("//@ sourceURL=" + uri + "\n" + Fs.readFileSync(uri, "utf-8"));
 				}
-			}
+			};
 		})();
 	}
 
@@ -53,8 +53,10 @@
 
 
 		/**
-		 * Loads a JavaScript file from the given @uri {String} and fires a @callback {Function} (in @context {Object?}) when the script was loaded.
-		 * Optionally appends an random `GET` parameter to omit caching when @nocache {Boolean?false} is enabled..
+		 * Loads a JavaScript file from the given @uri {String} and fires a
+		 * @callback {Function} (in @context {Object?}) when the script was loaded.
+		 * Optionally appends an random `GET` parameter to omit caching when
+		 * @nocache {Boolean?false} is enabled..
 		 */
 		load : function(uri, callback, context, nocache)
 		{
@@ -124,6 +126,7 @@
 					else if (e.type == "load" || (/loaded|complete/.test(elem.readyState) && (!doc.documentMode || doc.documentMode < 9)))
 					{
 						// ready
+						// jshint -W035
 					}
 					else
 					{

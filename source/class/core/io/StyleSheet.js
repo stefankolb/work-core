@@ -101,7 +101,7 @@
 					try
 					{
 						// MAGIC: only populated when file is loaded
-						style.sheet.cssRules;
+						style.sheet.cssRules; // jshint ignore:line
 
 						clearInterval(handle);
 						if (callback) {

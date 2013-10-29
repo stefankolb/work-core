@@ -220,14 +220,12 @@ core.Class("core.event.Promise",
 		{
 			return this.then(null, function(reason) 
 			{
-				if (reason instanceof Error) 
-				{
-					throw reason;
-				}
-				else if (jasy.Env.isSet("debug"))
+				if (jasy.Env.isSet("debug"))
 				{
 					console.error("Promise rejected: ", reason);
 				}
+
+				throw reason;
 			}, null, false);
 		}
 	}

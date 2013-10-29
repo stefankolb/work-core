@@ -4,7 +4,7 @@ import jasy.vcs.Repository as Repository
 from jasy.core.OutputManager import OutputManager
 from jasy.core.FileManager import FileManager
 from jasy.asset.Manager import AssetManager
-from jasy.js.Resolver import Resolver
+from jasy.js.Resolver import Resolver as ScriptResolver
 from jasy.js.api.Writer import ApiWriter
 from jasy.core.Util import executeCommand
 
@@ -34,7 +34,7 @@ def api():
     outputManager.deployAssets(["core.apibrowser.Browser"])
 
     # Write kernel script
-    outputManager.storeKernel("{{prefix}}/script/kernel.js", bootCode="core.apibrowser.Kernel.init();")
+    outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="core.apibrowser.Kernel.init();")
 
     # Copy files from source
     fileManager.updateFile(sourceFolder + "/apibrowser.html", "{{prefix}}/index.html")
@@ -48,10 +48,10 @@ def api():
     for permutation in session.permutate():
         
         # Resolving dependencies
-        resolver = Resolver(session).addClassName("core.apibrowser.Browser")
+        resolver = ScriptResolver(session).add("core.apibrowser.Browser")
 
         # Compressing classes
-        outputManager.storeCompressed(resolver.getSortedClasses(), "{{prefix}}/script/apibrowser-{{id}}.js", "new core.apibrowser.Browser;")
+        outputManager.storeCompressedScript(resolver.getSorted(), "{{prefix}}/script/apibrowser-{{id}}.js", "new core.apibrowser.Browser;")
 
     # Write API data
     ApiWriter(session).write("{{prefix}}/data")
@@ -101,15 +101,15 @@ def test_source(main="test.Main"):
     fileManager = FileManager(session)
     
     # Store kernel script
-    outputManager.storeKernel("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
+    outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
     
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName(main).getSortedClasses()
+        classes = ScriptResolver(session).add(main).getSorted()
 
         # Writing source loader
-        outputManager.storeLoader(classes, "{{prefix}}/script/test-{{id}}.js")
+        outputManager.storeLoaderScript(classes, "{{prefix}}/script/test-{{id}}.js")
 
 
 @share
@@ -130,7 +130,7 @@ def test_build(main="test.Main"):
     outputManager.deployAssets([main])
 
     # Store kernel script
-    outputManager.storeKernel("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
+    outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
 
     # Copy files from source
     for name in ["index.html", "phantom.js", "node.js"]:
@@ -139,10 +139,10 @@ def test_build(main="test.Main"):
     for permutation in session.permutate():
 
         # Resolving dependencies
-        classes = Resolver(session).addClassName(main).getSortedClasses()
+        classes = ScriptResolver(session).add(main).getSorted()
 
         # Compressing classes
-        outputManager.storeCompressed(classes, "{{prefix}}/script/test-{{id}}.js")
+        outputManager.storeCompressedScript(classes, "{{prefix}}/script/test-{{id}}.js")
 
     
 def test_phantom():

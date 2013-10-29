@@ -9,6 +9,8 @@
 
 (function()
 {
+  /* jshint bitwise:false */
+
   /** {=Array} Used for looking up hex characters */
   var hexTable = "0123456789abcdef".split("");
 

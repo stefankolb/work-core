@@ -38,7 +38,7 @@
 		checksumAsByteArray : function(str)
 		{
 			str = StringUtil.encodeUtf8(str);
-			return Util.bigEndianToByteArray(binb_sha256(Util.rawStringToBigEndian(str), str.length * 8));
+			return Util.bigEndianToByteArray(binb(Util.rawStringToBigEndian(str), str.length * 8));
 		},
 
 
@@ -58,7 +58,7 @@
 
 			var bkey = Util.rawStringToBigEndian(key);
 			if (bkey.length > 16) {
-				bkey = binb_sha256(bkey, key.length * 8);
+				bkey = binb(bkey, key.length * 8);
 			}
 
 			var ipad = Array(16);
@@ -70,8 +70,8 @@
 				opad[i] = bkey[i] ^ 0x5C5C5C5C;
 			}
 
-			var hash = binb_sha256(ipad.concat(Util.rawStringToBigEndian(str)), 512 + str.length * 8);
-			return Util.bigEndianToRawString(binb_sha256(opad.concat(hash), 512 + 256));
+			var hash = binb(ipad.concat(Util.rawStringToBigEndian(str)), 512 + str.length * 8);
+			return Util.bigEndianToRawString(binb(opad.concat(hash), 512 + 256));
 		}
 	});
 
@@ -79,20 +79,21 @@
 	/*
 	 * Main sha256 function, with its support functions
 	 */
-	function sha256_S (X, n) {return ( X >>> n ) | (X << (32 - n));}
+	function S (X, n) {return ( X >>> n ) | (X << (32 - n));}
 	function sha256_R (X, n) {return ( X >>> n );}
 	function sha256_Ch(x, y, z) {return ((x & y) ^ ((~x) & z));}
 	function sha256_Maj(x, y, z) {return ((x & y) ^ (x & z) ^ (y & z));}
-	function sha256_Sigma0256(x) {return (sha256_S(x, 2) ^ sha256_S(x, 13) ^ sha256_S(x, 22));}
-	function sha256_Sigma1256(x) {return (sha256_S(x, 6) ^ sha256_S(x, 11) ^ sha256_S(x, 25));}
-	function sha256_Gamma0256(x) {return (sha256_S(x, 7) ^ sha256_S(x, 18) ^ sha256_R(x, 3));}
-	function sha256_Gamma1256(x) {return (sha256_S(x, 17) ^ sha256_S(x, 19) ^ sha256_R(x, 10));}
-	function sha256_Sigma0512(x) {return (sha256_S(x, 28) ^ sha256_S(x, 34) ^ sha256_S(x, 39));}
-	function sha256_Sigma1512(x) {return (sha256_S(x, 14) ^ sha256_S(x, 18) ^ sha256_S(x, 41));}
-	function sha256_Gamma0512(x) {return (sha256_S(x, 1)	^ sha256_S(x, 8) ^ sha256_R(x, 7));}
-	function sha256_Gamma1512(x) {return (sha256_S(x, 19) ^ sha256_S(x, 61) ^ sha256_R(x, 6));}
+	function sigma0256(x) {return (S(x, 2) ^ S(x, 13) ^ S(x, 22));}
+	function sigma1256(x) {return (S(x, 6) ^ S(x, 11) ^ S(x, 25));}
+	function gamma0256(x) {return (S(x, 7) ^ S(x, 18) ^ sha256_R(x, 3));}
+	function gamma1256(x) {return (S(x, 17) ^ S(x, 19) ^ sha256_R(x, 10));}
+	function sigma0512(x) {return (S(x, 28) ^ S(x, 34) ^ S(x, 39));}
+	function sigma1512(x) {return (S(x, 14) ^ S(x, 18) ^ S(x, 41));}
+	function gamma0512(x) {return (S(x, 1)	^ S(x, 8) ^ sha256_R(x, 7));}
+	function gamma1512(x) {return (S(x, 19) ^ S(x, 61) ^ sha256_R(x, 6));}
 
-	var sha256_K = [
+	var K =
+	[
 		1116352408, 1899447441, -1245643825, -373957723, 961987163, 1508970993,
 		-1841331548, -1424204075, -670586216, 310598401, 607225278, 1426881987,
 		1925078388, -2132889090, -1680079193, -1046744716, -459576895, -272742522,
@@ -106,7 +107,7 @@
 		-1866530822, -1538233109, -1090935817, -965641998
 	];
 
-	function binb_sha256(m, l)
+	function binb(m, l)
 	{
 		var HASH = [1779033703, -1150833019, 1013904242, -1521486534, 1359893119, -1694144372, 528734635, 1541459225];
 		var W = new Array(64);
@@ -131,34 +132,34 @@
 			for(j = 0; j < 64; j++)
 			{
 				if (j < 16) W[j] = m[j + i];
-				else W[j] = safe_add(safe_add(safe_add(sha256_Gamma1256(W[j - 2]), W[j - 7]), sha256_Gamma0256(W[j - 15])), W[j - 16]);
+				else W[j] = safeAdd(safeAdd(safeAdd(gamma1256(W[j - 2]), W[j - 7]), gamma0256(W[j - 15])), W[j - 16]);
 
-				T1 = safe_add(safe_add(safe_add(safe_add(h, sha256_Sigma1256(e)), sha256_Ch(e, f, g)), sha256_K[j]), W[j]);
-				T2 = safe_add(sha256_Sigma0256(a), sha256_Maj(a, b, c));
+				T1 = safeAdd(safeAdd(safeAdd(safeAdd(h, sigma1256(e)), sha256_Ch(e, f, g)), K[j]), W[j]);
+				T2 = safeAdd(sigma0256(a), sha256_Maj(a, b, c));
 
 				h = g;
 				g = f;
 				f = e;
-				e = safe_add(d, T1);
+				e = safeAdd(d, T1);
 				d = c;
 				c = b;
 				b = a;
-				a = safe_add(T1, T2);
+				a = safeAdd(T1, T2);
 			}
 
-			HASH[0] = safe_add(a, HASH[0]);
-			HASH[1] = safe_add(b, HASH[1]);
-			HASH[2] = safe_add(c, HASH[2]);
-			HASH[3] = safe_add(d, HASH[3]);
-			HASH[4] = safe_add(e, HASH[4]);
-			HASH[5] = safe_add(f, HASH[5]);
-			HASH[6] = safe_add(g, HASH[6]);
-			HASH[7] = safe_add(h, HASH[7]);
+			HASH[0] = safeAdd(a, HASH[0]);
+			HASH[1] = safeAdd(b, HASH[1]);
+			HASH[2] = safeAdd(c, HASH[2]);
+			HASH[3] = safeAdd(d, HASH[3]);
+			HASH[4] = safeAdd(e, HASH[4]);
+			HASH[5] = safeAdd(f, HASH[5]);
+			HASH[6] = safeAdd(g, HASH[6]);
+			HASH[7] = safeAdd(h, HASH[7]);
 		}
 		return HASH;
 	}
 
-	function safe_add(x, y)
+	function safeAdd(x, y)
 	{
 		var lsw = (x & 0xFFFF) + (y & 0xFFFF);
 		var msw = (x >> 16) + (y >> 16) + (lsw >> 16);

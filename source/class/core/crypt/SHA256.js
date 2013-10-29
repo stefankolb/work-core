@@ -15,6 +15,8 @@
 
 "use strict";
 
+/* jshint bitwise:false */
+
 (function(Util, StringUtil)
 {
 	/**

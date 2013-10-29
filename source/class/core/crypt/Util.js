@@ -8,6 +8,8 @@
 
 "use strict";
 
+/* jshint bitwise:false */
+
 (function(String)
 {
 	/**
@@ -46,7 +48,7 @@
 		 */
 		rawStringToLittleEndian : function(input)
 		{
-			var output = Array(input.length >> 2);
+			var output = new Array(input.length >> 2);
 
 			for(var i = 0; i < output.length; i++) {
 				output[i] = 0;
@@ -91,7 +93,7 @@
 		 */
 		rawStringToBigEndian : function(input)
 		{
-			var output = Array(input.length >> 2);
+			var output = new Array(input.length >> 2);
 
 			for (var i = 0; i < output.length; i++) {
 				output[i] = 0;

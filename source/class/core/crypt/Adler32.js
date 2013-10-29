@@ -8,6 +8,8 @@
 
 "use strict";
 
+/* jshint bitwise:false */
+
 /**
  * Implements the Adler32 checksum
  *
@@ -34,4 +36,4 @@ core.Module("core.crypt.Adler32",
 
 		return (b << 16) | a;
 	}
-})
+});

@@ -134,7 +134,9 @@
 				}
 
 				// Execute callback
-				if (callback) {
+				if (callback)
+				{
+					/* jshint -W030 */
 					context ? callback.call(context, cache) : callback(cache);
 				}
 			};
@@ -195,6 +197,7 @@
 			// If all scripts are loaded already, just execute the callback
 			if (executeDirectly)
 			{
+				/* jshint -W030 */
 				// Nothing to load, execute callback directly
 				context ? callback.call(context, cache) : callback(cache);
 			}

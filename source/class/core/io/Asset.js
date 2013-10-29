@@ -117,7 +117,7 @@
 				}
 
 				if (core.String.endsWith(section, "/")) {
-					throw new Error("Sections must not end with a slash!")
+					throw new Error("Sections must not end with a slash!");
 				}
 
 				if (recursive != null) {

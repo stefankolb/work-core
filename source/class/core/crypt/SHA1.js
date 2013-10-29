@@ -37,7 +37,7 @@
 		checksumAsByteArray : function(str)
 		{
 			str = StringUtil.encodeUtf8(str);
-			return Util.bigEndianToByteArray(binb_sha1(Util.rawStringToBigEndian(str), str.length * 8));
+			return Util.bigEndianToByteArray(binb(Util.rawStringToBigEndian(str), str.length * 8));
 		},
 
 
@@ -57,7 +57,7 @@
 
 			var bkey = Util.rawStringToBigEndian(key);
 			if (bkey.length > 16) {
-				bkey = binb_sha1(bkey, key.length * 8);
+				bkey = binb(bkey, key.length * 8);
 			}
 
 			var ipad = Array(16);
@@ -69,8 +69,8 @@
 				opad[i] = bkey[i] ^ 0x5C5C5C5C;
 			}
 
-			var hash = binb_sha1(ipad.concat(Util.rawStringToBigEndian(str)), 512 + str.length * 8);
-			return Util.bigEndianToRawString(binb_sha1(opad.concat(hash), 512 + 160));
+			var hash = binb(ipad.concat(Util.rawStringToBigEndian(str)), 512 + str.length * 8);
+			return Util.bigEndianToRawString(binb(opad.concat(hash), 512 + 160));
 		}
 	});
 
@@ -78,7 +78,7 @@
 	/*
 	 * Calculate the SHA-1 of an array of big-endian words, and a bit length
 	 */
-	function binb_sha1(x, len)
+	function binb(x, len)
 	{
 		/* append padding */
 		x[len >> 5] |= 0x80 << (24 - len % 32);
@@ -105,23 +105,23 @@
 				if (j < 16) {
 					w[j] = x[i + j];
 				} else {
-					w[j] = bit_rol(w[j-3] ^ w[j-8] ^ w[j-14] ^ w[j-16], 1);
+					w[j] = bitRol(w[j-3] ^ w[j-8] ^ w[j-14] ^ w[j-16], 1);
 				}
 
-				var t = safe_add(safe_add(bit_rol(a, 5), sha1_ft(j, b, c, d)), safe_add(safe_add(e, w[j]), sha1_kt(j)));
+				var t = safeAdd(safeAdd(bitRol(a, 5), ft(j, b, c, d)), safeAdd(safeAdd(e, w[j]), kt(j)));
 
 				e = d;
 				d = c;
-				c = bit_rol(b, 30);
+				c = bitRol(b, 30);
 				b = a;
 				a = t;
 			}
 
-			a = safe_add(a, olda);
-			b = safe_add(b, oldb);
-			c = safe_add(c, oldc);
-			d = safe_add(d, oldd);
-			e = safe_add(e, olde);
+			a = safeAdd(a, olda);
+			b = safeAdd(b, oldb);
+			c = safeAdd(c, oldc);
+			d = safeAdd(d, oldd);
+			e = safeAdd(e, olde);
 		}
 
 		return Array(a, b, c, d, e);
@@ -131,7 +131,7 @@
 	 * Perform the appropriate triplet combination function for the current
 	 * iteration
 	 */
-	function sha1_ft(t, b, c, d)
+	function ft(t, b, c, d)
 	{
 		if (t < 20) {
 			return (b & c) | ((~b) & d);
@@ -147,7 +147,7 @@
 	/*
 	 * Determine the appropriate additive constant for the current iteration
 	 */
-	function sha1_kt(t) {
+	function kt(t) {
 		return (t < 20) ?	 1518500249 : (t < 40) ?	1859775393 : (t < 60) ? -1894007588 : -899497514;
 	}
 
@@ -155,7 +155,7 @@
 	 * Add integers, wrapping at 2^32. This uses 16-bit operations internally
 	 * to work around bugs in some JS interpreters.
 	 */
-	function safe_add(x, y)
+	function safeAdd(x, y)
 	{
 		var lsw = (x & 0xFFFF) + (y & 0xFFFF);
 		var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
@@ -166,7 +166,7 @@
 	/*
 	 * Bitwise rotate a 32-bit number to the left.
 	 */
-	function bit_rol(num, cnt) {
+	function bitRol(num, cnt) {
 		return (num << cnt) | (num >>> (32 - cnt));
 	}
 

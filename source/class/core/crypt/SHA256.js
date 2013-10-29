@@ -61,8 +61,8 @@
 				bkey = binb(bkey, key.length * 8);
 			}
 
-			var ipad = Array(16);
-			var opad = Array(16);
+			var ipad = new Array(16);
+			var opad = new Array(16);
 
 			for (var i = 0; i < 16; i++)
 			{
@@ -87,10 +87,6 @@
 	function sigma1256(x) {return (S(x, 6) ^ S(x, 11) ^ S(x, 25));}
 	function gamma0256(x) {return (S(x, 7) ^ S(x, 18) ^ R(x, 3));}
 	function gamma1256(x) {return (S(x, 17) ^ S(x, 19) ^ R(x, 10));}
-	function sigma0512(x) {return (S(x, 28) ^ S(x, 34) ^ S(x, 39));}
-	function sigma1512(x) {return (S(x, 14) ^ S(x, 18) ^ S(x, 41));}
-	function gamma0512(x) {return (S(x, 1)	^ S(x, 8) ^ R(x, 7));}
-	function gamma1512(x) {return (S(x, 19) ^ S(x, 61) ^ R(x, 6));}
 
 	var K =
 	[

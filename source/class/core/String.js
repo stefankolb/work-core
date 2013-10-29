@@ -80,7 +80,7 @@
      * Whether the @str {String} contains the given @substring {String}.
      */
     contains : function(str, substring) {
-      return str.indexOf(substring) != -1;
+      return str.indexOf(substring) !== -1;
     },
 
 
@@ -88,7 +88,7 @@
      * {Boolean} Returns true if the @str {String} has a length of 0 or contains only whitespace.
      */
     isBlank : function(str) {
-      return str.trim().length == 0;
+      return str.trim().length === 0;
     },
 
 

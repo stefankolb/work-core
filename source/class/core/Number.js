@@ -46,7 +46,7 @@ core.Module("core.Number",
 		}
 
 		for (var i=0; i<number; i++) {
-			context ? func.call(context) : func();
+			context ? func.call(context) : func(); // jshint: ignore:line
 		}
 	},
 

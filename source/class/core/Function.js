@@ -62,7 +62,7 @@
 
         return nativeMethod(callback, delay);
       }
-    }
+    };
   };
 
   var immediate;
@@ -170,7 +170,7 @@
           }
 
           timeout = null;
-        };
+        }
 
         if (timeout){
           clearTimeout(timeout);

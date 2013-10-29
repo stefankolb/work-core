@@ -47,9 +47,11 @@
 	core.Module("core.io.Queue",
 	{
 		/**
-		 * Loads the given @uris {String[]} and optionally executes the given @callback {Function} with the @context {Object?null} after all are completed.
-		 * One can optionally disable the browser caching using enforced get parameters via the @nocache {Boolean?false} flag. Typically
-		 * the matching loader is figured out automatically based on the file extension but can be controlled using the @type {String?} parameter.
+		 * Loads the given @uris {String[]} and optionally executes the given @callback {Function}
+		 * with the @context {Object?null} after all are completed. One can optionally disable the
+		 * browser caching using enforced get parameters via the @nocache {Boolean?false} flag. Typically
+		 * the matching loader is figured out automatically based on the file extension but can be
+		 * controlled using the @type {String?} parameter.
 		 */
 		load : function(uris, callback, context, nocache, type)
 		{
@@ -148,7 +150,7 @@
 			{
 				var currentUri = uris[i];
 
-				if (jasy.Env.isSet("debug") && (currentUri == "" || currentUri == null)) {
+				if (jasy.Env.isSet("debug") && (currentUri === "" || currentUri == null)) {
 					throw new Error("Invalid URI to load: " + currentUri);
 				}
 

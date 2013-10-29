@@ -112,7 +112,7 @@
 			{
 				core.Assert.isType(section, "String");
 
-				if (section == "") {
+				if (section === "") {
 					throw new Error("Invalid section: " + section);
 				}
 
@@ -183,7 +183,7 @@
 				}
 			}
 
-			if (uris.length == 0)
+			if (uris.length === 0)
 			{
 				// Execute user defined callback method
 				if (callback) {
@@ -454,10 +454,10 @@
 
 					// Calculate position inside sprite image
 					left += (frame % cols) * width;
-					top += (~~(frame / cols)) * height;
+					top += (~~(frame / cols)) * height; // jshint ignore:line
 				}
 			}
-			else if (frame != 0 && jasy.Env.isSet("debug"))
+			else if (frame !== 0 && jasy.Env.isSet("debug"))
 			{
 				throw new Error("Invalid frame number " + frame + " for asset " + id + "!");
 			}

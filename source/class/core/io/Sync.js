@@ -22,7 +22,7 @@
     },
 
     loadScript : function(scriptId) {
-      doc.write("<script src='" + replaceFields(scriptId) + "'></script>")
+      doc.write("<script src='" + replaceFields(scriptId) + "'></script>");
     }
   });
 })();

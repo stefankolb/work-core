@@ -63,7 +63,7 @@
 						height : img.naturalHeight || img.height || 0
 					});
 				}
-			}
+			};
 
 			img.src = uri + (nocache ? dynamicExtension : "");
 		}

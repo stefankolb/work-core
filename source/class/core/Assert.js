@@ -242,13 +242,13 @@
 			if (Object.prototype.hasOwnProperty(a, "length"))
 			{
 				if (a.length === 0) {
-					raise(message || "Value " + a + " must not be empty: " + type);
+					raise(message || "Value " + a + " must not be empty!");
 				}
 			}
 			else if (core.Main.isTypeOf(a, "Map"))
 			{
 				if (!core.Object.isEmpty(a)) {
-					raise(message || "Value " + a + " must not be empty: " + type);
+					raise(message || "Value " + a + " must not be empty!");
 				}
 			}
 		}

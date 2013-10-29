@@ -232,7 +232,7 @@
 			}
 
 			if (position == null) {
-				array.push(value)
+				array.push(value);
 			}
 			else
 			{
@@ -278,7 +278,7 @@
 			}
 
 			var length = array.length;
-			var result = Array(length);
+			var result = new Array(length);
 
 			if (!context) {
 				context = global;
@@ -315,19 +315,6 @@
 			}
 
 			return Math.min.apply(Math, array);
-		},
-
-
-		/**
-		 * Randomizes the @array {Array} via Fisher-Yates algorithm.
-		 */
-		randomize : function(array)
-		{
-			if (jasy.Env.isSet("debug")) {
-				core.Assert.isType(array, "Array");
-			}
-
-			for (var j, x, self=array, i=self.length; i; j = parseInt(Math.random() * i), x = self[--i], self[i] = self[j], self[j] = x);
 		},
 
 
@@ -464,7 +451,6 @@
 		 */
 		toKeys : function(array, value)
 		{
-			var undef;
 			if (value === undef) {
 				value = true;
 			}

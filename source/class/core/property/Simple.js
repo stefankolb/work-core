@@ -50,7 +50,7 @@
 		{
 			/*
 			---------------------------------------------------------------------------
-				 INTRO
+				INTRO
 			---------------------------------------------------------------------------
 			*/
 
@@ -67,7 +67,8 @@
 			// Validation
 			if (jasy.Env.isSet("debug"))
 			{
-				core.Assert.doesOnlyHaveKeys(config, "name,nullable,init,type,fire,apply,cast,validate", "Unallowed keys in property: " + propertyName + "!");
+				core.Assert.doesOnlyHaveKeys(config, "name,nullable,init,type,fire,apply,cast,validate",
+					"Unallowed keys in property: " + propertyName + "!");
 				core.Assert.isType(propertyName, "String");
 
 				if (propertyNullable !== undef) {
@@ -95,8 +96,10 @@
 					 *
 					 * #break(core.Class)
 					 */
-					if (propertyCast && !core.Class.isClass(propertyType)) {
-						throw new Error("Property declaration of " + propertyName + " contains invalid configuration: Casting support requires a core.Class for the type of the property!");
+					if (propertyCast && !core.Class.isClass(propertyType))
+					{
+						throw new Error("Property declaration of " + propertyName +
+							" contains invalid configuration: Casting support requires a core.Class for the type of the property!");
 					}
 				}
 
@@ -120,7 +123,7 @@
 
 			/*
 			---------------------------------------------------------------------------
-				 METHODS :: GET
+				METHODS :: GET
 			---------------------------------------------------------------------------
 			*/
 
@@ -161,7 +164,7 @@
 
 			/*
 			---------------------------------------------------------------------------
-				 METHODS :: INIT
+				METHODS :: INIT
 			---------------------------------------------------------------------------
 			*/
 
@@ -195,7 +198,7 @@
 
 			/*
 			---------------------------------------------------------------------------
-				 METHODS :: SET
+				METHODS :: SET
 			---------------------------------------------------------------------------
 			*/
 
@@ -258,7 +261,7 @@
 
 			/*
 			---------------------------------------------------------------------------
-				 METHODS :: RESET
+				METHODS :: RESET
 			---------------------------------------------------------------------------
 			*/
 
@@ -311,7 +314,7 @@
 
 			/*
 			---------------------------------------------------------------------------
-				 METHODS :: ISVALID
+				METHODS :: ISVALID
 			---------------------------------------------------------------------------
 			*/
 
@@ -352,7 +355,7 @@
 
 			/*
 			---------------------------------------------------------------------------
-				 DONE
+				DONE
 			---------------------------------------------------------------------------
 			*/
 

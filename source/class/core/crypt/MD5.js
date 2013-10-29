@@ -170,8 +170,10 @@
 			d = safeAdd(d, oldd);
 		}
 
-		return Array(a, b, c, d);
+		return new Array(a, b, c, d);
 	};
+
+	/* jshint -W072 */
 
 	/*
 	 * These functions implement the four basic operations the algorithm uses.

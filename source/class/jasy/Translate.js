@@ -6,7 +6,9 @@
 ==================================================================================================
 */
 
-(function(global)
+"use strict";
+
+(function()
 {
 	/** {=Map} Translation table */
 	var translations = {};
@@ -36,7 +38,7 @@
 		 */
 		getEntry : function(basic, plural, context)
 		{
-			var id = basic
+			var id = basic;
 
 			if (context != null) {
 				id += "[C:" + context + "]";
@@ -48,4 +50,4 @@
 		}
 	});
 
-})(core.Main.getGlobal());
+})();

@@ -21,20 +21,21 @@
   // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
   if ([1,2].splice(0).length != 2)
   {
-    var array_splice = ArrayProto.splice;
+    var arraySplice = ArrayProto.splice;
+    var arraySlice = ArrayProto.slice;
 
     ArrayProto.splice = function(start, deleteCount)
     {
       if (!arguments.length)
       {
-         return [];
+        return [];
       }
       else
       {
-        return array_splice.apply(this, [
+        return arraySplice.apply(this, [
           start === undef ? 0 : start,
           deleteCount === undef ? (this.length - start) : deleteCount
-        ].concat(slice.call(arguments, 2)));
+        ].concat(arraySlice.call(arguments, 2)));
       }
     };
   }
@@ -45,11 +46,11 @@
   // IE < 8 bug: [].unshift(0) == undefined but should be "1"
   if ([].unshift(0) != 1)
   {
-    var array_unshift = ArrayProto.unshift;
+    var arrayUnshift = ArrayProto.unshift;
 
     ArrayProto.unshift = function()
     {
-      array_unshift.apply(this, arguments);
+      arrayUnshift.apply(this, arguments);
       return this.length;
     };
   }

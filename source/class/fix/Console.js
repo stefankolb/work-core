@@ -61,6 +61,6 @@
 			if (!expression) {
 				throw new Error(slice.call(arguments, 1).join(" "));
 			}
-		}
+		};
 	}
 })(core.Main.getGlobal(), Array.prototype.slice);

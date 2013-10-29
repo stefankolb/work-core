@@ -51,7 +51,7 @@
 				return null;
 			}
 		});
-	};
+	}
 
 	// otherwise, execScript is `undefined` since nothing is returned
 })(core.Main.getGlobal());

@@ -38,15 +38,15 @@ def api():
 
     # Copy files from source
     fileManager.updateFile(sourceFolder + "/apibrowser.html", "{{prefix}}/index.html")
-    
+
     # Rewrite template as jsonp
     for tmpl in ["main", "error", "entry", "type", "params", "info", "origin", "tags"]:
         jsonTemplate = json.dumps({ "template" : open(sourceFolder + "/tmpl/apibrowser/%s.mustache" % tmpl).read() })
         fileManager.writeFile("{{prefix}}/tmpl/%s.js" % tmpl, "apiload(%s, '%s.mustache')" % (jsonTemplate, tmpl))
-        
+
     # Process every possible permutation
     for permutation in session.permutate():
-        
+
         # Resolving dependencies
         resolver = ScriptResolver(session).add("core.apibrowser.Browser")
 
@@ -83,7 +83,7 @@ def distclean():
     fm.removeDir("source/script")
 
     fm.removeDir("api")
-    fm.removeDir("external")    
+    fm.removeDir("external")
 
 
 @share
@@ -99,10 +99,10 @@ def test_source(main="test.Main"):
     assetManager = AssetManager(session).addSourceProfile()
     outputManager = OutputManager(session, assetManager, compressionLevel=0, formattingLevel=1)
     fileManager = FileManager(session)
-    
+
     # Store kernel script
     outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
-    
+
     for permutation in session.permutate():
 
         # Resolving dependencies
@@ -133,7 +133,7 @@ def test_build(main="test.Main"):
     outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
 
     # Copy files from source
-    for name in ["index.html", "phantom.js", "node.js"]:
+    for name in ["index.html", "testem.html", "phantom.js", "node.js"]:
         fileManager.updateFile("source/%s" % fileName, "{{prefix}}/%s" % fileName)
 
     for permutation in session.permutate():
@@ -144,7 +144,7 @@ def test_build(main="test.Main"):
         # Compressing classes
         outputManager.storeCompressedScript(classes, "{{prefix}}/script/test-{{id}}.js")
 
-    
+
 def test_phantom():
     """Automatically executes tests using PhantomJS"""
 
@@ -190,8 +190,8 @@ def test_testem(browsers=None, root=".."):
     # We need to use a full temporary directory and even a named temporary file
     # is not being guaranteed able to be accessed a second time.
     configDir = tempfile.TemporaryDirectory()
-    pagePath = os.path.join("test", prefix, "index.html")
-    
+    pagePath = os.path.join("test", prefix, "testem.html")
+
     testemConfig = open(os.path.join(configDir.name, "testem.json"), "w")
     testemConfig.write('{"framework": "custom", "test_page" : "' + pagePath + '"}')
     testemConfig.close()
@@ -204,9 +204,11 @@ def test_testem(browsers=None, root=".."):
 
     Console.info("")
     Console.info("Running Testem based test suite...")
+    Console.info("$ testem ci " + browsers + " -f " + testemConfig.name)
 
     # We execute the testem command in the root of the project
     retval = executeCommand("testem ci " + browsers + " -f " + testemConfig.name, path=root, wrapOutput=False)
+    # retval = executeCommand("testem ci " + browsers + " -f test/testem.json", path=root, wrapOutput=False)
     Console.info("")
 
     return retval
@@ -215,7 +217,7 @@ def test_testem(browsers=None, root=".."):
 @share
 def test(target="source", tool="phantom", browsers=None, main="test.Main"):
     """Automatically executes tests in either PhantomJS, NodeJS or Testem CI"""
-    
+
     session.setCurrentPrefix(target)
 
     if target == "source":
@@ -223,7 +225,7 @@ def test(target="source", tool="phantom", browsers=None, main="test.Main"):
     elif target == "build":
         test_build(main=main)
     else:
-        Console.error("Unsupported target: %s" % target)    
+        Console.error("Unsupported target: %s" % target)
 
     if tool == "phantom":
         test_phantom()

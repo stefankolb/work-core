@@ -140,16 +140,13 @@ core.Module("core.testrunner.Controller",
     {
       var self = this;
 
-      core.io.Script.load("/testem.js", function()
+      Testem.useCustomAdapter(function(socket)
       {
-        Testem.useCustomAdapter(function(socket)
-        {
-          self.__testemSocket = socket;
-          socket.emit("tests-start");
+        self.__testemSocket = socket;
+        socket.emit("tests-start");
 
-          self.__reporter.start(suites);
-          self.__runNextSuite();
-        });
+        self.__reporter.start(suites);
+        self.__runNextSuite();
       });
     }
     else

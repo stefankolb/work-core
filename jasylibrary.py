@@ -171,7 +171,7 @@ def test_node():
     return retval
 
 
-def test_testem(browsers=None, root=".."):
+def test_testem(target="source", browsers=None):
     """
     Automatically executes tests using Testem.
 
@@ -185,30 +185,14 @@ def test_testem(browsers=None, root=".."):
     which points to the "real" project's root folder.
     """
 
-    prefix = session.getCurrentPrefix()
-
-    # We need to use a full temporary directory and even a named temporary file
-    # is not being guaranteed able to be accessed a second time.
-    configDir = tempfile.TemporaryDirectory()
-    pagePath = os.path.join("test", prefix, "testem.html")
-
-    testemConfig = open(os.path.join(configDir.name, "testem.json"), "w")
-    testemConfig.write('{"framework": "custom", "test_page" : "' + pagePath + '"}')
-    testemConfig.close()
-
     # Add parameter for browsers - otherwise auto-detected
-    if browsers:
-        browsers = "-l %s" % browsers
-    else:
-        browsers = ""
+    browsers = "-l %s" % browsers if browsers else ""
 
     Console.info("")
     Console.info("Running Testem based test suite...")
-    Console.info("$ testem ci " + browsers + " -f " + testemConfig.name)
 
     # We execute the testem command in the root of the project
-    retval = executeCommand("testem ci " + browsers + " -f " + testemConfig.name, path=root, wrapOutput=False)
-    # retval = executeCommand("testem ci " + browsers + " -f test/testem.json", path=root, wrapOutput=False)
+    retval = executeCommand("testem ci " + browsers + " -f test/testem-" + target + ".json", path=root, wrapOutput=False)
     Console.info("")
 
     return retval
@@ -232,7 +216,7 @@ def test(target="source", tool="phantom", browsers=None, main="test.Main"):
     elif tool == "node":
         test_node()
     elif tool == "testem":
-        test_testem(browsers)
+        test_testem(target, browsers)
     else:
         Console.error("Unsupported tool: %s" % tool)
 

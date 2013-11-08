@@ -1,0 +1,9 @@
+{
+	"name": "test",
+	
+	"requires" : 
+  	[
+		"../../",
+		"https://github.com/sebastian-software/jasy-node.git"
+	]
+}

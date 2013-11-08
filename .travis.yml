@@ -9,10 +9,11 @@ env:
 
 install:
   - pip install git+https://github.com/sebastian-software/jasy.git@1.5-beta1
+  - npm install promises-aplus-tests -g
 
-before_script:
-  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
+#before_script:
+#  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 
 script:
   - cd test && jasy test
-  - ls
+  - cd promises && jasy source && cd source && promises-aplus-tests test.js

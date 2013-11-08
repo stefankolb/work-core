@@ -136,7 +136,7 @@ core.Module("core.testrunner.Controller",
     this.__initReporter(suites);
 
     // Integration with Testem Runner
-    if (jasy.Env.isSet("runtime", "browser") && location.hash == "#testem")
+    if (jasy.Env.isSet("runtime", "browser") && location.pathname.indexOf("testem.html") != -1)
     {
       var self = this;
 

@@ -8,7 +8,7 @@ env:
     - secure: "C2XbqmBXzdBNWnTlDYk8PWHzPw3N0FshDCaW0Flv5z+BSOXPhSNZO60ywnNkK7ZyM/gs6wDNwoy4jfIqBJItxv0I9AUKd/RyLDZibQZzElwxXQEpvfQpckKH16flfnswanzUm89LS/LQUVITlkPrQ7Me3CxNp5o2DkyOPcCE1g0="
 
 install:
-  - pip install git+https://github.com/sebastian-software/jasy.git@master
+  - pip install git+https://github.com/sebastian-software/jasy.git@1.5-beta1
 
 before_script:
   - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash

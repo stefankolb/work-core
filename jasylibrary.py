@@ -171,7 +171,7 @@ def test_node():
     return retval
 
 
-def test_testem(target="source", browsers=None):
+def test_testem(target="source", browsers=None, root="../"):
     """
     Automatically executes tests using Testem.
 

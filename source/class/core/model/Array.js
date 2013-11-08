@@ -438,8 +438,8 @@
        */
       pluck : function(property)
       {
-        return this.__items.map(function() {
-          return this.get(property);
+        return core.Array.map(this.__items, function(item) {
+          return item.get(property);
         });
       }
     }

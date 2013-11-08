@@ -1,18 +1,18 @@
 language: python
 python:
-	- 3.3
+  - 3.3
 
 env:
-	global:
-		- secure: "LFDFwTkBz3FAi8wXVBry6jWGzfbMLFbjJ+naaV0s/f5VuhF5/M81ltHoRes0qNoG495CrkPKpwX0XUgWWq/5lxLCiFQP1EJmRUAVBL7MyAYE0AzgKcYAEyl/XkCPRR/OncZGpFAJ1b+16iCqUJqEJr+8ZRg2GBvGoA/QMwW3qVE="
-		- secure: "C2XbqmBXzdBNWnTlDYk8PWHzPw3N0FshDCaW0Flv5z+BSOXPhSNZO60ywnNkK7ZyM/gs6wDNwoy4jfIqBJItxv0I9AUKd/RyLDZibQZzElwxXQEpvfQpckKH16flfnswanzUm89LS/LQUVITlkPrQ7Me3CxNp5o2DkyOPcCE1g0="
+  global:
+    - secure: "LFDFwTkBz3FAi8wXVBry6jWGzfbMLFbjJ+naaV0s/f5VuhF5/M81ltHoRes0qNoG495CrkPKpwX0XUgWWq/5lxLCiFQP1EJmRUAVBL7MyAYE0AzgKcYAEyl/XkCPRR/OncZGpFAJ1b+16iCqUJqEJr+8ZRg2GBvGoA/QMwW3qVE="
+    - secure: "C2XbqmBXzdBNWnTlDYk8PWHzPw3N0FshDCaW0Flv5z+BSOXPhSNZO60ywnNkK7ZyM/gs6wDNwoy4jfIqBJItxv0I9AUKd/RyLDZibQZzElwxXQEpvfQpckKH16flfnswanzUm89LS/LQUVITlkPrQ7Me3CxNp5o2DkyOPcCE1g0="
 
 install:
-	- pip install git+https://github.com/sebastian-software/jasy.git@master
+  - pip install git+https://github.com/sebastian-software/jasy.git@master
 
 before_script:
-	- curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
+  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 
 script:
-	- cd test && jasy test
-	- ls
+  - cd test && jasy test
+  - ls

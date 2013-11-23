@@ -10,7 +10,7 @@
 
 (function()
 {
-	var root = jasy.Env.getValue("root");
+	var root = jasy.Env.getValue("jasy.url") + jasy.Env.getValue("jasy.folder.asset") + "/";
 
 	// Internal data storage
 	var assets = {};

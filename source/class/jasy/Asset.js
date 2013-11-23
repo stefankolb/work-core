@@ -81,33 +81,25 @@
 			});
 		}
 
-		var delegate = delegates[profile.name];
-		if (delegate)
+		// Root can be a local folder reference or a URL from a CDN, etc.
+		var root = profile.root || "";
+
+		// Support for hashed file name
+		if (entry.h)
 		{
-			var url = delegate(profile, id, entry);
+			var extension = id.slice(id.lastIndexOf("."));
+			var uri = root + entry.h + extension;
 		}
+
+		// Using custom URL (source mode) [1] or just append file ID to URL [2]
+		// [1] is typically used during development for references to source files
+		// [2] is typically used for basic build while keeping asset structure (non hashed copying)
 		else
 		{
-			// Root can be a local folder reference or a URL from a CDN, etc.
-			var root = profile.root || "";
-
-			// Support for hashed file name
-			if (entry.h)
-			{
-				var extension = id.slice(id.lastIndexOf("."));
-				var url = root + entry.h + extension;
-			}
-
-			// Using custom URL (source mode) [1] or just append file ID to URL [2]
-			// [1] is typically used during development for references to source files
-			// [2] is typically used for basic build while keeping asset structure (non hashed copying)
-			else
-			{
-				var url = root + (entry.u || id);
-			}
+			var uri = root + (entry.u || id);
 		}
 
-		return url;
+		return uri;
 	};
 
 

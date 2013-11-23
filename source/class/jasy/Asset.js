@@ -10,11 +10,8 @@
 
 (function()
 {
-	/** {Map} Internal map of delegates for building URLs */
-	var delegates = {};
-
 	// Internal data storage
-	var profile = null;
+	var root = null;
 	var assets = {};
 	var sprites = {};
 
@@ -80,9 +77,6 @@
 				return jasy.Env.getValue(field);
 			});
 		}
-
-		// Root can be a local folder reference or a URL from a CDN, etc.
-		var root = profile.root || "";
 
 		// Support for hashed file name
 		if (entry.h)
@@ -177,7 +171,7 @@
 			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(data, "Map", "Asset data must be a map.");
-				core.Assert.isType(data.profile, "Map", "Asset data must define a profile for accessing assets.");
+				core.Assert.isType(data.root, "String", "Asset data must define a root for a base folder for all assets.");
 				core.Assert.isType(data.assets, "Map", "Asset data must define a structure of assets under the assets keys.");
 
 				if ("sprites" in data) {
@@ -186,9 +180,9 @@
 			}
 
 			// Initial data
-			if (!profile)
+			if (!root)
 			{
-				profile = data.profile;
+				root = data.root;
 				assets = data.assets;
 				sprites = data.sprites;
 			}
@@ -206,24 +200,7 @@
 		 * Resets the internal state of the asset class.
 		 */
 		resetData : function() {
-			profile = assets = sprites = null;
-		},
-
-
-		/**
-		 * Registers a @delegate {Function} for URL construction of the given @profile {String}.
-		 * The @delegate is called with the parameters `profile`, `id` and `entry` and should return a fully qualified URL.
-		 */
-		registerDelegate : function(profile, delegate)
-		{
-			// Validate input data
-			if (jasy.Env.isSet("debug"))
-			{
-				core.Assert.isType(profile, "String");
-				core.Assert.isType(delegate, "Function");
-			}
-
-			delegates[profile] = delegate;
+			root = assets = sprites = null;
 		},
 
 

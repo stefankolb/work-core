@@ -82,12 +82,29 @@
 		}
 
 		var delegate = delegates[profile.name];
-		if (delegate) {
+		if (delegate)
+		{
 			var url = delegate(profile, id, entry);
-		} else if (entry.h) {
-			var url = (profile.root || "") + entry.h + id.slice(id.lastIndexOf("."));
-		} else {
-			var url = (profile.root || "") + (entry.u || id);
+		}
+		else
+		{
+			// Root can be a local folder reference or a URL from a CDN, etc.
+			var root = profile.root || "";
+
+			// Support for hashed file name
+			if (entry.h)
+			{
+				var extension = id.slice(id.lastIndexOf("."));
+				var url = root + entry.h + extension;
+			}
+
+			// Using custom URL (source mode) [1] or just append file ID to URL [2]
+			// [1] is typically used during development for references to source files
+			// [2] is typically used for basic build while keeping asset structure (non hashed copying)
+			else
+			{
+				var url = root + (entry.u || id);
+			}
 		}
 
 		return url;

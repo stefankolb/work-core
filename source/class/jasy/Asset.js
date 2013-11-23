@@ -10,11 +10,13 @@
 
 (function()
 {
-	/** {Map} Internal map of delegates for building URLs based on profiles */
+	/** {Map} Internal map of delegates for building URLs */
 	var delegates = {};
 
 	// Internal data storage
-	var profiles, assets, sprites;
+	var profile = null;
+	var assets = {};
+	var sprites = {};
 
 	/** {Map} Expands internal type names to user readable ones */
 	var typeExpansion =
@@ -69,11 +71,7 @@
 		{
 			core.Assert.isType(id, "String", "Unknown asset ID: " + id);
 			core.Assert.isType(entry, "Map", "Invalid entry: " + entry + " for asset ID: " + id);
-			core.Assert.isType(entry.p, "Integer", "Invalid profile in entry: " + entry.p + "for asset " +
-				id + ". Do not now how to construct an URI for that entry!");
 		}
-
-		var profile = profiles[entry.p];
 
 		// Support placeholders for environment variables
 		if (id.indexOf("{{") !== -1)
@@ -169,8 +167,8 @@
 			// Validate input data
 			if (jasy.Env.isSet("debug"))
 			{
-				core.Assert.isType(data, "Map", "Asset data must be a map with the keys assets and profiles.");
-				core.Assert.isType(data.profiles, "Array", "Asset data must have an array of profiles under the profiles key.");
+				core.Assert.isType(data, "Map", "Asset data must be a map.");
+				core.Assert.isType(data.profile, "Map", "Asset data must define a profile for accessing assets.");
 				core.Assert.isType(data.assets, "Map", "Asset data must define a structure of assets under the assets keys.");
 
 				if ("sprites" in data) {
@@ -179,9 +177,9 @@
 			}
 
 			// Initial data
-			if (!profiles)
+			if (!profile)
 			{
-				profiles = data.profiles;
+				profile = data.profile;
 				assets = data.assets;
 				sprites = data.sprites;
 			}
@@ -190,9 +188,7 @@
 			else
 			{
 				mergeData(data.assets, assets);
-
-				// Hint: Profiles and Sprites should be identical in every set of assets
-				// (aka only the first one is relevant for keeping)
+				mergeData(data.sprites, sprites);
 			}
 		},
 
@@ -201,7 +197,7 @@
 		 * Resets the internal state of the asset class.
 		 */
 		resetData : function() {
-			profiles = assets = sprites = null;
+			profile = assets = sprites = null;
 		},
 
 

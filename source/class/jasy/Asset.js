@@ -10,8 +10,9 @@
 
 (function()
 {
+	var root = jasy.Env.getValue("root");
+
 	// Internal data storage
-	var root = null;
 	var assets = {};
 	var sprites = {};
 
@@ -171,28 +172,19 @@
 			if (jasy.Env.isSet("debug"))
 			{
 				core.Assert.isType(data, "Map", "Asset data must be a map.");
-				core.Assert.isType(data.root, "String", "Asset data must define a root for a base folder for all assets.");
-				core.Assert.isType(data.assets, "Map", "Asset data must define a structure of assets under the assets keys.");
+
+				if ("assets" in data) {
+					core.Assert.isType(data.assets, "Map", "Asset data must define a structure of assets under the assets keys.");
+				}
 
 				if ("sprites" in data) {
 					core.Assert.isType(data.sprites, "Array", "Sprite data inside assets must be delivered as an Array.");
 				}
 			}
 
-			// Initial data
-			if (!root)
-			{
-				root = data.root;
-				assets = data.assets;
-				sprites = data.sprites;
-			}
-
 			// Inject data
-			else
-			{
-				mergeData(data.assets, assets);
-				mergeData(data.sprites, sprites);
-			}
+			mergeData(data.assets, assets);
+			mergeData(data.sprites, sprites);
 		},
 
 
@@ -200,7 +192,7 @@
 		 * Resets the internal state of the asset class.
 		 */
 		resetData : function() {
-			root = assets = sprites = null;
+			assets = sprites = null;
 		},
 
 

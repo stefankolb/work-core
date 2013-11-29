@@ -19,6 +19,11 @@
 	/** {=String} Computed checksum */
 	var checksum = null;
 
+	// Combines all passed arguments into a valid URL
+	var joinUrl = function(all) {
+		return all.join("/").replace(/!:\/\//g, "/");
+	};
+
 	// At this level Array.prototype.indexOf might not be support, so we implement a custom logic for a contains check
 	var contains = function(array, value)
 	{
@@ -159,6 +164,25 @@
 			for (var i=0, l=fields.length; i<l; i++) {
 				this.addField(fields[i]);
 			}
+		},
+
+
+		/**
+		 * Returns a fully qualified URL of the given @part {String} content
+		 * for the given @type {String}.
+		 */
+		getPartUrl : function(part, type)
+		{
+			var folder = selected["jasy.folder." + type];
+			if (folder == null) {
+				throw new Error("Unsupported type for URL generator: " + type);
+			}
+
+			return joinUrl([
+				jasy.Env.getValue("jasy.url"),
+				selected["jasy.folder." + type],
+				part + "-" + jasy.Env.getId() + "." + type
+			]);
 		},
 
 

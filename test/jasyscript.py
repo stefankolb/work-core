@@ -1,3 +1,5 @@
+import sys
+
 
 @task
 def source():
@@ -27,4 +29,7 @@ def distclean():
 def test(target="source", tool="phantom", browsers=None):
     """Automatically executes tests in either PhantomJS, NodeJS or Testem CI"""
     
-    core.test(target, tool, browsers)
+    retval = core.test(target, tool, browsers)
+    
+    if retval > 0:
+        sys.exit(retval)

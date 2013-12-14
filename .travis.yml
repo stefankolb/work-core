@@ -1,0 +1,9 @@
+language: python
+python:
+  - 3.3
+
+install:
+  - pip install git+https://github.com/sebastian-software/jasy.git@1.5-beta1
+
+script:
+  - cd test && jasy test

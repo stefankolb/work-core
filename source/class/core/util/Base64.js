@@ -18,6 +18,32 @@
 	var btoa = global.btoa;
 	var atob = global.atob;
 
+	if (jasy.Env.isSet("runtime", "native"))
+	{
+		// NodeJS has no atob and btoa, so use Node's buffer API
+
+		if (!atob) {
+			atob = function (string) {
+				return new Buffer(string, "base64").toString("binary");
+			};
+		}
+
+		if (!btoa) {
+			function btoa(string) {
+				var buffer;
+
+				if (string instanceof Buffer) {
+					buffer = string;
+				} else {
+					buffer = new Buffer(string.toString(), "binary");
+				}
+
+				return buffer.toString('base64');
+			}
+
+		}
+	}
+
 	if (!btoa)
 	{
 		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";

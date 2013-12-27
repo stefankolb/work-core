@@ -212,11 +212,11 @@ def test(target="source", tool="phantom", browsers=None, main="test.Main"):
         Console.error("Unsupported target: %s" % target)
 
     if tool == "phantom":
-        test_phantom()
+        return test_phantom()
     elif tool == "node":
-        test_node()
+        return test_node()
     elif tool == "testem":
-        test_testem(target, browsers)
+        return test_testem(target, browsers)
     else:
         Console.error("Unsupported tool: %s" % tool)
 

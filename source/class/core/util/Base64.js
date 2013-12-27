@@ -29,7 +29,7 @@
 		}
 
 		if (!btoa) {
-			function btoa(string) {
+			btoa = function(string) {
 				var buffer;
 
 				if (string instanceof Buffer) {

@@ -96,6 +96,13 @@
   }
 
   /**
+   * {Integer} Maximum arguments that could be given to Function.apply
+   * 2048 is a safe value for all browsers.
+   */
+
+  var APPLY_LIMIT = 2048;
+
+  /**
    * A collection of utility methods for native JavaScript functions.
    */
   core.Module("core.Function",
@@ -252,6 +259,36 @@
       return function() {
         return func.apply(this, args.concat(core.Array.fromArguments(arguments)));
       };
+    },
+
+    /**
+     * Applies the given @args {Array} via func.apply to the given @func {Function}
+     * in @context {Object}.
+     * infiniteApply devides the arguments list to a reasonable size and applies each
+     * chunk to the fiven function. After that @joinFunc {Function} is called with the
+     * result as array. This function should join all results to the appropriate result
+     * and return it.
+     */
+    infiniteApply : function(func, args, joinFunc, context)
+    {
+      if (jasy.Env.isSet("debug")) {
+        core.Assert.isType(func, "Function");
+        core.Assert.isType(args, "Array");
+        core.Assert.isType(joinFunc, "Function");
+      }
+
+      var argsLength = args.length;
+      if (argsLength <= APPLY_LIMIT) {
+        return func.apply(context, args);
+      }
+
+      var turns = Math.ceil(argsLength / APPLY_LIMIT)
+      var result = new Array(turns);
+      for (var i=0; i<turns; i++) {
+        var start = i * APPLY_LIMIT;
+        result[i] = func.apply(context, args.slice(start, start + APPLY_LIMIT));
+      }
+      return joinFunc(result);
     }
   });
 })(core.Main.getGlobal(), Array.prototype.slice);

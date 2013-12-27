@@ -106,12 +106,35 @@
 		atob = atob.bind(global);
 	}
 
+	var byteArrayJoinFnt = function(arr) {
+		return "".join(arr);
+	};
+	var encodeFromByteArray = function(byteArray)
+	{
+		return btoa(core.Function.infiniteApply(String.fromCharCode, byteArray, byteArrayJoinFnt));
+	};
+
+	var decodeToByteArray = function(encoded)
+	{
+		var str = atob(encoded);
+		var len = str.length;
+		var result = new Array(len);
+
+		for (var i=0; i<len; i++) {
+			result[i] = str.charCodeAt(i);
+		}
+
+		return result;
+	};
+
 	/**
 	 * Polyfill for Base64 support which is natively implemented in most recent browsers.
 	 */
 	core.Module("core.util.Base64",
 	{
 		encode : btoa,
-		decode : atob
+		decode : atob,
+		encodeFromByteArray : encodeFromByteArray,
+		decodeToByteArray : decodeToByteArray
 	});
 }(core.Main.getGlobal()));

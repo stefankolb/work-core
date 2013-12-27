@@ -18,6 +18,32 @@
 	var btoa = global.btoa;
 	var atob = global.atob;
 
+	if (jasy.Env.isSet("runtime", "native"))
+	{
+		// NodeJS has no atob and btoa, so use Node's buffer API
+
+		if (!atob) {
+			atob = function (string) {
+				return new Buffer(string, "base64").toString("binary");
+			};
+		}
+
+		if (!btoa) {
+			btoa = function(string) {
+				var buffer;
+
+				if (string instanceof Buffer) {
+					buffer = string;
+				} else {
+					buffer = new Buffer(string.toString(), "binary");
+				}
+
+				return buffer.toString('base64');
+			}
+
+		}
+	}
+
 	if (!btoa)
 	{
 		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -106,12 +132,35 @@
 		atob = atob.bind(global);
 	}
 
+	var byteArrayJoinFnt = function(arr) {
+		return "".join(arr);
+	};
+	var encodeFromByteArray = function(byteArray)
+	{
+		return btoa(core.Function.infiniteApply(String.fromCharCode, byteArray, byteArrayJoinFnt));
+	};
+
+	var decodeToByteArray = function(encoded)
+	{
+		var str = atob(encoded);
+		var len = str.length;
+		var result = new Array(len);
+
+		for (var i=0; i<len; i++) {
+			result[i] = str.charCodeAt(i);
+		}
+
+		return result;
+	};
+
 	/**
 	 * Polyfill for Base64 support which is natively implemented in most recent browsers.
 	 */
 	core.Module("core.util.Base64",
 	{
 		encode : btoa,
-		decode : atob
+		decode : atob,
+		encodeFromByteArray : encodeFromByteArray,
+		decodeToByteArray : decodeToByteArray
 	});
 }(core.Main.getGlobal()));

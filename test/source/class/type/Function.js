@@ -155,3 +155,25 @@ suite.test("curry", function()
   curryFunc1(param4);
   curryFunc2(param4);
 });
+
+suite.test("infinite apply", function()
+{
+  var test = this;
+
+  // should result in 3 chunks as max limit is 2048
+  var testArg = new Array(4097);
+  var result = 0;
+  for (var i=0; i<4097; i++) {
+    testArg[i] = i;
+    result = Math.max(i, result);
+  }
+
+  var joinFnt = function(res) {
+    test.isIdentical(res.length, 3);
+
+    return Math.max.apply(this, res);
+  };
+
+  var sum = core.Function.infiniteApply(Math.max, testArg, joinFnt, this);
+  test.isIdentical(sum, result);
+});

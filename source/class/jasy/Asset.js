@@ -191,8 +191,10 @@
 		/**
 		 * Resets the internal state of the asset class.
 		 */
-		resetData : function() {
-			assets = sprites = null;
+		resetData : function()
+		{
+			assets = {};
+			sprites = {};
 		},
 
 

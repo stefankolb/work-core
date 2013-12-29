@@ -1,2 +1,4 @@
 /** #require(test.*) */
-core.testrunner.Controller.run();
+test.Main = function() {
+  core.testrunner.Controller.run();
+};

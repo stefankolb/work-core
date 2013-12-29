@@ -168,5 +168,8 @@ core.Class("core.testrunner.reporter.Html",
   }
 });
 
-/** #asset(core/testrunner/index.css) */
-core.io.StyleSheet.load(jasy.Asset.toUri("core/testrunner/index.css"));
+if (jasy.Env.isSet("runtime", "browser"))
+{
+  /** #asset(core/testrunner/index.css) */
+  core.io.StyleSheet.load(jasy.Asset.toUri("core/testrunner/index.css"));
+}

@@ -24,7 +24,7 @@
 		var url;
 		for (var i=0, ii=all.length; i<ii; i++) {
 			var part = all[i];
-			if (part && part.length > 0) {
+			if (part) {
 				if (!url) {
 					url = part;
 				} else {

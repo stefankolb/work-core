@@ -8,6 +8,9 @@
 
 "use strict";
 
+if (jasy.Env.isSet("runtime", "browser"))
+{
+
 (function()
 {
 	/**
@@ -156,3 +159,6 @@
 	});
 
 })();
+
+}
+

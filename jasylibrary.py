@@ -86,65 +86,6 @@ def distclean():
     fm.removeDir("external")
 
 
-@share
-def test_source(main="test.Main"):
-    """Generates source (development) version of test runner"""
-
-    session.setField("debug", True)
-    session.permutateField("json")
-    session.permutateField("engine")
-    session.permutateField("runtime")
-
-    # Initialize shared objects
-    assetManager = AssetManager(session).addSourceProfile()
-    outputManager = OutputManager(session, assetManager, compressionLevel=0, formattingLevel=1)
-    fileManager = FileManager(session)
-
-    # Store kernel script
-    outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
-
-    for permutation in session.permutate():
-
-        # Resolving dependencies
-        classes = ScriptResolver(session).add(main).getSorted()
-
-        # Writing source loader
-        outputManager.storeLoaderScript(classes, "{{prefix}}/script/test-{{id}}.js")
-
-
-@share
-def test_build(main="test.Main"):
-    """Generates build (deployment) version of test runner"""
-
-    session.setField("debug", True)
-    session.permutateField("json")
-    session.permutateField("engine")
-    session.permutateField("runtime")
-
-    # Initialize shared objects
-    assetManager = AssetManager(session).addBuildProfile()
-    outputManager = OutputManager(session, assetManager, compressionLevel=2)
-    fileManager = FileManager(session)
-
-    # Deploy assets
-    outputManager.deployAssets([main])
-
-    # Store kernel script
-    outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="test.Kernel.init();")
-
-    # Copy files from source
-    for name in ["index.html", "testem.html", "phantom.js", "node.js"]:
-        fileManager.updateFile("source/%s" % fileName, "{{prefix}}/%s" % fileName)
-
-    for permutation in session.permutate():
-
-        # Resolving dependencies
-        classes = ScriptResolver(session).add(main).getSorted()
-
-        # Compressing classes
-        outputManager.storeCompressedScript(classes, "{{prefix}}/script/test-{{id}}.js")
-
-
 def test_phantom():
     """Automatically executes tests using PhantomJS"""
 
@@ -202,13 +143,34 @@ def test_testem(target="source", browsers=None, root="../"):
 def test(target="source", tool="phantom", browsers=None, main="test.Main"):
     """Automatically executes tests in either PhantomJS, NodeJS or Testem CI"""
 
-    session.setCurrentPrefix(target)
+    # Configure parts
+    profile.registerPart("main", className="test.Main")
+
+    # Destination should match target name
+    profile.setDestinationPath(target)
 
     if target == "source":
-        test_source(main=main)
+
+        # Force debug enabled
+        session.setField("debug", True)
+
+        # Load all scripts/assets from source folder
+        profile.setUseSource(True)
+
+        # Start actual build
+        profile.build()
+
     elif target == "build":
-        test_build(main=main)
+
+        # Start actual build
+        profile.build()
+
+        # Copy files from source
+        for name in ["index.html", "testem.html", "phantom.js", "node.js"]:
+            fileManager.updateFile("source/%s" % fileName, "{{prefix}}/%s" % fileName)
+
     else:
+
         Console.error("Unsupported target: %s" % target)
 
     if tool == "phantom":

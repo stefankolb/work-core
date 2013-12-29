@@ -1,19 +1,19 @@
-var suite = new core.testrunner.Suite("Effect/AnimationFrame");
-
 if (jasy.Env.isSet("runtime", "browser"))
 {
-  suite.test("Request", function() 
+  var suite = new core.testrunner.Suite("Effect/AnimationFrame");
+
+  suite.test("Request", function()
   {
     var test = this;
 
-    core.effect.AnimationFrame.request(function() 
+    core.effect.AnimationFrame.request(function()
     {
       test.isTrue(true, "always fine");
       test.done();
     });
   }, 1, 1000);
 
-  suite.test("Request and Cancel", function() 
+  suite.test("Request and Cancel", function()
   {
     var test = this;
 
@@ -23,11 +23,11 @@ if (jasy.Env.isSet("runtime", "browser"))
 
     core.effect.AnimationFrame.cancel(id1);
 
-    var id2 = core.effect.AnimationFrame.request(function() 
+    var id2 = core.effect.AnimationFrame.request(function()
     {
       test.isTrue(true, "always fine");
       test.done();
-    });    
-  }, 1, 1000);  
+    });
+  }, 1, 1000);
 }
 

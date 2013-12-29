@@ -41,11 +41,17 @@ core.Class("core.testrunner.reporter.Console",
 
     // interface implementation
     suiteStarted : function(suite) {
-      console.info("Testing: " + suite.getCaption());
+      console.info("Suite started: " + suite.getCaption());
     },
 
     // interface implementation
-    suiteFinished : function(suite) {
+    suiteFinished : function(suite)
+    {
+      if (suite.wasSuccessful()) {
+        console.info("Suite finished.");
+      } else {
+        console.error("ERR: Suite failed!");
+      }
       console.info("");
     },
 

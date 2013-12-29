@@ -136,11 +136,12 @@ def test_testem(target="source", browsers=None, root="../"):
 
 
 @share
-def test(target="source", tool="phantom", browsers=None, main="test.Main"):
+def test(target="source", tool="phantom", browsers=None, main="test.Main", kernel="test.Kernel"):
     """Automatically executes tests in either PhantomJS, NodeJS or Testem CI"""
 
     # Configure parts
-    profile.registerPart("main", className="test.Main")
+    profile.registerPart("kernel", className=kernel)
+    profile.registerPart("main", className=main)
 
     # Destination should match target name
     profile.setDestinationPath(target)

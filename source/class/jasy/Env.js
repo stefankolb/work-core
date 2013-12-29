@@ -21,7 +21,7 @@
 
 	// Combines all passed arguments into a valid URL
 	var joinUrl = function(all) {
-		var url = null;
+		var url;
 		for (var i=0, ii=all.length; i<ii; i++) {
 			var part = all[i];
 			if (part && part.length > 0) {

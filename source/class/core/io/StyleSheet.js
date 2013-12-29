@@ -10,128 +10,132 @@
 
 "use strict";
 
-(function(global)
+if (jasy.Env.isSet("runtime", "browser"))
 {
-	var doc = global.document;
-
-	// Dynamic URI can be shared because we do not support reloading files
-	var dynamicExtension = "?r=" + Date.now();
-
-
-	/**
-	 * Stylesheet loader with support for load callback.
-	 */
-	core.Module("core.io.StyleSheet",
+	(function(global)
 	{
-		/** Whether the loader supports parallel requests. Always true for stylesheets (order should, hopefully, not be important). */
-		SUPPORTS_PARALLEL : true,
+		var doc = global.document;
+
+		// Dynamic URI can be shared because we do not support reloading files
+		var dynamicExtension = "?r=" + Date.now();
 
 
 		/**
-		 * Loads a StyleSheet file from the given @uri {String} and fires a @callback {Function} (in @context {Object?}) when it was loaded.
-		 * Optionally appends an random `GET` parameter to omit caching when @nocache {Boolean?false} is enabled..
+		 * Stylesheet loader with support for load callback.
 		 */
-		load: function(uri, callback, context, nocache)
+		core.Module("core.io.StyleSheet",
 		{
-			if (jasy.Env.isSet("debug"))
+			/** Whether the loader supports parallel requests. Always true for stylesheets (order should, hopefully, not be important). */
+			SUPPORTS_PARALLEL : true,
+
+
+			/**
+			 * Loads a StyleSheet file from the given @uri {String} and fires a @callback {Function} (in @context {Object?}) when it was loaded.
+			 * Optionally appends an random `GET` parameter to omit caching when @nocache {Boolean?false} is enabled..
+			 */
+			load: function(uri, callback, context, nocache)
 			{
-				core.Assert.isType(uri, "String");
-
-				if (callback != null) {
-					core.Assert.isType(callback, "Function", "Invalid callback method!");
-				}
-
-				if (context != null) {
-					core.Assert.isType(context, "Object", "Invalid callback context!");
-				}
-
-				if (nocache != null) {
-					core.Assert.isType(nocache, "Boolean");
-				}
-			}
-
-			// Default nocache to true when debugging is enabled
-			if (jasy.Env.isSet("debug") && nocache == null) {
-				nocache = true;
-			}
-
-			var head = doc.head;
-
-			if (!context) {
-				context = global;
-			}
-
-			// Use listener to stylesheet list and compare elements
-			if (jasy.Env.isSet("engine", "webkit"))
-			{
-				var link = doc.createElement('link');
-				var sheets = doc.styleSheets;
-
-				var handle = setInterval(function()
+				if (jasy.Env.isSet("debug"))
 				{
-					for (var i=0, l=sheets.length; i<l; i++)
+					core.Assert.isType(uri, "String");
+
+					if (callback != null) {
+						core.Assert.isType(callback, "Function", "Invalid callback method!");
+					}
+
+					if (context != null) {
+						core.Assert.isType(context, "Object", "Invalid callback context!");
+					}
+
+					if (nocache != null) {
+						core.Assert.isType(nocache, "Boolean");
+					}
+				}
+
+				// Default nocache to true when debugging is enabled
+				if (jasy.Env.isSet("debug") && nocache == null) {
+					nocache = true;
+				}
+
+				var head = doc.head;
+
+				if (!context) {
+					context = global;
+				}
+
+				// Use listener to stylesheet list and compare elements
+				if (jasy.Env.isSet("engine", "webkit"))
+				{
+					var link = doc.createElement('link');
+					var sheets = doc.styleSheets;
+
+					var handle = setInterval(function()
 					{
-						// In Webkit browsers the sheets array is populated as soon
-						// as the stylesheet was loaded.
-						if (sheets[i].ownerNode === link)
+						for (var i=0, l=sheets.length; i<l; i++)
 						{
+							// In Webkit browsers the sheets array is populated as soon
+							// as the stylesheet was loaded.
+							if (sheets[i].ownerNode === link)
+							{
+								clearInterval(handle);
+								if (callback) {
+									callback.call(context, uri, false);
+								}
+							}
+						}
+					}, 50);
+
+					link.rel = "stylesheet";
+					link.type = "text/css";
+					link.href = uri + (nocache ? dynamicExtension : "");
+
+					head.appendChild(link);
+				}
+
+				// Use style import fallback for buggy GECKO
+				else if (jasy.Env.isSet("engine", "gecko"))
+				{
+					var style = doc.createElement("style");
+					style.textContent = "@import '" + uri + (nocache ? dynamicExtension : "") + "'";
+
+					var handle = setInterval(function()
+					{
+						try
+						{
+							// MAGIC: only populated when file is loaded
+							style.sheet.cssRules; // jshint ignore:line
+
 							clearInterval(handle);
 							if (callback) {
 								callback.call(context, uri, false);
 							}
-						}
-					}
-				}, 50);
+						} catch(e) {}
+					}, 50);
 
-				link.rel = "stylesheet";
-				link.type = "text/css";
-				link.href = uri + (nocache ? dynamicExtension : "");
+					head.appendChild(style);
+				}
 
-				head.appendChild(link);
-			}
-
-			// Use style import fallback for buggy GECKO
-			else if (jasy.Env.isSet("engine", "gecko"))
-			{
-				var style = doc.createElement("style");
-				style.textContent = "@import '" + uri + (nocache ? dynamicExtension : "") + "'";
-
-				var handle = setInterval(function()
+				// Load event only supported by MSIE and OPERA
+				else
 				{
-					try
+					var link = doc.createElement("link");
+					link.onload = link.onerror = function(e)
 					{
-						// MAGIC: only populated when file is loaded
-						style.sheet.cssRules; // jshint ignore:line
+						link.onload = link.onerror = null;
 
-						clearInterval(handle);
 						if (callback) {
-							callback.call(context, uri, false);
+							callback.call(context, uri, (e||global.event).type === "error");
 						}
-					} catch(e) {}
-				}, 50);
+					};
 
-				head.appendChild(style);
+					link.rel = "stylesheet";
+					link.type = "text/css";
+					link.href = uri + (nocache ? dynamicExtension : "");
+
+					head.appendChild(link);
+				}
 			}
+		});
+	})(core.Main.getGlobal());
+}
 
-			// Load event only supported by MSIE and OPERA
-			else
-			{
-				var link = doc.createElement("link");
-				link.onload = link.onerror = function(e)
-				{
-					link.onload = link.onerror = null;
-
-					if (callback) {
-						callback.call(context, uri, (e||global.event).type === "error");
-					}
-				};
-
-				link.rel = "stylesheet";
-				link.type = "text/css";
-				link.href = uri + (nocache ? dynamicExtension : "");
-
-				head.appendChild(link);
-			}
-		}
-	});
-})(core.Main.getGlobal());

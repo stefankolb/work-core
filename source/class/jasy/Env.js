@@ -21,7 +21,18 @@
 
 	// Combines all passed arguments into a valid URL
 	var joinUrl = function(all) {
-		return all.join("/").replace(/\/\//g, "/").replace(/:\//g, "://");
+		var url = null;
+		for (var i=0, ii=all.length; i<ii; i++) {
+			var part = all[i];
+			if (part && part.length > 0) {
+				if (!url) {
+					url = part;
+				} else {
+					url += "/" + part;
+				}
+			}
+		}
+		return url;
 	};
 
 	// At this level Array.prototype.indexOf might not be support, so we implement a custom logic for a contains check

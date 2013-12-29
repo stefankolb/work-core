@@ -11,16 +11,16 @@ suite.test("Image Sizes", function() {
           "app.png" : {"d":[48, 48], "p":0, "t":"i"}
         }
       }
-    }, 
+    },
     "profiles" : [{name:"build", "root":"asset/"}]
   });
   this.isEqual(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
   this.isEqual(core.io.Asset.getImageSize("myapp/icons/app.png")+"", [48, 48]+"");
   this.isEqual(core.io.Asset.getFrameNumber("myapp/icons/app.png"), 1);
-  
+
 });
 
-  
+
 suite.test("Image Sprite - None", function() {
 
   jasy.Asset.resetData();
@@ -32,7 +32,7 @@ suite.test("Image Sprite - None", function() {
           "app.png" : {"d":[48, 48], "p":0, "t":"i"}
         }
       }
-    }, 
+    },
     "profiles" : [{name:"build", "root":"asset/"}]
   });
   this.isEqual(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
@@ -41,11 +41,11 @@ suite.test("Image Sprite - None", function() {
   this.isIdentical(imgData.left, 0);
   this.isIdentical(imgData.top, 0);
   this.isIdentical(imgData.src, "asset/myapp/icons/app.png");
-  
+
 });
-  
-  
-suite.test("Image Sprite - Same Folder", function() 
+
+
+suite.test("Image Sprite - Same Folder", function()
 {
 
   jasy.Asset.resetData();
@@ -58,7 +58,7 @@ suite.test("Image Sprite - Same Folder", function()
           "icons.png" : {"d":[288, 288], "p":0, "t":"i"}
         }
       }
-    }, 
+    },
     "profiles" : [{name:"build", "root":"asset/"}],
     "sprites" : ["icons.png"]
   });
@@ -72,8 +72,8 @@ suite.test("Image Sprite - Same Folder", function()
   this.isIdentical(imgData.src, "asset/myapp/icons/icons.png");
 });
 
-  
-suite.test("Image Sprite - Absolute ID", function() 
+
+suite.test("Image Sprite - Absolute ID", function()
 {
 
   jasy.Asset.resetData();
@@ -86,7 +86,7 @@ suite.test("Image Sprite - Absolute ID", function()
           "app.png" : {"d":[48, 48, [0, 96, 240]], "p":0, "t":"i"}
         }
       }
-    }, 
+    },
     "profiles" : [{name:"build", "root":"asset/"}],
     "sprites" : ["myapp/icons.png"]
   });
@@ -98,10 +98,10 @@ suite.test("Image Sprite - Absolute ID", function()
   this.isIdentical(imgData.left, 96);
   this.isIdentical(imgData.top, 240);
   this.isIdentical(imgData.src, "asset/myapp/icons.png");
-});  
+});
 
 
-suite.test("Image Sprite - Root ID", function() 
+suite.test("Image Sprite - Root ID", function()
 {
   jasy.Asset.resetData();
   jasy.Asset.addData(
@@ -113,7 +113,7 @@ suite.test("Image Sprite - Root ID", function()
           "app.png" : {"d":[48, 48, [0, 96, 240]], "p":0, "t":"i"}
         }
       }
-    }, 
+    },
     "profiles" : [{name:"build", "root":"asset/"}],
     "sprites" : ["/icons.png"]
   });
@@ -127,31 +127,31 @@ suite.test("Image Sprite - Root ID", function()
   this.isIdentical(imgData.src, "asset/icons.png");
 
 });
-  
+
 suite.test("Image Animation - Rows/Columns", function() {
-  
+
   jasy.Asset.resetData();
   jasy.Asset.addData(
   {
-    "assets" : 
+    "assets" :
     {
-      "myapp" : 
+      "myapp" :
       {
-        "anim" : 
+        "anim" :
         {
           "loading.png" : {"d":[16*16, 16, 0, [16, 1]], "p":0, "t":"i"},
           "explode.png" : {"d":[32*30, 32*3, 0, [30, 3]], "p":0, "t":"i"},
           "collapse.png" : {"d":[12*2, 12*20, 0, [2, 20, 86]], "p":0, "t":"i"},
         }
       }
-    }, 
+    },
     "profiles" : [{name:"build", "root":"asset/"}]
   });
-  
+
   this.isIdentical(core.io.Asset.getFrameNumber("myapp/anim/loading.png"), 16, "number of frames I");
   this.isIdentical(core.io.Asset.getFrameNumber("myapp/anim/explode.png"), 90, "number of frames II");
   this.isIdentical(core.io.Asset.getFrameNumber("myapp/anim/collapse.png"), 86, "number of frames III");
-  
+
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 0).left, 0, "left position first");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 1).left, 16, "left position second");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 13).left, 208, "left position inner");
@@ -167,40 +167,40 @@ suite.test("Image Animation - Rows/Columns", function() {
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 13).width, 16, "corrected width");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 13).height, 16, "corrected height");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 13).src, "asset/myapp/anim/loading.png", "normal source handling I");
-  
+
   this.isIdentical(core.io.Asset.getImage("myapp/anim/loading.png").width, 256, "full image width");
   this.isIdentical(core.io.Asset.getImage("myapp/anim/loading.png").height, 16, "full image height");
   this.isIdentical(core.io.Asset.getImage("myapp/anim/loading.png").src, "asset/myapp/anim/loading.png", "normal source handling II");
 
 });
 
-  
+
 suite.test("Image Animation - Rows/Columns in Image Sprite", function() {
-  
+
   jasy.Asset.resetData();
   jasy.Asset.addData(
   {
-    "assets" : 
+    "assets" :
     {
-      "myapp" : 
+      "myapp" :
       {
         "sprite.png" : {"d":[960, 352], "p":0},
-        "anim" : 
+        "anim" :
         {
           "loading.png" : {"d":[16*16, 16, [0, 20, 0], [16, 1]], "p":0, "t":"i"},
           "explode.png" : {"d":[32*30, 32*3, [0, 40, 16], [30, 3]], "p":0, "t":"i"},
           "collapse.png" : {"d":[12*2, 12*20, [0, 60, 112], [2, 20, 86]], "p":0, "t":"i"}
         }
       }
-    }, 
+    },
     "profiles" : [{name:"build", "root":"asset/"}],
     "sprites" : ["myapp/sprite.png"]
   });
-  
+
   this.isIdentical(core.io.Asset.getFrameNumber("myapp/anim/loading.png"), 16, "number of frames I");
   this.isIdentical(core.io.Asset.getFrameNumber("myapp/anim/explode.png"), 90, "number of frames II");
   this.isIdentical(core.io.Asset.getFrameNumber("myapp/anim/collapse.png"), 86, "number of frames III");
-  
+
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 0).left, 20, "left position first");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 1).left, 36, "left position second");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 13).left, 228, "left position inner");
@@ -216,7 +216,7 @@ suite.test("Image Animation - Rows/Columns in Image Sprite", function() {
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 13).width, 16, "corrected width");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 13).height, 16, "corrected height");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/loading.png", 13).src, "asset/myapp/sprite.png", "normal source sprite handling I");
-  
+
   this.isIdentical(core.io.Asset.getImage("myapp/anim/loading.png").width, 256, "full image width");
   this.isIdentical(core.io.Asset.getImage("myapp/anim/loading.png").height, 16, "full image height");
   this.isIdentical(core.io.Asset.getImage("myapp/anim/loading.png").src, "asset/myapp/sprite.png", "normal source sprite handling II");
@@ -230,11 +230,11 @@ suite.test("Image Animation - Custom", function()
   jasy.Asset.resetData();
   jasy.Asset.addData(
   {
-    "assets" : 
+    "assets" :
     {
-      "myapp" : 
+      "myapp" :
       {
-        "anim" : 
+        "anim" :
         {
           "guy.png" : {"d":[200, 16, 0, [
             [
@@ -249,8 +249,8 @@ suite.test("Image Animation - Custom", function()
     },
     "profiles" : [{name:"build", "root":"asset/"}]
   });
-  
-  
+
+
   this.isIdentical(core.io.Asset.getFrameNumber("myapp/anim/guy.png"), 3, "number of frames");
 
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 0).left, 0, "left position I");
@@ -260,7 +260,7 @@ suite.test("Image Animation - Custom", function()
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 0).offsetLeft, 0, "offsetLeft I");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 0).offsetTop, 0, "offsetTop I");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 0).rotation, 0, "rotation I");
-  
+
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 1).left, 30, "left position II");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 1).top, 50, "top position II");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 1).width, 10, "width II");
@@ -276,7 +276,7 @@ suite.test("Image Animation - Custom", function()
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 2).offsetLeft, 0, "offsetLeft III");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 2).offsetTop, 30, "offsetTop III");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 2).rotation, 90, "rotation III");
-  
+
 });
 
 
@@ -285,12 +285,12 @@ suite.test("Image Animation - Custom in Image Sprite", function()
   jasy.Asset.resetData();
   jasy.Asset.addData(
   {
-    "assets" : 
+    "assets" :
     {
-      "myapp" : 
+      "myapp" :
       {
         "sprite.png" : {"d":[960, 352], "p":0},
-        "anim" : 
+        "anim" :
         {
           "guy.png" : {"d":[200, 16, [0, 20, 40], [
             [
@@ -306,8 +306,8 @@ suite.test("Image Animation - Custom in Image Sprite", function()
     "sprites" : ["myapp/sprite.png"],
     "profiles" : [{name:"build", "root":"asset/"}]
   });
-  
-  
+
+
   this.isIdentical(core.io.Asset.getFrameNumber("myapp/anim/guy.png"), 3, "number of frames");
 
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 0).left, 20, "left position I");
@@ -318,7 +318,7 @@ suite.test("Image Animation - Custom in Image Sprite", function()
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 0).offsetTop, 0, "offsetTop I");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 0).rotation, 0, "rotation I");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 0).src, "asset/myapp/sprite.png", "source I");
-  
+
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 1).left, 50, "left position II");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 1).top, 90, "top position II");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 1).width, 10, "width II");
@@ -336,6 +336,6 @@ suite.test("Image Animation - Custom in Image Sprite", function()
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 2).offsetTop, 30, "offsetTop III");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 2).rotation, 90, "rotation III");
   this.isIdentical(core.io.Asset.getFrame("myapp/anim/guy.png", 2).src, "asset/myapp/sprite.png", "source III");
-  
+
 });
 

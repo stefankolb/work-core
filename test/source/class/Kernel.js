@@ -1,6 +1,6 @@
 core.Module("test.Kernel",
 {
-  init : function() {
-    core.io.Script.load("script/test-" + jasy.Env.getId() + ".js");
+  boot : function() {
+    core.io.Script.load(jasy.Env.getPartUrl("main", "js"));
   }
 });

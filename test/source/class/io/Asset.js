@@ -11,8 +11,7 @@ suite.test("Image Sizes", function() {
           "app.png" : {"d":[48, 48], "p":0, "t":"i"}
         }
       }
-    },
-    "profiles" : [{name:"build", "root":"asset/"}]
+    }
   });
   this.isEqual(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
   this.isEqual(core.io.Asset.getImageSize("myapp/icons/app.png")+"", [48, 48]+"");
@@ -32,8 +31,7 @@ suite.test("Image Sprite - None", function() {
           "app.png" : {"d":[48, 48], "p":0, "t":"i"}
         }
       }
-    },
-    "profiles" : [{name:"build", "root":"asset/"}]
+    }
   });
   this.isEqual(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
 
@@ -59,7 +57,6 @@ suite.test("Image Sprite - Same Folder", function()
         }
       }
     },
-    "profiles" : [{name:"build", "root":"asset/"}],
     "sprites" : ["icons.png"]
   });
   this.isEqual(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
@@ -87,7 +84,6 @@ suite.test("Image Sprite - Absolute ID", function()
         }
       }
     },
-    "profiles" : [{name:"build", "root":"asset/"}],
     "sprites" : ["myapp/icons.png"]
   });
   this.isEqual(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
@@ -114,7 +110,6 @@ suite.test("Image Sprite - Root ID", function()
         }
       }
     },
-    "profiles" : [{name:"build", "root":"asset/"}],
     "sprites" : ["/icons.png"]
   });
   this.isEqual(jasy.Asset.toUri("myapp/icons/app.png"), "asset/myapp/icons/app.png");
@@ -144,8 +139,7 @@ suite.test("Image Animation - Rows/Columns", function() {
           "collapse.png" : {"d":[12*2, 12*20, 0, [2, 20, 86]], "p":0, "t":"i"},
         }
       }
-    },
-    "profiles" : [{name:"build", "root":"asset/"}]
+    }
   });
 
   this.isIdentical(core.io.Asset.getFrameNumber("myapp/anim/loading.png"), 16, "number of frames I");
@@ -193,7 +187,6 @@ suite.test("Image Animation - Rows/Columns in Image Sprite", function() {
         }
       }
     },
-    "profiles" : [{name:"build", "root":"asset/"}],
     "sprites" : ["myapp/sprite.png"]
   });
 
@@ -246,8 +239,7 @@ suite.test("Image Animation - Custom", function()
           ]], "p":0, "t":"i"}
         }
       },
-    },
-    "profiles" : [{name:"build", "root":"asset/"}]
+    }
   });
 
 
@@ -303,8 +295,7 @@ suite.test("Image Animation - Custom in Image Sprite", function()
         }
       },
     },
-    "sprites" : ["myapp/sprite.png"],
-    "profiles" : [{name:"build", "root":"asset/"}]
+    "sprites" : ["myapp/sprite.png"]
   });
 
 

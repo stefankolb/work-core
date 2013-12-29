@@ -89,11 +89,9 @@ def distclean():
 def test_phantom():
     """Automatically executes tests using PhantomJS"""
 
-    prefix = session.getCurrentPrefix()
-
     Console.info("")
     Console.info("Running PhantomJS based test suite...")
-    retval = executeCommand("phantomjs phantom.js", path=prefix, wrapOutput=False)
+    retval = executeCommand("phantomjs phantom.js", path=profile.getDestinationPath(), wrapOutput=False)
     Console.info("")
 
     return retval
@@ -102,11 +100,9 @@ def test_phantom():
 def test_node():
     """Automatically executes tests using NodeJS"""
 
-    prefix = session.getCurrentPrefix()
-
     Console.info("")
     Console.info("Running NodeJS based test suite...")
-    retval = executeCommand("node node.js", path=prefix, wrapOutput=False)
+    retval = executeCommand("node node.js", path=profile.getDestinationPath(), wrapOutput=False)
     Console.info("")
 
     return retval

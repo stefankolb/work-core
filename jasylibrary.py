@@ -1,10 +1,6 @@
 import jasy.core.Console as Console
 import jasy.vcs.Repository as Repository
 
-from jasy.core.OutputManager import OutputManager
-from jasy.core.FileManager import FileManager
-from jasy.asset.Manager import AssetManager
-from jasy.js.Resolver import Resolver as ScriptResolver
 from jasy.js.api.Writer import ApiWriter
 from jasy.core.Util import executeCommand
 
@@ -24,41 +20,28 @@ import subprocess
 def api():
     """Generates the API viewer for the current project"""
 
-    sourceFolder = session.getProjectByName("core").getPath() + "/source/"
+    profile = Profile.Profile(session)
+    profile.registerPart("kernel", className="core.apibrowser.Kernel")
+    profile.registerPart("main", className="core.apibrowser.Browser")
 
     # Configure fields
-    session.setField("debug", False)
+    profile.setField("debug", False)
 
-    # Initialize shared objects
-    assetManager = AssetManager(session).addBuildProfile()
-    outputManager = OutputManager(session, assetManager, compressionLevel=2)
-    fileManager = FileManager(session)
+    # Build application code
+    BuildTool.run(profile)
 
-    # Deploy assets
-    outputManager.deployAssets(["core.apibrowser.Browser"])
-
-    # Write kernel script
-    outputManager.storeKernelScript("{{prefix}}/script/kernel.js", bootCode="core.apibrowser.Kernel.init();")
-
-    # Copy files from source
-    fileManager.updateFile(sourceFolder + "/apibrowser.html", "{{prefix}}/index.html")
+    # Copy files from Core project
+    fileManager = profile.getFileManager()
+    sourceFolder = session.getProjectByName("core").getPath() + "/source/"
+    fileManager.updateFile(sourceFolder + "/apibrowser.html", "{{destination}}/index.html")
 
     # Rewrite template as jsonp
     for tmpl in ["main", "error", "entry", "type", "params", "info", "origin", "tags"]:
         jsonTemplate = json.dumps({ "template" : open(sourceFolder + "/tmpl/apibrowser/%s.mustache" % tmpl).read() })
-        fileManager.writeFile("{{prefix}}/tmpl/%s.js" % tmpl, "apiload(%s, '%s.mustache')" % (jsonTemplate, tmpl))
-
-    # Process every possible permutation
-    for permutation in session.permutate():
-
-        # Resolving dependencies
-        resolver = ScriptResolver(session).add("core.apibrowser.Browser")
-
-        # Compressing classes
-        outputManager.storeCompressedScript(resolver.getSorted(), "{{prefix}}/script/apibrowser-{{id}}.js", "new core.apibrowser.Browser;")
+        fileManager.writeFile("{{destination}}/tmpl/%s.js" % tmpl, "apiload(%s, '%s.mustache')" % (jsonTemplate, tmpl))
 
     # Write API data
-    ApiWriter(session).write("{{prefix}}/data")
+    ApiWriter(profile).write("{{destination}}/data")
 
 
 @share
@@ -174,7 +157,7 @@ def test(target="source", tool="phantom", browsers=None, main="test.Main", kerne
 
         # Copy files from source
         for name in ["index.html", "testem.html", "phantom.js", "node.js"]:
-            fileManager.updateFile("source/%s" % fileName, "{{prefix}}/%s" % fileName)
+            fileManager.updateFile("source/%s" % fileName, "{{destination}}/%s" % fileName)
 
     else:
 

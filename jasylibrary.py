@@ -8,6 +8,10 @@ from jasy.js.Resolver import Resolver as ScriptResolver
 from jasy.js.api.Writer import ApiWriter
 from jasy.core.Util import executeCommand
 
+# NEW
+import jasy.core.Profile as Profile
+import jasy.core.BuildTool as BuildTool
+
 import os
 import sys
 import json
@@ -63,7 +67,7 @@ def clean():
 
     session.clean()
 
-    fm = FileManager(session)
+    fm = FileManager()
 
     fm.removeDir("build")
     fm.removeDir("source/script")
@@ -75,9 +79,9 @@ def distclean():
 
     session.clean()
     Repository.distclean()
-
-    fm = FileManager(session)
     session.close()
+
+    fm = FileManager()
 
     fm.removeDir("build")
     fm.removeDir("source/script")
@@ -86,7 +90,7 @@ def distclean():
     fm.removeDir("external")
 
 
-def test_phantom():
+def test_phantom(profile):
     """Automatically executes tests using PhantomJS"""
 
     Console.info("")
@@ -97,7 +101,7 @@ def test_phantom():
     return retval
 
 
-def test_node():
+def test_node(profile):
     """Automatically executes tests using NodeJS"""
 
     Console.info("")
@@ -108,7 +112,7 @@ def test_node():
     return retval
 
 
-def test_testem(target="source", browsers=None, root="../"):
+def test_testem(profile, target="source", browsers=None, root="../"):
     """
     Automatically executes tests using Testem.
 
@@ -137,9 +141,12 @@ def test_testem(target="source", browsers=None, root="../"):
 
 @share
 def test(target="source", tool="phantom", browsers=None, main="test.Main", kernel="test.Kernel"):
-    """Automatically executes tests in either PhantomJS, NodeJS or Testem CI"""
+    """
+    Automatically executes tests in either PhantomJS, NodeJS or via Testem CI
+    """
 
-    # Configure parts
+    # Initialize profile
+    profile = Profile.Profile(session)
     profile.registerPart("kernel", className=kernel)
     profile.registerPart("main", className=main)
 
@@ -149,18 +156,21 @@ def test(target="source", tool="phantom", browsers=None, main="test.Main", kerne
     if target == "source":
 
         # Force debug enabled
-        session.setField("debug", True)
+        profile.setField("debug", True)
 
         # Load all scripts/assets from source folder
         profile.setUseSource(True)
 
         # Start actual build
-        profile.build()
+        BuildTool.run(profile)
 
     elif target == "build":
 
+        # Copy assets
+        profile.setCopyAssets(True)
+
         # Start actual build
-        profile.build()
+        BuildTool.run(profile)
 
         # Copy files from source
         for name in ["index.html", "testem.html", "phantom.js", "node.js"]:
@@ -171,11 +181,11 @@ def test(target="source", tool="phantom", browsers=None, main="test.Main", kerne
         Console.error("Unsupported target: %s" % target)
 
     if tool == "phantom":
-        return test_phantom()
+        return test_phantom(profile)
     elif tool == "node":
-        return test_node()
+        return test_node(profile)
     elif tool == "testem":
-        return test_testem(target, browsers)
+        return test_testem(profile, target, browsers)
     else:
         Console.error("Unsupported tool: %s" % tool)
 

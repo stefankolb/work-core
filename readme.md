@@ -7,6 +7,7 @@ Core was designed to work together with the JavaScript tooling project [Jasy](ht
 
 [![Code Climate](https://codeclimate.com/github/sebastian-software/core.png)](https://codeclimate.com/github/sebastian-software/core)
 
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sebastian-software/core/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 
 ## Creating Projects

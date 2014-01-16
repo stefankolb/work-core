@@ -1,5 +1,5 @@
 body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 18px;
 	line-height: 1.7;
 	
@@ -56,6 +56,9 @@ strong{
 	font-weight: bold;
 }
 
+header, nav, h1, h2, h3, h4{
+	text-rendering: optimizeLegibility;
+}
 
 
 
@@ -139,6 +142,10 @@ strong{
 #tree .tree-item:before{
 	font-family: "Entypo";
 	font-weight: normal;
+	
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
 	position: absolute;
 	left: 4px;
 	width: 24px;

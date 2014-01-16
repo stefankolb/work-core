@@ -23,9 +23,8 @@ def api():
     profile = Profile.Profile(session)
     profile.registerPart("kernel", className="core.apibrowser.Kernel")
     profile.registerPart("main", className="core.apibrowser.Browser")
-
-    # Configure fields
     profile.setField("debug", False)
+    profile.setCopyAssets(True)
 
     # Build application code
     BuildTool.run(profile)

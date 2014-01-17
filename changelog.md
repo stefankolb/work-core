@@ -1,3 +1,36 @@
+# 1.5-alpha1
+
+After a while here some changes which were developed over the last few month...
+
+## Major changes
+
+- Ready for Jasy-1.5-beta:
+  - jasylibrary.py update
+  - API browser fixed
+  - Testrunner fixed
+  - Adopted asset system to new data format
+- Reimplemented Storage API `core.store.Abstract` for being usable in more scenarios. Unfortunately the new version is not API compatible with the old one.
+- Added JSHint configuration
+- Code Climate integration + added a ton of fixes to increase ranking :)
+- Added `Normalize.style` for basic HTML formatting/reset using Jasy's new StyleSheet processor.
+
+## Additions
+
+- Added `core.Function.infiniteApply()`.
+- Added `Buffer` based implementation to Base64 wrapper (core.util.Base64) for NodeJS.
+- Added `jasy.Env.getPartUrl()` for resolving part script/stylesheets/templates from Jasy data.
+
+## Minor changes
+
+- Fixed missing `toInteger` function in polyfill for `Array.prototype.indexOf`
+- Fixed implementation of `core.util.TextCompressor` for omitting encoding/decoding issues on some systems/configurations.
+- Improved and fixed integration with Testem testrunner
+- Using "Avenir Next" instead of Helvetica in API Browser
+- Removed pretty rarely useful `core.Array.randomize()`
+- Fixed undefined variable in `core.Array.toKeys()`
+- Fixed `core.Model.Array` to correctly use ES5 emulated methods instead of expecting native methods being available.
+
+
 # 0.9-beta4
 
 ## Hightlights
@@ -94,7 +127,7 @@ New/Better
 Changes
 -------
 
-- Moved native utilities for Strings, Numbers, Arrays, Objects into modules and converted all of them into static methods. 
+- Moved native utilities for Strings, Numbers, Arrays, Objects into modules and converted all of them into static methods.
 - Removed old JSON / ES5 polyfills - new solutions are on the way.
 - Renamed some assertion methods to start with leading "is": `equal` to `isEqual`, `notEqual` to `isNotEqual` etc.
 - Added assertion method `isNotUndefined`, `doesOnlyHaveKeys`.
@@ -138,7 +171,7 @@ This is the first follow up release of the Core project by Sebastian Software. U
   - `core.io.Asset.getType()` => `jasy.Asset.getType()`
   - `core.Env.isSet()` => `jasy.Env.isSet()`
   - `core.Env.getValue()` => `jasy.Env.getValue()`
-- `core.io.Queue` has now marked all loader classes as optional which basically means that using the class means less bloat when only a few types are actually loaded. 
+- `core.io.Queue` has now marked all loader classes as optional which basically means that using the class means less bloat when only a few types are actually loaded.
 - Added new translation APIs for Jasy 0.8 in `jasy.Translate`
 
 

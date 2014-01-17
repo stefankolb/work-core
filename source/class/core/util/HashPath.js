@@ -1,7 +1,7 @@
 /*
 ==================================================================================================
   Core - JavaScript Foundation
-  Copyright 2013 Sebastian Werner
+  Copyright 2013-2014 Sebastian Werner
 --------------------------------------------------------------------------------------------------
   Based on Unify <unify-project.org>
   Copyright 2009-2010 Deutsche Telekom AG

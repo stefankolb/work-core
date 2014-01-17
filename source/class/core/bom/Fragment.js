@@ -1,7 +1,7 @@
 /*
 ==================================================================================================
   Core - JavaScript Foundation
-  Copyright 2013 Sebastian Werner
+  Copyright 2013-2014 Sebastian Werner
 --------------------------------------------------------------------------------------------------
   Based on the work of the jQuery project
   Copyright 2005, 2013 jQuery Foundation, Inc. and other contributors

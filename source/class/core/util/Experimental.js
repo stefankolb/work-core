@@ -1,7 +1,7 @@
 /*
 ==================================================================================================
   Core - JavaScript Foundation
-  Copyright 2012-2013 Sebastian Werner
+  Copyright 2012-2014 Sebastian Werner
 --------------------------------------------------------------------------------------------------
   Based on experimental by Andrea Giammarchi - Mit Style License
   https://github.com/WebReflection/experimental

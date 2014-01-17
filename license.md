@@ -1,5 +1,5 @@
 Copyright (c) 2011-2012 Zynga Inc. http://zynga.com/
-Copyright (c) 2012-2013 Sebastian Werner http://sebastian-werner.com
+Copyright (c) 2012-2014 Sebastian Werner http://sebastian-werner.com
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

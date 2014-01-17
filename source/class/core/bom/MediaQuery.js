@@ -1,7 +1,7 @@
 /*
 ==================================================================================================
   Core - JavaScript Foundation
-  Copyright 2013 Sebastian Werner
+  Copyright 2013-2014 Sebastian Werner
 --------------------------------------------------------------------------------------------------
   Based on the work of the Modernizr project
   Copyright Modernizr, http://modernizr.com/, MIT License

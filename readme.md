@@ -25,6 +25,7 @@ Note: Replace `myproject` with the name of the project (lowecase characters, no 
 
 This project is kept compatible with newest development of the [Jasy](http://github.com/sebastian-software/jasy) tooling framework. This means that the newest GitHub versions typically require a recent Jasy version  as well. Take a look at this list to understand what version to choose from:
 
+* **1.5**: Jasy = 1.5.x
 * **0.9**: Jasy = 0.8.x
 * **0.8**: Jasy = 0.8.x
 * **0.7**: Jasy = 0.7.x
@@ -34,8 +35,8 @@ This project is kept compatible with newest development of the [Jasy](http://git
 
 ## License
 
-Copyright (c) 2011-2012 Zynga Inc. http://zynga.com/  
-Copyright (c) 2012-2013 Sebastian Werner http://sebastian-werner.com
+Copyright (c) 2011-2012 Zynga Inc. http://zynga.com/
+Copyright (c) 2012-2014 Sebastian Werner http://sebastian-werner.com
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

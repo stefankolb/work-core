@@ -49,7 +49,8 @@ def clean():
 
     session.clean()
 
-    fm = FileManager()
+    profile = Profile.Profile(session)
+    fm = profile.getFileManager()
 
     fm.removeDir("build")
     fm.removeDir("source/script")
@@ -63,7 +64,8 @@ def distclean():
     Repository.distclean()
     session.close()
 
-    fm = FileManager()
+    profile = Profile.Profile(session)
+    fm = profile.getFileManager()
 
     fm.removeDir("build")
     fm.removeDir("source/script")

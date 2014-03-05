@@ -39,6 +39,10 @@ if (jasy.Env.isSet("runtime", "browser"))
 			 */
 			load : function load(uri, callback, context, nocache)
 			{
+				if (core.io.Util.isRelativeUrl(uri)) {
+					uri = jasy.Env.getValue("jasy.url") + uri;
+				}
+
 				function JSONPResponse()
 				{
 					try {

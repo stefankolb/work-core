@@ -44,6 +44,10 @@
 				}
 			}
 
+			if (core.io.Util.isRelativeUrl(uri)) {
+				uri = jasy.Env.getValue("jasy.url") + uri;
+			}
+
 			var img = new Image;
 
 			img.onload = img.onerror = function(e)

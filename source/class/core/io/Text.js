@@ -50,6 +50,10 @@
 				nocache = jasy.Env.isSet("debug");
 			}
 
+			if (core.io.Util.isRelativeUrl(uri)) {
+				uri = jasy.Env.getValue("jasy.url") + uri;
+			}
+
 			// Open request, we always use async GET here
 			request.open("GET", uri + (nocache ? dynamicExtension : ""), true);
 

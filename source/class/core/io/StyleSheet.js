@@ -57,6 +57,10 @@ if (jasy.Env.isSet("runtime", "browser"))
 					nocache = true;
 				}
 
+				if (core.io.Util.isRelativeUrl(uri)) {
+					uri = jasy.Env.getValue("jasy.url") + uri;
+				}
+
 				var head = doc.head;
 
 				if (!context) {

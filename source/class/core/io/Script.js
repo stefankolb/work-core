@@ -81,6 +81,10 @@
 				nocache = true;
 			}
 
+			if (core.io.Util.isRelativeUrl(uri)) {
+				uri = jasy.Env.getValue("jasy.url") + uri;
+			}
+
 			// Browser-less (e.g. NodeJS) support
 			if (jasy.Env.isSet("runtime", "native"))
 			{

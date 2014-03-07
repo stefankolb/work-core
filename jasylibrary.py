@@ -6,7 +6,7 @@ from jasy.core.Util import executeCommand
 
 # NEW
 import jasy.core.Profile as Profile
-import jasy.core.BuildTool as BuildTool
+import jasy.build.Manager as BuildManager
 
 import os
 import sys
@@ -27,7 +27,7 @@ def api():
     profile.setCopyAssets(True)
 
     # Build application code
-    BuildTool.run(profile)
+    BuildManager.run(profile)
 
     # Copy files from Core project
     fileManager = profile.getFileManager()
@@ -146,7 +146,7 @@ def test(target="source", tool="phantom", browsers=None, main="test.Main", kerne
         profile.setUseSource(True)
 
         # Start actual build
-        BuildTool.run(profile)
+        BuildManager.run(profile)
 
     elif target == "build":
 
@@ -154,7 +154,7 @@ def test(target="source", tool="phantom", browsers=None, main="test.Main", kerne
         profile.setCopyAssets(True)
 
         # Start actual build
-        BuildTool.run(profile)
+        BuildManager.run(profile)
 
         # Copy files from source
         for name in ["index.html", "testem.html", "phantom.js", "node.js"]:

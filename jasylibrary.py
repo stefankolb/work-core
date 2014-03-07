@@ -1,3 +1,8 @@
+#
+# Jasy - Web Tooling Framework
+# Copyright 2013-2014 Sebastian Werner
+#
+
 import jasy.core.Profile as Profile
 import jasy.build.Manager as Build
 import jasy.core.Console as Console
@@ -6,12 +11,7 @@ import jasy.vcs.Repository as Repository
 from jasy.js.api.Writer import ApiWriter
 from jasy.core.Util import executeCommand
 
-import os
-import sys
 import json
-import tempfile
-import shlex
-import subprocess
 
 
 @share

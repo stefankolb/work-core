@@ -8,7 +8,7 @@ import jasy.build.Manager as Build
 import jasy.core.Console as Console
 import jasy.vcs.Repository as Repository
 
-from jasy.js.api.Writer import ApiWriter
+from jasy.script.api.Writer import ApiWriter
 from jasy.core.Util import executeCommand
 
 import json

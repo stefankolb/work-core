@@ -1,3 +1,8 @@
+# 1.5-alpha2
+
+Release for compatibility to Jasy-1.5-beta6.
+
+
 # 1.5-alpha1
 
 After a while here some changes which were developed over the last few month...

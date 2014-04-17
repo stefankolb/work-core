@@ -19,7 +19,7 @@ if (jasy.Env.isSet("runtime", "browser"))
   (function(doc)
   {
 		var tags = "abbr article aside audio canvas details figcaption figure footer header hgroup " +
-      "main mark meter nav output progress section summary time video";
+      "main mark meter nav output picture progress section summary time video";
 
 		tags.replace(/\w+/g, function(tagName) {
 			doc.createElement(tagName);

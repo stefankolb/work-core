@@ -175,7 +175,7 @@
 			 * {String} Outputs the @key {String} of @data {Map}
 			 * using the given accessor @method {Integer} as raw data.
 			 */
-			_data : function(key, method, data, escape)
+			_data : function(key, method, data)
 			{
 				var value = accessor[method](key, data);
 				return value == null ? "" : "" + value;
@@ -266,7 +266,7 @@
 				} else if (value != null && value.isEmpty) {
 					return !value.isEmpty();
 				} else {
-					return value === '' || !!value
+					return !!value
 				}
 			}
 		}

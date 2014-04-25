@@ -35,7 +35,8 @@
 		"?" : 1, // if / has
 		"^" : 1, // if not / has not
 		"$" : 1, // insert variable
-		"=" : 1  // insert raw / non escaped
+		"=" : 1,  // insert raw / non escaped
+		"@" : 1 // insert command
 	};
 
 	// Tags which support children
@@ -87,6 +88,8 @@
 						code += 'buf+=this._data(' + accessorCode + ');';
 					} else if (tag == '$') {
 						code += 'buf+=this._variable(' + accessorCode + ');';
+					} else if (tag == '@') {
+						code += 'buf+=this._command("' + escaped + '",commands);';
 					}
 				}
 				else if (tag == '>')
@@ -128,8 +131,8 @@
 		{
 			var tree = core.template.Parser.parse(text, nostrip);
 			var wrapped = 'var buf="";' + walk(tree, labels, nostrip) + 'return buf;';
-
-			return new core.template.Template(new Function('data', 'partials', 'labels', wrapped), text, name);
+			
+			return new core.template.Template(new Function('data', 'partials', 'labels', 'commands', wrapped), text, name);
 		}
 	});
 })();

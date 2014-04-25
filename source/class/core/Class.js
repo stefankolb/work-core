@@ -374,6 +374,8 @@
 			} else if (propertyConfig.themeable || propertyConfig.inheritable) {
 				/** #optional(core.property.Multi) */
 				var propertyMembers = core.property.Multi.create(propertyConfig);
+			} else if (propertyConfig.compute) {
+				var propertyMembers = core.property.Compute.create(propertyConfig);
 			} else {
 				var propertyMembers = core.property.Simple.create(propertyConfig);
 			}

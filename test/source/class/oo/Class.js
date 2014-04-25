@@ -370,6 +370,7 @@ var suite = new core.testrunner.Suite("OO/Classes/Properties", null, function() 
   core.Main.clearNamespace("properties.Parent");
   core.Main.clearNamespace("properties.Child1");
   core.Main.clearNamespace("properties.Child2");
+  core.Main.clearNamespace("properties.Computed");
 }); 
 
 suite.test("Creating Properties", function() 
@@ -702,5 +703,84 @@ suite.test("Overwrite properties", function()
   
   this.isEqual("Child1", child1.getProp());
   this.isEqual("Parent", child2.getProp());
+});
+
+
+suite.test("Computed properties - getter", function() 
+{
+  core.Class("properties.Computed",
+  {
+    include : [core.event.MEventTarget],
+
+    properties : {
+      val1 : {
+        type: "Integer",
+        fire: "changeVal1"
+      },
+      val2 : {
+        type: "Integer",
+        fire: "changeVal2"
+      },
+      sum : {
+        type: "Integer",
+        compute: function() {
+          return this.getVal1() + this.getVal2();
+        },
+        observes: ["val1", "val2"]
+      }
+    }
+  });
+  
+  var obj1 = new properties.Computed();
+
+  obj1.setVal1(10);
+  obj1.setVal2(45);
+  this.isEqual(10 + 45, obj1.getSum());
+
+  obj1.setVal1(20);
+  this.isEqual(20 + 45, obj1.getSum());
+
+});
+
+
+suite.test("Computed properties - setter", function() 
+{
+  core.Class("properties.Computed2",
+  {
+    include : [core.event.MEventTarget],
+
+    properties : {
+      val1 : {
+        type: "Integer",
+        fire: "changeVal1"
+      },
+      val2 : {
+        type: "Integer",
+        fire: "changeVal2"
+      },
+      sum : {
+        type: "Integer",
+        compute: function() {
+          return this.getVal1() + this.getVal2();
+        },
+        observes: ["val1", "val2"],
+        setter: function(value) {
+          this.setVal1(value);
+        }
+      }
+    }
+  });
+  
+  var obj2 = new properties.Computed2();
+
+  obj2.setVal1(10);
+  obj2.setVal2(45);
+  this.isEqual(10 + 45, obj2.getSum());
+
+  obj2.setSum(20);
+  this.isEqual(20, obj2.getVal1());
+  this.isEqual(45, obj2.getVal2());
+  this.isEqual(20 + 45, obj2.getSum());
+
 });
 

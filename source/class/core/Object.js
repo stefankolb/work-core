@@ -333,6 +333,21 @@
 
 
     /**
+     * {Map} Returns a reduced copy of the @object {Object},
+     * filtered to only have values if @callback {Function} returns true.
+     */
+    reduce : createIterator(
+    {
+      has : true,
+      stable : false,
+      args : "callback",
+      init : "var result={};",
+      iter : "if(callback(key,object[key])===true)result[key]=object[key];",
+      exit : "return result;"
+    }),
+
+
+    /**
      * {Map} Create a shallow-copied clone of the @object {Object} where all the
      * keys of @table {Map} will be translated to the value of that mapping.
      * It uses the original key when no translation is available.

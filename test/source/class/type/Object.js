@@ -181,3 +181,17 @@ suite.test("translate", function()
   this.isEqual(core.Object.getKeys(translated).toString(), "y,x,z");
   this.isEqual(core.Object.getValues(translated).toString(), "1,2,3");
 });
+
+suite.test("reduce", function() 
+{
+  var source = {x:1,y:2,z:3};
+  var reduced = core.Object.reduce(source, function(key, value) {
+    if (key == "x" || key == "z") {
+      return true;
+    }
+  });
+
+  this.isEqual(core.Object.getLength(reduced), 2);
+  this.isEqual(core.Object.getKeys(reduced).toString(), "x,z");
+  this.isEqual(core.Object.getValues(reduced).toString(), "1,3");
+});

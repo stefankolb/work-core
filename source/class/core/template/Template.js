@@ -122,7 +122,7 @@
 			 * {String} Public render method which transforms the stored template text using the @data {Map},
 			 * runtime specific @partials {Map?null} and @labels {Map?null}.
 			 */
-			render: function(data, partials, labels)
+			render: function(data, partials, labels, commands)
 			{
 				if (jasy.Env.isSet("debug"))
 				{
@@ -143,7 +143,7 @@
 				{
 					try
 					{
-						return this.__render(data, partials, labels);
+						return this.__render(data, partials, labels, commands);
 					}
 					catch(ex)
 					{
@@ -153,7 +153,7 @@
 				}
 				else
 				{
-					return this.__render(data, partials, labels);
+					return this.__render(data, partials, labels, commands);
 				}
 			},
 
@@ -223,6 +223,20 @@
 
 				var compiledLabel = core.template.Compiler.compile(text);
 				return compiledLabel.__render(data, partials, labels);
+			},
+
+
+			_command: function(name, commands)
+			{
+				var parameter = name.split(" ");
+				var cmd = parameter.shift();
+
+				var cb = commands[cmd];
+				if (cb) {
+					return cb.apply(null, parameter);
+				}
+
+				return "";
 			},
 
 

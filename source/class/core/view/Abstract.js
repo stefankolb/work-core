@@ -26,6 +26,7 @@
       // Initialize data stores for labels and partials
       this.__labels = {};
       this.__partials = {};
+      this.__commands = {};
     },
 
     events :
@@ -47,6 +48,9 @@
 
       /** {=Map} All known partials */
       __partials : null,
+
+      /** {=Map} All known commands */
+      __commands : null,
 
 
 
@@ -144,6 +148,40 @@
       {
         for (var name in labels) {
           this.addLabel(name, labels[name]);
+        }
+      },
+
+
+
+      /*
+      ======================================================
+        PARTIALS
+      ======================================================
+      */
+
+      /**
+       * {Map} Returns a map of known commands.
+       */
+      getCommands : function() {
+        return this.__commands;
+      },
+
+
+      /**
+       * Add the given @command {function} as command with @name {String}.
+       */
+      addCommand : function(name, command) {
+        this.__commands[name] = command;
+      },
+
+
+      /**
+       * Registers the given @commands {Map} to the presenter.
+       */
+      addcommands : function(partials)
+      {
+        for (var name in partials) {
+          this.addCommand(name, partials[name]);
         }
       }
     }

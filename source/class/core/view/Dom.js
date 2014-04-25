@@ -116,9 +116,10 @@ core.Class("core.view.Dom",
 
       var partials = this.getPartials();
       var labels = this.getLabels();
-
+      var commands = this.getCommands();
+      
       this._beforeRender();
-      elem.innerHTML = template.render(presenter, partials, labels);
+      elem.innerHTML = template.render(presenter, partials, labels, commands);
       this._afterRender();
 
       // Let others know

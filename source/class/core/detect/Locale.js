@@ -24,6 +24,14 @@ core.Module("core.detect.Locale",
 		var nav = global.navigator || { };
 		var language;
 		
+		// HACK [start]
+		// We need boekhandelbe to always be in dutch
+		var qs = window.location.search;
+		if (qs.indexOf('partner=60') > -1 || qs.indexOf('partner=boekhandel') > -1 || qs.indexOf('partner=boekhandelbe') > -1) {
+			return 'nl';
+		}
+		// [HACK] end
+		
 		// Let's see if we can get some language information out of the user agent
 		if (regexp.test(nav.userAgent)) {
 			language = RegExp.$1;

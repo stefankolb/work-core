@@ -26,11 +26,11 @@ core.Module("core.detect.Locale",
 		
 		// HACK [start]
 		// We need boekhandelbe to always be in dutch
-		var qs = window.location.search;
+		var qs = global.location.search;
 		if (qs.indexOf('partner=60') > -1 ||
-		    qs.indexOf('partner=boekhandel') > -1 ||
-		    qs.indexOf('partner=boekhandelbe') > -1 ||
-		    window.sessionStorage.getItem('master') === 'boekhandelbe') {
+				qs.indexOf('partner=boekhandel') > -1 ||
+				qs.indexOf('partner=boekhandelbe') > -1 ||
+		    (global.sessionStorage && global.sessionStorage.getItem('master') === 'boekhandelbe')) {
 			return 'nl';
 		}
 		// [HACK] end

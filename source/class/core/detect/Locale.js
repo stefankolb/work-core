@@ -19,7 +19,7 @@ core.Module("core.detect.Locale",
 	VALUE : (function(global)
 	{
 
-    var DEFAULT_LANGUAGE = 'de';
+    var DEFAULT_LANGUAGE = 'en';
     var regexp = /(([a-z]{2})-([a-z]{2})?)\;?/ig;
     var nav = global.navigator || { };
     var language;

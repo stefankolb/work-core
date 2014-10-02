@@ -37,6 +37,7 @@ core.Module("core.detect.Locale",
       (global.sessionStorage && global.sessionStorage.getItem('master') === 'ibsit')) {
 				// We need IBS.it to always be in Italian
       return 'it';
+		}
     // [HACK] end
 
     // Let's see if we can get some language information out of the user agent
